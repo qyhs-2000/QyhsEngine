@@ -4,3 +4,7 @@
 *.zip
 *.so
 3rdparty/
+CMakeFiles/
+QYHSEngine.sln
+cmake_install.cmake
+CMakeCache.txt
