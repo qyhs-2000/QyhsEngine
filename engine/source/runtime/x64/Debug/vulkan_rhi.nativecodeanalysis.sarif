@@ -1,0 +1,5648 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json",
+  "runs": [
+    {
+      "results": [
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'VkResult' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/QyhsRuntime/function/render/rhi/vulkan/vulkan_rhi.h"
+                },
+                "region": {
+                  "startLine": 93,
+                  "startColumn": 10,
+                  "endLine": 93,
+                  "endColumn": 50
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?CreateDebugUtilsMessengerEXT@@YA?AW4VkResult@@PEAUVkInstance_T@@PEBUVkDebugUtilsMessengerCreateInfoEXT@@PEBUVkAllocationCallbacks@@PEAPEAUVkDebugUtilsMessengerEXT_T@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '+' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '+' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 1050,
+                  "startColumn": 24,
+                  "endLine": 1050,
+                  "endColumn": 30
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__malloc_mad2@@YAPEAXHHH@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 1050,
+                  "startColumn": 24,
+                  "endLine": 1050,
+                  "endColumn": 26
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__malloc_mad2@@YAPEAXHHH@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '+' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '+' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 1057,
+                  "startColumn": 24,
+                  "endLine": 1057,
+                  "endColumn": 32
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__malloc_mad3@@YAPEAXHHHH@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 1057,
+                  "startColumn": 24,
+                  "endLine": 1057,
+                  "endColumn": 28
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__malloc_mad3@@YAPEAXHHHH@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 1057,
+                  "startColumn": 24,
+                  "endLine": 1057,
+                  "endColumn": 26
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__malloc_mad3@@YAPEAXHHHH@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '+' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '+' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 1064,
+                  "startColumn": 24,
+                  "endLine": 1064,
+                  "endColumn": 34
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__malloc_mad4@@YAPEAXHHHHH@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 1064,
+                  "startColumn": 24,
+                  "endLine": 1064,
+                  "endColumn": 30
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__malloc_mad4@@YAPEAXHHHHH@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 1064,
+                  "startColumn": 24,
+                  "endLine": 1064,
+                  "endColumn": 28
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__malloc_mad4@@YAPEAXHHHHH@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 1064,
+                  "startColumn": 24,
+                  "endLine": 1064,
+                  "endColumn": 26
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__malloc_mad4@@YAPEAXHHHHH@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 1211,
+                  "startColumn": 45,
+                  "endLine": 1211,
+                  "endColumn": 53
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__convert_8_to_16@@YAPEAGPEAEHHH@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '-' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '-' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 1230,
+                  "startColumn": 32,
+                  "endLine": 1230,
+                  "endColumn": 42
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__vertical_flip@@YAXPEAXHHH@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '-' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '-' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 1230,
+                  "startColumn": 32,
+                  "endLine": 1230,
+                  "endColumn": 36
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__vertical_flip@@YAXPEAXHHH@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 1769,
+                  "startColumn": 36,
+                  "endLine": 1769,
+                  "endColumn": 44
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__convert_format@@YAPEAEPEAEHHII@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 1769,
+                  "startColumn": 36,
+                  "endLine": 1769,
+                  "endColumn": 40
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__convert_format@@YAPEAEPEAEHHII@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 1770,
+                  "startColumn": 36,
+                  "endLine": 1770,
+                  "endColumn": 44
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__convert_format@@YAPEAEPEAEHHII@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 1770,
+                  "startColumn": 36,
+                  "endLine": 1770,
+                  "endColumn": 40
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__convert_format@@YAPEAEPEAEHHII@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 1819,
+                  "startColumn": 41,
+                  "endLine": 1819,
+                  "endColumn": 60
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__convert_format16@@YAPEAGPEAGHHII@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 1819,
+                  "startColumn": 41,
+                  "endLine": 1819,
+                  "endColumn": 56
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__convert_format16@@YAPEAGPEAGHHII@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 1819,
+                  "startColumn": 41,
+                  "endLine": 1819,
+                  "endColumn": 52
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__convert_format16@@YAPEAGPEAGHHII@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 1826,
+                  "startColumn": 35,
+                  "endLine": 1826,
+                  "endColumn": 43
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__convert_format16@@YAPEAGPEAGHHII@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 1826,
+                  "startColumn": 35,
+                  "endLine": 1826,
+                  "endColumn": 39
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__convert_format16@@YAPEAGPEAGHHII@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 1827,
+                  "startColumn": 35,
+                  "endLine": 1827,
+                  "endColumn": 43
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__convert_format16@@YAPEAGPEAGHHII@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 1827,
+                  "startColumn": 35,
+                  "endLine": 1827,
+                  "endColumn": 39
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__convert_format16@@YAPEAGPEAGHHII@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 3021,
+                  "startColumn": 53,
+                  "endLine": 3021,
+                  "endColumn": 81
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__parse_entropy_coded_data@@YAHPEAUstbi__jpeg@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 3052,
+                  "startColumn": 62,
+                  "endLine": 3052,
+                  "endColumn": 92
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__parse_entropy_coded_data@@YAHPEAUstbi__jpeg@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 2966,
+                  "startColumn": 57,
+                  "endLine": 2966,
+                  "endColumn": 77
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__parse_entropy_coded_data@@YAHPEAUstbi__jpeg@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 2966,
+                  "startColumn": 57,
+                  "endLine": 2966,
+                  "endColumn": 75
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__parse_entropy_coded_data@@YAHPEAUstbi__jpeg@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 2966,
+                  "startColumn": 79,
+                  "endLine": 2966,
+                  "endColumn": 81
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__parse_entropy_coded_data@@YAHPEAUstbi__jpeg@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 2994,
+                  "startColumn": 66,
+                  "endLine": 2994,
+                  "endColumn": 84
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__parse_entropy_coded_data@@YAHPEAUstbi__jpeg@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 3089,
+                  "startColumn": 53,
+                  "endLine": 3089,
+                  "endColumn": 81
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__jpeg_finish@@YAXPEAUstbi__jpeg@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 3091,
+                  "startColumn": 57,
+                  "endLine": 3091,
+                  "endColumn": 77
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__jpeg_finish@@YAXPEAUstbi__jpeg@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 3091,
+                  "startColumn": 57,
+                  "endLine": 3091,
+                  "endColumn": 75
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__jpeg_finish@@YAXPEAUstbi__jpeg@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 3091,
+                  "startColumn": 79,
+                  "endLine": 3091,
+                  "endColumn": 81
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__jpeg_finish@@YAXPEAUstbi__jpeg@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 3586,
+                  "startColumn": 43,
+                  "endLine": 3586,
+                  "endColumn": 45
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__resample_row_hv_2_simd@@YAPEAEPEAE00HH@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '+' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '+' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 3903,
+                  "startColumn": 60,
+                  "endLine": 3903,
+                  "endColumn": 74
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?load_jpeg_image@@YAPEAEPEAUstbi__jpeg@@PEAH11H@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 3926,
+                  "startColumn": 34,
+                  "endLine": 3926,
+                  "endColumn": 52
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?load_jpeg_image@@YAPEAEPEAUstbi__jpeg@@PEAH11H@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 3926,
+                  "startColumn": 34,
+                  "endLine": 3926,
+                  "endColumn": 42
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?load_jpeg_image@@YAPEAEPEAUstbi__jpeg@@PEAH11H@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 4738,
+                  "startColumn": 36,
+                  "endLine": 4738,
+                  "endColumn": 43
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__create_png_image_raw@@YAHPEAUstbi__png@@PEAEIHIIHH@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 4739,
+                  "startColumn": 38,
+                  "endLine": 4739,
+                  "endColumn": 46
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__create_png_image_raw@@YAHPEAUstbi__png@@PEAEIHIIHH@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 4740,
+                  "startColumn": 32,
+                  "endLine": 4740,
+                  "endColumn": 39
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__create_png_image_raw@@YAHPEAUstbi__png@@PEAEIHIIHH@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 4823,
+                  "startColumn": 31,
+                  "endLine": 4823,
+                  "endColumn": 33
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__create_png_image_raw@@YAHPEAUstbi__png@@PEAEIHIIHH@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 4891,
+                  "startColumn": 31,
+                  "endLine": 4891,
+                  "endColumn": 49
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__create_png_image@@YAHPEAUstbi__png@@PEAEIHHHH@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 4891,
+                  "startColumn": 31,
+                  "endLine": 4891,
+                  "endColumn": 41
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__create_png_image@@YAHPEAUstbi__png@@PEAEIHHHH@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 4891,
+                  "startColumn": 61,
+                  "endLine": 4891,
+                  "endColumn": 67
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__create_png_image@@YAHPEAUstbi__png@@PEAEIHHHH@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 4892,
+                  "startColumn": 33,
+                  "endLine": 4892,
+                  "endColumn": 40
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__create_png_image@@YAHPEAUstbi__png@@PEAEIHHHH@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '+' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '+' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 4892,
+                  "startColumn": 33,
+                  "endLine": 4892,
+                  "endColumn": 37
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__create_png_image@@YAHPEAUstbi__png@@PEAEIHHHH@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 4892,
+                  "startColumn": 33,
+                  "endLine": 4892,
+                  "endColumn": 35
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__create_png_image@@YAHPEAUstbi__png@@PEAEIHHHH@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 5712,
+                  "startColumn": 35,
+                  "endLine": 5712,
+                  "endColumn": 51
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__bmp_load@@YAPEAXPEAUstbi__context@@PEAH11HPEAUstbi__result_info@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 5712,
+                  "startColumn": 35,
+                  "endLine": 5712,
+                  "endColumn": 43
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__bmp_load@@YAPEAXPEAUstbi__context@@PEAH11HPEAUstbi__result_info@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 5713,
+                  "startColumn": 31,
+                  "endLine": 5713,
+                  "endColumn": 54
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__bmp_load@@YAPEAXPEAUstbi__context@@PEAH11HPEAUstbi__result_info@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 5713,
+                  "startColumn": 31,
+                  "endLine": 5713,
+                  "endColumn": 46
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__bmp_load@@YAPEAXPEAUstbi__context@@PEAH11HPEAUstbi__result_info@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '-' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '-' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 5713,
+                  "startColumn": 31,
+                  "endLine": 5713,
+                  "endColumn": 42
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__bmp_load@@YAPEAXPEAUstbi__context@@PEAH11HPEAUstbi__result_info@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26819",
+          "message": {
+            "text": "Unannotated fallthrough between switch labels (es.78)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 5744,
+                  "startColumn": 12
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__tga_get_comp@@YAHHHPEAH@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 5933,
+                  "startColumn": 40,
+                  "endLine": 5933,
+                  "endColumn": 54
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__tga_load@@YAPEAXPEAUstbi__context@@PEAH11HPEAUstbi__result_info@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 5933,
+                  "startColumn": 40,
+                  "endLine": 5933,
+                  "endColumn": 44
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__tga_load@@YAPEAXPEAUstbi__context@@PEAH11HPEAUstbi__result_info@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 6201,
+                  "startColumn": 38,
+                  "endLine": 6201,
+                  "endColumn": 44
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__psd_load@@YAPEAXPEAUstbi__context@@PEAH11HPEAUstbi__result_info@@H@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 6201,
+                  "startColumn": 38,
+                  "endLine": 6201,
+                  "endColumn": 42
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__psd_load@@YAPEAXPEAUstbi__context@@PEAH11HPEAUstbi__result_info@@H@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 6283,
+                  "startColumn": 58,
+                  "endLine": 6283,
+                  "endColumn": 60
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__psd_load@@YAPEAXPEAUstbi__context@@PEAH11HPEAUstbi__result_info@@H@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 6295,
+                  "startColumn": 42,
+                  "endLine": 6295,
+                  "endColumn": 44
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__psd_load@@YAPEAXPEAUstbi__context@@PEAH11HPEAUstbi__result_info@@H@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 6420,
+                  "startColumn": 33,
+                  "endLine": 6420,
+                  "endColumn": 41
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__pic_load_core@@YAPEAEPEAUstbi__context@@HHPEAHPEAE@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 6420,
+                  "startColumn": 33,
+                  "endLine": 6420,
+                  "endColumn": 35
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__pic_load_core@@YAPEAEPEAUstbi__context@@HHPEAHPEAE@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 6524,
+                  "startColumn": 25,
+                  "endLine": 6524,
+                  "endColumn": 29
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__pic_load@@YAPEAXPEAUstbi__context@@PEAH11HPEAUstbi__result_info@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 6524,
+                  "startColumn": 25,
+                  "endLine": 6524,
+                  "endColumn": 27
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__pic_load@@YAPEAXPEAUstbi__context@@PEAH11HPEAUstbi__result_info@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 6790,
+                  "startColumn": 41,
+                  "endLine": 6790,
+                  "endColumn": 45
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__gif_load_next@@YAPEAEPEAUstbi__context@@PEAUstbi__gif@@PEAHHPEAE@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 6791,
+                  "startColumn": 48,
+                  "endLine": 6791,
+                  "endColumn": 52
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__gif_load_next@@YAPEAEPEAUstbi__context@@PEAUstbi__gif@@PEAHHPEAE@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 6799,
+                  "startColumn": 28,
+                  "endLine": 6799,
+                  "endColumn": 32
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__gif_load_next@@YAPEAEPEAUstbi__context@@PEAUstbi__gif@@PEAHHPEAE@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 6800,
+                  "startColumn": 35,
+                  "endLine": 6800,
+                  "endColumn": 39
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__gif_load_next@@YAPEAEPEAUstbi__context@@PEAUstbi__gif@@PEAHHPEAE@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 6833,
+                  "startColumn": 38,
+                  "endLine": 6833,
+                  "endColumn": 50
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__gif_load_next@@YAPEAEPEAUstbi__context@@PEAUstbi__gif@@PEAHHPEAE@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 6833,
+                  "startColumn": 38,
+                  "endLine": 6833,
+                  "endColumn": 43
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__gif_load_next@@YAPEAEPEAUstbi__context@@PEAUstbi__gif@@PEAHHPEAE@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 6837,
+                  "startColumn": 30,
+                  "endLine": 6837,
+                  "endColumn": 38
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__gif_load_next@@YAPEAEPEAUstbi__context@@PEAUstbi__gif@@PEAHHPEAE@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C6262",
+          "message": {
+            "text": "Function uses '35036' bytes of stack:  exceeds /analyze:stacksize '16384'.  Consider moving some data to heap."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 6960,
+                  "startColumn": 14,
+                  "endLine": 6960,
+                  "endColumn": 14
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__load_gif_main@@YAPEAXPEAUstbi__context@@PEAPEAHPEAH222H@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 6991,
+                  "startColumn": 39,
+                  "endLine": 6991,
+                  "endColumn": 39
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__load_gif_main@@YAPEAXPEAUstbi__context@@PEAPEAHPEAH222H@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 7007,
+                  "startColumn": 46,
+                  "endLine": 7007,
+                  "endColumn": 55
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__load_gif_main@@YAPEAXPEAUstbi__context@@PEAPEAHPEAH222H@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 7018,
+                  "startColumn": 29,
+                  "endLine": 7018,
+                  "endColumn": 43
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__load_gif_main@@YAPEAXPEAUstbi__context@@PEAPEAHPEAH222H@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '-' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '-' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 7018,
+                  "startColumn": 29,
+                  "endLine": 7018,
+                  "endColumn": 38
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__load_gif_main@@YAPEAXPEAUstbi__context@@PEAPEAHPEAH222H@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 7020,
+                  "startColumn": 33,
+                  "endLine": 7020,
+                  "endColumn": 37
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__load_gif_main@@YAPEAXPEAUstbi__context@@PEAPEAHPEAH222H@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C6262",
+          "message": {
+            "text": "Function uses '34980' bytes of stack:  exceeds /analyze:stacksize '16384'.  Consider moving some data to heap."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 7045,
+                  "startColumn": 14,
+                  "endLine": 7045,
+                  "endColumn": 14
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__gif_load@@YAPEAXPEAUstbi__context@@PEAH11HPEAUstbi__result_info@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26819",
+          "message": {
+            "text": "Unannotated fallthrough between switch labels (es.78)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 7146,
+                  "startColumn": 15
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__hdr_convert@@YAXPEAMPEAEH@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26819",
+          "message": {
+            "text": "Unannotated fallthrough between switch labels (es.78)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 7149,
+                  "startColumn": 15
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__hdr_convert@@YAXPEAMPEAEH@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 7220,
+                  "startColumn": 42,
+                  "endLine": 7220,
+                  "endColumn": 54
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__hdr_load@@YAPEAMPEAUstbi__context@@PEAH11HPEAUstbi__result_info@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 7220,
+                  "startColumn": 42,
+                  "endLine": 7220,
+                  "endColumn": 46
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__hdr_load@@YAPEAMPEAUstbi__context@@PEAH11HPEAUstbi__result_info@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 7220,
+                  "startColumn": 65,
+                  "endLine": 7220,
+                  "endColumn": 69
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__hdr_load@@YAPEAMPEAUstbi__context@@PEAH11HPEAUstbi__result_info@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 7277,
+                  "startColumn": 41,
+                  "endLine": 7277,
+                  "endColumn": 54
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__hdr_load@@YAPEAMPEAUstbi__context@@PEAH11HPEAUstbi__result_info@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '+' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '+' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 7277,
+                  "startColumn": 41,
+                  "endLine": 7277,
+                  "endColumn": 51
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__hdr_load@@YAPEAMPEAUstbi__context@@PEAH11HPEAUstbi__result_info@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 7277,
+                  "startColumn": 41,
+                  "endLine": 7277,
+                  "endColumn": 43
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__hdr_load@@YAPEAMPEAUstbi__context@@PEAH11HPEAUstbi__result_info@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+                },
+                "region": {
+                  "startLine": 7277,
+                  "startColumn": 75,
+                  "endLine": 7277,
+                  "endColumn": 77
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?stbi__hdr_load@@YAPEAMPEAUstbi__context@@PEAH11HPEAUstbi__result_info@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'QYHS::WindowSystem::m_height' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/QyhsRuntime/function/render/window_system.h"
+                },
+                "region": {
+                  "startLine": 100,
+                  "startColumn": 2,
+                  "endLine": 100,
+                  "endColumn": 2
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0WindowSystem@QYHS@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "QYHS::WindowSystem::m_height"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'QYHS::WindowSystem::m_width' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/QyhsRuntime/function/render/window_system.h"
+                },
+                "region": {
+                  "startLine": 100,
+                  "startColumn": 2,
+                  "endLine": 100,
+                  "endColumn": 2
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0WindowSystem@QYHS@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "QYHS::WindowSystem::m_width"
+          }
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '-' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '-' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 949,
+                  "startColumn": 36,
+                  "endLine": 949,
+                  "endColumn": 44
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?tryParseDouble@tinyobj@@YA_NPEBD0PEAN@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '-' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '-' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 974,
+                  "startColumn": 36,
+                  "endLine": 974,
+                  "endColumn": 44
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?tryParseDouble@tinyobj@@YA_NPEBD0PEAN@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'tinyobj::texture_type_t' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 1136,
+                  "startColumn": 30,
+                  "endLine": 1136,
+                  "endColumn": 30
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?parseTextureType@tinyobj@@YA?AW4texture_type_t@1@PEAPEBDW421@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26498",
+          "message": {
+            "text": "The function 'std::numeric_limits<float>::epsilon' is constexpr, mark variable 'epsilon' constexpr if compile-time evaluation is desired (con.5)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 1779,
+                  "startColumn": 26,
+                  "endLine": 1779,
+                  "endColumn": 72
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?exportGroupsToShape@tinyobj@@YA_NPEAUshape_t@1@AEBUPrimGroup@1@AEBV?$vector@Utag_t@tinyobj@@V?$allocator@Utag_t@tinyobj@@@std@@@std@@HAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@5@_NAEBV?$vector@MV?$allocator@M@std@@@5@PEAV65@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::skin_weight_t::vertex_id' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 347,
+                  "startColumn": 1,
+                  "endLine": 347,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0skin_weight_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::skin_weight_t::vertex_id"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::texture_option_t::type' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 183,
+                  "startColumn": 1,
+                  "endLine": 183,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0texture_option_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::texture_option_t::type"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::texture_option_t::brightness' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 183,
+                  "startColumn": 1,
+                  "endLine": 183,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0texture_option_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::texture_option_t::brightness"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::texture_option_t::sharpness' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 183,
+                  "startColumn": 1,
+                  "endLine": 183,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0texture_option_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::texture_option_t::sharpness"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::texture_option_t::contrast' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 183,
+                  "startColumn": 1,
+                  "endLine": 183,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0texture_option_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::texture_option_t::contrast"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::texture_option_t::origin_offset' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 183,
+                  "startColumn": 1,
+                  "endLine": 183,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0texture_option_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::texture_option_t::origin_offset"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::texture_option_t::scale' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 183,
+                  "startColumn": 1,
+                  "endLine": 183,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0texture_option_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::texture_option_t::scale"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::texture_option_t::turbulence' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 183,
+                  "startColumn": 1,
+                  "endLine": 183,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0texture_option_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::texture_option_t::turbulence"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::texture_option_t::texture_resolution' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 183,
+                  "startColumn": 1,
+                  "endLine": 183,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0texture_option_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::texture_option_t::texture_resolution"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::texture_option_t::clamp' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 183,
+                  "startColumn": 1,
+                  "endLine": 183,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0texture_option_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::texture_option_t::clamp"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::texture_option_t::imfchan' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 183,
+                  "startColumn": 1,
+                  "endLine": 183,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0texture_option_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::texture_option_t::imfchan"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::texture_option_t::blendu' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 183,
+                  "startColumn": 1,
+                  "endLine": 183,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0texture_option_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::texture_option_t::blendu"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::texture_option_t::blendv' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 183,
+                  "startColumn": 1,
+                  "endLine": 183,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0texture_option_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::texture_option_t::blendv"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::texture_option_t::bump_multiplier' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 183,
+                  "startColumn": 1,
+                  "endLine": 183,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0texture_option_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::texture_option_t::bump_multiplier"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::material_t::dummy' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 327,
+                  "startColumn": 1,
+                  "endLine": 327,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0material_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::material_t::dummy"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::material_t::ior' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 327,
+                  "startColumn": 1,
+                  "endLine": 327,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0material_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::material_t::ior"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::material_t::illum' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 327,
+                  "startColumn": 1,
+                  "endLine": 327,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0material_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::material_t::illum"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::material_t::dissolve' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 327,
+                  "startColumn": 1,
+                  "endLine": 327,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0material_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::material_t::dissolve"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::material_t::shininess' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 327,
+                  "startColumn": 1,
+                  "endLine": 327,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0material_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::material_t::shininess"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::material_t::emission' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 327,
+                  "startColumn": 1,
+                  "endLine": 327,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0material_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::material_t::emission"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::material_t::transmittance' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 327,
+                  "startColumn": 1,
+                  "endLine": 327,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0material_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::material_t::transmittance"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::material_t::specular' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 327,
+                  "startColumn": 1,
+                  "endLine": 327,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0material_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::material_t::specular"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::material_t::ambient' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 327,
+                  "startColumn": 1,
+                  "endLine": 327,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0material_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::material_t::ambient"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::material_t::diffuse' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 327,
+                  "startColumn": 1,
+                  "endLine": 327,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0material_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::material_t::diffuse"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::material_t::roughness' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 327,
+                  "startColumn": 1,
+                  "endLine": 327,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0material_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::material_t::roughness"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::material_t::metallic' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 327,
+                  "startColumn": 1,
+                  "endLine": 327,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0material_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::material_t::metallic"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::material_t::sheen' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 327,
+                  "startColumn": 1,
+                  "endLine": 327,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0material_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::material_t::sheen"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::material_t::clearcoat_thickness' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 327,
+                  "startColumn": 1,
+                  "endLine": 327,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0material_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::material_t::clearcoat_thickness"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::material_t::clearcoat_roughness' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 327,
+                  "startColumn": 1,
+                  "endLine": 327,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0material_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::material_t::clearcoat_roughness"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::material_t::anisotropy' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 327,
+                  "startColumn": 1,
+                  "endLine": 327,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0material_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::material_t::anisotropy"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::material_t::anisotropy_rotation' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 327,
+                  "startColumn": 1,
+                  "endLine": 327,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0material_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::material_t::anisotropy_rotation"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::material_t::pad0' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 327,
+                  "startColumn": 1,
+                  "endLine": 327,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0material_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::material_t::pad0"
+          }
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'tinyobj::material_t::pad2' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+                },
+                "region": {
+                  "startLine": 327,
+                  "startColumn": 1,
+                  "endLine": 327,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0material_t@tinyobj@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "tinyobj::material_t::pad2"
+          }
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'VkDebugUtilsMessageSeverityFlagBitsEXT' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/QyhsRuntime/function/render/rhi/vulkan/vulkan_rhi.cpp"
+                },
+                "region": {
+                  "startLine": 146,
+                  "startColumn": 40,
+                  "endLine": 146,
+                  "endColumn": 40
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?debugCallback@QYHS@@YAIW4VkDebugUtilsMessageSeverityFlagBitsEXT@@IPEBUVkDebugUtilsMessengerCallbackDataEXT@@PEAX@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'VkSampleCountFlagBits' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/QyhsRuntime/function/render/rhi/vulkan/vulkan_rhi.cpp"
+                },
+                "region": {
+                  "startLine": 232,
+                  "startColumn": 20,
+                  "endLine": 232,
+                  "endColumn": 47
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?pickPhysicalDevice@VulkanRHI@QYHS@@AEAAXXZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'VkPresentModeKHR' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/QyhsRuntime/function/render/rhi/vulkan/vulkan_rhi.cpp"
+                },
+                "region": {
+                  "startLine": 293,
+                  "startColumn": 20,
+                  "endLine": 293,
+                  "endColumn": 72
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?createSwapChain@VulkanRHI@QYHS@@AEAAXXZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'VkFormat' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/QyhsRuntime/function/render/rhi/vulkan/vulkan_rhi.cpp"
+                },
+                "region": {
+                  "startLine": 337,
+                  "startColumn": 3,
+                  "endLine": 337,
+                  "endColumn": 39
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?createSwapChain@VulkanRHI@QYHS@@AEAAXXZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'VkDynamicState' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/QyhsRuntime/function/render/rhi/vulkan/vulkan_rhi.cpp"
+                },
+                "region": {
+                  "startLine": 555,
+                  "startColumn": 33,
+                  "endLine": 555,
+                  "endColumn": 51
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?createGraphicsPipeline@VulkanRHI@QYHS@@AEAAXXZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/QyhsRuntime/function/render/rhi/vulkan/vulkan_rhi.cpp"
+                },
+                "region": {
+                  "startLine": 720,
+                  "startColumn": 28,
+                  "endLine": 720,
+                  "endColumn": 51
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?createTextureImage@VulkanRHI@QYHS@@AEAAXXZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/QyhsRuntime/function/render/rhi/vulkan/vulkan_rhi.cpp"
+                },
+                "region": {
+                  "startLine": 720,
+                  "startColumn": 28,
+                  "endLine": 720,
+                  "endColumn": 39
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?createTextureImage@VulkanRHI@QYHS@@AEAAXXZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '+' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '+' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/QyhsRuntime/function/render/rhi/vulkan/vulkan_rhi.cpp"
+                },
+                "region": {
+                  "startLine": 850,
+                  "startColumn": 22,
+                  "endLine": 850,
+                  "endColumn": 47
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?loadModel@VulkanRHI@QYHS@@AEAAXXZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/QyhsRuntime/function/render/rhi/vulkan/vulkan_rhi.cpp"
+                },
+                "region": {
+                  "startLine": 850,
+                  "startColumn": 22,
+                  "endLine": 850,
+                  "endColumn": 31
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?loadModel@VulkanRHI@QYHS@@AEAAXXZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '+' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '+' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/QyhsRuntime/function/render/rhi/vulkan/vulkan_rhi.cpp"
+                },
+                "region": {
+                  "startLine": 849,
+                  "startColumn": 22,
+                  "endLine": 849,
+                  "endColumn": 47
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?loadModel@VulkanRHI@QYHS@@AEAAXXZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/QyhsRuntime/function/render/rhi/vulkan/vulkan_rhi.cpp"
+                },
+                "region": {
+                  "startLine": 849,
+                  "startColumn": 22,
+                  "endLine": 849,
+                  "endColumn": 31
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?loadModel@VulkanRHI@QYHS@@AEAAXXZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/QyhsRuntime/function/render/rhi/vulkan/vulkan_rhi.cpp"
+                },
+                "region": {
+                  "startLine": 848,
+                  "startColumn": 22,
+                  "endLine": 848,
+                  "endColumn": 31
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?loadModel@VulkanRHI@QYHS@@AEAAXXZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '+' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '+' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/QyhsRuntime/function/render/rhi/vulkan/vulkan_rhi.cpp"
+                },
+                "region": {
+                  "startLine": 855,
+                  "startColumn": 30,
+                  "endLine": 855,
+                  "endColumn": 57
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?loadModel@VulkanRHI@QYHS@@AEAAXXZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/QyhsRuntime/function/render/rhi/vulkan/vulkan_rhi.cpp"
+                },
+                "region": {
+                  "startLine": 855,
+                  "startColumn": 30,
+                  "endLine": 855,
+                  "endColumn": 39
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?loadModel@VulkanRHI@QYHS@@AEAAXXZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/QyhsRuntime/function/render/rhi/vulkan/vulkan_rhi.cpp"
+                },
+                "region": {
+                  "startLine": 854,
+                  "startColumn": 23,
+                  "endLine": 854,
+                  "endColumn": 32
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?loadModel@VulkanRHI@QYHS@@AEAAXXZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'SwapChainSupportDetails::capabilities' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/QyhsRuntime/function/render/rhi/vulkan/vulkan_rhi.h"
+                },
+                "region": {
+                  "startLine": 120,
+                  "startColumn": 1,
+                  "endLine": 120,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0SwapChainSupportDetails@@QEAA@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "SwapChainSupportDetails::capabilities"
+          }
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'VkImageTiling' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/QyhsRuntime/function/render/rhi/vulkan/vulkan_rhi.cpp"
+                },
+                "region": {
+                  "startLine": 1423,
+                  "startColumn": 18,
+                  "endLine": 1423,
+                  "endColumn": 18
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?createImage@VulkanRHI@QYHS@@AEAAXIIW4VkFormat@@IW4VkSampleCountFlagBits@@W4VkImageTiling@@IIAEAPEAUVkImage_T@@AEAPEAUVkDeviceMemory_T@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'VkImageLayout' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///E:/VS_Project/QyhsEngine/QyhsRuntime/function/render/rhi/vulkan/vulkan_rhi.cpp"
+                },
+                "region": {
+                  "startLine": 1458,
+                  "startColumn": 18,
+                  "endLine": 1458,
+                  "endColumn": 18
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?transitionImageLayout@VulkanRHI@QYHS@@AEAAXPEAUVkImage_T@@W4VkFormat@@IW4VkImageLayout@@2@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tool": {
+        "driver": {
+          "name": "PREfast",
+          "fullName": "PREfast Code Analysis",
+          "version": "14.29.30136.0",
+          "informationUri": "https://aka.ms/cpp/ca"
+        }
+      },
+      "invocations": [
+        {
+          "commandLine": "\"D:\\Visual Studio2019\\VisualStudioIDE\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX86\\x64\\c1xx.dll\" -ACf{1F7B090C-16DB-4822-966A-A93D26ED4681} -ACpmspft140.dll -Alint -D_PREFAST_ -D_AST_FE_ -Analyze -zm0x0053C1B0 -il C:\\Users\\1\\AppData\\Local\\Temp\\_CL_5e360bddast -typedil -f function\\render\\rhi\\vulkan\\vulkan_rhi.cpp -Ze -D_MSC_EXTENSIONS -Zp16 -pc \\:/ -D_MSC_VER=1929 -D_MSC_FULL_VER=192930136 -D_MSC_BUILD=0 -D_M_AMD64=100 -ZILP448 -D_M_X64=100 -D_WIN64 -D_WIN32 -GR -D_CPPRTTI -I E:\\VS_Project\\QyhsEngine\\3rdparty\\source\\glfw\\include -I E:\\VS_Project\\QyhsEngine\\QyhsRuntime -I E:\\VS_Project\\QyhsEngine\\3rdparty\\VulkanSDK\\include -I E:\\VS_Project\\QyhsEngine\\3rdparty\\glm -I E:\\VS_Project\\QyhsEngine\\3rdparty -I E:\\VS_Project\\QyhsEngine\\QyhsEditor\\code\\source -I E:\\VS_Project\\QyhsEngine\\QyhsEditor\\code\\include -nologo -W 3 -diagnostics:column -D_GUARDOVERFLOW_CRT_ALLOCATORS=1 -Ot -DCODE_ANALYSIS -D_DEBUG -D_CONSOLE -DGLFW_INCLUDE_VULKAN -D_UNICODE -DUNICODE -EHs -D_CPPUNWIND -EHc -D__MSVC_RUNTIME_CHECKS -RTCs -RTCu -MDd -D_DEBUG -D_MT -D_DLL -GS -D_M_FP_PRECISE -permissive- -Zc:wchar_t -Zc:forScope -std:c++17 -Fox64\\Debug\\vulkan_rhi.obj -FdE:\\VS_Project\\QyhsEngine\\x64\\Debug\\QyhsRuntime.pdb -external:W 3 -Gd -analyze:projectdirectory E:\\VS_Project\\QyhsEngine\\QyhsRuntime -analyze:rulesetdirectory ;D:\\Visual Studio2019\\VisualStudioIDE\\Team Tools\\Static Analysis Tools\\\\Rule Sets; -analyze:ruleset D:\\Visual Studio2019\\VisualStudioIDE\\Team Tools\\Static Analysis Tools\\Rule Sets\\NativeRecommendedRules.ruleset -analyze:quiet -analyze:plugin D:\\Visual Studio2019\\VisualStudioIDE\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX86\\x86\\EspXEngine.dll -FC -errorreport:prompt -I D:\\Visual Studio2019\\VisualStudioIDE\\VC\\Tools\\MSVC\\14.29.30133\\include -I D:\\Visual Studio2019\\VisualStudioIDE\\VC\\Tools\\MSVC\\14.29.30133\\atlmfc\\include -I D:\\Visual Studio2019\\VisualStudioIDE\\VC\\Auxiliary\\VS\\include -I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22621.0\\ucrt -I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22621.0\\um -I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22621.0\\shared -I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22621.0\\winrt -I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22621.0\\cppwinrt -I C:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.8\\Include\\um -external:I D:\\Visual Studio2019\\VisualStudioIDE\\VC\\Tools\\MSVC\\14.29.30133\\include -I D:\\Visual Studio2019\\VisualStudioIDE\\VC\\Tools\\MSVC\\14.29.30133\\include -external:I D:\\Visual Studio2019\\VisualStudioIDE\\VC\\Tools\\MSVC\\14.29.30133\\atlmfc\\include -I D:\\Visual Studio2019\\VisualStudioIDE\\VC\\Tools\\MSVC\\14.29.30133\\atlmfc\\include -external:I D:\\Visual Studio2019\\VisualStudioIDE\\VC\\Auxiliary\\VS\\include -I D:\\Visual Studio2019\\VisualStudioIDE\\VC\\Auxiliary\\VS\\include -external:I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22621.0\\ucrt -I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22621.0\\ucrt -external:I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22621.0\\um -I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22621.0\\um -external:I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22621.0\\shared -I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22621.0\\shared -external:I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22621.0\\winrt -I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22621.0\\winrt -external:I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22621.0\\cppwinrt -I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22621.0\\cppwinrt -external:I C:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.8\\Include\\um -I C:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.8\\Include\\um",
+          "executionSuccessful": true
+        }
+      ],
+      "artifacts": [
+        {
+          "location": {
+            "uri": "file:///E:/VS_Project/QyhsEngine/QyhsRuntime/function/render/rhi/vulkan/vulkan_rhi.h"
+          },
+          "roles": [
+            "resultFile"
+          ],
+          "hashes": {
+            "md5": "8d83b851208e881e1a6a1f25824c8efc"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/stb_image.h"
+          },
+          "roles": [
+            "resultFile"
+          ],
+          "hashes": {
+            "md5": "731495e5e34eb541e3da79691f30392c"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///E:/VS_Project/QyhsEngine/QyhsRuntime/function/render/window_system.h"
+          },
+          "roles": [
+            "resultFile"
+          ],
+          "hashes": {
+            "md5": "67f8950d8aebd166607e5602a85d66fb"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///E:/VS_Project/QyhsEngine/3rdparty/tiny_obj_loader.h"
+          },
+          "roles": [
+            "resultFile"
+          ],
+          "hashes": {
+            "md5": "3226a14e4a4c3a51ddbfa87bd6240f6b"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///E:/VS_Project/QyhsEngine/QyhsRuntime/function/render/rhi/vulkan/vulkan_rhi.cpp"
+          },
+          "roles": [
+            "analysisTarget",
+            "resultFile"
+          ],
+          "hashes": {
+            "md5": "f09307b875092a4b3e95714cdd826799"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/vulkansdk/include/vulkan/vulkan.h"
+          },
+          "hashes": {
+            "md5": "1fc9c6eaff384b3a8e8a8d481165a333"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/vulkansdk/include/vulkan/vk_platform.h"
+          },
+          "hashes": {
+            "md5": "33608c48007dc9329ed7492ff801f607"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/vulkansdk/include/vulkan/vulkan_core.h"
+          },
+          "hashes": {
+            "md5": "7b00c03bbbb95b0863e3f8a371821083"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/source/glfw/include/glfw/glfw3.h"
+          },
+          "hashes": {
+            "md5": "2b8d5c95a035e11120927bbdb4dc12d7"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/glm.hpp"
+          },
+          "hashes": {
+            "md5": "86e130898c9a16fa56a4e1a1d6e4b9bf"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/_fixes.hpp"
+          },
+          "hashes": {
+            "md5": "4258db4aa4db2fcf1b84b9c64e061c17"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/setup.hpp"
+          },
+          "hashes": {
+            "md5": "450bc8dce28fceef2000a720658eeb5f"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/simd/platform.h"
+          },
+          "hashes": {
+            "md5": "c022767b43bffe870735e2000db2de2a"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/fwd.hpp"
+          },
+          "hashes": {
+            "md5": "61df6b1811b6a00fdbe94fca3152e9c8"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/qualifier.hpp"
+          },
+          "hashes": {
+            "md5": "ca5da67ccf529c70fd134f265a3a1ad4"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/vec2.hpp"
+          },
+          "hashes": {
+            "md5": "2a69862d67d85af84158250d454875a9"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_bool2.hpp"
+          },
+          "hashes": {
+            "md5": "03e0316c5ed390f7777bc2e3887c71ac"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_vec2.hpp"
+          },
+          "hashes": {
+            "md5": "8be887b8a28588d9319b4a0ee51b88a3"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_vec2.inl"
+          },
+          "hashes": {
+            "md5": "964a5f2c7cbf4c7553dbb460050241d7"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/compute_vector_relational.hpp"
+          },
+          "hashes": {
+            "md5": "3dbc4c0370fd4f1afc2de835eef5ee2d"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_bool2_precision.hpp"
+          },
+          "hashes": {
+            "md5": "1fa289fbdb4f7e3fbbdc8ea54f143b2e"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_float2.hpp"
+          },
+          "hashes": {
+            "md5": "49dd688b9fd99a26ac358e2f6eef952a"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_float2_precision.hpp"
+          },
+          "hashes": {
+            "md5": "2970883af8ee8e73632605db7fa38582"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_double2.hpp"
+          },
+          "hashes": {
+            "md5": "6e89336c6c438cf8f842725b6d979bf5"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_double2_precision.hpp"
+          },
+          "hashes": {
+            "md5": "13999b208c8c9f89c80c2e83f10c5258"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_int2.hpp"
+          },
+          "hashes": {
+            "md5": "426f21371933605c17ded62b4e83f56d"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_int2_sized.hpp"
+          },
+          "hashes": {
+            "md5": "0fef15a860b7857166afdcd123a3265c"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/scalar_int_sized.hpp"
+          },
+          "hashes": {
+            "md5": "56922a1c4ea160d56d67645575d3c32b"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_uint2.hpp"
+          },
+          "hashes": {
+            "md5": "fb1d0769086196ce9642c77939f64395"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_uint2_sized.hpp"
+          },
+          "hashes": {
+            "md5": "ea6d506440f1fc094a02fbc45066c07e"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/scalar_uint_sized.hpp"
+          },
+          "hashes": {
+            "md5": "8dd47eb717f4dfd571b5074c5597ac46"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/vec3.hpp"
+          },
+          "hashes": {
+            "md5": "30188f353bb3c74313eb54147568449f"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_bool3.hpp"
+          },
+          "hashes": {
+            "md5": "9f1eb69356c03e6dad0472d65103ed89"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_vec3.hpp"
+          },
+          "hashes": {
+            "md5": "1b42b53f984bd2fa9761314c81f03e44"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_vec3.inl"
+          },
+          "hashes": {
+            "md5": "08032a97cc5f9e09df7a3e6ea54afda3"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_bool3_precision.hpp"
+          },
+          "hashes": {
+            "md5": "0caacc42ecbc6b95921dc848cd42230b"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_float3.hpp"
+          },
+          "hashes": {
+            "md5": "9d538505432eede5b464649e83e6352a"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_float3_precision.hpp"
+          },
+          "hashes": {
+            "md5": "bb6a82373dbdf07ab4987983ff9625f5"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_double3.hpp"
+          },
+          "hashes": {
+            "md5": "2e908d1a60b45775bf54d07440b2e2ea"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_double3_precision.hpp"
+          },
+          "hashes": {
+            "md5": "b0cb1d7e8daedd408c7914e56d4886aa"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_int3.hpp"
+          },
+          "hashes": {
+            "md5": "9177707955903f049664f893e56f1030"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_int3_sized.hpp"
+          },
+          "hashes": {
+            "md5": "6c3cfc77eee6618f0f4dfb090179aa25"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_uint3.hpp"
+          },
+          "hashes": {
+            "md5": "25167e31b36c7793295da7510084070c"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_uint3_sized.hpp"
+          },
+          "hashes": {
+            "md5": "e0e40d1e398b4c980d25e2b9ca0d462d"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/vec4.hpp"
+          },
+          "hashes": {
+            "md5": "abcf6911267e379a78288d87e3bdcbe4"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_bool4.hpp"
+          },
+          "hashes": {
+            "md5": "06880ff97b470a930eba055982f0ad9f"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_vec4.hpp"
+          },
+          "hashes": {
+            "md5": "d88e16a82edba11f0e7930fe191736ce"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_vec4.inl"
+          },
+          "hashes": {
+            "md5": "3a49a2c11e8043af63a6f643c6253da2"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_bool4_precision.hpp"
+          },
+          "hashes": {
+            "md5": "e3a3f70625137f2f8bd281f3375f4552"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_float4.hpp"
+          },
+          "hashes": {
+            "md5": "55b643da17a37bdc82f5cd74f09f64c5"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_float4_precision.hpp"
+          },
+          "hashes": {
+            "md5": "18a43606bd9f0679bf05f1a85bd315bb"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_double4.hpp"
+          },
+          "hashes": {
+            "md5": "7304908ade91874f663a019949d4da9c"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_double4_precision.hpp"
+          },
+          "hashes": {
+            "md5": "c4b32c85617367909dfff47bdc2bfd2b"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_int4.hpp"
+          },
+          "hashes": {
+            "md5": "ada224b16331467c3c41590d07ff6bec"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_int4_sized.hpp"
+          },
+          "hashes": {
+            "md5": "47cbdc840d44755efb1226b176dba771"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_uint4.hpp"
+          },
+          "hashes": {
+            "md5": "64a5d3844628a9f22736ab0f0e306af4"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_uint4_sized.hpp"
+          },
+          "hashes": {
+            "md5": "b7e9ed75d880e607dec273c238cc18a3"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/mat2x2.hpp"
+          },
+          "hashes": {
+            "md5": "f09d4c48512108de48e2c95a1f8297fd"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_double2x2.hpp"
+          },
+          "hashes": {
+            "md5": "67f1076b5a202f71d4303846cbaa3f74"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_mat2x2.hpp"
+          },
+          "hashes": {
+            "md5": "8000e2be27d42172560991c99c0499bd"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_mat2x2.inl"
+          },
+          "hashes": {
+            "md5": "de1a084eb0290d4499a15c1bd4825d59"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/matrix.hpp"
+          },
+          "hashes": {
+            "md5": "42fd66519422162bea3542c3a73939b3"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/mat2x3.hpp"
+          },
+          "hashes": {
+            "md5": "f668df5af6f72c51d9bacd470955c565"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_double2x3.hpp"
+          },
+          "hashes": {
+            "md5": "aaa1da294d1d8484119b34c506158849"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_mat2x3.hpp"
+          },
+          "hashes": {
+            "md5": "48ad9aee97558da3ecabc33d91d1edde"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_mat2x3.inl"
+          },
+          "hashes": {
+            "md5": "ec8f515d10da3dec68dc02b585fff126"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_double2x3_precision.hpp"
+          },
+          "hashes": {
+            "md5": "468883a552985c38ec0852cd4553dbd9"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_float2x3.hpp"
+          },
+          "hashes": {
+            "md5": "c5c72f8544f47325d57ac2267e2ba800"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_float2x3_precision.hpp"
+          },
+          "hashes": {
+            "md5": "9d8d4fa547b0516aae41e3006d396ff2"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/mat2x4.hpp"
+          },
+          "hashes": {
+            "md5": "7d79eae01c98fe7540989aa66b0444af"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_double2x4.hpp"
+          },
+          "hashes": {
+            "md5": "7ded1199b1ec5b8baab5d2fed1308060"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_mat2x4.hpp"
+          },
+          "hashes": {
+            "md5": "510bcd0c9279d0c60bc261eb888622cf"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_mat2x4.inl"
+          },
+          "hashes": {
+            "md5": "0288d4ab20b1a11f4500684d5e1b8a54"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_double2x4_precision.hpp"
+          },
+          "hashes": {
+            "md5": "8d8bdd1e3ad9f9fdc77f286094a56f2b"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_float2x4.hpp"
+          },
+          "hashes": {
+            "md5": "1fdfdde56f3483e76b67966cea5d5c13"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_float2x4_precision.hpp"
+          },
+          "hashes": {
+            "md5": "acff309f234e3dfe20efc23e4d6c2c55"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/mat3x2.hpp"
+          },
+          "hashes": {
+            "md5": "8ddd1ea2f6968b984e75afc562311fcc"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_double3x2.hpp"
+          },
+          "hashes": {
+            "md5": "30ad62cf96f34da17012cf1f44117504"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_mat3x2.hpp"
+          },
+          "hashes": {
+            "md5": "1279679850187d2c2b2bee5dd53c6d12"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_mat3x2.inl"
+          },
+          "hashes": {
+            "md5": "fb4c5af8d9eeffb1a62d056e2e461c12"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_double3x2_precision.hpp"
+          },
+          "hashes": {
+            "md5": "173487ed009d901886f1d4f49c83e99b"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_float3x2.hpp"
+          },
+          "hashes": {
+            "md5": "7ab36c6d6d9b3d299b88340397a0644f"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_float3x2_precision.hpp"
+          },
+          "hashes": {
+            "md5": "aa9fa7827108b83ce1b786faf90dda49"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/mat3x3.hpp"
+          },
+          "hashes": {
+            "md5": "bdeac3c9494ab29b6063e7f20c5f3a76"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_double3x3.hpp"
+          },
+          "hashes": {
+            "md5": "fdadc029e2e2f979092f3558009bc24b"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_mat3x3.hpp"
+          },
+          "hashes": {
+            "md5": "73516c1ba2f8c4bf2dbb11fdfee334bf"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_mat3x3.inl"
+          },
+          "hashes": {
+            "md5": "081bb36ee96b72e2890a55c7a536d7e2"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_double3x3_precision.hpp"
+          },
+          "hashes": {
+            "md5": "39353cd1744b46aac8bfd44aa7670943"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_float3x3.hpp"
+          },
+          "hashes": {
+            "md5": "0a894c4357b58bcd443799d4d70eca8b"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_float3x3_precision.hpp"
+          },
+          "hashes": {
+            "md5": "573ce88c36556454fe90f8b2acf41064"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/mat3x4.hpp"
+          },
+          "hashes": {
+            "md5": "db69584ff612a22f46b6d3d0abf30b18"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_double3x4.hpp"
+          },
+          "hashes": {
+            "md5": "947b7fb951811fd726d796ddbbc51bf4"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_mat3x4.hpp"
+          },
+          "hashes": {
+            "md5": "5fec13b77bddd12a687866900838f8ef"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_mat3x4.inl"
+          },
+          "hashes": {
+            "md5": "e317f3f3340b7d5a2507ca44b740bfa8"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_double3x4_precision.hpp"
+          },
+          "hashes": {
+            "md5": "e6779ff4c1759a8db0d6d986bcdb64ba"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_float3x4.hpp"
+          },
+          "hashes": {
+            "md5": "39d375e30adc9f2def3e9e82ce2f72a8"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_float3x4_precision.hpp"
+          },
+          "hashes": {
+            "md5": "14b646c38559751a2dc995f407c8b866"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/mat4x2.hpp"
+          },
+          "hashes": {
+            "md5": "14a23b93f932b144469b200e87b8f825"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_double4x2.hpp"
+          },
+          "hashes": {
+            "md5": "b13ab8d95a29b67f5e1e94c7bb8e6df9"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_mat4x2.hpp"
+          },
+          "hashes": {
+            "md5": "1b28ed5990a46ba43c55f0ee41a105cb"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_mat4x2.inl"
+          },
+          "hashes": {
+            "md5": "4bd9df27ee2ef5669ba648acd3d08722"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_double4x2_precision.hpp"
+          },
+          "hashes": {
+            "md5": "79adfc17ac77ae525ad315f1dd9714d2"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_float4x2.hpp"
+          },
+          "hashes": {
+            "md5": "987e6a564945a40805a6fda80503697c"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_float4x2_precision.hpp"
+          },
+          "hashes": {
+            "md5": "b0569fc05b029b4873f79f89c6ea632a"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/mat4x3.hpp"
+          },
+          "hashes": {
+            "md5": "d4866acb2b555bdd47ab09ce17715510"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_double4x3.hpp"
+          },
+          "hashes": {
+            "md5": "8b6a3b452070b64c909aa625f7797efc"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_mat4x3.hpp"
+          },
+          "hashes": {
+            "md5": "ced466943788cfca5bb19249f89a5a7b"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_mat4x3.inl"
+          },
+          "hashes": {
+            "md5": "223db0fb2270ad5984daf86f771a0801"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_double4x3_precision.hpp"
+          },
+          "hashes": {
+            "md5": "473f5150365f0484d1ba8c1c558b1746"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_float4x3.hpp"
+          },
+          "hashes": {
+            "md5": "d0833389efe6d299c4afddc1fa41c71f"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_float4x3_precision.hpp"
+          },
+          "hashes": {
+            "md5": "3470646ee954d2a4ebac7a63b87890a6"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/mat4x4.hpp"
+          },
+          "hashes": {
+            "md5": "a7dcdf3d616f5ec44bf6e3886cef69d8"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_double4x4.hpp"
+          },
+          "hashes": {
+            "md5": "d712f6bbe13d5e32d19389da62611617"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_mat4x4.hpp"
+          },
+          "hashes": {
+            "md5": "244f1a3f9face57382d4c8f671c1e297"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_mat4x4.inl"
+          },
+          "hashes": {
+            "md5": "e70aa231a312b414ce54928c71d79fdd"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_double4x4_precision.hpp"
+          },
+          "hashes": {
+            "md5": "58dbe39d31ed909fee0dfa96b7febd2d"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_float4x4.hpp"
+          },
+          "hashes": {
+            "md5": "f55fbdf3dbdf2e5a3d2a4055738ea7b1"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_float4x4_precision.hpp"
+          },
+          "hashes": {
+            "md5": "b504e594a03c39d97e0ac65217756cf9"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/func_matrix.inl"
+          },
+          "hashes": {
+            "md5": "4e4770dbced546f9b411b76cfdb53e7f"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/geometric.hpp"
+          },
+          "hashes": {
+            "md5": "2564acf12cfb14dffc775bba9d05def4"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/func_geometric.inl"
+          },
+          "hashes": {
+            "md5": "20b7c0d583de755f76ed9ea6e7bfd7fa"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/exponential.hpp"
+          },
+          "hashes": {
+            "md5": "d0420791049cb2398cbaf2f534378744"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_vec1.hpp"
+          },
+          "hashes": {
+            "md5": "fab4fd42bc992c425f2e0c2c46ae34d4"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_vec1.inl"
+          },
+          "hashes": {
+            "md5": "b6fc4673b6f8e27efe98b5ccb43b49f6"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/func_exponential.inl"
+          },
+          "hashes": {
+            "md5": "b19f14dfb0cfa5ffaa0bdc722dc58583"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/vector_relational.hpp"
+          },
+          "hashes": {
+            "md5": "fc9e73be8c936c74b46c1113342f398c"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/func_vector_relational.inl"
+          },
+          "hashes": {
+            "md5": "91234408444307e7d2d5374b0239bf08"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/_vectorize.hpp"
+          },
+          "hashes": {
+            "md5": "f13f86894c3d12be4a4a5c05bd1b939d"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/common.hpp"
+          },
+          "hashes": {
+            "md5": "7dd527c6e4e1d794bbdf2548d5bb557d"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/func_common.inl"
+          },
+          "hashes": {
+            "md5": "bc98dd3ec040625d32c1212323148098"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/compute_common.hpp"
+          },
+          "hashes": {
+            "md5": "5ca0a92abc175d72ce50841ee56a11e3"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_double2x2_precision.hpp"
+          },
+          "hashes": {
+            "md5": "450bef16ce9975cf6eceb803837eea46"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_float2x2.hpp"
+          },
+          "hashes": {
+            "md5": "aba93c6e3189111b8c738ba96b22744e"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_float2x2_precision.hpp"
+          },
+          "hashes": {
+            "md5": "3d06f51d7e991f5c3c8a2baee4198c26"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/trigonometric.hpp"
+          },
+          "hashes": {
+            "md5": "7daa4eb621d3c7b2ef853d26b9bacf99"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/func_trigonometric.inl"
+          },
+          "hashes": {
+            "md5": "6b9b39951c52f79881c5f6a44bc147ca"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/packing.hpp"
+          },
+          "hashes": {
+            "md5": "d7359a27a6275b1d6239015770896026"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/func_packing.inl"
+          },
+          "hashes": {
+            "md5": "05831c7ec61e8f2de94180b63e575f3b"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_half.hpp"
+          },
+          "hashes": {
+            "md5": "37bd666b26f36fd2c230c580c8fe2a2a"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_half.inl"
+          },
+          "hashes": {
+            "md5": "f9dde417557b4a58bff42177fe48727f"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/integer.hpp"
+          },
+          "hashes": {
+            "md5": "9c1f4e4cccc9c898d20a19923cd6d9b7"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/func_integer.inl"
+          },
+          "hashes": {
+            "md5": "408e40bdbf5bbe602a4e3c13f4c0c299"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/gtc/matrix_transform.hpp"
+          },
+          "hashes": {
+            "md5": "b6f63acd21bf911dda29cd6737dcbfbb"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_projection.hpp"
+          },
+          "hashes": {
+            "md5": "edd95a8fc5397ec2fcee498d592c8fb0"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/gtc/constants.hpp"
+          },
+          "hashes": {
+            "md5": "ff2ca20ef3a0846df61d4270c709315d"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/scalar_constants.hpp"
+          },
+          "hashes": {
+            "md5": "8d0ab6540c5607c6ffe14b2d4661abc1"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/scalar_constants.inl"
+          },
+          "hashes": {
+            "md5": "597ae54cdaa8fb2b98eccfb5582ff6f8"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/gtc/constants.inl"
+          },
+          "hashes": {
+            "md5": "7724d835030a82936fceee11b595a8b7"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_projection.inl"
+          },
+          "hashes": {
+            "md5": "3db80edb55b08fd25d651660cb6a502e"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_clip_space.hpp"
+          },
+          "hashes": {
+            "md5": "c6a778dd1dd57d8892c04d1d3884c05b"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_clip_space.inl"
+          },
+          "hashes": {
+            "md5": "f515518d4c61f2aac78130fc28cb15c4"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_transform.hpp"
+          },
+          "hashes": {
+            "md5": "ba03712dd9c3842d72e109850ae9f8e8"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/matrix_transform.inl"
+          },
+          "hashes": {
+            "md5": "fd4375e7b439e9ecf9c5f039450bd6c8"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/gtc/matrix_transform.inl"
+          },
+          "hashes": {
+            "md5": "6ea7580110141824bf413d5396e4853a"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/gtx/hash.hpp"
+          },
+          "hashes": {
+            "md5": "822788aead5f91df009b9fde4377d05c"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/gtc/vec1.hpp"
+          },
+          "hashes": {
+            "md5": "359036e5d69a2754b5140c24ac7939be"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_bool1.hpp"
+          },
+          "hashes": {
+            "md5": "d5b83a791dcb75d61e4fc68cb6aa446b"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_bool1_precision.hpp"
+          },
+          "hashes": {
+            "md5": "8cabd19680c59f2b9c5971dabd95ac62"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_float1.hpp"
+          },
+          "hashes": {
+            "md5": "4748d14a05d34447fd7f226f89e804b0"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_float1_precision.hpp"
+          },
+          "hashes": {
+            "md5": "bfdde8d7404de269095c570ede7ce6d2"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_double1.hpp"
+          },
+          "hashes": {
+            "md5": "94b1644af6405fca137c6bd00c827e32"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_double1_precision.hpp"
+          },
+          "hashes": {
+            "md5": "08b9296a5305e6d37ec31bed0e45a57d"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_int1.hpp"
+          },
+          "hashes": {
+            "md5": "e264f2c1303bcc85abc58b851407be94"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_int1_sized.hpp"
+          },
+          "hashes": {
+            "md5": "535f2c310b399be08a47647becb7bba6"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_uint1.hpp"
+          },
+          "hashes": {
+            "md5": "ec3384086aa3d536dd19ac2fa2ca5a4b"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_uint1_sized.hpp"
+          },
+          "hashes": {
+            "md5": "b2bcadbf579c0ba92ee99916785ddc9a"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/gtc/quaternion.hpp"
+          },
+          "hashes": {
+            "md5": "94cdd453da906d3eb1d310bc93bcbac4"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_relational.hpp"
+          },
+          "hashes": {
+            "md5": "2959cfc6937b919e9cf1f6e489732808"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/vector_relational.inl"
+          },
+          "hashes": {
+            "md5": "09e7b3fd91b42c6d4f204be182c0a5be"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_float.hpp"
+          },
+          "hashes": {
+            "md5": "dbbbdc1019716c3944f478244ecf41e1"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/quaternion_common.hpp"
+          },
+          "hashes": {
+            "md5": "419d4bdee57755064572cbbacd9d353d"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/quaternion_geometric.hpp"
+          },
+          "hashes": {
+            "md5": "7a9801b2f4fb9862770bd849a4613432"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/quaternion_geometric.inl"
+          },
+          "hashes": {
+            "md5": "71a5b8efa04b81147cecd630cf5d462b"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/quaternion_common.inl"
+          },
+          "hashes": {
+            "md5": "261e30f85960369f3a7b2cdfeb19f8ea"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/quaternion_float.hpp"
+          },
+          "hashes": {
+            "md5": "93df7cdd7843a12705f288ccfc8f2b5c"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_quat.hpp"
+          },
+          "hashes": {
+            "md5": "de5195036f4e3ab2465ebea1cccb831b"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/quaternion_relational.hpp"
+          },
+          "hashes": {
+            "md5": "c87f2a1c42fabb62ca32c20cdf6484ea"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/quaternion_relational.inl"
+          },
+          "hashes": {
+            "md5": "ade4a39cc8051ba3dc1d20eaa75b5566"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/detail/type_quat.inl"
+          },
+          "hashes": {
+            "md5": "3b06aadb66613b3a662ac1315a680699"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/quaternion_float_precision.hpp"
+          },
+          "hashes": {
+            "md5": "be3830d30c23028c84c2c719d4ce0b1b"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/quaternion_double.hpp"
+          },
+          "hashes": {
+            "md5": "4f093bea45b89e0b3682560ee36f79c0"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/quaternion_double_precision.hpp"
+          },
+          "hashes": {
+            "md5": "9a49f20faa6b6d46d74ecfdad6b9d64f"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/quaternion_trigonometric.hpp"
+          },
+          "hashes": {
+            "md5": "877832534386fa59e8c14606c7b0592b"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/quaternion_trigonometric.inl"
+          },
+          "hashes": {
+            "md5": "73d7ed50434b137113173316d38b6eb4"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/quaternion_transform.hpp"
+          },
+          "hashes": {
+            "md5": "73d519b6a57d35f6265d7368297a8703"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/ext/quaternion_transform.inl"
+          },
+          "hashes": {
+            "md5": "06469830f6976e8404233be4b014f825"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/gtc/quaternion.inl"
+          },
+          "hashes": {
+            "md5": "856803edfbd90bf607a1cbf08b557a20"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/gtc/epsilon.hpp"
+          },
+          "hashes": {
+            "md5": "1bc62b34076a67088c62710d1b4d2115"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/gtc/epsilon.inl"
+          },
+          "hashes": {
+            "md5": "a809d51b6a872e5a0ad13599e52b60f2"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/gtx/dual_quaternion.hpp"
+          },
+          "hashes": {
+            "md5": "b852c1739f7bcfda02b4771907999b3f"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/gtx/dual_quaternion.inl"
+          },
+          "hashes": {
+            "md5": "4d0c151da6990ca0f3e490540c4b1bc7"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/3rdparty/glm/glm/gtx/hash.inl"
+          },
+          "hashes": {
+            "md5": "b3d59503c785dc56e024ac9492425d3c"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/qyhsruntime/function/render/rhi/rhi.h"
+          },
+          "hashes": {
+            "md5": "eb94b218e6cfba798a44f1d4de258d6a"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/qyhsruntime/function/global/global_context.h"
+          },
+          "hashes": {
+            "md5": "c07c236c721a33ed18dbbd904b71e230"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/qyhsruntime/core/log/log_system.h"
+          },
+          "hashes": {
+            "md5": "a85b5914ec3e6975d6d629a7102d8bd7"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/qyhsruntime/function/render/render_system.h"
+          },
+          "hashes": {
+            "md5": "1b88469112f14c5ae1f59ef03c5efd45"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/qyhsruntime/function/render/render_pipeline.h"
+          },
+          "hashes": {
+            "md5": "e46f34ba30aae35b37308e55b30e8134"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/qyhsruntime/function/render/render_pipeline_base.h"
+          },
+          "hashes": {
+            "md5": "d7c7a0e1cdac2c3f0707468e7bb7ea03"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/qyhseditor/code/include/editor_global_context.h"
+          },
+          "hashes": {
+            "md5": "aaf685a4a1ec94d321117f8817427777"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/qyhseditor/code/include/editor_input_manager.h"
+          },
+          "hashes": {
+            "md5": "73dcab1fa49f653c9980553d81f881bf"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/qyhseditor/code/include/editor_scene_manager.h"
+          },
+          "hashes": {
+            "md5": "a84fee2d8388520f28baa14e6681dd50"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/vs_project/qyhsengine/qyhsruntime/function/render/render_camera.h"
+          },
+          "hashes": {
+            "md5": "faeb079ae42922ac95d5be27751c3808"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+^E:\VS_PROJECT\QYHSENGINE\CMAKEFILES\FA11A57B05570C65462B2974A053E531\QYHSPRECOMPILE.RULE
+setlocal
+D:\CMake\bin\cmake.exe -E echo "************************************************************* "
+if %errorlevel% neq 0 goto :cmEnd
+D:\CMake\bin\cmake.exe -E echo "**** [Precompile] BEGIN "
+if %errorlevel% neq 0 goto :cmEnd
+D:\CMake\bin\cmake.exe -E echo E:/VS_Project/QyhsEngine/engine/bin/QyhsParser.exe
+if %errorlevel% neq 0 goto :cmEnd
+D:\CMake\bin\cmake.exe -E echo E:/VS_Project/QyhsEngine/engine/bin/precompile.json
+if %errorlevel% neq 0 goto :cmEnd
+D:\CMake\bin\cmake.exe -E echo E:/VS_Project/QyhsEngine/parser_header.h
+if %errorlevel% neq 0 goto :cmEnd
+bin\QyhsParser.exe E:/VS_Project/QyhsEngine/engine/bin/precompile.json E:/VS_Project/QyhsEngine/parser_header.h E:/VS_Project/QyhsEngine/engine/source * Qyhs 0
+if %errorlevel% neq 0 goto :cmEnd
+D:\CMake\bin\cmake.exe -E echo "+++ Precompile finished +++"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\VS_PROJECT\QYHSENGINE\ENGINE\CMAKELISTS.TXT
+setlocal
+D:\CMake\bin\cmake.exe -SE:/VS_Project/QyhsEngine -BE:/VS_Project/QyhsEngine --check-stamp-file E:/VS_Project/QyhsEngine/engine/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

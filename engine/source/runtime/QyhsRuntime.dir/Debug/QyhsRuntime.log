@@ -1,0 +1,3 @@
+﻿  level.cpp
+E:\VS_Project\QyhsEngine\engine\source\runtime\function\framework\level\level.cpp(25): warning C4715: 'QYHS::Level::load': not all control paths return a value
+  QyhsRuntime.vcxproj -> E:\VS_Project\QyhsEngine\engine\source\runtime\Debug\QyhsRuntime.lib

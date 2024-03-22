@@ -1,0 +1,50 @@
+﻿  engine.cpp
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(37,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(37,19): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(55,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(55,22): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(73,17): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(73,10): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  mesh_component.cpp
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(37,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(37,19): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(55,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(55,22): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(73,17): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(73,10): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  global_context.cpp
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(37,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(37,19): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(55,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(55,22): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(73,17): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(73,10): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  render_resource.cpp
+  render_scene.cpp
+  render_system.cpp
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(37,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(37,19): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(55,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(55,22): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(73,17): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(73,10): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  vulkan_rhi.cpp
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(37,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(37,19): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(55,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(55,22): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(73,17): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(73,10): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\rhi\vulkan\vulkan_rhi.cpp(28,29): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\rhi\vulkan\vulkan_rhi.cpp(776,69): warning C4244: '=': conversion from 'double' to 'uint32_t', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\rhi\vulkan\vulkan_rhi.cpp(1050,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  window_system.cpp
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(37,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(37,19): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(55,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(55,22): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(73,17): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\window_system.h(73,10): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  Generating Code...
+E:\VS_Project\QyhsEngine\QyhsRuntime\function\render\rhi\vulkan\vulkan_rhi.cpp(99): warning C4172: returning address of local variable or temporary: descriptorPool
+  QyhsRuntime.vcxproj -> E:\VS_Project\QyhsEngine\x64\Debug\QyhsRuntime.lib

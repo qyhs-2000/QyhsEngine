@@ -1,0 +1,7 @@
+.vs
+*.vcxproj
+*.vcxproj.filters
+*.zip
+*.so
+3rdparty/
+engine/3rdparty/
