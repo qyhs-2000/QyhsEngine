@@ -1,0 +1,10 @@
+^E:\VS_PROJECT\QYHSENGINE\ENGINE\3RDPARTY\GLFW\SRC\CMAKELISTS.TXT
+setlocal
+D:\CMake\bin\cmake.exe -SE:/VS_Project/QyhsEngine -BE:/VS_Project/QyhsEngine --check-stamp-file E:/VS_Project/QyhsEngine/engine/3rdparty/glfw/src/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

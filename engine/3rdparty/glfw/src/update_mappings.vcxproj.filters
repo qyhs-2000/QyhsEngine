@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="E:\VS_Project\QyhsEngine\CMakeFiles\a2a5e6122e94e1cb5ac6c70a82a2e1d7\update_mappings.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\VS_Project\QyhsEngine\engine\3rdparty\glfw\src\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="E:\VS_Project\QyhsEngine\engine\3rdparty\glfw\src\mappings.h.in">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="E:\VS_Project\QyhsEngine\engine\3rdparty\glfw\CMake\GenerateMappings.cmake" />
+    <None Include="E:\VS_Project\QyhsEngine\engine\3rdparty\glfw\src\CMakeFiles\update_mappings" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{E76C0AB4-3EDD-38BB-B065-B322E070E67A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{B04FD247-CF3C-3C7D-9F5D-7CCD60B5EDE7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

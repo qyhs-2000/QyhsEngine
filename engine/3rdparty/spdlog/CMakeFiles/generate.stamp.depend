@@ -1,0 +1,12 @@
+# CMake generation dependency list for this directory.
+D:/CMake/share/cmake-3.28/Modules/CheckCSourceCompiles.cmake
+D:/CMake/share/cmake-3.28/Modules/CheckIncludeFile.cmake
+D:/CMake/share/cmake-3.28/Modules/CheckLibraryExists.cmake
+D:/CMake/share/cmake-3.28/Modules/FindPackageHandleStandardArgs.cmake
+D:/CMake/share/cmake-3.28/Modules/FindPackageMessage.cmake
+D:/CMake/share/cmake-3.28/Modules/FindThreads.cmake
+D:/CMake/share/cmake-3.28/Modules/GNUInstallDirs.cmake
+E:/VS_Project/QyhsEngine/CMakeFiles/cmake.verify_globs
+E:/VS_Project/QyhsEngine/engine/3rdparty/spdlog/CMakeLists.txt
+E:/VS_Project/QyhsEngine/engine/3rdparty/spdlog/cmake/ide.cmake
+E:/VS_Project/QyhsEngine/engine/3rdparty/spdlog/cmake/utils.cmake

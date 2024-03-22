@@ -1,0 +1,10 @@
+# CMake generation dependency list for this directory.
+D:/CMake/share/cmake-3.28/Modules/BasicConfigVersion-SameMajorVersion.cmake.in
+D:/CMake/share/cmake-3.28/Modules/CMakePackageConfigHelpers.cmake
+D:/CMake/share/cmake-3.28/Modules/GNUInstallDirs.cmake
+D:/CMake/share/cmake-3.28/Modules/WriteBasicConfigVersionFile.cmake
+E:/VS_Project/QyhsEngine/CMakeFiles/cmake.verify_globs
+E:/VS_Project/QyhsEngine/engine/3rdparty/tinyobjloader/CMakeLists.txt
+E:/VS_Project/QyhsEngine/engine/3rdparty/tinyobjloader/cmake_uninstall.cmake.in
+E:/VS_Project/QyhsEngine/engine/3rdparty/tinyobjloader/tinyobjloader-config.cmake.in
+E:/VS_Project/QyhsEngine/engine/3rdparty/tinyobjloader/tinyobjloader.pc.in

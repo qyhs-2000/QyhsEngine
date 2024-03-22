@@ -1,0 +1,5 @@
+# CMake generation dependency list for this directory.
+E:/VS_Project/QyhsEngine/CMakeFiles/cmake.verify_globs
+E:/VS_Project/QyhsEngine/engine/3rdparty/CMakeLists.txt
+E:/VS_Project/QyhsEngine/engine/3rdparty/imgui.cmake
+E:/VS_Project/QyhsEngine/engine/3rdparty/stb.cmake
