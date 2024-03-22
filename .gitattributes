@@ -7,3 +7,4 @@ engine/source/runtime/resource/model/Vulkan-Assets-a27c0e584434d59b7c7a714e9180e
 *.dylib filter=lfs diff=lfs merge=lfs -text
 *.lib filter=lfs diff=lfs merge=lfs -text
 *.zip filter=lfs diff=lfs merge=lfs -text
+engine/3rdparty/ filter=lfs diff=lfs merge=lfs -text
