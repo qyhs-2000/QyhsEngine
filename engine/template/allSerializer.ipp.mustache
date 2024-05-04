@@ -1,0 +1,26 @@
+#pragma once
+{{#include_headfiles}}
+#include "{{headfile_name}}"
+{{/include_headfiles}}
+namespace QYHS
+{
+	{{#class_defines}}
+	template<>
+	{{class_name}} & Serializer::read(const Json & json_context,{{class_name}} & instance)
+	{
+		assert(json_context.is_object());
+		{{#class_base_class_defines}}Serializer::read(json_context,*({{class_base_class_name}}*)&instance);{{/class_base_class_defines}}
+		{{#class_field_defines}}
+		if(!json_context["{{class_field_display_name}}"].is_null())
+		{
+			{{#class_field_is_vector}}assert(json_context["{{class_field_display_name}}"].is_array());
+			Json::array array_{{class_field_name}} = 
+			json_context["{{class_field_display_name}}"].array_items();
+			instance.{{class_field_name}}.resize(array_{{class_field_name}}.size());
+			for(size_t index = 0;index<array_{{class_field_name}}.size();++index){
+				Serializer::read(array_{{class_field_name}}[index],instance.{{class_field_name}}[index]);
+			}{{/class_field_is_vector}}{{^class_field_is_vector}}Serializer::read(json_context["{{class_field_display_name}}"],instance.{{class_field_name}});{{/class_field_is_vector}}
+		}{{/class_field_defines}}
+		return instance;
+	}{{/class_defines}}
+}

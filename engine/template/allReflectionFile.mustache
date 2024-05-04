@@ -1,0 +1,15 @@
+{{#include_headfiles}}
+#include "{{headfile_name}}"
+{{/include_headfiles}}
+
+namespace QYHS
+{
+	namespace Reflection
+	{
+		void TypeMetaRegister::Register()
+		{
+			{{#class_defines}}TypeWrapperRegister_{{class_name}}();
+			{{/class_defines}}
+		}
+	}
+}
