@@ -110,7 +110,7 @@ namespace QYHS
 		createRenderPass();
 		loadAssets();
 		createDescriptorSetLayout();
-		createGraphicsPipeline();
+		//createGraphicsPipeline();
 		createCommandPool();
 		createDepthResources();
 		createColorResource();

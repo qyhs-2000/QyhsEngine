@@ -13,13 +13,14 @@ namespace QYHS
 	public:
 	enum RenderPipelineType
 	{
-		render_pipeline_type_mesh_buffer = 0,
+		render_pipeline_type_mesh_global_buffer = 0,
 		render_pipeline_type_count
 	};
 
 	enum DescriptorSetLayoutType
 	{
 		global_mesh=0,
+		mesh_per_material,
 		descriptor_set_layout_type_count
 	};
 

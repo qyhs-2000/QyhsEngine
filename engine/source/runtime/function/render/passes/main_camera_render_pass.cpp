@@ -77,10 +77,13 @@ namespace QYHS
 				auto& mesh_instance = material_map_to_meshinstance.second;
 				
 				//material.material_descriptor_set = m_descriptors[per_mesh].descriptor_set;
-				vkCmdBindDescriptorSets(m_vulkan_rhi->getCurrentCommandBuffer(), VK_PIPELINE_BIND_POINT_GRAPHICS, m_render_pipelines[global_mesh].pipeline_layout, 0, 1, &m_descriptors[global_mesh].descriptor_set, 0, nullptr);
+				vkCmdBindDescriptorSets(m_vulkan_rhi->getCurrentCommandBuffer(), VK_PIPELINE_BIND_POINT_GRAPHICS, m_render_pipelines[render_pipeline_type_mesh_global_buffer].pipeline_layout, 1, 1, &material.material_descriptor_set, 0, nullptr);
 				for (auto& pair : mesh_instance)
 				{
 					auto& mesh = *(pair.first);
+					vkCmdBindDescriptorSets(m_vulkan_rhi->getCurrentCommandBuffer(), 
+						VK_PIPELINE_BIND_POINT_GRAPHICS, m_render_pipelines[render_pipeline_type_mesh_global_buffer].pipeline_layout, 
+						0, 1, &m_descriptors[global_mesh].descriptor_set, 0, 0);
 					VkBuffer vertexBuffers[] = { mesh.mesh_vertex_buffer };
 					VkBuffer indices_buffer = mesh.mesh_vertex_index_buffer;
 					size_t indices_count = mesh.indices_count;
@@ -94,32 +97,39 @@ namespace QYHS
 				}
 			}
 
-
-			/*for (auto& instance : mesh_instance)
-			{*/
-			//Mesh& mesh = *(instance.first);
-		//	std::vector<MeshNode>& mesh_node = instance.second;
-			//mesh.mesh_vertex_position_buffer = m_vulkan_rhi->getVertexBuffer();
-
-
-			//vkCmdBindDescriptorSets(m_vulkan_rhi->getCurrentCommandBuffer(), VK_PIPELINE_BIND_POINT_GRAPHICS, m_render_pipelines[per_mesh].pipeline_layout, 0, 1, &m_descriptors[per_mesh].descriptor_set, 0, nullptr);
-
-
-			//VkBuffer vertexBuffers[] = { m_vulkan_rhi->getVertexBuffer() };
-
 		}
-
-
-
-
-
-
-		//}
-
 	}
 
 	void MainCameraRenderPass::setupGlobalModelDescriptorSet()
 	{
+		VkDescriptorSetAllocateInfo allocInfo{};
+		allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+		allocInfo.descriptorPool = m_vulkan_rhi->getDescriptorPool();
+		allocInfo.descriptorSetCount = 1;
+		allocInfo.pSetLayouts = &m_descriptors[global_mesh].descriptor_set_layout;
+
+		if (vkAllocateDescriptorSets(m_vulkan_rhi->getDevice(), &allocInfo, &m_descriptors[global_mesh].descriptor_set) != VK_SUCCESS) {
+			throw std::runtime_error("failed to allocate descriptor sets!");
+		}
+
+		for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+			VkDescriptorBufferInfo bufferInfo{};
+			bufferInfo.buffer = m_vulkan_rhi->getUniformBuffer(i);
+			bufferInfo.offset = 0;
+			bufferInfo.range = sizeof(UniformBufferObject);
+
+			VkWriteDescriptorSet descriptorWrites[1];
+
+			descriptorWrites[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+			descriptorWrites[0].pNext = NULL;
+			descriptorWrites[0].dstSet = m_descriptors[global_mesh].descriptor_set;
+			descriptorWrites[0].dstBinding = 0;
+			descriptorWrites[0].dstArrayElement = 0;
+			descriptorWrites[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+			descriptorWrites[0].descriptorCount = 1;
+			descriptorWrites[0].pBufferInfo = &bufferInfo;
+			vkUpdateDescriptorSets(m_vulkan_rhi->getDevice(), static_cast<uint32_t>(sizeof(descriptorWrites)/sizeof(descriptorWrites[0])), descriptorWrites, 0, nullptr);
+		}
 	}
 
 	void MainCameraRenderPass::setupAttachments()
@@ -242,8 +252,19 @@ namespace QYHS
 	void MainCameraRenderPass::setupRenderPipelines()
 	{
 		m_render_pipelines.resize(render_pipeline_type_count);
-		//mesh render pipeline
+		//mesh global buffer render pipeline
 		{
+			VkDescriptorSetLayout  descriptorSetLayout[2] = { m_descriptors[global_mesh].descriptor_set_layout,m_descriptors[mesh_per_material].descriptor_set_layout};
+			VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
+			pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+			uint32_t descriptorset_layout_count = static_cast<uint32_t>(sizeof(descriptorSetLayout) / sizeof(descriptorSetLayout[0]));
+			pipelineLayoutInfo.setLayoutCount = descriptorset_layout_count;
+			pipelineLayoutInfo.pSetLayouts = descriptorSetLayout;
+
+			if (vkCreatePipelineLayout(m_vulkan_rhi->getDevice(), &pipelineLayoutInfo, nullptr, &m_render_pipelines[render_pipeline_type_mesh_global_buffer].pipeline_layout) != VK_SUCCESS) {
+				throw std::runtime_error("failed to create pipeline layout!");
+			}
+
 			auto vertShaderCode = Util::readFile("E://VS_Project//QyhsEngine//engine//shader//vert.spv");
 			auto fragShaderCode = Util::readFile("E://VS_Project//QyhsEngine//engine//shader//frag.spv");
 
@@ -334,15 +355,7 @@ namespace QYHS
 			dynamicState.dynamicStateCount = static_cast<uint32_t>(dynamicStates.size());
 			dynamicState.pDynamicStates = dynamicStates.data();
 
-			VkDescriptorSetLayout  descriptorSetLayout[1] = { m_descriptors[global_mesh].descriptor_set_layout };
-			VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
-			pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-			pipelineLayoutInfo.setLayoutCount = 1;
-			pipelineLayoutInfo.pSetLayouts = descriptorSetLayout;
-
-			if (vkCreatePipelineLayout(m_vulkan_rhi->getDevice(), &pipelineLayoutInfo, nullptr, &m_render_pipelines[render_pipeline_type_mesh_buffer].pipeline_layout) != VK_SUCCESS) {
-				throw std::runtime_error("failed to create pipeline layout!");
-			}
+			
 
 			VkGraphicsPipelineCreateInfo pipelineInfo{};
 			pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
@@ -356,12 +369,12 @@ namespace QYHS
 			pipelineInfo.pDepthStencilState = &depthStencil;
 			pipelineInfo.pColorBlendState = &colorBlending;
 			pipelineInfo.pDynamicState = &dynamicState;
-			pipelineInfo.layout = m_render_pipelines[render_pipeline_type_mesh_buffer].pipeline_layout;
+			pipelineInfo.layout = m_render_pipelines[render_pipeline_type_mesh_global_buffer].pipeline_layout;
 			pipelineInfo.renderPass = m_framebuffer.render_pass;
 			pipelineInfo.subpass = 0;
 			pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
-			if (vkCreateGraphicsPipelines(m_vulkan_rhi->getDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_render_pipelines[global_mesh].pipeline) != VK_SUCCESS) {
+			if (vkCreateGraphicsPipelines(m_vulkan_rhi->getDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_render_pipelines[render_pipeline_type_mesh_global_buffer].pipeline) != VK_SUCCESS) {
 				throw std::runtime_error("failed to create graphics pipeline!");
 			}
 
@@ -373,57 +386,16 @@ namespace QYHS
 	void MainCameraRenderPass::setupDescriptorSets()
 	{
 		setupGlobalModelDescriptorSet();
-		VkDescriptorSetAllocateInfo allocInfo{};
-		allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-		allocInfo.descriptorPool = m_vulkan_rhi->getDescriptorPool();
-		allocInfo.descriptorSetCount = 1;
-		allocInfo.pSetLayouts = &m_descriptors[global_mesh].descriptor_set_layout;
-
-		if (vkAllocateDescriptorSets(m_vulkan_rhi->getDevice(), &allocInfo, &m_descriptors[global_mesh].descriptor_set) != VK_SUCCESS) {
-			throw std::runtime_error("failed to allocate descriptor sets!");
-		}
-
-
-
-		for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-			VkDescriptorBufferInfo bufferInfo{};
-			bufferInfo.buffer = m_vulkan_rhi->getUniformBuffer(i);
-			bufferInfo.offset = 0;
-			bufferInfo.range = sizeof(UniformBufferObject);
-
-			VkDescriptorImageInfo imageInfo{};
-			imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-			imageInfo.imageView = m_vulkan_rhi->getTextureImageView();
-			imageInfo.sampler = m_vulkan_rhi->getTextureSampler();
-
-			std::array<VkWriteDescriptorSet, 2> descriptorWrites{};
-
-			descriptorWrites[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-			descriptorWrites[0].dstSet = m_descriptors[global_mesh].descriptor_set;
-			descriptorWrites[0].dstBinding = 0;
-			descriptorWrites[0].dstArrayElement = 0;
-			descriptorWrites[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-			descriptorWrites[0].descriptorCount = 1;
-			descriptorWrites[0].pBufferInfo = &bufferInfo;
-
-			descriptorWrites[1].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-			descriptorWrites[1].dstSet = m_descriptors[global_mesh].descriptor_set;
-			descriptorWrites[1].dstBinding = 1;
-			descriptorWrites[1].dstArrayElement = 0;
-			descriptorWrites[1].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-			descriptorWrites[1].descriptorCount = 1;
-			descriptorWrites[1].pImageInfo = &imageInfo;
-
-			vkUpdateDescriptorSets(m_vulkan_rhi->getDevice(), static_cast<uint32_t>(descriptorWrites.size()), descriptorWrites.data(), 0, nullptr);
-		}
 	}
 
 	void MainCameraRenderPass::setupDescriptorSetLayout()
 	{
 		m_descriptors.resize(descriptor_set_layout_type_count);
 		{
-
-			VkDescriptorSetLayoutBinding uboLayoutBinding{};
+			VkDescriptorSetLayoutBinding mesh_global_layout_bindings[1];
+			//mesh descriptor set layout,like uniform which contain project matrix and view matrix;
+			//set = 0,binding = 0
+			VkDescriptorSetLayoutBinding& uboLayoutBinding = mesh_global_layout_bindings[0];
 			uboLayoutBinding.binding = 0;
 			uboLayoutBinding.descriptorCount = 1;
 			uboLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
@@ -437,13 +409,40 @@ namespace QYHS
 			samplerLayoutBinding.pImmutableSamplers = nullptr;
 			samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 
-			std::array<VkDescriptorSetLayoutBinding, 2> bindings = { uboLayoutBinding, samplerLayoutBinding };
 			VkDescriptorSetLayoutCreateInfo layoutInfo{};
 			layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-			layoutInfo.bindingCount = static_cast<uint32_t>(bindings.size());
-			layoutInfo.pBindings = bindings.data();
+			layoutInfo.bindingCount = (sizeof(mesh_global_layout_bindings)/sizeof(mesh_global_layout_bindings[0]));
+			layoutInfo.pBindings = mesh_global_layout_bindings;
 			if (vkCreateDescriptorSetLayout(m_vulkan_rhi->getDevice(), &layoutInfo, nullptr, &m_descriptors[global_mesh].descriptor_set_layout) != VK_SUCCESS) {
 				throw std::runtime_error("failed to create descriptor set layout!");
+			}
+		}
+
+		{
+			//mesh per material descriptor set layout
+			VkDescriptorSetLayoutBinding mesh_per_material_layout_binding[1];
+			//set = 1,binding = 0
+			VkDescriptorSetLayoutBinding& mesh_per_material_layout_base_color_sampler_binding = mesh_per_material_layout_binding[0];
+			mesh_per_material_layout_base_color_sampler_binding.binding = 0;
+			mesh_per_material_layout_base_color_sampler_binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+			mesh_per_material_layout_base_color_sampler_binding.descriptorCount = 1;
+			mesh_per_material_layout_base_color_sampler_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+			mesh_per_material_layout_base_color_sampler_binding.pImmutableSamplers = nullptr;
+			
+			VkDescriptorSetLayoutCreateInfo mesh_material_layout_create_info;
+			mesh_material_layout_create_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+			mesh_material_layout_create_info.pNext = NULL;
+			mesh_material_layout_create_info.flags = 0;
+			mesh_material_layout_create_info.bindingCount = (sizeof(mesh_per_material_layout_binding)/sizeof(mesh_per_material_layout_binding[0]));
+			mesh_material_layout_create_info.pBindings = mesh_per_material_layout_binding;
+
+			if (vkCreateDescriptorSetLayout(m_vulkan_rhi->getDevice(),
+				&mesh_material_layout_create_info,
+				nullptr,
+				&m_descriptors[mesh_per_material].descriptor_set_layout) != VK_SUCCESS)
+
+			{
+				throw std::runtime_error("create mesh material layout");
 			}
 		}
 

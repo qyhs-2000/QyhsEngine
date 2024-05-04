@@ -22,3 +22,5 @@ engine/source/meta_parser/QyhsParser.dir/Debug/QyhsParser.ilk
 bin/QyhsEditor.pdb
 bin/
 x64/
+engine/source/editor/Debug/
+engine/source/runtime/Debug/

@@ -69,7 +69,7 @@ const uint32_t WIDTH = 2500;
 const uint32_t HEIGHT = 1600;
 
 const std::string MODEL_PATH = "../../asset/objects/house.obj";
-const std::string TEXTURE_PATH = "E:/VS_Project/QyhsEngine/asset/objects/_textures/gold.tga";
+const std::string TEXTURE_PATH = "E:/VS_Project/QyhsEngine/asset/objects/_textures/n.tga";
 
 const int MAX_FRAMES_IN_FLIGHT = 3;
 

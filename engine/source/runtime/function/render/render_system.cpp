@@ -109,7 +109,7 @@ namespace QYHS
 		m_render_scene = std::make_shared<RenderScene>();
 		m_render_scene->setVisibleObjectNodesReference();
 
-		m_render_resource->m_material_descriptor_set_layout = &static_cast<RenderPass*>(m_render_pipeline->m_main_camera_pass.get())->m_descriptors[MainCameraRenderPass::DescriptorSetLayoutType::global_mesh].descriptor_set_layout;
+		m_render_resource->m_material_descriptor_set_layout = &static_cast<RenderPass*>(m_render_pipeline->m_main_camera_pass.get())->m_descriptors[MainCameraRenderPass::DescriptorSetLayoutType::mesh_per_material].descriptor_set_layout;
 	}
 
 	void RenderSystem::swapLogicRenderData()
