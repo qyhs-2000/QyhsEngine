@@ -88,9 +88,6 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   D:\Visual\ Studio2019\VisualStudioIDE\VC\Tools\MSVC\14.29.30133\include\vector \
   D:\Visual\ Studio2019\VisualStudioIDE\VC\Tools\MSVC\14.29.30133\include\xbit_ops.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/transform.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/vector2.h \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\assert.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/vector3.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime/core/meta/reflection/reflection.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime/core/meta/json.h \
   json11.hpp \
@@ -105,6 +102,9 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   D:\Visual\ Studio2019\VisualStudioIDE\VC\Tools\MSVC\14.29.30133\include\xhash \
   D:\Visual\ Studio2019\VisualStudioIDE\VC\Tools\MSVC\14.29.30133\include\list \
   D:\Visual\ Studio2019\VisualStudioIDE\VC\Tools\MSVC\14.29.30133\include\unordered_set \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/vector2.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\assert.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/vector3.h \
   D:\Visual\ Studio2019\VisualStudioIDE\VC\Tools\MSVC\14.29.30133\include\cassert \
   E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/vector4.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime/core/math/vector3.h \
@@ -159,8 +159,9 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/mesh/mesh_component.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/mesh/../component.h \
   resource/type/component/mesh/mesh.h function/render/game_object_desc.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/transform/transform_component.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/motor/motor_component.h \
   function/framework/component/component.h core/math/transform.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/transform/transform_component.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/game_object/game_object.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/game_object/game_object_id_allocator.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\memory.h \
@@ -212,24 +213,30 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\component.h \
   E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\vector3.serializer.gen.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime\core\math\vector3.h \
+  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\transform.serializer.gen.h \
+  E:/VS_Project/QyhsEngine/engine/source\runtime\core\math\transform.h \
+  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\vector2.serializer.gen.h \
+  E:/VS_Project/QyhsEngine/engine/source\runtime\core\math\vector2.h \
   E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\vector4.serializer.gen.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime\core\math\vector4.h \
+  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\transform_component.serializer.gen.h \
+  E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\transform\transform_component.h \
+  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\motor_component.serializer.gen.h \
+  E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\motor\motor_component.h \
   E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\object.serializer.gen.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime\resource\common\object.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime/function/framework/component/component.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\world_resource.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\resource\type\world_resource.h \
-  resource/common/object.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\transform_component.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\transform\transform_component.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\level_resource.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\resource\type\level_resource.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\mesh.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\resource\type\component\mesh\mesh.h \
   E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\mash_data.serializer.gen.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime\resource\type\data\mash_data.h \
+  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\mesh.serializer.gen.h \
+  E:/VS_Project/QyhsEngine/engine/source\runtime\resource\type\component\mesh\mesh.h \
   E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\material.serializer.gen.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime\resource\type\data\material.h \
+  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\level_resource.serializer.gen.h \
+  E:/VS_Project/QyhsEngine/engine/source\runtime\resource\type\level_resource.h \
+  resource/common/object.h \
+  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\world_resource.serializer.gen.h \
+  E:/VS_Project/QyhsEngine/engine/source\runtime\resource\type\world_resource.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/common/object.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/config_manager/config_manager.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/component/mesh/mesh.h \

@@ -53,10 +53,9 @@ namespace QYHS
 		int getObjectPartSize();
 		GameObjectID getId() { return m_go_id; }
 		std::vector<GameObjectPartDesc>& getGameObjectParts();
-		GameObjectID id;
+		GameObjectID m_go_id;
 	private:
 		std::vector<GameObjectPartDesc>  m_object_parts;
-		GameObjectID m_go_id;
 	};
 
 

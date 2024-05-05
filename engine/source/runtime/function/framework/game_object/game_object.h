@@ -11,6 +11,7 @@ namespace QYHS
 	class GameObject :public std::enable_shared_from_this<GameObject>
 	{
 	public:
+		GameObject(GameObjectID id) :m_id{ id } {}
 		void tick(double delta_time);
 		GameObjectID getObjectId() { return m_id; }
 		bool load(const class ObjectInstanceResource& instance_resource);

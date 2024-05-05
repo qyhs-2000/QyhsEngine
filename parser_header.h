@@ -19,6 +19,7 @@
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/engine.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/component.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/mesh/mesh_component.h"
+#include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/motor/motor_component.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/transform/transform_component.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/game_object/game_object.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/game_object/game_object_id_allocator.h"

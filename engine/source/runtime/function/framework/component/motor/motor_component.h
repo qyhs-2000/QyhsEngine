@@ -5,13 +5,13 @@ namespace QYHS
 {
     //TODO:if don't add 'class Transform',it will fail in {{class_name}}.reflection.gen.h file, i don't know the reason
     class Transform;
-    REFLECTION_TYPE(TransformComponent)
-        CLASS(TransformComponent : public Component, WhiteListFields)
+    REFLECTION_TYPE(MotorComponent)
+        CLASS(MotorComponent : public Component, WhiteListFields)
     {
-        REFLECTION_BODY(TransformComponent)
+        REFLECTION_BODY(MotorComponent)
 
     public:
-        TransformComponent() = default;
+        MotorComponent() = default;
         virtual void postLoadResource(std::weak_ptr<GameObject> parent_object) override;
         bool isDirty() { return m_is_dirty; }
         void setDirty(bool is_dirty) { m_is_dirty = is_dirty; }

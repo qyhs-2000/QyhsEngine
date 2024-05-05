@@ -1,6 +1,6 @@
 #pragma once
 
-//#include "runtime/core/meta/reflection/reflection.h"
+#include "runtime/core/meta/reflection/reflection.h"
 #include "runtime/core/math/quaternion.h"
 #include "matrix4.h"
 
@@ -8,19 +8,21 @@ namespace QYHS
 {
     class Vector3;
     REFLECTION_TYPE(Transform)
-    CLASS(Transform, Fields)
+        CLASS(Transform, Fields)
     {
         REFLECTION_BODY(Transform);
 
     public:
         Vector3    m_position{ Vector3::ZERO };
         Vector3    m_scale{ Vector3::UNIT_SCALE };
-        Quaternion m_rotation{Quaternion::IDENTITY};
+        Quaternion m_rotation{ Quaternion::IDENTITY };
 
         Transform() = default;
         Transform(const Vector3 & position, const Vector3 & scale, const Quaternion & rotation) :
             m_position{ position }, m_scale{ scale }, m_rotation{ rotation }
-        {}
+        {
+        
+        }
 
         Matrix4x4 getMatrix() const
         {

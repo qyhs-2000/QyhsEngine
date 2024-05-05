@@ -4,11 +4,15 @@
 #include <stack>
 #include "render_type.h"
 #include "passes/main_camera_render_pass.h"
+//#include "function/framework/component/transform/transform_component.h"
+#include "function/framework/component/motor/motor_component.h"
 namespace QYHS
 {
 
 	void RenderSystem::tick()
 	{
+		MotorComponent motor;
+		//TransformComponent transform;
 		processSwapData();
 
 		m_render_scene->updateVisibleObject(m_render_resource);
@@ -41,7 +45,7 @@ namespace QYHS
 				{
 					GameObjectPartDesc& game_object_part = gobject.getGameObjectParts()[part_index];
 
-					GameObjectPartId part_id = { gobject.id,part_index };
+					GameObjectPartId part_id = { gobject.m_go_id,part_index };
 					
 					bool is_entity_in_scene = m_render_scene->getInstanceIdAllocator().hasElement(part_id);
 					RenderEntity render_entity;

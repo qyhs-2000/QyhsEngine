@@ -1,13 +1,15 @@
 #pragma once
-#include <unordered_set>
+#include <atomic>
+#include <limits>
 namespace QYHS
 {
 	using GameObjectID = size_t;
+	constexpr GameObjectID k_invalid_gobject_id = std::numeric_limits<std::size_t>::max();
 	class GameObjectIdAllocator
 	{
 	public:
 		GameObjectID allocateId();
 	private:
-		std::unordered_set<GameObjectID>	m_allocated_id;
+		static std::atomic<GameObjectID> m_next_id;
 	};
 }

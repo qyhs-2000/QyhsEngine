@@ -23,7 +23,7 @@ namespace QYHS
 				//field
 				static void set_m_position(void * instance,void * field_value)
 				{
-					static_cast<Transform*>(instance)->m_position = *static_cast<QYHS::Vector3*>(field_value);
+					static_cast<Transform*>(instance)->m_position = *static_cast<Vector3*>(field_value);
 				}
 				static void* get_m_position(void * instance)
 				{
@@ -35,7 +35,7 @@ namespace QYHS
 				}
 				static const char* getFieldTypeName_m_position()
 				{
-					return "QYHS::Vector3";
+					return "Vector3";
 				}
 				static bool isArray_m_position()
 				{
@@ -43,7 +43,7 @@ namespace QYHS
 				}
 				static void set_m_scale(void * instance,void * field_value)
 				{
-					static_cast<Transform*>(instance)->m_scale = *static_cast<QYHS::Vector3*>(field_value);
+					static_cast<Transform*>(instance)->m_scale = *static_cast<Vector3*>(field_value);
 				}
 				static void* get_m_scale(void * instance)
 				{
@@ -55,9 +55,29 @@ namespace QYHS
 				}
 				static const char* getFieldTypeName_m_scale()
 				{
-					return "QYHS::Vector3";
+					return "Vector3";
 				}
 				static bool isArray_m_scale()
+				{
+					return false;
+				}
+				static void set_m_rotation(void * instance,void * field_value)
+				{
+					static_cast<Transform*>(instance)->m_rotation = *static_cast<Quaternion*>(field_value);
+				}
+				static void* get_m_rotation(void * instance)
+				{
+					return &(static_cast<Transform*>(instance)->m_rotation);
+				}
+				static const char* getFieldName_m_rotation()
+				{
+					return "m_rotation";
+				}
+				static const char* getFieldTypeName_m_rotation()
+				{
+					return "Quaternion";
+				}
+				static bool isArray_m_rotation()
 				{
 					return false;
 				}
@@ -86,6 +106,15 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeTransformOperator::isArray_m_scale
 			);
 			REGISTER_TO_FIELD_MAP("m_scale",f_field_function_tuple_m_scale);
+			FieldFunctionTuple * f_field_function_tuple_m_rotation = new FieldFunctionTuple(
+			&TypeFieldReflectionOperator::TypeTransformOperator::set_m_rotation,
+			&TypeFieldReflectionOperator::TypeTransformOperator::get_m_rotation,
+			&TypeFieldReflectionOperator::TypeTransformOperator::getClassName,
+			&TypeFieldReflectionOperator::TypeTransformOperator::getFieldName_m_rotation,
+			&TypeFieldReflectionOperator::TypeTransformOperator::getFieldTypeName_m_rotation,
+			&TypeFieldReflectionOperator::TypeTransformOperator::isArray_m_rotation
+			);
+			REGISTER_TO_FIELD_MAP("m_rotation",f_field_function_tuple_m_rotation);
 		
 		
 		ClassFunctionTuple * f_class_function_tuple_Transform = new ClassFunctionTuple(

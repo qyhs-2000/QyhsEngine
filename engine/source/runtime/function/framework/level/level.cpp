@@ -35,18 +35,18 @@ namespace QYHS
 	}
 	void Level::createGameObject(ObjectInstanceResource & instance_res)
 	{
-		GameObjectID id = m_go_id_allocator.allocateId();
+		GameObjectID game_object_id = m_go_id_allocator.allocateId();
 		std::shared_ptr<GameObject> game_object;
 		try
 		{
-			game_object = std::make_shared<GameObject>();
+			game_object = std::make_shared<GameObject>(game_object_id);
 		}
 		catch (const std::exception& e)
 		{
 			std::cout << "can't create game object!" << std::endl;
 		}
 		game_object->load(instance_res);
-		m_game_objects.emplace(id, game_object);
+		m_game_objects.emplace(game_object_id, game_object);
 	}
 	std::unordered_map<GameObjectID, std::shared_ptr<GameObject>>& Level::getObjectsInLevel()
 	{
