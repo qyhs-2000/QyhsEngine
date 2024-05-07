@@ -1,9 +1,7 @@
 #include "editor_scene_manager.h"
-
+#include "function/global/global_context.h"
+#include "function/render/render_system.h"
 void QYHS::EditorSceneManager::initialize()
 {
-	m_camera = std::make_shared<RenderCamera>();
-	m_camera->setCameraPosition(glm::vec3(0.f, 0.f, 5.f));
-
-	
+	m_camera = g_runtime_global_context.m_render_system->getRenderCamera();
 }

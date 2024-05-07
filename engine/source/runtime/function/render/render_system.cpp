@@ -16,9 +16,8 @@ namespace QYHS
 		processSwapData();
 
 		m_render_scene->updateVisibleObject(m_render_resource);
-
+		m_render_resource->updatePerframeBuffer(m_render_camera);
 		m_render_pipeline->render();
-
 
 	}
 
@@ -113,6 +112,8 @@ namespace QYHS
 		m_render_scene = std::make_shared<RenderScene>();
 		m_render_scene->setVisibleObjectNodesReference();
 
+		m_render_camera = std::make_shared<RenderCamera>();
+		m_render_camera->setCameraPosition(glm::vec3(0.f, 0.f, 5.f));
 		m_render_resource->m_material_descriptor_set_layout = &static_cast<RenderPass*>(m_render_pipeline->m_main_camera_pass.get())->m_descriptors[MainCameraRenderPass::DescriptorSetLayoutType::mesh_per_material].descriptor_set_layout;
 	}
 

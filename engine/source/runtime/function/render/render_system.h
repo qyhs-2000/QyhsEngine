@@ -3,6 +3,7 @@
 #include <function/render/render_swap_context.h>
 #include <function/render/render_scene.h>
 #include <function/render/render_guid_allocator.h>
+#include "render_camera.h"
 namespace QYHS
 {
 	
@@ -18,7 +19,9 @@ namespace QYHS
 		void processRenderEntity();
 		void processSwapData();
 		RenderSwapContext& getSwapContext() { return m_swap_context; }
+		std::shared_ptr<RenderCamera> getRenderCamera() { return m_render_camera; }
 	private:
+		std::shared_ptr<RenderCamera>			m_render_camera;
 		std::shared_ptr<RHI> m_rhi;
 		std::shared_ptr< RenderPipelineBase>	m_render_pipeline;
 		RenderSwapContext						m_swap_context;

@@ -17,12 +17,6 @@ void QYHS::RenderPipeline::render()
 {
 
 	VulkanRHI * vulkan_rhi = static_cast<VulkanRHI*>(m_rhi.get());
-	/*vulkan_rhi->waitForFence();
-	vulkan_rhi->getNextImage();
-	vulkan_rhi->updateUniformBuffer();
-	vulkan_rhi->resetFence();
-	vulkan_rhi->resetCommandBuffer();
-	vulkan_rhi->recordCommandBuffer();*/
 	vulkan_rhi->prepareBeforeRender();
 	static_cast<MainCameraRenderPass*>(m_main_camera_pass.get())->draw();
 	vulkan_rhi->submitCommandBuffer();

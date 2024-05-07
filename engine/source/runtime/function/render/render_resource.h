@@ -23,6 +23,7 @@ namespace QYHS
 		void updateMeshData(std::shared_ptr<RHI> rhi, uint32_t index_buffer_size, void* index_buffer, uint32_t vertex_buffer_size, MeshVertexDataDefinition* vertex_buffer, VulkanMesh& mesh);
 		void updateVertexBuffer(std::shared_ptr<RHI> rhi, uint32_t vertex_buffer_size, const void* vertex_buffer, VulkanMesh& mesh);
 		void updateIndexBuffer(std::shared_ptr<RHI> rhi, uint32_t index_buffer_size, const void* index_buffer, VulkanMesh& mesh);
+		void updatePerframeBuffer(std::shared_ptr<class RenderCamera> camera);
 		std::shared_ptr<TextureData> loadTexture(const std::string& material_file);
 		RenderMaterialData loadMaterialData(MaterialSourceDesc& material_source);
 		VkDescriptorSetLayout* m_material_descriptor_set_layout;

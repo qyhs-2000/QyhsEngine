@@ -12,6 +12,7 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader.h>
 #include "rhi/vulkan/vulkan_utils.h"
+#include "render_camera.h"
 namespace QYHS
 {
 	VulkanMaterial& RenderResource::getEntityMaterial(RenderEntity& entity)
@@ -322,5 +323,11 @@ namespace QYHS
 
 		vkDestroyBuffer(vulkan_rhi->getDevice(), stagingBuffer, nullptr);
 		vkFreeMemory(vulkan_rhi->getDevice(), stagingBufferMemory, nullptr);
+	}
+	void RenderResource::updatePerframeBuffer(std::shared_ptr<RenderCamera> camera)
+	{
+		
+		//Matrix4x4 view_matrix = camera->getViewMatrix();
+		//Matrix4x4 project_matrix = camera->getProjectMatrix();
 	}
 }
