@@ -22,7 +22,7 @@ namespace QYHS
 	class GameObjectTransformDesc
 	{
 	public:
-		Matrix4x4 m_transform_matrix;
+		Matrix4x4 m_transform_matrix{Matrix4x4::IDENTITY};
 	private:
 	};
 

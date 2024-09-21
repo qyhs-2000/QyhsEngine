@@ -11,6 +11,7 @@
 	if(handle->shouldCompile()) \
 	{\
 		auto file = handle->getSourceFile(); \
+		std::cout<<file<<std::endl;\
 		m_schema_module[file].container.emplace_back(handle);\
 		std::cout<<"m_type_table push_back: "<<file<<std::endl;\
 		m_type_table[handle->m_display_name] = file;\
@@ -132,6 +133,7 @@ std::string MetaParser::getIncludeFile(std::string name)
 	return iter != m_type_table.end() ? iter->second : std::string();
 }
 
+//生成一个parser_header.h文件，包含所有需要映射的类
 bool MetaParser::parseProject()
 {
 	std::cout << "Parsing project file" << m_project_input_file << std::endl;
@@ -181,6 +183,8 @@ bool MetaParser::parseProject()
 
 void MetaParser::buildClassAST(const Cursor& cursor, Namespace current_namespace)
 {
+	std::string spelling_name = cursor.getSpelling();
+	std::string display_name = cursor.getDisplayName();
 	std::cout << cursor.getSpelling() << std::endl;
 	for (auto& child : cursor.getChildren())
 	{

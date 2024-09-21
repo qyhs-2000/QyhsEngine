@@ -135,6 +135,7 @@ namespace QYHS
 		void resetCommandBuffer();
 		void recordCommandBuffer();
 		void submitCommandBuffer();
+		int getMaxFrameInFlight() { return MAX_FRAMES_IN_FLIGHT; }
 		VkDevice getDevice() { return device; }
 		VkPhysicalDevice getPhysicalDevice() { return physical_device; }
 		VkFormat getSwapChainImageFormat() { return swapChainImageFormat; }

@@ -5,7 +5,7 @@ namespace QYHS
 	void QYHS::RenderPass::initialize()
 	{
 		m_vulkan_rhi = std::static_pointer_cast<VulkanRHI>(m_rhi);
-
+		m_global_render_resource = &(std::static_pointer_cast<RenderResource>(m_render_resource)->m_global_render_resource);
 	}
 
 }

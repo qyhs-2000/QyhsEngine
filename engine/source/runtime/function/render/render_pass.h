@@ -4,6 +4,7 @@
 #include "function/render/rhi/vulkan/vulkan_rhi.h"
 #include <function/render/render_pipeline_base.h>
 #include <function/render/render_structure.h>
+#include "render_resource.h"
 namespace QYHS
 {
 
@@ -57,6 +58,7 @@ namespace QYHS
 			VkPipelineLayout	pipeline_layout;
 		};
 		static VisibleRenderNode m_visible_render_meshes;
+		GlobalRenderResource* m_global_render_resource{ nullptr };
 	public:
 		virtual void initialize() override;
 	protected:
@@ -64,5 +66,7 @@ namespace QYHS
 		std::vector< Descriptor>		m_descriptors;
 		std::vector<RenderPipelineBase>	m_render_pipelines;
 		FrameBuffer						m_framebuffer;
+
+		
 	};
 }

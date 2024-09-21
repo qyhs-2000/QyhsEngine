@@ -170,6 +170,47 @@ namespace QYHS
 
 		return material_data;
 	}
+
+	void RenderResource::uploadGlobalRenderResource(std::shared_ptr<RHI> rhi)
+	{
+		createAndMapStorageBuffer(rhi);
+	}
+
+	void RenderResource::createAndMapStorageBuffer(std::shared_ptr<RHI> rhi)
+	{
+		VulkanRHI* m_rhi = static_cast<VulkanRHI*>(rhi.get());
+		StorageBuffer& global_storage_buffer = m_global_render_resource.storage_buffer;
+		uint32_t global_storage_buffer_size = 1024 * 1024 * 128;
+		VulkanUtils::createBuffer(m_rhi->getPhysicalDevice(),m_rhi->getDevice(),global_storage_buffer_size,
+			VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+			global_storage_buffer.global_ringbuffer,global_storage_buffer.global_ringbuffer_memory);
+		
+		VkPhysicalDeviceProperties properties;
+		vkGetPhysicalDeviceProperties(m_rhi->getPhysicalDevice(), &properties);
+		global_storage_buffer.min_storage_buffer_offset_alignment = static_cast<uint32_t>(properties.limits.minStorageBufferOffsetAlignment);
+		global_storage_buffer.max_storage_buffer_size = static_cast<uint32_t>(properties.limits.maxStorageBufferRange);
+		global_storage_buffer.min_uniform_buffer_offset_alignment = static_cast<uint32_t>(properties.limits.minUniformBufferOffsetAlignment);
+		
+		int max_frame_in_flight = m_rhi->getMaxFrameInFlight();
+		global_storage_buffer.ringbuffer_begin.resize(max_frame_in_flight);
+		global_storage_buffer.ringbuffer_end.resize(max_frame_in_flight);
+		global_storage_buffer.ringbuffer_size.resize(max_frame_in_flight);
+		for (int i = 0; i < max_frame_in_flight; ++i)
+		{
+			global_storage_buffer.ringbuffer_begin[i] = global_storage_buffer_size * i / max_frame_in_flight;
+			global_storage_buffer.ringbuffer_size[i] = global_storage_buffer_size * (i + 1) / max_frame_in_flight 
+															- global_storage_buffer_size * i / max_frame_in_flight;
+
+		}
+
+		vkMapMemory(m_rhi->getDevice(), global_storage_buffer.global_ringbuffer_memory, 0, VK_WHOLE_SIZE, 0, &global_storage_buffer.global_ringbuffer_memory_pointer);
+	}
+
+	void RenderResource::resetRingBufferOffset(uint32_t current_frame_index)
+	{
+		m_global_render_resource.storage_buffer.ringbuffer_end[current_frame_index] = m_global_render_resource.storage_buffer.ringbuffer_begin[current_frame_index];
+	}
+
 	VulkanMesh& RenderResource::getOrCreateVulkanMesh(std::shared_ptr<RHI> rhi, RenderEntity render_entity, RenderMeshData mesh_data)
 	{
 		size_t asset_id = render_entity.mesh_asset_id;

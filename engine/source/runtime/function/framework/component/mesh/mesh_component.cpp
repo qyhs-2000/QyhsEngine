@@ -36,6 +36,7 @@ namespace QYHS
 
 	void MeshComponent::postLoadResource(std::weak_ptr<GameObject> parent_object)
 	{
+		m_parent_object = parent_object;
 		Component::postLoadResource(parent_object);
 		m_raw_meshes.resize(m_mesh_res.m_sub_meshes.size());
 		std::shared_ptr<AssetManager> asset_manager = g_runtime_global_context.m_asset_manager;

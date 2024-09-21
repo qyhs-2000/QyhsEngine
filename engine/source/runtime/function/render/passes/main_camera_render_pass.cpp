@@ -1,6 +1,11 @@
 #include "main_camera_render_pass.h"
 #include "function/render/rhi/vulkan/vulkan_utils.h"
 #include "core/utils/util.h"
+#include <function/render/render_common.h>
+#include <function/render/render_helper.h>
+#include <cassert>
+#include <iostream>
+#include <stdexcept>
 namespace QYHS
 {
 
@@ -81,19 +86,64 @@ namespace QYHS
 				for (auto& pair : mesh_instance)
 				{
 					auto& mesh = *(pair.first);
-					vkCmdBindDescriptorSets(m_vulkan_rhi->getCurrentCommandBuffer(), 
-						VK_PIPELINE_BIND_POINT_GRAPHICS, m_render_pipelines[render_pipeline_type_mesh_global_buffer].pipeline_layout, 
-						0, 1, &m_descriptors[global_mesh].descriptor_set, 0, 0);
-					VkBuffer vertexBuffers[] = { mesh.mesh_vertex_buffer };
-					VkBuffer indices_buffer = mesh.mesh_vertex_index_buffer;
-					size_t indices_count = mesh.indices_count;
-					VkDeviceSize offsets[] = { 0 };
+					auto& mesh_nodes = pair.second;
+					uint32_t total_instance_count = mesh_nodes.size();
+					if (total_instance_count > 0)
+					{
+						uint32_t drawcall_max_instance_count =
+							(sizeof(MeshPerdrawcallStorageBufferObject::mesh_instances) /
+								sizeof(MeshPerdrawcallStorageBufferObject::mesh_instances[0]));
+						uint32_t drawcall_count =
+							roundUp(total_instance_count, drawcall_max_instance_count) / drawcall_max_instance_count;
+						for (uint32_t drawcall_index = 0; drawcall_index < drawcall_count; ++drawcall_index)
+						{
+							uint32_t current_instance_count =
+								((total_instance_count - drawcall_max_instance_count * drawcall_index) <
+									drawcall_max_instance_count) ?
+								(total_instance_count - drawcall_max_instance_count * drawcall_index) :
+								drawcall_max_instance_count;
 
-					vkCmdBindVertexBuffers(m_vulkan_rhi->getCurrentCommandBuffer(), 0, 1, vertexBuffers, offsets);
+							// per drawcall storage buffer
+							uint32_t perdrawcall_dynamic_offset =
+								roundUp(m_global_render_resource->storage_buffer
+									.ringbuffer_end[m_vulkan_rhi->getCurrentFrameIndex()],
+									m_global_render_resource->storage_buffer.min_storage_buffer_offset_alignment);
+							m_global_render_resource->storage_buffer
+								.ringbuffer_end[m_vulkan_rhi->getCurrentFrameIndex()] =
+								perdrawcall_dynamic_offset + sizeof(MeshPerdrawcallStorageBufferObject);
+							assert(m_global_render_resource->storage_buffer
+								.ringbuffer_end[m_vulkan_rhi->getCurrentFrameIndex()] <=
+								(m_global_render_resource->storage_buffer
+									.ringbuffer_begin[m_vulkan_rhi->getCurrentFrameIndex()] +
+									m_global_render_resource->storage_buffer
+									.ringbuffer_size[m_vulkan_rhi->getCurrentFrameIndex()]));
+							std::cout << "Size:" << sizeof(MeshPerdrawcallStorageBufferObject) << std::endl;
+							MeshPerdrawcallStorageBufferObject& perdrawcall_storage_buffer_object =
+								(*reinterpret_cast<MeshPerdrawcallStorageBufferObject*>(
+									reinterpret_cast<uintptr_t>(m_global_render_resource->storage_buffer
+										.global_ringbuffer_memory_pointer) +
+									perdrawcall_dynamic_offset));
 
-					vkCmdBindIndexBuffer(m_vulkan_rhi->getCurrentCommandBuffer(), indices_buffer, 0, VK_INDEX_TYPE_UINT16);
-					vkCmdDrawIndexed(m_vulkan_rhi->getCurrentCommandBuffer(), static_cast<uint32_t>(indices_count), 1, 0, 0, 0);
+							for (int i = 0; i < current_instance_count; ++i)
+							{
+								perdrawcall_storage_buffer_object.mesh_instances[i].model_matrix =
+									mesh_nodes[drawcall_max_instance_count * drawcall_index + i].model_matrix;
+							}
+							uint32_t dynamic_offsets[1] = { perdrawcall_dynamic_offset };
+							vkCmdBindDescriptorSets(m_vulkan_rhi->getCurrentCommandBuffer(),
+								VK_PIPELINE_BIND_POINT_GRAPHICS, m_render_pipelines[render_pipeline_type_mesh_global_buffer].pipeline_layout,
+								0, 1, &m_descriptors[global_mesh].descriptor_set, 1, dynamic_offsets);
+							VkBuffer vertexBuffers[] = { mesh.mesh_vertex_buffer };
+							VkBuffer indices_buffer = mesh.mesh_vertex_index_buffer;
+							size_t indices_count = mesh.indices_count;
+							VkDeviceSize offsets[] = { 0 };
 
+							vkCmdBindVertexBuffers(m_vulkan_rhi->getCurrentCommandBuffer(), 0, 1, vertexBuffers, offsets);
+
+							vkCmdBindIndexBuffer(m_vulkan_rhi->getCurrentCommandBuffer(), indices_buffer, 0, VK_INDEX_TYPE_UINT16);
+							vkCmdDrawIndexed(m_vulkan_rhi->getCurrentCommandBuffer(), static_cast<uint32_t>(indices_count), current_instance_count, 0, 0, 0);
+						}
+					}	
 				}
 			}
 
@@ -118,7 +168,12 @@ namespace QYHS
 			bufferInfo.offset = 0;
 			bufferInfo.range = sizeof(UniformBufferObject);
 
-			VkWriteDescriptorSet descriptorWrites[1];
+			VkDescriptorBufferInfo mesh_perdrawcall_storage_buffer;
+			mesh_perdrawcall_storage_buffer.offset = 0;
+			mesh_perdrawcall_storage_buffer.buffer = m_global_render_resource->storage_buffer.global_ringbuffer;
+			mesh_perdrawcall_storage_buffer.range = sizeof(MeshPerdrawcallStorageBufferObject);
+
+			VkWriteDescriptorSet descriptorWrites[2];
 
 			descriptorWrites[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 			descriptorWrites[0].pNext = NULL;
@@ -128,6 +183,16 @@ namespace QYHS
 			descriptorWrites[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
 			descriptorWrites[0].descriptorCount = 1;
 			descriptorWrites[0].pBufferInfo = &bufferInfo;
+
+			descriptorWrites[1].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+			descriptorWrites[1].pNext = NULL;
+			descriptorWrites[1].dstSet = m_descriptors[global_mesh].descriptor_set;
+			descriptorWrites[1].dstBinding = 1;
+			descriptorWrites[1].dstArrayElement = 0;
+			descriptorWrites[1].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC;
+			descriptorWrites[1].descriptorCount = 1;
+			descriptorWrites[1].pBufferInfo = &mesh_perdrawcall_storage_buffer;
+			
 			vkUpdateDescriptorSets(m_vulkan_rhi->getDevice(), static_cast<uint32_t>(sizeof(descriptorWrites)/sizeof(descriptorWrites[0])), descriptorWrites, 0, nullptr);
 		}
 	}
@@ -392,7 +457,7 @@ namespace QYHS
 	{
 		m_descriptors.resize(descriptor_set_layout_type_count);
 		{
-			VkDescriptorSetLayoutBinding mesh_global_layout_bindings[1];
+			VkDescriptorSetLayoutBinding mesh_global_layout_bindings[2];
 			//mesh descriptor set layout,like uniform which contain project matrix and view matrix;
 			//set = 0,binding = 0
 			VkDescriptorSetLayoutBinding& uboLayoutBinding = mesh_global_layout_bindings[0];
@@ -402,12 +467,12 @@ namespace QYHS
 			uboLayoutBinding.pImmutableSamplers = nullptr;
 			uboLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 
-			VkDescriptorSetLayoutBinding samplerLayoutBinding{};
+			VkDescriptorSetLayoutBinding &samplerLayoutBinding = mesh_global_layout_bindings[1];
 			samplerLayoutBinding.binding = 1;
 			samplerLayoutBinding.descriptorCount = 1;
-			samplerLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+			samplerLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC;
 			samplerLayoutBinding.pImmutableSamplers = nullptr;
-			samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+			samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 
 			VkDescriptorSetLayoutCreateInfo layoutInfo{};
 			layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;

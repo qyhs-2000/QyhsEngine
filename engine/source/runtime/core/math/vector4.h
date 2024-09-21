@@ -5,6 +5,7 @@
 
 namespace QYHS
 {
+    class Vector3;
     REFLECTION_TYPE(Vector4)
         CLASS(Vector4, Fields)
     {
@@ -16,6 +17,7 @@ namespace QYHS
     public:
         Vector4() = default;
         Vector4(float x_, float y_, float z_, float w_) : x{ x_ }, y{ y_ }, z{ z_ }, w{ w_ } {}
+        Vector4(const Vector3 & v3, float w_) : x{ v3.x }, y{ v3.y }, z{ v3.z }, w{ w_ } {}
 
         explicit Vector4(float coords[4]) : x{ coords[0] }, y{ coords[1] }, z{ coords[2] }, w{ coords[3] } {}
 
@@ -183,6 +185,9 @@ namespace QYHS
         A float representing the dot product value.
         */
         float dotProduct(const Vector4 & vec) const { return x * vec.x + y * vec.y + z * vec.z + w * vec.w; }
+
+        /// Check whether this vector contains valid values
+        bool isNaN() const { return Math::isNan(x) || Math::isNan(y) || Math::isNan(z) || Math::isNan(w); }
 
         // special
         static const Vector4 ZERO;

@@ -20,7 +20,7 @@ namespace QYHS
 	private:
 		float m_fov{ 45.f };
 
-		glm::vec3 camera_pos = { 0.f,0.f,3.f };
+		glm::vec3 camera_pos = { 0.f,0.f,0.f };
 		glm::vec3 camera_pos_offset = { 0.f,0.f,0.f };
 		glm::vec3 camera_target = { 0.0f,0.0f,0.0f };
 		glm::vec3 camera_front = { 0.f,0.f,-1.f };
