@@ -3,10 +3,11 @@
 #include "_generated\serializer\vector3.serializer.gen.h"
 #include "_generated\serializer\transform.serializer.gen.h"
 #include "_generated\serializer\component.serializer.gen.h"
+#include "_generated\serializer\quat.serializer.gen.h"
 #include "_generated\serializer\vector2.serializer.gen.h"
 #include "_generated\serializer\vector4.serializer.gen.h"
-#include "_generated\serializer\transform_component.serializer.gen.h"
 #include "_generated\serializer\motor_component.serializer.gen.h"
+#include "_generated\serializer\transform_component.serializer.gen.h"
 #include "_generated\serializer\object.serializer.gen.h"
 #include "_generated\serializer\mash_data.serializer.gen.h"
 #include "_generated\serializer\mesh.serializer.gen.h"
@@ -73,6 +74,29 @@ namespace QYHS
 		return instance;
 	}
 	template<>
+	Quaternion & Serializer::read(const Json & json_context,Quaternion & instance)
+	{
+		assert(json_context.is_object());
+		
+		if(!json_context["w"].is_null())
+		{
+			Serializer::read(json_context["w"],instance.w);
+		}
+		if(!json_context["x"].is_null())
+		{
+			Serializer::read(json_context["x"],instance.x);
+		}
+		if(!json_context["y"].is_null())
+		{
+			Serializer::read(json_context["y"],instance.y);
+		}
+		if(!json_context["z"].is_null())
+		{
+			Serializer::read(json_context["z"],instance.z);
+		}
+		return instance;
+	}
+	template<>
 	Vector2 & Serializer::read(const Json & json_context,Vector2 & instance)
 	{
 		assert(json_context.is_object());
@@ -111,7 +135,7 @@ namespace QYHS
 		return instance;
 	}
 	template<>
-	TransformComponent & Serializer::read(const Json & json_context,TransformComponent & instance)
+	MotorComponent & Serializer::read(const Json & json_context,MotorComponent & instance)
 	{
 		assert(json_context.is_object());
 		Serializer::read(json_context,*(QYHS::Component*)&instance);
@@ -122,7 +146,7 @@ namespace QYHS
 		return instance;
 	}
 	template<>
-	MotorComponent & Serializer::read(const Json & json_context,MotorComponent & instance)
+	TransformComponent & Serializer::read(const Json & json_context,TransformComponent & instance)
 	{
 		assert(json_context.is_object());
 		Serializer::read(json_context,*(QYHS::Component*)&instance);
@@ -287,14 +311,6 @@ namespace QYHS
 		if(!json_context["character_name"].is_null())
 		{
 			Serializer::read(json_context["character_name"],instance.m_character_name);
-		}
-		if(!json_context["test_name"].is_null())
-		{
-			Serializer::read(json_context["test_name"],instance.m_test_name);
-		}
-		if(!json_context["test_name2"].is_null())
-		{
-			Serializer::read(json_context["test_name2"],instance.m_test_name2);
 		}
 		if(!json_context["objects"].is_null())
 		{

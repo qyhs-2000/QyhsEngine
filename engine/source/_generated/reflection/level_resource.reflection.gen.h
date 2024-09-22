@@ -61,46 +61,6 @@ namespace QYHS
 				{
 					return false;
 				}
-				static void set_m_test_name(void * instance,void * field_value)
-				{
-					static_cast<LevelResource*>(instance)->m_test_name = *static_cast<std::string*>(field_value);
-				}
-				static void* get_m_test_name(void * instance)
-				{
-					return &(static_cast<LevelResource*>(instance)->m_test_name);
-				}
-				static const char* getFieldName_m_test_name()
-				{
-					return "m_test_name";
-				}
-				static const char* getFieldTypeName_m_test_name()
-				{
-					return "std::string";
-				}
-				static bool isArray_m_test_name()
-				{
-					return false;
-				}
-				static void set_m_test_name2(void * instance,void * field_value)
-				{
-					static_cast<LevelResource*>(instance)->m_test_name2 = *static_cast<std::string*>(field_value);
-				}
-				static void* get_m_test_name2(void * instance)
-				{
-					return &(static_cast<LevelResource*>(instance)->m_test_name2);
-				}
-				static const char* getFieldName_m_test_name2()
-				{
-					return "m_test_name2";
-				}
-				static const char* getFieldTypeName_m_test_name2()
-				{
-					return "std::string";
-				}
-				static bool isArray_m_test_name2()
-				{
-					return false;
-				}
 				static void set_m_objects(void * instance,void * field_value)
 				{
 					static_cast<LevelResource*>(instance)->m_objects = *static_cast<std::vector<ObjectInstanceResource>*>(field_value);
@@ -166,24 +126,6 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeLevelResourceOperator::isArray_m_character_name
 			);
 			REGISTER_TO_FIELD_MAP("m_character_name",f_field_function_tuple_m_character_name);
-			FieldFunctionTuple * f_field_function_tuple_m_test_name = new FieldFunctionTuple(
-			&TypeFieldReflectionOperator::TypeLevelResourceOperator::set_m_test_name,
-			&TypeFieldReflectionOperator::TypeLevelResourceOperator::get_m_test_name,
-			&TypeFieldReflectionOperator::TypeLevelResourceOperator::getClassName,
-			&TypeFieldReflectionOperator::TypeLevelResourceOperator::getFieldName_m_test_name,
-			&TypeFieldReflectionOperator::TypeLevelResourceOperator::getFieldTypeName_m_test_name,
-			&TypeFieldReflectionOperator::TypeLevelResourceOperator::isArray_m_test_name
-			);
-			REGISTER_TO_FIELD_MAP("m_test_name",f_field_function_tuple_m_test_name);
-			FieldFunctionTuple * f_field_function_tuple_m_test_name2 = new FieldFunctionTuple(
-			&TypeFieldReflectionOperator::TypeLevelResourceOperator::set_m_test_name2,
-			&TypeFieldReflectionOperator::TypeLevelResourceOperator::get_m_test_name2,
-			&TypeFieldReflectionOperator::TypeLevelResourceOperator::getClassName,
-			&TypeFieldReflectionOperator::TypeLevelResourceOperator::getFieldName_m_test_name2,
-			&TypeFieldReflectionOperator::TypeLevelResourceOperator::getFieldTypeName_m_test_name2,
-			&TypeFieldReflectionOperator::TypeLevelResourceOperator::isArray_m_test_name2
-			);
-			REGISTER_TO_FIELD_MAP("m_test_name2",f_field_function_tuple_m_test_name2);
 			FieldFunctionTuple * f_field_function_tuple_m_objects = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeLevelResourceOperator::set_m_objects,
 			&TypeFieldReflectionOperator::TypeLevelResourceOperator::get_m_objects,

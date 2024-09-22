@@ -11,10 +11,10 @@
 	if(handle->shouldCompile()) \
 	{\
 		auto file = handle->getSourceFile(); \
-		std::cout<<file<<std::endl;\
 		m_schema_module[file].container.emplace_back(handle);\
-		std::cout<<"m_type_table push_back: "<<file<<std::endl;\
 		m_type_table[handle->m_display_name] = file;\
+		std::cout<<"Module " << file << " is adding"<<file<<std::endl;\
+		std::cout<<"Type table "<< handle->m_display_name<<"is adding"<<file<<std::endl;\
 	}else\
 	{\
 	std::cout<<handle->getClassName()<<" can't compile!"<<std::endl;\
@@ -147,7 +147,11 @@ bool MetaParser::parseProject()
 	std::string context = buffer.str();
 	Utils::replaceAll(context, ",", ";");
 	auto include_files = Utils::split(context, ";");
-
+	std::cout << "Now serializing files:" << std::endl;
+	for (uint32_t i = 0; i < include_files.size(); ++i)
+	{
+		std::cout << include_files[i] << std::endl;
+	}
 	//upload include file to source file
 	std::fstream include_file_stream;
 	include_file_stream.open(m_source_include_file_name, std::ios::out);
@@ -185,7 +189,6 @@ void MetaParser::buildClassAST(const Cursor& cursor, Namespace current_namespace
 {
 	std::string spelling_name = cursor.getSpelling();
 	std::string display_name = cursor.getDisplayName();
-	std::cout << cursor.getSpelling() << std::endl;
 	for (auto& child : cursor.getChildren())
 	{
 		auto kind = child.getKind();

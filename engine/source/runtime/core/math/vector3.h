@@ -4,7 +4,7 @@
 
 #include <cassert>
 #include "math.h"
-#include "runtime/core/math/quaternion.h"
+#include "runtime/core/math/quat.h"
 
 namespace QYHS
 {

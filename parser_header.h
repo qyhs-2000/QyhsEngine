@@ -8,6 +8,7 @@
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/matrix4.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/quaternion.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/random.h"
+#include "E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/test.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/transform.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/vector2.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/vector3.h"
