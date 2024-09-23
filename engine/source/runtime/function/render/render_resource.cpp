@@ -368,7 +368,9 @@ namespace QYHS
 	void RenderResource::updatePerframeBuffer(std::shared_ptr<RenderCamera> camera)
 	{
 		
-		//Matrix4x4 view_matrix = camera->getViewMatrix();
-		//Matrix4x4 project_matrix = camera->getProjectMatrix();
+		Matrix4x4 view_matrix = camera->getViewMatrix();
+		Matrix4x4 project_matrix = camera->getProjMatrix();
+
+		m_mesh_per_frame_storage_buffer_object.project_view_matrix = project_matrix * view_matrix;
 	}
 }

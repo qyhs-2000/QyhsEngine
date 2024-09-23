@@ -15,4 +15,9 @@ namespace QYHS
 	{
 		VulkanMeshInstance mesh_instances[mesh_per_drawcall_max_instance_count];
 	};
+
+	struct MeshPerFrameStorageBufferObject
+	{
+		Matrix4x4 project_view_matrix;
+	};
 }

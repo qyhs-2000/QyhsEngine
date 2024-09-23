@@ -7,6 +7,7 @@
 #include "render_type.h"
 #include "rhi/rhi.h"
 #include "render_resource_base.h"
+#include "render_common.h"
 namespace QYHS
 {
 	struct StorageBuffer
@@ -50,8 +51,10 @@ namespace QYHS
 		VkDescriptorSetLayout* m_material_descriptor_set_layout;
 		void uploadGlobalRenderResource(std::shared_ptr<RHI> rhi);
 		void createAndMapStorageBuffer(std::shared_ptr<RHI> rhi);
-		GlobalRenderResource m_global_render_resource;
 		void resetRingBufferOffset(uint32_t current_frame_index);
+		
+		GlobalRenderResource m_global_render_resource;
+		MeshPerFrameStorageBufferObject m_mesh_per_frame_storage_buffer_object;
 	private:
 		std::unordered_map<size_t, VulkanMaterial> m_materials;
 		std::unordered_map<size_t, VulkanMesh>		 m_meshes;

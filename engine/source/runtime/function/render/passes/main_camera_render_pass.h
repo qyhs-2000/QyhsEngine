@@ -1,6 +1,6 @@
 #pragma once
 #include "function/render/render_pass.h"
-
+#include "function/render/render_common.h"
 namespace QYHS
 {
 	/*
@@ -41,6 +41,8 @@ namespace QYHS
 		void setupSwapChainFrameBuffers();
 		void drawMesh();
 		void setupGlobalModelDescriptorSet();
+		virtual void prepareData(std::shared_ptr<RenderResourceBase> resource) override;
+		MeshPerFrameStorageBufferObject m_mesh_perframe_storage_buffer_object;
 	private:
 		std::vector<VkFramebuffer> m_swapchain_framebuffers;
 		

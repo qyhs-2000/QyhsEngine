@@ -40,11 +40,11 @@ namespace QYHS
 		};
 		//material map to the mesh that use it. and  render mesh nodes are the instance of the mesh
 		std::map<VulkanMaterial*, std::map<VulkanMesh*, std::vector<MeshNode>>>	main_camera_pass_mesh_batch;
-
-		//render all nodes that can be see by the main camera
-
-		/*RenderMeshNode mesh_node;
-		m_visible_render_meshes.p_main_camera_pass_visible_mesh_nodes->push_back(mesh_node);*/
+		
+		uint32_t perframe_dynamic_offset = roundUp(m_global_render_resource->storage_buffer.ringbuffer_end[m_vulkan_rhi->getCurrentFrameIndex()], m_global_render_resource->storage_buffer.min_storage_buffer_offset_alignment);
+		m_global_render_resource->storage_buffer.ringbuffer_end[m_vulkan_rhi->getCurrentFrameIndex()] = perframe_dynamic_offset + sizeof(MeshPerFrameStorageBufferObject);
+		assert(m_global_render_resource->storage_buffer.ringbuffer_end[m_vulkan_rhi->getCurrentFrameIndex()] <= m_global_render_resource->storage_buffer.ringbuffer_begin[m_vulkan_rhi->getCurrentFrameIndex()] + m_global_render_resource->storage_buffer.ringbuffer_size[m_vulkan_rhi->getCurrentFrameIndex()]);
+		*(reinterpret_cast<MeshPerFrameStorageBufferObject*>(reinterpret_cast<uintptr_t>(m_global_render_resource->storage_buffer.global_ringbuffer_memory_pointer) + perframe_dynamic_offset)) = m_mesh_perframe_storage_buffer_object;
 
 		if (m_visible_render_meshes.p_main_camera_pass_visible_mesh_nodes)
 		{
@@ -117,7 +117,6 @@ namespace QYHS
 									.ringbuffer_begin[m_vulkan_rhi->getCurrentFrameIndex()] +
 									m_global_render_resource->storage_buffer
 									.ringbuffer_size[m_vulkan_rhi->getCurrentFrameIndex()]));
-							std::cout << "Size:" << sizeof(MeshPerdrawcallStorageBufferObject) << std::endl;
 							MeshPerdrawcallStorageBufferObject& perdrawcall_storage_buffer_object =
 								(*reinterpret_cast<MeshPerdrawcallStorageBufferObject*>(
 									reinterpret_cast<uintptr_t>(m_global_render_resource->storage_buffer
@@ -129,10 +128,10 @@ namespace QYHS
 								perdrawcall_storage_buffer_object.mesh_instances[i].model_matrix =
 									mesh_nodes[drawcall_max_instance_count * drawcall_index + i].model_matrix;
 							}
-							uint32_t dynamic_offsets[1] = { perdrawcall_dynamic_offset };
+							uint32_t dynamic_offsets[2] = { perframe_dynamic_offset,perdrawcall_dynamic_offset };
 							vkCmdBindDescriptorSets(m_vulkan_rhi->getCurrentCommandBuffer(),
 								VK_PIPELINE_BIND_POINT_GRAPHICS, m_render_pipelines[render_pipeline_type_mesh_global_buffer].pipeline_layout,
-								0, 1, &m_descriptors[global_mesh].descriptor_set, 1, dynamic_offsets);
+								0, 1, &m_descriptors[global_mesh].descriptor_set, 2, dynamic_offsets);
 							VkBuffer vertexBuffers[] = { mesh.mesh_vertex_buffer };
 							VkBuffer indices_buffer = mesh.mesh_vertex_index_buffer;
 							size_t indices_count = mesh.indices_count;
@@ -168,12 +167,20 @@ namespace QYHS
 			bufferInfo.offset = 0;
 			bufferInfo.range = sizeof(UniformBufferObject);
 
-			VkDescriptorBufferInfo mesh_perdrawcall_storage_buffer;
+			VkDescriptorBufferInfo mesh_perframe_storage_buffer = {};
+			mesh_perframe_storage_buffer.offset = 0;
+			mesh_perframe_storage_buffer.buffer = m_global_render_resource->storage_buffer.global_ringbuffer;
+			mesh_perframe_storage_buffer.range = sizeof(MeshPerFrameStorageBufferObject);
+			assert(mesh_perframe_storage_buffer.range < m_global_render_resource->storage_buffer.max_storage_buffer_size);
+
+			VkDescriptorBufferInfo mesh_perdrawcall_storage_buffer = {};
 			mesh_perdrawcall_storage_buffer.offset = 0;
 			mesh_perdrawcall_storage_buffer.buffer = m_global_render_resource->storage_buffer.global_ringbuffer;
 			mesh_perdrawcall_storage_buffer.range = sizeof(MeshPerdrawcallStorageBufferObject);
+			
 
-			VkWriteDescriptorSet descriptorWrites[2];
+
+			VkWriteDescriptorSet descriptorWrites[3];
 
 			descriptorWrites[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 			descriptorWrites[0].pNext = NULL;
@@ -191,9 +198,27 @@ namespace QYHS
 			descriptorWrites[1].dstArrayElement = 0;
 			descriptorWrites[1].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC;
 			descriptorWrites[1].descriptorCount = 1;
-			descriptorWrites[1].pBufferInfo = &mesh_perdrawcall_storage_buffer;
+			descriptorWrites[1].pBufferInfo = &mesh_perframe_storage_buffer;
+
+			descriptorWrites[2].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+			descriptorWrites[2].pNext = NULL;
+			descriptorWrites[2].dstSet = m_descriptors[global_mesh].descriptor_set;
+			descriptorWrites[2].dstBinding = 2;
+			descriptorWrites[2].dstArrayElement = 0;
+			descriptorWrites[2].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC;
+			descriptorWrites[2].descriptorCount = 1;
+			descriptorWrites[2].pBufferInfo = &mesh_perdrawcall_storage_buffer;
 			
 			vkUpdateDescriptorSets(m_vulkan_rhi->getDevice(), static_cast<uint32_t>(sizeof(descriptorWrites)/sizeof(descriptorWrites[0])), descriptorWrites, 0, nullptr);
+		}
+	}
+
+	void MainCameraRenderPass::prepareData(std::shared_ptr<RenderResourceBase> resource)
+	{
+		RenderResource* m_resource = static_cast<RenderResource*>(resource.get());
+		if (m_resource)
+		{
+			m_mesh_perframe_storage_buffer_object.project_view_matrix = m_resource->m_mesh_per_frame_storage_buffer_object.project_view_matrix;
 		}
 	}
 
@@ -457,7 +482,7 @@ namespace QYHS
 	{
 		m_descriptors.resize(descriptor_set_layout_type_count);
 		{
-			VkDescriptorSetLayoutBinding mesh_global_layout_bindings[2];
+			VkDescriptorSetLayoutBinding mesh_global_layout_bindings[3];
 			//mesh descriptor set layout,like uniform which contain project matrix and view matrix;
 			//set = 0,binding = 0
 			VkDescriptorSetLayoutBinding& uboLayoutBinding = mesh_global_layout_bindings[0];
@@ -467,12 +492,21 @@ namespace QYHS
 			uboLayoutBinding.pImmutableSamplers = nullptr;
 			uboLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 
-			VkDescriptorSetLayoutBinding &samplerLayoutBinding = mesh_global_layout_bindings[1];
-			samplerLayoutBinding.binding = 1;
-			samplerLayoutBinding.descriptorCount = 1;
-			samplerLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC;
-			samplerLayoutBinding.pImmutableSamplers = nullptr;
-			samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+			//set = 0,binding = 1
+			VkDescriptorSetLayoutBinding &mesh_global_layout_mesh_perframe_storage_buffer_binding = mesh_global_layout_bindings[1];
+			mesh_global_layout_mesh_perframe_storage_buffer_binding.binding = 1;
+			mesh_global_layout_mesh_perframe_storage_buffer_binding.descriptorCount = 1;
+			mesh_global_layout_mesh_perframe_storage_buffer_binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC;
+			mesh_global_layout_mesh_perframe_storage_buffer_binding.pImmutableSamplers = nullptr;
+			mesh_global_layout_mesh_perframe_storage_buffer_binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+
+			//set = 0,binding = 2
+			VkDescriptorSetLayoutBinding& mesh_global_layout_mesh_perdrawcall_storage_buffer_binding = mesh_global_layout_bindings[2];
+			mesh_global_layout_mesh_perdrawcall_storage_buffer_binding.binding = 2;
+			mesh_global_layout_mesh_perdrawcall_storage_buffer_binding.descriptorCount = 1;
+			mesh_global_layout_mesh_perdrawcall_storage_buffer_binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC;
+			mesh_global_layout_mesh_perdrawcall_storage_buffer_binding.pImmutableSamplers = nullptr;
+			mesh_global_layout_mesh_perdrawcall_storage_buffer_binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 
 			VkDescriptorSetLayoutCreateInfo layoutInfo{};
 			layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;

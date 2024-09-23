@@ -4,7 +4,9 @@
 #include <function/render/window_system.h>
 #include "editor_input_manager.h"
 #include "editor_scene_manager.h"
+#include "function/render/render_system.h"
 #include <glfw/glfw3.h>
+#include "core/math/vector2.h"
 #include <iostream>
 namespace QYHS
 {
@@ -43,7 +45,7 @@ namespace QYHS
 	}
 
 	void EditorInputManager::registerInput()
-	{
+	{				
 		g_runtime_global_context.m_window->registerOnScrollFunc(std::bind(&EditorInputManager::onScroll, this, std::placeholders::_1, std::placeholders::_2));
 		g_runtime_global_context.m_window->registerOnKeyFunc(std::bind(&EditorInputManager::onKey, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 		g_runtime_global_context.m_window->registerOnCursorPos(std::bind(&EditorInputManager::onCursorPos, this, std::placeholders::_1, std::placeholders::_2));
@@ -62,30 +64,27 @@ namespace QYHS
 	void EditorInputManager::onKey(int key, int scancode, int action, int mods)
 	{
 		float delta_time = 0.05;
-		glm::vec3 offset = { 0.f,0.f,0.f };
 		if (action == GLFW_PRESS)
 		{
-			float speed = g_editor_global_context.m_scene_manager->getEditorCamera()->getCameraSpeed();
-			glm::vec3 front = g_editor_global_context.m_scene_manager->getEditorCamera()->getCameraFront();
-			glm::vec3 up = g_editor_global_context.m_scene_manager->getEditorCamera()->getCameraUp();
-
 			switch (key)
 			{
-			case GLFW_KEY_W:
-				offset = speed * front * delta_time;
-				std::cout << "W";
+			case GLFW_KEY_A:
+				m_command |= (unsigned int)EditorCommand::camera_left;
 				break;
 			case GLFW_KEY_S:
-				offset = -speed * front * delta_time;
-				std::cout << "S";
+				m_command |= (unsigned int)EditorCommand::camera_back;
 				break;
-			case GLFW_KEY_A:
-				offset = -speed * glm::normalize(glm::cross(front, up)) * delta_time;
-				std::cout << "A";
+			case GLFW_KEY_W:
+				m_command |= (unsigned int)EditorCommand::camera_foward;
 				break;
 			case GLFW_KEY_D:
-				offset = speed * glm::normalize(glm::cross(front, up)) * delta_time;
-				std::cout << "D";
+				m_command |= (unsigned int)EditorCommand::camera_right;
+				break;
+			case GLFW_KEY_E:
+				m_command |= (unsigned int)EditorCommand::camera_up;
+				break;
+			case GLFW_KEY_Q:
+				m_command |= (unsigned int)EditorCommand::camera_down;
 				break;
 			default:
 				break;
@@ -96,35 +95,83 @@ namespace QYHS
 		{
 			switch (key)
 			{
-			case GLFW_KEY_W:
-				offset = { 0.f,0.f,0.f };
-				std::cout << "W";
+			case GLFW_KEY_A:
+				m_command &= (k_complement_control_command ^ (unsigned int)EditorCommand::camera_left);
 				break;
 			case GLFW_KEY_S:
-				offset = { 0.f,0.f,0.f };
-				std::cout << "S";
+				m_command &= (k_complement_control_command ^ (unsigned int)EditorCommand::camera_back);
 				break;
-			case GLFW_KEY_A:
-				offset = { 0.f,0.f,0.f };
-				std::cout << "A";
+			case GLFW_KEY_W:
+				m_command &= (k_complement_control_command ^ (unsigned int)EditorCommand::camera_foward);
 				break;
 			case GLFW_KEY_D:
-				offset = { 0.f,0.f,0.f };
-				std::cout << "D";
+				m_command &= (k_complement_control_command ^ (unsigned int)EditorCommand::camera_right);
+				break;
+			case GLFW_KEY_E:
+				m_command &= (k_complement_control_command ^ (unsigned int)EditorCommand::camera_up);
+				break;
+			case GLFW_KEY_Q:
+				m_command &= (k_complement_control_command ^ (unsigned int)EditorCommand::camera_down);
 				break;
 			default:
 				break;
 			}
 
 		}
-		g_editor_global_context.m_scene_manager->getEditorCamera()->updateCameraOffset(offset);
+		//g_editor_global_context.m_scene_manager->getEditorCamera()->updateCameraOffset(offset);
 	}
 
 	void EditorInputManager::onCursorPos(float x_pos, float y_pos)
 	{
-		g_editor_global_context.m_scene_manager->getEditorCamera()->updateCursorPos(x_pos, y_pos);
-
+		if (!m_first_initialize_mouse_pos)
+		{
+			m_mouse_x = x_pos;
+			m_mouse_y = y_pos;
+			m_first_initialize_mouse_pos = true;
+		}
+		//g_editor_global_context.m_scene_manager->getEditorCamera()->updateCursorPos(x_pos, y_pos);
+		g_editor_global_context.m_scene_manager->getEditorCamera()->rotate(Vector2(y_pos - m_mouse_y, x_pos - m_mouse_x)*0.14);
+		m_mouse_x = x_pos;
+		m_mouse_y = y_pos;
 	}
 
+	void EditorInputManager::tick(float delta_time)
+	{
+		processEditorCommand(delta_time);
+	}
+
+	void EditorInputManager::processEditorCommand(float delta_time)
+	{
+		std::shared_ptr<RenderCamera> camera = g_runtime_global_context.m_render_system->getRenderCamera();
+
+		Quaternion camera_rotation = camera->getRotation().inverse();
+		Vector3 camera_relative_position = { 0.f,0.f,0.f };
+		if (m_command & (unsigned int)EditorCommand::camera_foward)
+		{
+			camera_relative_position += camera_rotation * Vector3{ 0.f,1.f,0.f } *m_camera_speed;
+		}
+		else if (m_command & (unsigned int)EditorCommand::camera_back)
+		{
+			camera_relative_position += camera_rotation * Vector3{ 0.f,-1.f,0.f }*m_camera_speed;
+		}
+		else if (m_command & (unsigned int)EditorCommand::camera_left)
+		{
+			camera_relative_position += camera_rotation * Vector3{ -1.f,0.f,0.f }*m_camera_speed;
+		}
+		else if (m_command & (unsigned int)EditorCommand::camera_right)
+		{
+			camera_relative_position += camera_rotation * Vector3{ 1.f,0.f,0.f }*m_camera_speed;
+		}
+		else if (m_command & (unsigned int)EditorCommand::camera_up)
+		{
+			camera_relative_position += Vector3{ 0.f,0.f,1.f }*m_camera_speed;
+		}
+		else if (m_command & (unsigned int)EditorCommand::camera_down)
+		{
+			camera_relative_position += Vector3{ 0.f,0.f,-1.f }*m_camera_speed;
+		}
+		
+		camera->move(camera_relative_position);
+	}
 
 }

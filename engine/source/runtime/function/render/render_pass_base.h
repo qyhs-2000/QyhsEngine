@@ -16,6 +16,7 @@ namespace QYHS
 	{
 	public:
 		virtual void initialize() = 0;
+		virtual void prepareData(std::shared_ptr<RenderResourceBase> resource) {}
 		virtual void setCommonInfo(RenderPassCommonInfo common_info);
 	protected:
 		std::shared_ptr<RHI>	m_rhi;

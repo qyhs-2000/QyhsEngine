@@ -1062,11 +1062,11 @@ namespace QYHS
 		//ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 		ubo.model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		g_editor_global_context.m_scene_manager->getEditorCamera()->updateCameraPosition();
-		glm::vec3 camera_pos = g_editor_global_context.m_scene_manager->getEditorCamera()->getCameraPos();
-		glm::vec3 camera_front = g_editor_global_context.m_scene_manager->getEditorCamera()->getCameraFront();
-		glm::vec3 camera_up = g_editor_global_context.m_scene_manager->getEditorCamera()->getCameraUp();
+		Vector3 camera_pos = g_editor_global_context.m_scene_manager->getEditorCamera()->getCameraPos();
+		Vector3 camera_front = g_editor_global_context.m_scene_manager->getEditorCamera()->getCameraFront();
+		Vector3 camera_up = g_editor_global_context.m_scene_manager->getEditorCamera()->getCameraUp();
 		auto camera_fov = g_editor_global_context.m_scene_manager->getEditorCamera()->getCameraFOV();
-		ubo.view = glm::lookAt(camera_pos, camera_pos + camera_front, camera_up);
+		//ubo.view = glm::lookAt(camera_pos, camera_pos + camera_front, camera_up);
 		//ubo.view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		ubo.proj = glm::perspective(glm::radians(camera_fov), swapChainExtent.width / (float)swapChainExtent.height, 0.1f, 1000.0f);
 		ubo.proj[1][1] *= -1;

@@ -1,10 +1,10 @@
 #pragma once
+#include "_generated\serializer\component.serializer.gen.h"
+#include "_generated\serializer\vector2.serializer.gen.h"
+#include "_generated\serializer\quat.serializer.gen.h"
 #include "_generated\serializer\mesh_component.serializer.gen.h"
 #include "_generated\serializer\vector3.serializer.gen.h"
 #include "_generated\serializer\transform.serializer.gen.h"
-#include "_generated\serializer\component.serializer.gen.h"
-#include "_generated\serializer\quat.serializer.gen.h"
-#include "_generated\serializer\vector2.serializer.gen.h"
 #include "_generated\serializer\vector4.serializer.gen.h"
 #include "_generated\serializer\motor_component.serializer.gen.h"
 #include "_generated\serializer\transform_component.serializer.gen.h"
@@ -14,8 +14,56 @@
 #include "_generated\serializer\material.serializer.gen.h"
 #include "_generated\serializer\level_resource.serializer.gen.h"
 #include "_generated\serializer\world_resource.serializer.gen.h"
+#include "_generated\serializer\camera_config.serializer.gen.h"
+#include "_generated\serializer\global_rendering_resource.serializer.gen.h"
 namespace QYHS
 {
+	template<>
+	Component & Serializer::read(const Json & json_context,Component & instance)
+	{
+		assert(json_context.is_object());
+		
+		
+		return instance;
+	}
+	template<>
+	Vector2 & Serializer::read(const Json & json_context,Vector2 & instance)
+	{
+		assert(json_context.is_object());
+		
+		if(!json_context["x"].is_null())
+		{
+			Serializer::read(json_context["x"],instance.x);
+		}
+		if(!json_context["y"].is_null())
+		{
+			Serializer::read(json_context["y"],instance.y);
+		}
+		return instance;
+	}
+	template<>
+	Quaternion & Serializer::read(const Json & json_context,Quaternion & instance)
+	{
+		assert(json_context.is_object());
+		
+		if(!json_context["w"].is_null())
+		{
+			Serializer::read(json_context["w"],instance.w);
+		}
+		if(!json_context["x"].is_null())
+		{
+			Serializer::read(json_context["x"],instance.x);
+		}
+		if(!json_context["y"].is_null())
+		{
+			Serializer::read(json_context["y"],instance.y);
+		}
+		if(!json_context["z"].is_null())
+		{
+			Serializer::read(json_context["z"],instance.z);
+		}
+		return instance;
+	}
 	template<>
 	MeshComponent & Serializer::read(const Json & json_context,MeshComponent & instance)
 	{
@@ -62,52 +110,6 @@ namespace QYHS
 		if(!json_context["rotation"].is_null())
 		{
 			Serializer::read(json_context["rotation"],instance.m_rotation);
-		}
-		return instance;
-	}
-	template<>
-	Component & Serializer::read(const Json & json_context,Component & instance)
-	{
-		assert(json_context.is_object());
-		
-		
-		return instance;
-	}
-	template<>
-	Quaternion & Serializer::read(const Json & json_context,Quaternion & instance)
-	{
-		assert(json_context.is_object());
-		
-		if(!json_context["w"].is_null())
-		{
-			Serializer::read(json_context["w"],instance.w);
-		}
-		if(!json_context["x"].is_null())
-		{
-			Serializer::read(json_context["x"],instance.x);
-		}
-		if(!json_context["y"].is_null())
-		{
-			Serializer::read(json_context["y"],instance.y);
-		}
-		if(!json_context["z"].is_null())
-		{
-			Serializer::read(json_context["z"],instance.z);
-		}
-		return instance;
-	}
-	template<>
-	Vector2 & Serializer::read(const Json & json_context,Vector2 & instance)
-	{
-		assert(json_context.is_object());
-		
-		if(!json_context["x"].is_null())
-		{
-			Serializer::read(json_context["x"],instance.x);
-		}
-		if(!json_context["y"].is_null())
-		{
-			Serializer::read(json_context["y"],instance.y);
 		}
 		return instance;
 	}
@@ -332,6 +334,59 @@ namespace QYHS
 		if(!json_context["default_level_url"].is_null())
 		{
 			Serializer::read(json_context["default_level_url"],instance.m_default_level_url);
+		}
+		return instance;
+	}
+	template<>
+	CameraPose & Serializer::read(const Json & json_context,CameraPose & instance)
+	{
+		assert(json_context.is_object());
+		
+		if(!json_context["position"].is_null())
+		{
+			Serializer::read(json_context["position"],instance.m_position);
+		}
+		if(!json_context["target"].is_null())
+		{
+			Serializer::read(json_context["target"],instance.m_target);
+		}
+		if(!json_context["up"].is_null())
+		{
+			Serializer::read(json_context["up"],instance.m_up);
+		}
+		return instance;
+	}
+	template<>
+	CameraConfig & Serializer::read(const Json & json_context,CameraConfig & instance)
+	{
+		assert(json_context.is_object());
+		
+		if(!json_context["pose"].is_null())
+		{
+			Serializer::read(json_context["pose"],instance.m_pose);
+		}
+		if(!json_context["aspect"].is_null())
+		{
+			Serializer::read(json_context["aspect"],instance.m_aspect);
+		}
+		if(!json_context["z_far"].is_null())
+		{
+			Serializer::read(json_context["z_far"],instance.m_z_far);
+		}
+		if(!json_context["z_near"].is_null())
+		{
+			Serializer::read(json_context["z_near"],instance.m_z_near);
+		}
+		return instance;
+	}
+	template<>
+	GlobalRenderConfig & Serializer::read(const Json & json_context,GlobalRenderConfig & instance)
+	{
+		assert(json_context.is_object());
+		
+		if(!json_context["camera_config"].is_null())
+		{
+			Serializer::read(json_context["camera_config"],instance.camera_config);
 		}
 		return instance;
 	}

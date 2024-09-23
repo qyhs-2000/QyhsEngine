@@ -21,7 +21,12 @@ layout(set = 0,binding = 0) uniform UniformBufferObject
 	mat4 proj;
 } ubo;
 
-layout(set = 0, binding = 1) readonly buffer _unused_name_per_drawcall
+layout(set = 0,binding = 1) readonly buffer _unused_name_per_frame
+{
+	mat4 proj_view_matrix;
+};
+
+layout(set = 0, binding = 2) readonly buffer _unused_name_per_drawcall
 {
     VulkanMeshInstance mesh_instances[m_mesh_per_drawcall_max_instance_count];
 };
@@ -39,6 +44,6 @@ void main()
 	model_position = inPosition;
 	vec3 world_position = (model_matrix*vec4(model_position,1.0)).xyz;
 	//gl_Position = ubo.proj*ubo.view*vec4(inPosition,1.0);
-	gl_Position = ubo.proj*ubo.view*vec4(world_position,1.0);
+	gl_Position = proj_view_matrix*vec4(world_position,1.0);
 	fragTexCoord = inTexCoord;
 }

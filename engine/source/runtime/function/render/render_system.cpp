@@ -6,6 +6,10 @@
 #include "passes/main_camera_render_pass.h"
 //#include "function/framework/component/transform/transform_component.h"
 #include "function/framework/component/motor/motor_component.h"
+#include "function/global/global_context.h"
+#include "resource/config_manager/config_manager.h"
+#include "resource/asset_manager/asset_manager.h"
+#include "resource/type/global_rendering_resource.h"
 namespace QYHS
 {
 
@@ -17,6 +21,8 @@ namespace QYHS
 
 		m_render_scene->updateVisibleObject(m_render_resource);
 		m_render_resource->updatePerframeBuffer(m_render_camera);
+
+		m_render_pipeline->prepareDataForRenderPass(m_render_resource);
 		m_render_pipeline->render(m_render_resource);
 
 	}
@@ -103,21 +109,34 @@ namespace QYHS
 		m_rhi = std::make_shared<VulkanRHI>();
 		m_rhi->initialize();
 
+		GlobalRenderConfig global_render_config;
+		const std::string& config_url = g_runtime_global_context.m_config_manager->getGlobalRenderingResUrl();
+		g_runtime_global_context.m_asset_manager->loadAsset(config_url, global_render_config);
+
+		//render resource
 		m_render_resource = std::make_shared<RenderResource>();
 		m_render_resource->uploadGlobalRenderResource(m_rhi);
 
+		//render pipeline
 		RenderPipelineInitInfo init_info;
 		init_info.m_render_resource = m_render_resource;
 		m_render_pipeline = std::make_shared<RenderPipeline>();
 		m_render_pipeline->m_rhi = m_rhi;
 		m_render_pipeline->initialize(init_info);
 
-
+		//initialize render scene
 		m_render_scene = std::make_shared<RenderScene>();
 		m_render_scene->setVisibleObjectNodesReference();
 
+		//initialize render camera
+		CameraPose& camera_pose = global_render_config.camera_config.m_pose;
 		m_render_camera = std::make_shared<RenderCamera>();
-		m_render_camera->setCameraPosition(glm::vec3(0.f, 0.f, 70.f));
+		m_render_camera->setCameraPosition(Vector3(0.f, 0.f, 70.f));
+		m_render_camera->lookAt(camera_pose.m_position, camera_pose.m_target, camera_pose.m_up);
+		m_render_camera->m_zfar = global_render_config.camera_config.m_z_far;
+		m_render_camera->m_znear = global_render_config.camera_config.m_z_near;
+		m_render_camera->setAspect(global_render_config.camera_config.m_aspect.x / global_render_config.camera_config.m_aspect.y);
+		
 		m_render_resource->m_material_descriptor_set_layout = &static_cast<RenderPass*>(m_render_pipeline->m_main_camera_pass.get())->m_descriptors[MainCameraRenderPass::DescriptorSetLayoutType::mesh_per_material].descriptor_set_layout;
 
 

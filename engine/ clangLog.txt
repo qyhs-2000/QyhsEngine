@@ -97,11 +97,27 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/matrix4.h \
   core/math/matrix3.h core/math/vector4.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime/core/math/quaternion.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/quat.h \
+  E:/VS_Project/QyhsEngine/engine/source\runtime/core/meta/reflection/reflection.h \
+  E:/VS_Project/QyhsEngine/engine/source\runtime/core/meta/json.h \
+  json11.hpp E:\VS2022\VC\Tools\MSVC\14.38.33130\include\functional \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\tuple \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\typeinfo \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vcruntime_typeinfo.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\string \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cctype \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\ctype.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\unordered_map \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xhash \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\list \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vector \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\__msvc_bit_utils.hpp \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xbit_ops.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\unordered_set \
   E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/quaternion.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/random.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\random \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\__msvc_int128.hpp \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\__msvc_bit_utils.hpp \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\ios \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xlocnum \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\iterator \
@@ -120,28 +136,12 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\time.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xlocale \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\memory \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\typeinfo \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vcruntime_typeinfo.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xfacet \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xlocinfo \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\__msvc_xlocinfo_types.hpp \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cctype \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\ctype.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\clocale \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\locale.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vector \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xbit_ops.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/test.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/transform.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime/core/meta/reflection/reflection.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime/core/meta/json.h \
-  json11.hpp E:\VS2022\VC\Tools\MSVC\14.38.33130\include\functional \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\tuple \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\string \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\unordered_map \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xhash \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\list \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\unordered_set \
   E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/vector2.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/vector3.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime/core/math/quat.h \
@@ -191,8 +191,9 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   function/framework/game_object/game_object_id_allocator.h \
   core/math/matrix4.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/passes/main_camera_render_pass.h \
-  function/render/render_pass.h \
+  function/render/render_pass.h function/render/render_common.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_camera.h \
+  core/math/vector2.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_common.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_entity.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_guid_allocator.h \
@@ -228,18 +229,18 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   core/meta/serializer/serializer.h \
   E:/VS_Project/QyhsEngine/engine/source\_generated/serializer/all_serializer.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime/core/meta/serializer/serializer.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\mesh_component.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\mesh\mesh_component.h \
   E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\component.serializer.gen.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\component.h \
+  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\vector2.serializer.gen.h \
+  E:/VS_Project/QyhsEngine/engine/source\runtime\core\math\vector2.h \
+  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\quat.serializer.gen.h \
+  E:/VS_Project/QyhsEngine/engine/source\runtime\core\math\quat.h \
+  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\mesh_component.serializer.gen.h \
+  E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\mesh\mesh_component.h \
   E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\vector3.serializer.gen.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime\core\math\vector3.h \
   E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\transform.serializer.gen.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime\core\math\transform.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\quat.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\core\math\quat.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\vector2.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\core\math\vector2.h \
   E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\vector4.serializer.gen.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime\core\math\vector4.h \
   E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\motor_component.serializer.gen.h \
@@ -260,11 +261,18 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   resource/common/object.h \
   E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\world_resource.serializer.gen.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime\resource\type\world_resource.h \
+  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\camera_config.serializer.gen.h \
+  E:/VS_Project/QyhsEngine/engine/source\runtime\resource\type\data\camera_config.h \
+  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\global_rendering_resource.serializer.gen.h \
+  E:/VS_Project/QyhsEngine/engine/source\runtime\resource\type\global_rendering_resource.h \
+  E:/VS_Project/QyhsEngine/engine/source\runtime\resource\type/data/camera_config.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/common/object.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/config_manager/config_manager.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/component/mesh/mesh.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/data/camera_config.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/data/mash_data.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/data/material.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/global_rendering_resource.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/level_resource.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/world_resource.h \
   E:/VS_Project/QyhsEngine/engine/source/editor/include/editor.h \
