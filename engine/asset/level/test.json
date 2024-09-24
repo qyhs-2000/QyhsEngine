@@ -498,6 +498,275 @@
           "$typeName": "TransformComponent"
         }
       ]
+    },
+    {
+      "name": "Ground",
+      "definition": "asset/objects/environment/floor/floor.object_without_rigidbody.json",
+      "instanced_components": [
+        {
+          "$context": {
+            "transform": {
+              "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              },
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            }
+          },
+          "$typeName": "TransformComponent"
+        }
+      ]
+    },
+    {
+      "name": "WallWithDoor_1",
+      "definition": "asset/objects/environment/wall/wall_with_door.object.json",
+      "instanced_components": [
+        {
+          "$context": {
+            "transform": {
+              "position": {
+                "x": -19.083700180053711,
+                "y": 3.6104748249053955,
+                "z": 0
+              },
+              "rotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "scale": {
+                "x": 1,
+                "y": 0.87999975681304932,
+                "z": 1
+              }
+            }
+          },
+          "$typeName": "TransformComponent"
+        }
+      ]
+    },
+    {
+      "name": "WallWithDoor_2",
+      "definition": "asset/objects/environment/wall/wall_with_door.object.json",
+      "instanced_components": [
+        {
+          "$context": {
+            "transform": {
+              "position": {
+                "x": -23.8943,
+                "y": 19.4922,
+                "z": 0
+              },
+              "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "scale": {
+                "x": 1,
+                "y": 0.86,
+                "z": 1
+              }
+            }
+          },
+          "$typeName": "TransformComponent"
+        }
+      ]
+    },
+    {
+      "name": "WallWithDoor_3",
+      "definition": "asset/objects/environment/wall/wall_with_door.object.json",
+      "instanced_components": [
+        {
+          "$context": {
+            "transform": {
+              "position": {
+                "x": -8.84542,
+                "y": 19.4922,
+                "z": 0
+              },
+              "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "scale": {
+                "x": 1,
+                "y": 0.86,
+                "z": 1
+              }
+            }
+          },
+          "$typeName": "TransformComponent"
+        }
+      ]
+    },
+    {
+      "name": "WallWithDoor_4",
+      "definition": "asset/objects/environment/wall/wall_with_door.object.json",
+      "instanced_components": [
+        {
+          "$context": {
+            "transform": {
+              "position": {
+                "x": 20.2928,
+                "y": 15.6586,
+                "z": 0
+              },
+              "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "scale": {
+                "x": 1,
+                "y": 0.86,
+                "z": 1
+              }
+            }
+          },
+          "$typeName": "TransformComponent"
+        }
+      ]
+    },
+    {
+      "name": "WallWithDoor_5",
+      "definition": "asset/objects/environment/wall/wall_with_door.object.json",
+      "instanced_components": [
+        {
+          "$context": {
+            "transform": {
+              "position": {
+                "x": 36.2481,
+                "y": 7.65696,
+                "z": 0
+              },
+              "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": -0.707683,
+                "w": 0.70653
+              },
+              "scale": {
+                "x": 1,
+                "y": 0.86,
+                "z": 1
+              }
+            }
+          },
+          "$typeName": "TransformComponent"
+        }
+      ]
+    },
+    {
+      "name": "WallWithWindow_1",
+      "definition": "asset/objects/environment/wall/wall_with_window.object _without_rigidbody.json",
+      "instanced_components": [
+        {
+          "$context": {
+            "transform": {
+              "position": {
+                "x": -26.9268,
+                "y": -19.3617,
+                "z": 0
+              },
+              "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
+          },
+          "$typeName": "TransformComponent"
+        }
+      ]
+    },
+    {
+      "name": "WallWithWindow_2",
+      "definition": "asset/objects/environment/wall/wall_with_window.object _without_rigidbody.json",
+      "instanced_components": [
+        {
+          "$context": {
+            "transform": {
+              "position": {
+                "x": 32.364448547363281,
+                "y": 3.2151899337768555,
+                "z": 0
+              },
+              "rotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "scale": {
+                "x": 1,
+                "y": 0.90999966859817505,
+                "z": 1
+              }
+            }
+          },
+          "$typeName": "TransformComponent"
+        }
+      ]
+    },
+    {
+      "name": "Fence",
+      "transform": {
+        "rotation": {},
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "definition": "asset/objects/environment/fence/fence.object_without_rigidbody.json",
+      "instanced_components": [
+        {
+          "$context": {
+            "transform": {
+              "rotation": {},
+              "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              },
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            }
+          },
+          "$typeName": "TransformComponent"
+        }
+      ]
     }
 
   ]   

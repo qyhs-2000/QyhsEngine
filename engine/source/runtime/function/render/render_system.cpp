@@ -65,9 +65,8 @@ namespace QYHS
 					if (!is_mesh_loaded)
 					{
 						mesh_data = m_render_resource->loadMeshData(mesh_source);
-						m_render_resource->uploadGameObjectRenderResource(m_rhi, render_entity, mesh_data);
 					}
-
+					render_entity.mesh_asset_id = m_render_scene->getMeshAssetIdAllocator().allocateGUId(mesh_source);
 					//material
 					MaterialSourceDesc material_source = { game_object_part.m_material_desc.m_base_colour_texture_file };
 					const bool is_material_loaded = m_render_scene->getMaterialAssetIdAllocator().hasElement(material_source);
@@ -75,9 +74,18 @@ namespace QYHS
 					if (!is_material_loaded)
 					{
 						material_data = m_render_resource->loadMaterialData(material_source);
-						m_render_resource->uploadGameObjectRenderResource(m_rhi, render_entity, material_data);
 					}
 
+					render_entity.material_asset_id = m_render_scene->getMaterialAssetIdAllocator().allocateGUId(material_source);
+
+					if (!is_mesh_loaded)
+					{
+						m_render_resource->uploadGameObjectRenderResource(m_rhi, render_entity, mesh_data);
+					}
+					if (!is_material_loaded)
+					{
+						m_render_resource->uploadGameObjectRenderResource(m_rhi, render_entity, material_data);
+					}
 					if (!is_entity_in_scene)
 					{
 						m_render_scene->m_render_entities.push_back(render_entity);

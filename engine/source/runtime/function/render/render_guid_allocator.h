@@ -11,20 +11,20 @@ namespace QYHS
 		template<typename T>
 		inline size_t allocateGUId(const T& t)
 		{
-			auto find_it = m_element_guid_map.find(t);
-			if (find_it != m_element_guid_map.end())
+			auto find_it = m_element_map_guid.find(t);
+			if (find_it != m_element_map_guid.end())
 			{
 				return find_it->second;
 			}
 			else
 			{
-				for (size_t i = 0; i < m_guid_element_map.size(); ++i)
+				for (size_t i = 0; i < m_guid_map_element_.size()+1; ++i)
 				{
 					size_t id = i + 1;
-					if (m_guid_element_map.find(id) == m_guid_element_map.end())
+					if (m_guid_map_element_.find(id) == m_guid_map_element_.end())
 					{
-						m_guid_element_map.insert(std::make_pair(id, t));
-						m_element_guid_map.insert(std::make_pair(t, id));
+						m_guid_map_element_.insert(std::make_pair(id, t));
+						m_element_map_guid.insert(std::make_pair(t, id));
 						return id;
 					}
 				}
@@ -35,11 +35,11 @@ namespace QYHS
 		template<typename T>
 		bool hasElement(const T& t)
 		{
-			return m_element_guid_map.find(t) != m_element_guid_map.end();
+			return m_element_map_guid.find(t) != m_element_map_guid.end();
 		}
 	private:
-		std::unordered_map<size_t, T> m_guid_element_map;
-		std::unordered_map<T, size_t>  m_element_guid_map;
+		std::unordered_map<size_t, T> m_guid_map_element_;
+		std::unordered_map<T, size_t>  m_element_map_guid;
 
 
 	};
