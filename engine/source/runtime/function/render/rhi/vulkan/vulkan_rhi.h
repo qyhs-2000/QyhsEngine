@@ -21,7 +21,7 @@
 #include <glm/gtx/hash.hpp>
 #include "function/render/rhi/rhi.h"
 #include "function/render/model.h"
-
+#include "vulkanmemoryallocator/include/vk_mem_alloc.h"
 
 
 struct Vertex {
@@ -45,11 +45,6 @@ struct Vertex {
 		attributeDescriptions[0].location = 0;
 		attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
 		attributeDescriptions[0].offset = offsetof(Vertex, pos);
-
-		//attributeDescriptions[1].binding = 0;
-		//attributeDescriptions[1].location = 1;
-		//attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-		//attributeDescriptions[1].offset = offsetof(Vertex, color);
 
 		attributeDescriptions[1].binding = 0;
 		attributeDescriptions[1].location = 1;
@@ -139,7 +134,7 @@ namespace QYHS
 		VkDevice getDevice() { return device; }
 		VkPhysicalDevice getPhysicalDevice() { return physical_device; }
 		VkFormat getSwapChainImageFormat() { return swapChainImageFormat; }
-		VkSampleCountFlagBits getMSAASamples() { return msaa_samples; }
+		VkSampleCountFlagBits getMSAASamples() { return VK_SAMPLE_COUNT_1_BIT; }
 		VkFormat getDepthImageFormat() { return m_depth_image_format; }
 		VkExtent2D getSwapChainExtent() { return swapChainExtent; }
 		VkCommandBuffer& getCurrentCommandBuffer() { return commandBuffers[m_current_frame_index]; }
@@ -157,6 +152,7 @@ namespace QYHS
 		{
 			return swapChainImageViews;
 		}
+		VkViewport &getViewport() { return m_viewport; }
 		void prepareBeforeRender();
 	private:
 		void initVulkan();
@@ -189,6 +185,7 @@ namespace QYHS
 		void createDescriptorSets();
 		void createCommandBuffers();
 		void createSyncObjects();
+		void createAllocator();
 		VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger);
 		void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator);
 
@@ -200,6 +197,7 @@ namespace QYHS
 		VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
 		VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
 		VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
+
 		void createImage(uint32_t width, uint32_t height, VkFormat format, uint32_t mip_levels, VkSampleCountFlagBits num_samples, VkImageTiling tiling,
 			VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
 		void transitionImageLayout(VkImage image, VkFormat format, uint32_t mip_levels, VkImageLayout oldLayout, VkImageLayout newLayout);
@@ -215,8 +213,10 @@ namespace QYHS
 		void recreateSwapChain();
 		void cleanupSwapChain();
 		void beginCommandBuffer();
-		
+		void createViewport();
 
+	public:
+		VmaAllocator m_assets_allocator;
 	private:
 		VkCommandPool command_pool;
 		VkQueue graphics_queue;
@@ -227,6 +227,7 @@ namespace QYHS
 		GLFWwindow* m_window;
 		VkSurfaceKHR surface;
 		VkPhysicalDevice physical_device;
+		VkViewport m_viewport;
 
 		VkSampleCountFlagBits msaa_samples = VK_SAMPLE_COUNT_1_BIT;
 
@@ -288,7 +289,7 @@ namespace QYHS
 		float current_time;
 
 		GLTFModel m_model;
-
-
+		uint32_t                       m_vulkan_api_version {VK_API_VERSION_1_0};
+		
 	};
 }

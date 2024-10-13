@@ -13,6 +13,7 @@
 #include <tiny_obj_loader.h>
 #include "rhi/vulkan/vulkan_utils.h"
 #include "render_camera.h"
+#include <iostream>
 namespace QYHS
 {
 	VulkanMaterial& RenderResource::getEntityMaterial(RenderEntity& entity)
@@ -158,11 +159,38 @@ namespace QYHS
 		std::shared_ptr<TextureData> texture_data = std::make_shared<TextureData>();
 		int tex_width, tex_height, tex_channels;
 
-		texture_data->data = stbi_load(asset_manager->getFullPath(material_file).generic_string().c_str(), &tex_width, &tex_height, &tex_channels, STBI_rgb_alpha);
+		texture_data->m_pixels = stbi_load(asset_manager->getFullPath(material_file).generic_string().c_str(), &tex_width, &tex_height, &tex_channels, STBI_rgb_alpha);
 		texture_data->m_width = tex_width;
 		texture_data->m_height = tex_height;
 		return texture_data;
 	}
+
+	std::shared_ptr<TextureData> RenderResource::loadTextureHDR(const std::string& material_file,int desired_channels)
+	{
+		std::shared_ptr<AssetManager> asset_manager = g_runtime_global_context.m_asset_manager;
+		assert(asset_manager && "failed to get asset_manager");
+		std::shared_ptr<TextureData> texture_data = std::make_shared<TextureData>();
+		int tex_width, tex_height, tex_channels;
+
+		texture_data->m_pixels = stbi_loadf(asset_manager->getFullPath(material_file).generic_string().c_str(), &tex_width, &tex_height, &tex_channels, desired_channels);
+		texture_data->m_width = tex_width;
+		texture_data->m_height = tex_height;
+		switch (desired_channels)
+        {
+            case 2:
+                texture_data->m_format = PIXEL_FORMAT::FORMAT_R32G32_FLOAT;
+                break;
+            case 4:
+                texture_data->m_format = PIXEL_FORMAT::FORMAT_R32G32B32A32_FLOAT;
+                break;
+            default:
+                // three component format is not supported in some vulkan driver implementations
+                throw std::runtime_error("unsupported channels number");
+                break;
+        }
+		return texture_data;
+	}
+
 	RenderMaterialData RenderResource::loadMaterialData(MaterialSourceDesc& material_source)
 	{
 		RenderMaterialData material_data;
@@ -171,9 +199,10 @@ namespace QYHS
 		return material_data;
 	}
 
-	void RenderResource::uploadGlobalRenderResource(std::shared_ptr<RHI> rhi)
+	void RenderResource::uploadGlobalRenderResource(std::shared_ptr<RHI> rhi,LevelResourceDesc & level_resource_desc)
 	{
 		createAndMapStorageBuffer(rhi);
+		uploadIBLResource(rhi,level_resource_desc);
 	}
 
 	void RenderResource::createAndMapStorageBuffer(std::shared_ptr<RHI> rhi)
@@ -204,6 +233,83 @@ namespace QYHS
 		}
 
 		vkMapMemory(m_rhi->getDevice(), global_storage_buffer.global_ringbuffer_memory, 0, VK_WHOLE_SIZE, 0, &global_storage_buffer.global_ringbuffer_memory_pointer);
+	}
+
+	void RenderResource::uploadIBLResource(std::shared_ptr<RHI> rhi,LevelResourceDesc level_resource_desc)
+	{
+		SkyBoxSpecularMap sky_box_specular_map = level_resource_desc.m_ibl_resource_desc.m_skybox_specular_map;
+		std::shared_ptr<TextureData> specular_pos_x_map = loadTextureHDR(sky_box_specular_map.m_positive_x_map);
+		std::shared_ptr<TextureData> specular_neg_x_map = loadTextureHDR(sky_box_specular_map.m_negative_x_map);
+		std::shared_ptr<TextureData> specular_pos_y_map = loadTextureHDR(sky_box_specular_map.m_positive_y_map);
+		std::shared_ptr<TextureData> specular_neg_y_map = loadTextureHDR(sky_box_specular_map.m_negative_y_map);
+		std::shared_ptr<TextureData> specular_pos_z_map = loadTextureHDR(sky_box_specular_map.m_positive_z_map);
+		std::shared_ptr<TextureData> specular_neg_z_map = loadTextureHDR(sky_box_specular_map.m_negative_z_map);
+
+		createIBLSampler(rhi);
+
+		std::array<std::shared_ptr<TextureData>, 6> specular_map = {
+			specular_pos_x_map,
+			specular_neg_x_map,
+			specular_pos_y_map,
+			specular_neg_y_map,
+			specular_pos_z_map,
+			specular_neg_z_map
+		};
+
+		createIBLTexture(rhi,specular_map);
+
+	}
+	
+	void RenderResource::createIBLTexture(std::shared_ptr<RHI> rhi,std::array<std::shared_ptr<TextureData>, 6 > &specular_maps)
+	{
+		uint32_t specular_cubemaps_miplevels = static_cast<uint32_t>(std::log2(std::max(specular_maps[0]->m_width, specular_maps[0]->m_height)) + 1);
+		
+		VulkanUtils::createCubeMap(rhi.get(), m_global_render_resource.ibl_resource.specular_texture_image,
+			m_global_render_resource.ibl_resource.specular_texture_image_view,
+			m_global_render_resource.ibl_resource.specular_texture_image_allocation,
+			specular_maps[0]->m_width, specular_maps[0]->m_height,
+			{ specular_maps[0]->m_pixels,
+			specular_maps[1]->m_pixels,
+			specular_maps[2]->m_pixels,
+			specular_maps[3]->m_pixels,
+			specular_maps[4]->m_pixels,
+			specular_maps[5]->m_pixels },
+			specular_maps[0]->m_format,
+			specular_cubemaps_miplevels
+		);
+
+	}
+
+	void RenderResource::createIBLSampler(std::shared_ptr<RHI> rhi)
+	{
+		VulkanRHI* vulkan_rhi = static_cast<VulkanRHI*>(rhi.get());
+		VkPhysicalDeviceProperties physical_device_properties{};
+		vkGetPhysicalDeviceProperties(vulkan_rhi->getPhysicalDevice(), &physical_device_properties);
+
+		VkSamplerCreateInfo specular_sampler_create_info{};
+		specular_sampler_create_info.sType                   = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+        specular_sampler_create_info.magFilter               = VK_FILTER_LINEAR;
+        specular_sampler_create_info.minFilter               = VK_FILTER_LINEAR;
+        specular_sampler_create_info.addressModeU            = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+        specular_sampler_create_info.addressModeV            = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+        specular_sampler_create_info.addressModeW            = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+        specular_sampler_create_info.anisotropyEnable        = VK_TRUE;                                                // close:false
+        specular_sampler_create_info.maxAnisotropy           = physical_device_properties.limits.maxSamplerAnisotropy; // close :1.0f
+        specular_sampler_create_info.borderColor             = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
+        specular_sampler_create_info.unnormalizedCoordinates = VK_FALSE;
+        specular_sampler_create_info.compareEnable           = VK_FALSE;
+        specular_sampler_create_info.compareOp               = VK_COMPARE_OP_ALWAYS;
+        specular_sampler_create_info.mipmapMode              = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+        specular_sampler_create_info.maxLod                  = 0.0f;
+
+		if (m_global_render_resource.ibl_resource.specular_texture_image_sampler != VK_NULL_HANDLE)
+		{
+			vkDestroySampler(vulkan_rhi->getDevice(), m_global_render_resource.ibl_resource.specular_texture_image_sampler, nullptr);
+		}
+		if (vkCreateSampler(vulkan_rhi->getDevice(), &specular_sampler_create_info, nullptr, &m_global_render_resource.ibl_resource.specular_texture_image_sampler) != VK_SUCCESS)
+		{
+			throw std::runtime_error("failed to create specular sampler!");
+		}
 	}
 
 	void RenderResource::resetRingBufferOffset(uint32_t current_frame_index)
@@ -263,13 +369,13 @@ namespace QYHS
 
 			void* data;
 			vkMapMemory(device, stagingBufferMemory, 0, imageSize, 0, &data);
-			memcpy(data, mesh_data.m_base_color_texture->data, static_cast<size_t>(imageSize));
+			memcpy(data, mesh_data.m_base_color_texture->m_pixels, static_cast<size_t>(imageSize));
 			vkUnmapMemory(device, stagingBufferMemory);
 
 			VulkanUtils::createImage(physical_device, device, mesh_data.m_base_color_texture->m_width, mesh_data.m_base_color_texture->m_height, VK_FORMAT_R8G8B8A8_SRGB, mip_levels, VK_SAMPLE_COUNT_1_BIT, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, material.base_color_texture_image, material.base_color_texture_image_memory);
 
-			VulkanUtils::transitionImageLayout(vulkan_rhi, material.base_color_texture_image, VK_FORMAT_R8G8B8A8_SRGB, mip_levels, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-			VulkanUtils::copyBufferToImage(vulkan_rhi, stagingBuffer, material.base_color_texture_image, static_cast<uint32_t>(mesh_data.m_base_color_texture->m_width), static_cast<uint32_t>(mesh_data.m_base_color_texture->m_height));
+			VulkanUtils::transitionImageLayout(vulkan_rhi, material.base_color_texture_image, VK_FORMAT_R8G8B8A8_SRGB, 1,mip_levels, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+			VulkanUtils::copyBufferToImage(vulkan_rhi, stagingBuffer, material.base_color_texture_image, static_cast<uint32_t>(mesh_data.m_base_color_texture->m_width), static_cast<uint32_t>(mesh_data.m_base_color_texture->m_height),1);
 
 			vkDestroyBuffer(device, stagingBuffer, nullptr);
 			vkFreeMemory(device, stagingBufferMemory, nullptr);
@@ -370,7 +476,9 @@ namespace QYHS
 		
 		Matrix4x4 view_matrix = camera->getViewMatrix();
 		Matrix4x4 project_matrix = camera->getProjMatrix();
-
+		Vector3 camera_position = camera->getCameraPos();
 		m_mesh_per_frame_storage_buffer_object.project_view_matrix = project_matrix * view_matrix;
+		m_mesh_per_frame_storage_buffer_object.camera_position = camera_position;
+		//std::cout << camera_position.x <<" "<<camera_position.y<<" "<<camera_position.z << std::endl;
 	}
 }

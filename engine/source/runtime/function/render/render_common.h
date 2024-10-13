@@ -19,5 +19,6 @@ namespace QYHS
 	struct MeshPerFrameStorageBufferObject
 	{
 		Matrix4x4 project_view_matrix;
+		Vector3 camera_position;
 	};
 }

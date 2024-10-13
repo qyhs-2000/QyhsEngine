@@ -43,6 +43,7 @@ namespace QYHS
 			TypeWrapperRegister_CameraConfig();
 			TypeWrapperRegister_CameraPose();
 			TypeWrapperRegister_GlobalRenderConfig();
+			TypeWrapperRegister_SkyBoxSpecularMap();
 		}
 	}
 }

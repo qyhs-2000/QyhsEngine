@@ -9,6 +9,8 @@
 
 namespace QYHS
 {
+	VkSampler VulkanUtils::m_nearest_sampler = VK_NULL_HANDLE;
+
 	std::unordered_map<uint32_t, VkSampler> VulkanUtils::m_mipmap_sampler_map;
 	VkShaderModule VulkanUtils::createShaderModule(VkDevice device, const std::vector<char>& code)
 	{
@@ -52,17 +54,17 @@ namespace QYHS
 
 	}
 
-	VkImageView VulkanUtils::createImageView(VkDevice device, VkImage image, VkFormat format, uint32_t mip_levels, VkImageAspectFlags aspectFlags) {
+	VkImageView VulkanUtils::createImageView(VkDevice device, VkImage image, VkFormat format,VkImageViewType image_view_type,uint32_t layer_count, uint32_t mip_levels, VkImageAspectFlags aspectFlags) {
 		VkImageViewCreateInfo viewInfo{};
 		viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
 		viewInfo.image = image;
-		viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+		viewInfo.viewType = image_view_type;
 		viewInfo.format = format;
 		viewInfo.subresourceRange.aspectMask = aspectFlags;
 		viewInfo.subresourceRange.baseMipLevel = 0;
 		viewInfo.subresourceRange.levelCount = mip_levels;
 		viewInfo.subresourceRange.baseArrayLayer = 0;
-		viewInfo.subresourceRange.layerCount = 1;
+		viewInfo.subresourceRange.layerCount = layer_count;
 
 		VkImageView imageView;
 		if (vkCreateImageView(device, &viewInfo, nullptr, &imageView) != VK_SUCCESS) {
@@ -72,7 +74,7 @@ namespace QYHS
 		return imageView;
 	}
 
-	void VulkanUtils::transitionImageLayout(RHI* rhi, VkImage image, VkFormat format, uint32_t mip_levels, VkImageLayout oldLayout, VkImageLayout newLayout) {
+	void VulkanUtils::transitionImageLayout(RHI* rhi, VkImage image, VkFormat format,uint32_t layer_count, uint32_t mip_levels, VkImageLayout oldLayout, VkImageLayout newLayout) {
 		VulkanRHI* vulkan_rhi = static_cast<VulkanRHI*>(rhi);
 		VkCommandBuffer commandBuffer = vulkan_rhi->beginSingleTimeCommands();
 
@@ -87,7 +89,7 @@ namespace QYHS
 		barrier.subresourceRange.baseMipLevel = 0;
 		barrier.subresourceRange.levelCount = mip_levels;
 		barrier.subresourceRange.baseArrayLayer = 0;
-		barrier.subresourceRange.layerCount = 1;
+		barrier.subresourceRange.layerCount = layer_count;
 
 		VkPipelineStageFlags sourceStage;
 		VkPipelineStageFlags destinationStage;
@@ -122,7 +124,7 @@ namespace QYHS
 		vulkan_rhi->endSingleTimeCommands(commandBuffer);
 	}
 
-	void VulkanUtils::copyBufferToImage(RHI* rhi, VkBuffer buffer, VkImage image, uint32_t width, uint32_t height) {
+	void VulkanUtils::copyBufferToImage(RHI* rhi, VkBuffer buffer, VkImage image, uint32_t width, uint32_t height,uint32_t layer_count) {
 		VulkanRHI* vulkan_rhi = static_cast<VulkanRHI*>(rhi);
 		VkCommandBuffer commandBuffer = vulkan_rhi->beginSingleTimeCommands();
 
@@ -133,7 +135,7 @@ namespace QYHS
 		region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
 		region.imageSubresource.mipLevel = 0;
 		region.imageSubresource.baseArrayLayer = 0;
-		region.imageSubresource.layerCount = 1;
+		region.imageSubresource.layerCount = layer_count;
 		region.imageOffset = { 0, 0, 0 };
 		region.imageExtent = {
 			width,
@@ -147,7 +149,7 @@ namespace QYHS
 	}
 
 	void VulkanUtils::createTextureImageView(VkDevice device, VkImage image, VkImageView &image_view, uint32_t mip_levels) {
-		image_view = createImageView(device, image, VK_FORMAT_R8G8B8A8_SRGB, mip_levels, VK_IMAGE_ASPECT_COLOR_BIT);
+		image_view = createImageView(device, image, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_VIEW_TYPE_2D,1,mip_levels, VK_IMAGE_ASPECT_COLOR_BIT);
 	}
 
 	void VulkanUtils::copyBuffer(RHI* rhi, VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size)
@@ -279,6 +281,124 @@ namespace QYHS
 			m_mipmap_sampler_map.insert(std::make_pair(mip_levels, std::move(sampler)));
 			return m_mipmap_sampler_map[mip_levels];
 		}
+	}
+
+	void VulkanUtils::createCubeMap(RHI* rhi, VkImage& image, VkImageView& image_view, VmaAllocation& allocation, uint32_t width, uint32_t height, std::array<void*, 6> pixels, PIXEL_FORMAT texture_image_format, uint32_t miplevels)
+	{
+		VkDeviceSize cube_byte_size;
+		VkDeviceSize texture_byte_size;
+		VkFormat vulkan_image_format;
+		switch (texture_image_format)
+		{
+		case QYHS::FORMAT_R8G8B8_UNORM:
+			texture_byte_size = width * height * 3;
+			vulkan_image_format = VK_FORMAT_R8G8_UNORM;
+			break;
+		case QYHS::FORMAT_R8G8B8_SRGB:
+			texture_byte_size = width * height * 3;
+			vulkan_image_format = VK_FORMAT_R8G8_SRGB;
+			break;
+		case QYHS::FORMAT_R8G8B8A8_UNORM:
+			texture_byte_size = width * height * 4;
+			vulkan_image_format = VK_FORMAT_R8G8B8A8_UNORM;
+			break;
+		case QYHS::FORMAT_R8G8B8A8_SRGB:
+			texture_byte_size = width * height * 4;
+			vulkan_image_format = VK_FORMAT_R8G8B8A8_SRGB;
+			break;
+		case QYHS::FORMAT_R32G32_FLOAT:
+			texture_byte_size = width * height * 4 * 2;
+			vulkan_image_format = VK_FORMAT_R32G32_SFLOAT;
+			break;
+		case QYHS::FORMAT_R32G32B32_FLOAT:
+			texture_byte_size = width * height * 4 * 3;
+			vulkan_image_format = VK_FORMAT_R32G32B32_SFLOAT;
+			break;
+		case QYHS::FORMAT_R32G32B32A32_FLOAT:
+			texture_byte_size = width * height * 4 * 4;
+			vulkan_image_format = VK_FORMAT_R32G32B32A32_SFLOAT;
+			break;
+		default:
+			texture_byte_size = VkDeviceSize(-1);
+			vulkan_image_format = VK_FORMAT_UNDEFINED;
+			throw std::runtime_error("invalid texture byte size");
+			break;
+		}
+		cube_byte_size = texture_byte_size * 6;
+
+		VkImageCreateInfo cube_map_image_create_info{};
+		cube_map_image_create_info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+		cube_map_image_create_info.flags = VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT;
+		cube_map_image_create_info.format = vulkan_image_format;
+		cube_map_image_create_info.extent.depth = 1;
+		cube_map_image_create_info.arrayLayers = 6;
+		cube_map_image_create_info.imageType = VK_IMAGE_TYPE_2D;
+		cube_map_image_create_info.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+		cube_map_image_create_info.tiling = VK_IMAGE_TILING_OPTIMAL;
+		cube_map_image_create_info.extent.width = static_cast<uint32_t>(width);
+		cube_map_image_create_info.extent.height = static_cast<uint32_t>(height);
+		cube_map_image_create_info.mipLevels = miplevels;
+		cube_map_image_create_info.usage =
+            VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
+        cube_map_image_create_info.samples     = VK_SAMPLE_COUNT_1_BIT;
+        cube_map_image_create_info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+		VmaAllocationCreateInfo allocate_info = {};
+		allocate_info.usage = VMA_MEMORY_USAGE_GPU_ONLY;
+		vmaCreateImage(static_cast<VulkanRHI*>(rhi)->m_assets_allocator, 
+			&cube_map_image_create_info, &allocate_info, &image, &allocation, nullptr);
+
+		VkBuffer storage_buffer;
+		VkDeviceMemory storage_buffer_memory;
+		VulkanRHI* vulkan_rhi = static_cast<VulkanRHI*>(rhi);
+		createBuffer(vulkan_rhi->getPhysicalDevice(), vulkan_rhi->getDevice(), cube_byte_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, storage_buffer,storage_buffer_memory);
+
+		void* data;
+		vkMapMemory(vulkan_rhi->getDevice(), storage_buffer_memory, 0, cube_byte_size, 0, &data);
+		for (int i = 0; i < 6; ++i)
+		{
+			memcpy((void*)(static_cast<char*>(data) + texture_byte_size * i), pixels[i], static_cast<size_t>(texture_byte_size));
+
+		}
+		vkUnmapMemory(vulkan_rhi->getDevice(), storage_buffer_memory);
+		transitionImageLayout(rhi, image, vulkan_image_format,6, miplevels, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+		copyBufferToImage(rhi, storage_buffer, image, static_cast<uint32_t>(width), static_cast<uint32_t>(height),6);
+		transitionImageLayout(rhi, image, vulkan_image_format,6, miplevels, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+		vkDestroyBuffer(vulkan_rhi->getDevice(), storage_buffer, nullptr);
+		vkFreeMemory(vulkan_rhi->getDevice(), storage_buffer_memory, nullptr);
+
+		image_view = createImageView(vulkan_rhi->getDevice(), image, vulkan_image_format,VK_IMAGE_VIEW_TYPE_CUBE,6, miplevels, VK_IMAGE_ASPECT_COLOR_BIT);
+	}
+
+	VkSampler VulkanUtils::getOrCreateNearestSampler(VkPhysicalDevice physical_device, VkDevice device)
+	{
+		if (m_nearest_sampler == VK_NULL_HANDLE)
+		{
+			VkPhysicalDeviceProperties physical_property;
+			vkGetPhysicalDeviceProperties(physical_device, &physical_property);
+
+			VkSamplerCreateInfo create_info{};
+			create_info.sType                   = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+            create_info.magFilter               = VK_FILTER_NEAREST;
+            create_info.minFilter               = VK_FILTER_NEAREST;
+            create_info.mipmapMode              = VK_SAMPLER_MIPMAP_MODE_NEAREST;
+            create_info.addressModeU            = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+            create_info.addressModeV            = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+            create_info.addressModeW            = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+            create_info.mipLodBias              = 0.0f;
+            create_info.anisotropyEnable        = VK_FALSE;
+            create_info.maxAnisotropy           = physical_property.limits.maxSamplerAnisotropy; // close :1.0f
+            create_info.compareEnable           = VK_FALSE;
+            create_info.compareOp               = VK_COMPARE_OP_ALWAYS;
+            create_info.minLod                  = 0.0f;
+            create_info.maxLod                  = 8.0f; // todo: m_irradiance_texture_miplevels
+            create_info.borderColor             = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
+            create_info.unnormalizedCoordinates = VK_FALSE;
+
+			vkCreateSampler(device, &create_info, nullptr, &m_nearest_sampler);
+		}
+		return m_nearest_sampler;
 	}
 
 

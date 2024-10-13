@@ -5,8 +5,31 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <resource/type/global_rendering_resource.h>
 namespace QYHS
 {
+	enum PIXEL_FORMAT
+	{
+		FORMAT_UNKNOWN = 0,
+        FORMAT_R8G8B8_UNORM,
+        FORMAT_R8G8B8_SRGB,
+        FORMAT_R8G8B8A8_UNORM,
+        FORMAT_R8G8B8A8_SRGB,
+        FORMAT_R32G32_FLOAT,
+        FORMAT_R32G32B32_FLOAT,
+        FORMAT_R32G32B32A32_FLOAT
+	};
+
+	struct LevelIBLResource
+	{
+		SkyBoxSpecularMap m_skybox_specular_map;
+	};
+
+	struct LevelResourceDesc
+	{
+		LevelIBLResource m_ibl_resource_desc;
+	};
+
 	struct MeshSourceDesc
 	{
 		std::string mesh_source_file;
@@ -62,7 +85,8 @@ namespace QYHS
 		uint32_t m_width;
 		uint32_t m_height;
 
-		void* data;
+		PIXEL_FORMAT m_format{PIXEL_FORMAT::FORMAT_UNKNOWN};
+		void* m_pixels{ nullptr };
 	};
 
 	struct RenderMaterialData

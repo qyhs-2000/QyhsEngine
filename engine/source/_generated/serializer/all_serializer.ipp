@@ -380,6 +380,37 @@ namespace QYHS
 		return instance;
 	}
 	template<>
+	SkyBoxSpecularMap & Serializer::read(const Json & json_context,SkyBoxSpecularMap & instance)
+	{
+		assert(json_context.is_object());
+		
+		if(!json_context["positive_x_map"].is_null())
+		{
+			Serializer::read(json_context["positive_x_map"],instance.m_positive_x_map);
+		}
+		if(!json_context["negative_x_map"].is_null())
+		{
+			Serializer::read(json_context["negative_x_map"],instance.m_negative_x_map);
+		}
+		if(!json_context["positive_y_map"].is_null())
+		{
+			Serializer::read(json_context["positive_y_map"],instance.m_positive_y_map);
+		}
+		if(!json_context["negative_y_map"].is_null())
+		{
+			Serializer::read(json_context["negative_y_map"],instance.m_negative_y_map);
+		}
+		if(!json_context["positive_z_map"].is_null())
+		{
+			Serializer::read(json_context["positive_z_map"],instance.m_positive_z_map);
+		}
+		if(!json_context["negative_z_map"].is_null())
+		{
+			Serializer::read(json_context["negative_z_map"],instance.m_negative_z_map);
+		}
+		return instance;
+	}
+	template<>
 	GlobalRenderConfig & Serializer::read(const Json & json_context,GlobalRenderConfig & instance)
 	{
 		assert(json_context.is_object());
@@ -387,6 +418,10 @@ namespace QYHS
 		if(!json_context["camera_config"].is_null())
 		{
 			Serializer::read(json_context["camera_config"],instance.camera_config);
+		}
+		if(!json_context["skybox_specular_map"].is_null())
+		{
+			Serializer::read(json_context["skybox_specular_map"],instance.m_skybox_specular_map);
 		}
 		return instance;
 	}

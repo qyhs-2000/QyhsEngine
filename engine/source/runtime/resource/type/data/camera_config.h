@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/meta/reflection/reflection.h"
+#include "core/math/vector2.h"
 #include "core/math/vector3.h"
 namespace QYHS
 {

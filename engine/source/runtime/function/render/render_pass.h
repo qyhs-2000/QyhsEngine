@@ -11,12 +11,16 @@ namespace QYHS
 	enum
 	{
 		main_camera_subpass_basepass = 0,
+		//main_camera_subpass_skybox = 1,
+		//main_camera_subpass_msaa = 2,
 		main_camera_subpass_count
 	};
 
 	enum
 	{
 		main_camera_subpass_base_dependency = 0,
+		//main_camera_subpass_skybox_dependency,
+		//main_camera_subpass_dependency_msaa,
 		main_camera_subpass_dependency_count
 	};
 

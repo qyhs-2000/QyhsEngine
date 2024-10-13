@@ -8,6 +8,8 @@
 #include "rhi/rhi.h"
 #include "render_resource_base.h"
 #include "render_common.h"
+#include "vulkanmemoryallocator/include/vk_mem_alloc.h"
+
 namespace QYHS
 {
 	struct StorageBuffer
@@ -25,9 +27,19 @@ namespace QYHS
 		uint32_t max_storage_buffer_size{ 1 << 27 };
 	};
 
+	struct IBLResource
+	{
+		//TODO:study what is specular and what is brdf
+		VkImage specular_texture_image;
+		VkImageView specular_texture_image_view;
+		VkSampler specular_texture_image_sampler;
+		VmaAllocation specular_texture_image_allocation;
+	};
+	
 	struct GlobalRenderResource
 	{
 		StorageBuffer storage_buffer;
+		IBLResource ibl_resource;
 	};
 
 	class RenderResource:public RenderResourceBase
@@ -49,12 +61,16 @@ namespace QYHS
 		std::shared_ptr<TextureData> loadTexture(const std::string& material_file);
 		RenderMaterialData loadMaterialData(MaterialSourceDesc& material_source);
 		VkDescriptorSetLayout* m_material_descriptor_set_layout;
-		void uploadGlobalRenderResource(std::shared_ptr<RHI> rhi);
+		void uploadGlobalRenderResource(std::shared_ptr<RHI> rhi,LevelResourceDesc & level_resource_desc);
 		void createAndMapStorageBuffer(std::shared_ptr<RHI> rhi);
 		void resetRingBufferOffset(uint32_t current_frame_index);
-		
+		void uploadIBLResource(std::shared_ptr<RHI> rhi,LevelResourceDesc level_resource_desc);
+		void createIBLTexture(std::shared_ptr<RHI> rhi,std::array<std::shared_ptr<TextureData>,6 > &specular_map);
+		void createIBLSampler(std::shared_ptr<RHI> rhi);
+		std::shared_ptr<TextureData> loadTextureHDR(const std::string& material_file,int desired_channels=4);
 		GlobalRenderResource m_global_render_resource;
 		MeshPerFrameStorageBufferObject m_mesh_per_frame_storage_buffer_object;
+		
 	private:
 		std::unordered_map<size_t, VulkanMaterial> m_materials;
 		std::unordered_map<size_t, VulkanMesh>		 m_meshes;

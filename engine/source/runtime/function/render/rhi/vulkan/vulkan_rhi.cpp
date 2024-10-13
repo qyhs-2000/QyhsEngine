@@ -107,6 +107,7 @@ namespace QYHS
 		createLogicalDevice();
 		createSwapChain();
 		createImageViews();
+		createViewport();
 		createRenderPass();
 		loadAssets();
 		createDescriptorSetLayout();
@@ -127,6 +128,7 @@ namespace QYHS
 		createDescriptorSets();
 		createCommandBuffers();
 		createSyncObjects();
+		createAllocator();
 	}
 
 	void VulkanRHI::loadAssets()
@@ -920,8 +922,8 @@ namespace QYHS
 	void VulkanRHI::prepareBeforeRender()
 	{
 		waitForFence();
+		resetCommandBuffer();
 		getNextImage();
-		updateUniformBuffer();
 		resetFence();
 		beginCommandBuffer();
 	}
@@ -930,12 +932,23 @@ namespace QYHS
 	{
 		VkCommandBufferBeginInfo beginInfo{};
 		beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+		beginInfo.flags = 0;
+		beginInfo.pInheritanceInfo = nullptr;
 		VkCommandBuffer commandBuffer = commandBuffers[m_current_frame_index];
-		uint32_t imageIndex = current_image_index;
 
 		if (vkBeginCommandBuffer(commandBuffers[m_current_frame_index], &beginInfo) != VK_SUCCESS) {
 			throw std::runtime_error("failed to begin recording command buffer!");
 		}
+	}
+
+	void VulkanRHI::createViewport()
+	{
+		m_viewport.x = 0.0f;
+		m_viewport.y = 0.0f;
+		m_viewport.width = (float)getSwapChainExtent().width;
+		m_viewport.height = (float)getSwapChainExtent().height;
+		m_viewport.minDepth = 0.0f;
+		m_viewport.maxDepth = 1.0f;
 	}
 
 	void VulkanRHI::recordCommandBuffer() {
@@ -1059,15 +1072,12 @@ namespace QYHS
 		float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
 		UniformBufferObject ubo{};
-		//ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 		ubo.model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		g_editor_global_context.m_scene_manager->getEditorCamera()->updateCameraPosition();
 		Vector3 camera_pos = g_editor_global_context.m_scene_manager->getEditorCamera()->getCameraPos();
 		Vector3 camera_front = g_editor_global_context.m_scene_manager->getEditorCamera()->getCameraFront();
 		Vector3 camera_up = g_editor_global_context.m_scene_manager->getEditorCamera()->getCameraUp();
 		auto camera_fov = g_editor_global_context.m_scene_manager->getEditorCamera()->getCameraFOV();
-		//ubo.view = glm::lookAt(camera_pos, camera_pos + camera_front, camera_up);
-		//ubo.view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		ubo.proj = glm::perspective(glm::radians(camera_fov), swapChainExtent.width / (float)swapChainExtent.height, 0.1f, 1000.0f);
 		ubo.proj[1][1] *= -1;
 
@@ -1240,6 +1250,22 @@ namespace QYHS
 				throw std::runtime_error("failed to create synchronization objects for a frame!");
 			}
 		}
+	}
+
+	void VulkanRHI::createAllocator()
+	{
+		VmaVulkanFunctions vulkanFunctions    = {};
+        vulkanFunctions.vkGetInstanceProcAddr = &vkGetInstanceProcAddr;
+        vulkanFunctions.vkGetDeviceProcAddr   = &vkGetDeviceProcAddr;
+
+        VmaAllocatorCreateInfo create_info = {};
+        create_info.vulkanApiVersion       = m_vulkan_api_version;
+        create_info.physicalDevice         = physical_device;
+        create_info.device                 = device;
+        create_info.instance               = instance;
+        create_info.pVulkanFunctions       = &vulkanFunctions;
+
+		vmaCreateAllocator(&create_info, &m_assets_allocator);
 	}
 
 	void VulkanRHI::generateMipmaps(VkImage image, VkFormat format, uint32_t tex_width, uint32_t tex_height)

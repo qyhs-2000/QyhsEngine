@@ -24,6 +24,7 @@ layout(set = 0,binding = 0) uniform UniformBufferObject
 layout(set = 0,binding = 1) readonly buffer _unused_name_per_frame
 {
 	mat4 proj_view_matrix;
+	highp vec3  camera_position;
 };
 
 layout(set = 0, binding = 2) readonly buffer _unused_name_per_drawcall

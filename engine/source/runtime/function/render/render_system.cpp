@@ -4,7 +4,6 @@
 #include <stack>
 #include "render_type.h"
 #include "passes/main_camera_render_pass.h"
-//#include "function/framework/component/transform/transform_component.h"
 #include "function/framework/component/motor/motor_component.h"
 #include "function/global/global_context.h"
 #include "resource/config_manager/config_manager.h"
@@ -122,8 +121,10 @@ namespace QYHS
 		g_runtime_global_context.m_asset_manager->loadAsset(config_url, global_render_config);
 
 		//render resource
+		LevelResourceDesc level_resource_desc;
+		level_resource_desc.m_ibl_resource_desc.m_skybox_specular_map = global_render_config.m_skybox_specular_map;
 		m_render_resource = std::make_shared<RenderResource>();
-		m_render_resource->uploadGlobalRenderResource(m_rhi);
+		m_render_resource->uploadGlobalRenderResource(m_rhi,level_resource_desc);
 
 		//render pipeline
 		RenderPipelineInitInfo init_info;
