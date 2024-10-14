@@ -276,7 +276,7 @@ namespace QYHS
 		VkSubpassDescription& main_camera_base_subpass = subpass[main_camera_subpass_basepass];
 		main_camera_base_subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
 		main_camera_base_subpass.colorAttachmentCount = 1;
-		main_camera_base_subpass.pColorAttachments = &swap_chain_attachment_ref;
+		main_camera_base_subpass.pColorAttachments = &base_color_attachment_ref;
 		main_camera_base_subpass.pDepthStencilAttachment = &depth_attachment_ref;
 		//main_camera_base_subpass.pResolveAttachments = &swap_chain_attachment_ref;
 
@@ -298,12 +298,12 @@ namespace QYHS
 		//swap_chain_attachment_ref.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
 		//skybox subpass
-		//VkSubpassDescription& main_camera_skybox_subpass = subpass[main_camera_subpass_skybox];
-		//main_camera_skybox_subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-		//main_camera_skybox_subpass.inputAttachmentCount = (sizeof(skybox_input_attachment_references)/sizeof(skybox_input_attachment_references[0]));
-		//main_camera_skybox_subpass.pInputAttachments = skybox_input_attachment_references;
-		//main_camera_skybox_subpass.colorAttachmentCount = 1;
-		//main_camera_skybox_subpass.pColorAttachments = &swap_chain_attachment_ref;
+		VkSubpassDescription& main_camera_skybox_subpass = subpass[main_camera_subpass_skybox];
+		main_camera_skybox_subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+		main_camera_skybox_subpass.inputAttachmentCount = (sizeof(skybox_input_attachment_references)/sizeof(skybox_input_attachment_references[0]));
+		main_camera_skybox_subpass.pInputAttachments = skybox_input_attachment_references;
+		main_camera_skybox_subpass.colorAttachmentCount = 1;
+		main_camera_skybox_subpass.pColorAttachments = &swap_chain_attachment_ref;
 
 		/*VkAttachmentReference msaa_input_attachment_ref{};
 		msaa_input_attachment_ref.attachment = &skybox_attachment - attachments;
@@ -320,14 +320,14 @@ namespace QYHS
 		base_dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
 		base_dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
 
-		//VkSubpassDependency& skybox_pass_depend_on_base_pass = dependency[main_camera_subpass_skybox_dependency];
-		//skybox_pass_depend_on_base_pass.srcSubpass = main_camera_subpass_basepass;
-		//skybox_pass_depend_on_base_pass.dstSubpass = main_camera_subpass_skybox;
-		//skybox_pass_depend_on_base_pass.srcStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-		//skybox_pass_depend_on_base_pass.dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-		//skybox_pass_depend_on_base_pass.srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-		//skybox_pass_depend_on_base_pass.dstAccessMask = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
-		//skybox_pass_depend_on_base_pass.dependencyFlags = 0;
+		VkSubpassDependency& skybox_pass_depend_on_base_pass = dependency[main_camera_subpass_skybox_dependency];
+		skybox_pass_depend_on_base_pass.srcSubpass = main_camera_subpass_basepass;
+		skybox_pass_depend_on_base_pass.dstSubpass = main_camera_subpass_skybox;
+		skybox_pass_depend_on_base_pass.srcStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+		skybox_pass_depend_on_base_pass.dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+		skybox_pass_depend_on_base_pass.srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+		skybox_pass_depend_on_base_pass.dstAccessMask = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
+		skybox_pass_depend_on_base_pass.dependencyFlags = 0;
 
 
 		VkRenderPassCreateInfo renderPassInfo{};
@@ -592,142 +592,142 @@ namespace QYHS
 			vkDestroyShaderModule(m_vulkan_rhi->getDevice(), vertShaderModule, nullptr);
 		}
 
-		////skybox
-		//{
-		//	VkDescriptorSetLayout descriptor_set_layouts[2] = { m_descriptors[global_mesh].descriptor_set_layout,
-		//														m_descriptors[skybox].descriptor_set_layout };
-		//	VkPipelineLayout pipeline_layout;
-		//	VkPipelineLayoutCreateInfo create_info{};
-		//	create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-		//	create_info.setLayoutCount = sizeof(descriptor_set_layouts) / sizeof(descriptor_set_layouts[0]);
-		//	create_info.pSetLayouts = descriptor_set_layouts;
-		//
-		//	if (vkCreatePipelineLayout(m_vulkan_rhi->getDevice(), &create_info, nullptr, &m_render_pipelines[render_pipeline_type_skybox].pipeline_layout) != VK_SUCCESS)
-		//	{
-		//		throw std::runtime_error("failed to create pipeline layout !");
-		//	}
-		//
-		//	auto vertShaderCode = Util::readFile("E://VS_Project//QyhsEngine//engine//shader//skybox_vert.spv");
-		//	auto fragShaderCode = Util::readFile("E://VS_Project//QyhsEngine//engine//shader//skybox_frag.spv");
-		//
-		//	VkShaderModule vertex_shader_module = VulkanUtils::createShaderModule(m_vulkan_rhi->getDevice(), vertShaderCode);
-		//	VkShaderModule fragment_shader_module = VulkanUtils::createShaderModule(m_vulkan_rhi->getDevice(), fragShaderCode);
-		//
-		//	VkPipelineShaderStageCreateInfo vertex_shader_shtage_info = {};
-		//	vertex_shader_shtage_info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-		//	vertex_shader_shtage_info.stage = VK_SHADER_STAGE_VERTEX_BIT;
-		//	vertex_shader_shtage_info.pName = "main";
-		//	vertex_shader_shtage_info.module = vertex_shader_module;
-		//
-		//	VkPipelineShaderStageCreateInfo fragment_shader_shtage_info = {};
-		//	fragment_shader_shtage_info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-		//	fragment_shader_shtage_info.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-		//	fragment_shader_shtage_info.pName = "main";
-		//	fragment_shader_shtage_info.module = fragment_shader_module;
-		//
-		//	VkPipelineShaderStageCreateInfo shader_stages[2] = { vertex_shader_shtage_info,fragment_shader_shtage_info };
-		//
-		//
-		//	VkVertexInputBindingDescription binding_description;
-		//	binding_description.binding = 0;
-		//	binding_description.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-		//	binding_description.stride = sizeof(Vector3);
-		//
-		//	VkVertexInputAttributeDescription attrib_description;
-		//	attrib_description.binding = 0;
-		//	attrib_description.location = 0;
-		//	attrib_description.offset = 0;
-		//	attrib_description.format = VK_FORMAT_R32G32B32_SFLOAT;
-		//
-		//	VkPipelineVertexInputStateCreateInfo vertex_input_state_info{};
-		//	vertex_input_state_info.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-		//	vertex_input_state_info.vertexBindingDescriptionCount = 0;
-		//	vertex_input_state_info.pVertexBindingDescriptions = nullptr;
-		//	vertex_input_state_info.vertexAttributeDescriptionCount = 0;
-		//	vertex_input_state_info.pVertexAttributeDescriptions = nullptr;
-		//
-		//	VkPipelineInputAssemblyStateCreateInfo input_assembly{};
-		//	input_assembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-		//	input_assembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-		//	input_assembly.primitiveRestartEnable = VK_FALSE;
-		//
-		//	VkPipelineViewportStateCreateInfo viewportState{};
-		//	viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-		//	viewportState.viewportCount = 1;
-		//	viewportState.scissorCount = 1;
-		//
-		//	VkPipelineRasterizationStateCreateInfo rasterizer{};
-		//	rasterizer.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
-		//	rasterizer.depthClampEnable = VK_FALSE;
-		//	rasterizer.rasterizerDiscardEnable = VK_FALSE;
-		//	rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
-		//	rasterizer.lineWidth = 1.0f;
-		//	rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
-		//	rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
-		//	rasterizer.depthBiasEnable = VK_FALSE;
-		//
-		//	VkPipelineMultisampleStateCreateInfo multisample_state_create_info{};
-		//	multisample_state_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
-		//	multisample_state_create_info.sampleShadingEnable = VK_FALSE;
-		//	multisample_state_create_info.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
-		//
-		//	VkPipelineDepthStencilStateCreateInfo depthStencil{};
-		//	depthStencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
-		//	depthStencil.depthTestEnable = VK_FALSE;
-		//	depthStencil.depthWriteEnable = VK_FALSE;
-		//	depthStencil.depthCompareOp = VK_COMPARE_OP_LESS;
-		//	depthStencil.depthBoundsTestEnable = VK_FALSE;
-		//	depthStencil.stencilTestEnable = VK_FALSE;
-		//
-		//	VkPipelineColorBlendAttachmentState colorBlendAttachment{};
-		//	colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-		//	colorBlendAttachment.blendEnable = VK_FALSE;
-		//
-		//	VkPipelineColorBlendStateCreateInfo colorBlending{};
-		//	colorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-		//	colorBlending.logicOpEnable = VK_FALSE;
-		//	colorBlending.logicOp = VK_LOGIC_OP_COPY;
-		//	colorBlending.attachmentCount = 1;
-		//	colorBlending.pAttachments = &colorBlendAttachment;
-		//	colorBlending.blendConstants[0] = 0.0f;
-		//	colorBlending.blendConstants[1] = 0.0f;
-		//	colorBlending.blendConstants[2] = 0.0f;
-		//	colorBlending.blendConstants[3] = 0.0f;
-		//
-		//	std::vector<VkDynamicState> dynamicStates = {
-		//		VK_DYNAMIC_STATE_VIEWPORT,
-		//		VK_DYNAMIC_STATE_SCISSOR
-		//	};
-		//	VkPipelineDynamicStateCreateInfo dynamicState{};
-		//	dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
-		//	dynamicState.dynamicStateCount = static_cast<uint32_t>(dynamicStates.size());
-		//	dynamicState.pDynamicStates = dynamicStates.data();
-		//
-		//	VkGraphicsPipelineCreateInfo pipeline_info{};
-		//	pipeline_info.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-		//	pipeline_info.stageCount = 2;
-		//	pipeline_info.pStages = shader_stages;
-		//	pipeline_info.pVertexInputState = &vertex_input_state_info;
-		//	pipeline_info.pInputAssemblyState = &input_assembly;
-		//	pipeline_info.pViewportState = &viewportState;
-		//	pipeline_info.pRasterizationState = &rasterizer;
-		//	pipeline_info.pMultisampleState = &multisample_state_create_info;
-		//	pipeline_info.pDepthStencilState = &depthStencil;
-		//	pipeline_info.pColorBlendState = &colorBlending;
-		//	pipeline_info.pDynamicState = &dynamicState;
-		//	pipeline_info.layout = m_render_pipelines[render_pipeline_type_skybox].pipeline_layout;
-		//	pipeline_info.renderPass = m_framebuffer.render_pass;
-		//	pipeline_info.subpass = main_camera_subpass_skybox;
-		//	pipeline_info.basePipelineHandle = VK_NULL_HANDLE;
-		//
-		//
-		//	if (vkCreateGraphicsPipelines(m_vulkan_rhi->getDevice(), VK_NULL_HANDLE, 1, &pipeline_info, nullptr, &m_render_pipelines[render_pipeline_type_skybox].pipeline) != VK_SUCCESS)
-		//	{
-		//		throw std::runtime_error("failed to create graphics pipeline!");
-		//	}
-		//	vkDestroyShaderModule(m_vulkan_rhi->getDevice(), vertex_shader_module, nullptr);
-		//	vkDestroyShaderModule(m_vulkan_rhi->getDevice(), fragment_shader_module, nullptr);
-		//}
+		//skybox
+		{
+			VkDescriptorSetLayout descriptor_set_layouts[2] = { m_descriptors[global_mesh].descriptor_set_layout,
+																m_descriptors[skybox].descriptor_set_layout };
+			VkPipelineLayout pipeline_layout;
+			VkPipelineLayoutCreateInfo create_info{};
+			create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+			create_info.setLayoutCount = sizeof(descriptor_set_layouts) / sizeof(descriptor_set_layouts[0]);
+			create_info.pSetLayouts = descriptor_set_layouts;
+		
+			if (vkCreatePipelineLayout(m_vulkan_rhi->getDevice(), &create_info, nullptr, &m_render_pipelines[render_pipeline_type_skybox].pipeline_layout) != VK_SUCCESS)
+			{
+				throw std::runtime_error("failed to create pipeline layout !");
+			}
+		
+			auto vertShaderCode = Util::readFile("E://VS_Project//QyhsEngine//engine//shader//skybox_vert.spv");
+			auto fragShaderCode = Util::readFile("E://VS_Project//QyhsEngine//engine//shader//skybox_frag.spv");
+		
+			VkShaderModule vertex_shader_module = VulkanUtils::createShaderModule(m_vulkan_rhi->getDevice(), vertShaderCode);
+			VkShaderModule fragment_shader_module = VulkanUtils::createShaderModule(m_vulkan_rhi->getDevice(), fragShaderCode);
+		
+			VkPipelineShaderStageCreateInfo vertex_shader_shtage_info = {};
+			vertex_shader_shtage_info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+			vertex_shader_shtage_info.stage = VK_SHADER_STAGE_VERTEX_BIT;
+			vertex_shader_shtage_info.pName = "main";
+			vertex_shader_shtage_info.module = vertex_shader_module;
+		
+			VkPipelineShaderStageCreateInfo fragment_shader_shtage_info = {};
+			fragment_shader_shtage_info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+			fragment_shader_shtage_info.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+			fragment_shader_shtage_info.pName = "main";
+			fragment_shader_shtage_info.module = fragment_shader_module;
+		
+			VkPipelineShaderStageCreateInfo shader_stages[2] = { vertex_shader_shtage_info,fragment_shader_shtage_info };
+		
+		
+			VkVertexInputBindingDescription binding_description;
+			binding_description.binding = 0;
+			binding_description.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+			binding_description.stride = sizeof(Vector3);
+		
+			VkVertexInputAttributeDescription attrib_description;
+			attrib_description.binding = 0;
+			attrib_description.location = 0;
+			attrib_description.offset = 0;
+			attrib_description.format = VK_FORMAT_R32G32B32_SFLOAT;
+		
+			VkPipelineVertexInputStateCreateInfo vertex_input_state_info{};
+			vertex_input_state_info.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+			vertex_input_state_info.vertexBindingDescriptionCount = 1;
+			vertex_input_state_info.pVertexBindingDescriptions = &binding_description;
+			vertex_input_state_info.vertexAttributeDescriptionCount = 1;
+			vertex_input_state_info.pVertexAttributeDescriptions = &attrib_description;
+		
+			VkPipelineInputAssemblyStateCreateInfo input_assembly{};
+			input_assembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
+			input_assembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+			input_assembly.primitiveRestartEnable = VK_FALSE;
+		
+			VkPipelineViewportStateCreateInfo viewportState{};
+			viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+			viewportState.viewportCount = 1;
+			viewportState.scissorCount = 1;
+		
+			VkPipelineRasterizationStateCreateInfo rasterizer{};
+			rasterizer.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+			rasterizer.depthClampEnable = VK_FALSE;
+			rasterizer.rasterizerDiscardEnable = VK_FALSE;
+			rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
+			rasterizer.lineWidth = 1.0f;
+			rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
+			rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
+			rasterizer.depthBiasEnable = VK_FALSE;
+		
+			VkPipelineMultisampleStateCreateInfo multisample_state_create_info{};
+			multisample_state_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
+			multisample_state_create_info.sampleShadingEnable = VK_FALSE;
+			multisample_state_create_info.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
+		
+			VkPipelineDepthStencilStateCreateInfo depthStencil{};
+			depthStencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+			depthStencil.depthTestEnable = VK_FALSE;
+			depthStencil.depthWriteEnable = VK_FALSE;
+			depthStencil.depthCompareOp = VK_COMPARE_OP_LESS;
+			depthStencil.depthBoundsTestEnable = VK_FALSE;
+			depthStencil.stencilTestEnable = VK_FALSE;
+		
+			VkPipelineColorBlendAttachmentState colorBlendAttachment{};
+			colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+			colorBlendAttachment.blendEnable = VK_FALSE;
+		
+			VkPipelineColorBlendStateCreateInfo colorBlending{};
+			colorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+			colorBlending.logicOpEnable = VK_FALSE;
+			colorBlending.logicOp = VK_LOGIC_OP_COPY;
+			colorBlending.attachmentCount = 1;
+			colorBlending.pAttachments = &colorBlendAttachment;
+			colorBlending.blendConstants[0] = 0.0f;
+			colorBlending.blendConstants[1] = 0.0f;
+			colorBlending.blendConstants[2] = 0.0f;
+			colorBlending.blendConstants[3] = 0.0f;
+		
+			std::vector<VkDynamicState> dynamicStates = {
+				VK_DYNAMIC_STATE_VIEWPORT,
+				VK_DYNAMIC_STATE_SCISSOR
+			};
+			VkPipelineDynamicStateCreateInfo dynamicState{};
+			dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+			dynamicState.dynamicStateCount = static_cast<uint32_t>(dynamicStates.size());
+			dynamicState.pDynamicStates = dynamicStates.data();
+		
+			VkGraphicsPipelineCreateInfo pipeline_info{};
+			pipeline_info.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+			pipeline_info.stageCount = 2;
+			pipeline_info.pStages = shader_stages;
+			pipeline_info.pVertexInputState = &vertex_input_state_info;
+			pipeline_info.pInputAssemblyState = &input_assembly;
+			pipeline_info.pViewportState = &viewportState;
+			pipeline_info.pRasterizationState = &rasterizer;
+			pipeline_info.pMultisampleState = &multisample_state_create_info;
+			pipeline_info.pDepthStencilState = &depthStencil;
+			pipeline_info.pColorBlendState = &colorBlending;
+			pipeline_info.pDynamicState = &dynamicState;
+			pipeline_info.layout = m_render_pipelines[render_pipeline_type_skybox].pipeline_layout;
+			pipeline_info.renderPass = m_framebuffer.render_pass;
+			pipeline_info.subpass = main_camera_subpass_skybox;
+			pipeline_info.basePipelineHandle = VK_NULL_HANDLE;
+		
+		
+			if (vkCreateGraphicsPipelines(m_vulkan_rhi->getDevice(), VK_NULL_HANDLE, 1, &pipeline_info, nullptr, &m_render_pipelines[render_pipeline_type_skybox].pipeline) != VK_SUCCESS)
+			{
+				throw std::runtime_error("failed to create graphics pipeline!");
+			}
+			vkDestroyShaderModule(m_vulkan_rhi->getDevice(), vertex_shader_module, nullptr);
+			vkDestroyShaderModule(m_vulkan_rhi->getDevice(), fragment_shader_module, nullptr);
+		}
 	}
 
 
@@ -783,8 +783,8 @@ namespace QYHS
 		vkCmdBeginRenderPass(m_vulkan_rhi->getCurrentCommandBuffer(), &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
 		drawMesh();
-		//vkCmdNextSubpass(m_vulkan_rhi->getCurrentCommandBuffer(), VK_SUBPASS_CONTENTS_INLINE);
-		//drawSkyBox();
+		vkCmdNextSubpass(m_vulkan_rhi->getCurrentCommandBuffer(), VK_SUBPASS_CONTENTS_INLINE);
+		drawSkyBox();
 		//vkCmdNextSubpass(m_vulkan_rhi->getCurrentCommandBuffer(), VK_SUBPASS_CONTENTS_INLINE);
 		//drawMSAA();
 		vkCmdEndRenderPass(m_vulkan_rhi->getCurrentCommandBuffer());
@@ -925,9 +925,9 @@ namespace QYHS
 			m_render_pipelines[render_pipeline_type_skybox].pipeline_layout, 0, descriptor_sets.size(),
 			descriptor_sets.data(), (sizeof(dynamic_offset)/sizeof(dynamic_offset[0])), dynamic_offset);
 		
-		//VkDeviceSize offset[1] = { 0 };
+		VkDeviceSize offset[1] = { 0 };
 		//vkCmdBindVertexBuffers(m_vulkan_rhi->getCurrentCommandBuffer(), 0, 1, &skybox_cube_vertex_buffer, offset);
-		vkCmdDraw(m_vulkan_rhi->getCurrentCommandBuffer(), 6, 1, 0, 0);
+		vkCmdDraw(m_vulkan_rhi->getCurrentCommandBuffer(), 36, 1, 0, 0);
 	}
 
 	void MainCameraRenderPass::drawMSAA()
