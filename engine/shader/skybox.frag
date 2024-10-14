@@ -21,8 +21,11 @@ highp vec2 uv_to_ndcxy(highp vec2 uv) { return uv * vec2(2.0, 2.0) + vec2(-1.0, 
 void main()
 {
 	highp vec3 previous_color = subpassLoad(in_base_color).rgb;
+
+
+
 	highp float depth = subpassLoad(in_scene_depth).r;
-	highp vec3 origin_sample_UVW = vec3(frag_UVW.x, frag_UVW.y, frag_UVW.z);
+	highp vec3 origin_sample_UVW = vec3(frag_UVW.x, frag_UVW.z, frag_UVW.y);
 
 	if(depth>0.9999f)
 	{

@@ -76,6 +76,6 @@ void main()
     clip_position.z = clip_position.w * 0.99999;
     gl_Position     = clip_position;
 
-    frag_UVW = (world_position - camera_position);
+    frag_UVW = normalize(cube_corner_vertex_offsets[cube_triangle_index[gl_VertexIndex]]);
 
 }

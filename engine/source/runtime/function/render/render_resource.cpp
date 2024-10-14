@@ -250,10 +250,10 @@ namespace QYHS
 		std::array<std::shared_ptr<TextureData>, 6> specular_map = {
 			specular_pos_x_map,
 			specular_neg_x_map,
-			specular_pos_y_map,
-			specular_neg_y_map,
 			specular_pos_z_map,
-			specular_neg_z_map
+			specular_neg_z_map,
+			specular_pos_y_map,
+			specular_neg_y_map
 		};
 
 		createIBLTexture(rhi,specular_map);
