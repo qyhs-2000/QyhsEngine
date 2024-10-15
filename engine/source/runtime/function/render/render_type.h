@@ -66,7 +66,9 @@ namespace QYHS
 	struct MeshVertexDataDefinition
 	{
 		float x, y, z;
-		float u, v;
+		float nx, ny, nz;   //normal 
+		float tx, ty, tz;   //tangent
+		float u, v;			//uv 
 	};
 
 	struct StaticMeshData

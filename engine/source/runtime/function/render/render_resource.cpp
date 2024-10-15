@@ -64,12 +64,39 @@ namespace QYHS
 		}
 		if (std::filesystem::path(mesh_source.mesh_source_file).extension() == ".json")
 		{
-			MeshData mesh_data;
-			asset_manager->loadAsset<MeshData>(mesh_source.mesh_source_file, mesh_data);
+			std::shared_ptr<MeshData> bind_data = std::make_shared<MeshData>();
+			asset_manager->loadAsset(mesh_source.mesh_source_file, *bind_data);
+
+			size_t vertex_buffer_size = sizeof(MeshVertexDataDefinition) * bind_data->vertex_buffer.size();
+			ret.m_static_mesh_data.m_vertex_buffer = std::make_shared<BufferData>(vertex_buffer_size);
+			MeshVertexDataDefinition* vertex = (MeshVertexDataDefinition*)ret.m_static_mesh_data.m_vertex_buffer->m_data;
+			for (size_t i = 0; i < bind_data->vertex_buffer.size(); ++i)
+			{
+				vertex[i].x  = bind_data->vertex_buffer[i].px;
+                vertex[i].y  = bind_data->vertex_buffer[i].py;
+                vertex[i].z  = bind_data->vertex_buffer[i].pz;
+                vertex[i].nx = bind_data->vertex_buffer[i].nx;
+                vertex[i].ny = bind_data->vertex_buffer[i].ny;
+                vertex[i].nz = bind_data->vertex_buffer[i].nz;
+                vertex[i].tx = bind_data->vertex_buffer[i].tx;
+                vertex[i].ty = bind_data->vertex_buffer[i].ty;
+                vertex[i].tz = bind_data->vertex_buffer[i].tz;
+                vertex[i].u  = bind_data->vertex_buffer[i].u;
+                vertex[i].v  = bind_data->vertex_buffer[i].v;
+			}
+
+			size_t index_buffer_size = sizeof(uint16_t) * bind_data->index_buffer.size();
+			ret.m_static_mesh_data.m_index_buffer = std::make_shared<BufferData>(index_buffer_size);
+			uint16_t *index = (uint16_t*)ret.m_static_mesh_data.m_index_buffer->m_data;
+			for (size_t i = 0; i < bind_data->index_buffer.size(); ++i)
+			{
+				index[i] = static_cast<uint16_t>(bind_data->index_buffer[i]);
+			}
 		}
 
 		return ret;
 	}
+
 	StaticMeshData RenderResource::loadStaticMesh(const std::string& mesh_file)
 	{
 		StaticMeshData mesh_data;
@@ -152,6 +179,8 @@ namespace QYHS
 		}
 		return mesh_data;
 	}
+
+	
 	std::shared_ptr<TextureData> RenderResource::loadTexture(const std::string& material_file)
 	{
 		std::shared_ptr<AssetManager> asset_manager = g_runtime_global_context.m_asset_manager;
@@ -428,24 +457,79 @@ namespace QYHS
 		mesh.indices_count = index_buffer_size/sizeof(uint16_t);
 		updateIndexBuffer(rhi, index_buffer_size, index_buffer, mesh);
 	}
-	void RenderResource::updateVertexBuffer(std::shared_ptr<RHI> rhi, uint32_t vertex_buffer_size, const void* vertex_buffer, VulkanMesh& mesh)
+	void RenderResource::updateVertexBuffer(std::shared_ptr<RHI> rhi, uint32_t vertex_buffer_size, MeshVertexDataDefinition const* vertex_buffer, VulkanMesh& mesh)
 	{
 		VulkanRHI* vulkan_rhi = static_cast<VulkanRHI*>(rhi.get());
+
+		uint32_t vertex_count = vertex_buffer_size / sizeof(MeshVertexDataDefinition);
+		VkDeviceSize vertex_position_buffer_size = sizeof(MeshVertex::MeshVertexPosition) * vertex_count;
+		VkDeviceSize vertex_normal_buffer_size = sizeof(MeshVertex::MeshVertexNormal) * vertex_count;
+		VkDeviceSize vertex_tangent_buffer_size = sizeof(MeshVertex::MeshVertexTangent) * vertex_count;
+		VkDeviceSize vertex_uv_buffer_size = sizeof(MeshVertex::MeshVertexUV) * vertex_count;
+
 		VkDeviceSize stage_buffer_size = vertex_buffer_size;
 		VkBuffer stage_buffer;
 		VkDeviceMemory stage_buffer_memory;
 		VulkanUtils::createBuffer(vulkan_rhi->getPhysicalDevice(), vulkan_rhi->getDevice(), stage_buffer_size,
-			VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stage_buffer, stage_buffer_memory);
-		void* data;
-		vkMapMemory(vulkan_rhi->getDevice(), stage_buffer_memory, 0, stage_buffer_size, 0, &data);
-		memcpy(data, vertex_buffer, (size_t)stage_buffer_size);
+			VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, 
+			stage_buffer, 
+			stage_buffer_memory);
+		void* buffer_begin_pointer;
+
+		VkDeviceSize vertex_position_buffer_offset = 0;
+		VkDeviceSize vertex_normal_buffer_offset = vertex_position_buffer_offset + vertex_position_buffer_size;
+		VkDeviceSize vertex_tangent_buffer_offset = vertex_normal_buffer_offset + vertex_normal_buffer_size;
+		VkDeviceSize vertex_uv_buffer_offset = vertex_tangent_buffer_offset + vertex_tangent_buffer_size;
+
+		vkMapMemory(vulkan_rhi->getDevice(), stage_buffer_memory, 0, VK_WHOLE_SIZE, 0, &buffer_begin_pointer);
+		MeshVertex::MeshVertexPosition* mesh_vertex_position_pointer = reinterpret_cast<MeshVertex::MeshVertexPosition*>(reinterpret_cast<uintptr_t>(buffer_begin_pointer) + vertex_position_buffer_offset);
+		MeshVertex::MeshVertexNormal* mesh_vertex_normal_pointer = reinterpret_cast<MeshVertex::MeshVertexNormal*>(reinterpret_cast<uintptr_t>(buffer_begin_pointer) + vertex_normal_buffer_offset);
+		MeshVertex::MeshVertexTangent * mesh_vertex_tangent_pointer = reinterpret_cast<MeshVertex::MeshVertexTangent*>(reinterpret_cast<uintptr_t>(buffer_begin_pointer) + vertex_tangent_buffer_offset);
+		MeshVertex::MeshVertexUV * mesh_vertex_UV_pointer = reinterpret_cast<MeshVertex::MeshVertexUV*>(reinterpret_cast<uintptr_t>(buffer_begin_pointer) + vertex_uv_buffer_offset);
+		//memcpy(data, vertex_buffer, (size_t)stage_buffer_size);
+		for (size_t vertex_index = 0; vertex_index < vertex_count; ++vertex_index)
+		{
+			mesh_vertex_position_pointer[vertex_index].position = Vector3(vertex_buffer[vertex_index].x, vertex_buffer[vertex_index].y, vertex_buffer[vertex_index].z);
+			mesh_vertex_normal_pointer[vertex_index].normal = Vector3(vertex_buffer[vertex_index].nx, vertex_buffer[vertex_index].ny, vertex_buffer[vertex_index].nz);
+			mesh_vertex_tangent_pointer[vertex_index].tangent = Vector3(vertex_buffer[vertex_index].tx, vertex_buffer[vertex_index].ty, vertex_buffer[vertex_index].tz);
+			mesh_vertex_UV_pointer[vertex_index].uv = Vector2(vertex_buffer[vertex_index].u, vertex_buffer[vertex_index].v);
+		}
 		vkUnmapMemory(vulkan_rhi->getDevice(), stage_buffer_memory);
+		
+		VulkanUtils::createBuffer(vulkan_rhi->getPhysicalDevice(), vulkan_rhi->getDevice(), 
+			vertex_position_buffer_size, 
+			VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+			mesh.mesh_vertex_position_buffer, 
+			mesh.mesh_vertex_position_buffer_memory);
 
-		VulkanUtils::createBuffer(vulkan_rhi->getPhysicalDevice(), vulkan_rhi->getDevice(), stage_buffer_size, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-			mesh.mesh_vertex_buffer, mesh.mesh_vertex_buffer_memory);
+		VulkanUtils::createBuffer(vulkan_rhi->getPhysicalDevice(), vulkan_rhi->getDevice(), 
+			vertex_normal_buffer_size, 
+			VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+			mesh.mesh_vertex_normal_buffer, 
+			mesh.mesh_vertex_normal_buffer_memory);
+		
+		VulkanUtils::createBuffer(vulkan_rhi->getPhysicalDevice(), vulkan_rhi->getDevice(), 
+			vertex_tangent_buffer_size, 
+			VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+			mesh.mesh_vertex_tangent_buffer, 
+			mesh.mesh_vertex_tangent_buffer_memory);
+		
+		VulkanUtils::createBuffer(vulkan_rhi->getPhysicalDevice(), vulkan_rhi->getDevice(), 
+			vertex_uv_buffer_size, 
+			VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+			mesh.mesh_vertex_uv_buffer, 
+			mesh.mesh_vertex_uv_buffer_memory);
 
-		VulkanUtils::copyBuffer(vulkan_rhi, stage_buffer, mesh.mesh_vertex_buffer, stage_buffer_size);
-
+		VulkanUtils::copyBuffer(vulkan_rhi, stage_buffer, mesh.mesh_vertex_position_buffer,vertex_position_buffer_offset,0, vertex_position_buffer_size);
+		VulkanUtils::copyBuffer(vulkan_rhi, stage_buffer, mesh.mesh_vertex_normal_buffer,vertex_normal_buffer_offset,0, vertex_normal_buffer_size);
+		VulkanUtils::copyBuffer(vulkan_rhi, stage_buffer, mesh.mesh_vertex_tangent_buffer,vertex_tangent_buffer_offset,0, vertex_tangent_buffer_size);
+		VulkanUtils::copyBuffer(vulkan_rhi, stage_buffer, mesh.mesh_vertex_uv_buffer,vertex_uv_buffer_offset,0, vertex_uv_buffer_size);
+		
 		vkDestroyBuffer(vulkan_rhi->getDevice(), stage_buffer, nullptr);
 		vkFreeMemory(vulkan_rhi->getDevice(), stage_buffer_memory, nullptr);
 	}
@@ -466,7 +550,7 @@ namespace QYHS
 		VulkanUtils::createBuffer(vulkan_rhi->getPhysicalDevice(), vulkan_rhi->getDevice(), bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
 			mesh.mesh_vertex_index_buffer, mesh.mesh_vertex_index_buffer_memory);
 
-		VulkanUtils::copyBuffer(vulkan_rhi, stagingBuffer, mesh.mesh_vertex_index_buffer, bufferSize);
+		VulkanUtils::copyBuffer(vulkan_rhi, stagingBuffer, mesh.mesh_vertex_index_buffer,0,0, bufferSize);
 
 		vkDestroyBuffer(vulkan_rhi->getDevice(), stagingBuffer, nullptr);
 		vkFreeMemory(vulkan_rhi->getDevice(), stagingBufferMemory, nullptr);

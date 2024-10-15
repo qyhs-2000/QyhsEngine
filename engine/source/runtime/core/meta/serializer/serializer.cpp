@@ -59,4 +59,11 @@ namespace QYHS
         assert(json_context.is_string());
         return instance = json_context.string_value();
     }
+
+    template<>
+    uint16_t& Serializer::read(const Json& json_context, uint16_t& instance)
+    {
+        assert(json_context.is_number());
+        return instance = static_cast<unsigned int>(json_context.number_value());
+    }
 }

@@ -28,6 +28,7 @@ namespace QYHS
 	public:
 		void onScroll(double xoffset, double yoffset);
 		void onKey(int key, int scancode, int action, int mods);
+		void onMouseButton(int button, int action, int mods);
 		void onCursorPos(float x_pos, float y_pos);
 		void tick(float delta_time);
 		void processEditorCommand(float delta_time);

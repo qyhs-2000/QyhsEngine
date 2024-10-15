@@ -8,7 +8,7 @@ namespace QYHS
 {
 	EditorGlobalContext g_editor_global_context;
 
-	void EditorGlobalContext::initialize()
+	void EditorGlobalContext::initialize(EditorGlobalContextInitInfo & info)
 	{
 		m_input_manager = new EditorInputManager();
 		m_scene_manager = new EditorSceneManager();
@@ -16,6 +16,6 @@ namespace QYHS
 		m_scene_manager->initialize();
 		m_input_manager->initialize();
 
-		m_window_system = new WindowSystem();
+		m_window_system = info.window_system;
 	}
 }

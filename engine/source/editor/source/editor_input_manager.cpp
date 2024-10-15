@@ -49,6 +49,7 @@ namespace QYHS
 		g_runtime_global_context.m_window->registerOnScrollFunc(std::bind(&EditorInputManager::onScroll, this, std::placeholders::_1, std::placeholders::_2));
 		g_runtime_global_context.m_window->registerOnKeyFunc(std::bind(&EditorInputManager::onKey, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 		g_runtime_global_context.m_window->registerOnCursorPos(std::bind(&EditorInputManager::onCursorPos, this, std::placeholders::_1, std::placeholders::_2));
+		g_runtime_global_context.m_window->registerOnMouseButton(std::bind(&EditorInputManager::onMouseButton, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 	}
 
 	void EditorInputManager::initialize()
@@ -121,6 +122,21 @@ namespace QYHS
 		//g_editor_global_context.m_scene_manager->getEditorCamera()->updateCameraOffset(offset);
 	}
 
+	void EditorInputManager::onMouseButton(int button, int action, int mods)
+	{
+		static bool cursor_hide = false;
+		if ((action == GLFW_PRESS) && (button == GLFW_MOUSE_BUTTON_RIGHT) && !cursor_hide)
+		{
+			cursor_hide = true;
+			g_runtime_global_context.m_window->hideCursor(true);
+		}
+		if ((action == GLFW_RELEASE) && (button == GLFW_MOUSE_BUTTON_RIGHT) && cursor_hide)
+		{
+			cursor_hide = false;
+			g_runtime_global_context.m_window->hideCursor(false);
+		}
+	}
+
 	void EditorInputManager::onCursorPos(float x_pos, float y_pos)
 	{
 		if (!m_first_initialize_mouse_pos)
@@ -129,8 +145,11 @@ namespace QYHS
 			m_mouse_y = y_pos;
 			m_first_initialize_mouse_pos = true;
 		}
-		//g_editor_global_context.m_scene_manager->getEditorCamera()->updateCursorPos(x_pos, y_pos);
-		g_editor_global_context.m_scene_manager->getEditorCamera()->rotate(Vector2(y_pos - m_mouse_y, x_pos - m_mouse_x)*0.14);
+		if (g_editor_global_context.m_window_system->isMouseButton(GLFW_MOUSE_BUTTON_RIGHT))
+		{
+
+			g_editor_global_context.m_scene_manager->getEditorCamera()->rotate(Vector2(y_pos - m_mouse_y, x_pos - m_mouse_x)*0.14);
+		}
 		m_mouse_x = x_pos;
 		m_mouse_y = y_pos;
 	}
@@ -150,23 +169,23 @@ namespace QYHS
 		{
 			camera_relative_position += camera_rotation * Vector3{ 0.f,1.f,0.f } *m_camera_speed;
 		}
-		else if (m_command & (unsigned int)EditorCommand::camera_back)
+		if (m_command & (unsigned int)EditorCommand::camera_back)
 		{
 			camera_relative_position += camera_rotation * Vector3{ 0.f,-1.f,0.f }*m_camera_speed;
 		}
-		else if (m_command & (unsigned int)EditorCommand::camera_left)
+		if (m_command & (unsigned int)EditorCommand::camera_left)
 		{
 			camera_relative_position += camera_rotation * Vector3{ -1.f,0.f,0.f }*m_camera_speed;
 		}
-		else if (m_command & (unsigned int)EditorCommand::camera_right)
+		if (m_command & (unsigned int)EditorCommand::camera_right)
 		{
 			camera_relative_position += camera_rotation * Vector3{ 1.f,0.f,0.f }*m_camera_speed;
 		}
-		else if (m_command & (unsigned int)EditorCommand::camera_up)
+		if (m_command & (unsigned int)EditorCommand::camera_up)
 		{
 			camera_relative_position += Vector3{ 0.f,0.f,1.f }*m_camera_speed;
 		}
-		else if (m_command & (unsigned int)EditorCommand::camera_down)
+		if (m_command & (unsigned int)EditorCommand::camera_down)
 		{
 			camera_relative_position += Vector3{ 0.f,0.f,-1.f }*m_camera_speed;
 		}

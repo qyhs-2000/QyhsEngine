@@ -217,6 +217,30 @@ namespace QYHS
 		{
 			Serializer::read(json_context["pz"],instance.pz);
 		}
+		if(!json_context["nx"].is_null())
+		{
+			Serializer::read(json_context["nx"],instance.nx);
+		}
+		if(!json_context["ny"].is_null())
+		{
+			Serializer::read(json_context["ny"],instance.ny);
+		}
+		if(!json_context["nz"].is_null())
+		{
+			Serializer::read(json_context["nz"],instance.nz);
+		}
+		if(!json_context["tx"].is_null())
+		{
+			Serializer::read(json_context["tx"],instance.tx);
+		}
+		if(!json_context["ty"].is_null())
+		{
+			Serializer::read(json_context["ty"],instance.ty);
+		}
+		if(!json_context["tz"].is_null())
+		{
+			Serializer::read(json_context["tz"],instance.tz);
+		}
 		if(!json_context["u"].is_null())
 		{
 			Serializer::read(json_context["u"],instance.u);

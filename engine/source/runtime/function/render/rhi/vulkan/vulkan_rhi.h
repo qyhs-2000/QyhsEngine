@@ -22,39 +22,83 @@
 #include "function/render/rhi/rhi.h"
 #include "function/render/model.h"
 #include "vulkanmemoryallocator/include/vk_mem_alloc.h"
+#include <core/math/vector2.h>
+#include <core/math/vector3.h>
 
-
-struct Vertex {
+struct MeshVertex {
 	glm::vec3 pos;
 	//glm::vec3 color;
 	glm::vec2 texCoord;
 
-	static VkVertexInputBindingDescription getBindingDescription() {
-		VkVertexInputBindingDescription bindingDescription{};
-		bindingDescription.binding = 0;
-		bindingDescription.stride = sizeof(Vertex);
-		bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+	struct MeshVertexPosition
+	{
+		QYHS::Vector3 position;
+	};
 
-		return bindingDescription;
+	struct MeshVertexNormal
+	{
+		QYHS::Vector3 normal;
+	};
+
+	struct MeshVertexTangent
+	{
+		QYHS::Vector3 tangent;  //ÇÐÏß
+	};
+
+	struct MeshVertexUV
+	{
+		QYHS::Vector2 uv;
+	};
+
+	static std::array<VkVertexInputBindingDescription,4> getBindingDescription() {
+		std::array<VkVertexInputBindingDescription,4> binding_descriptions{};
+
+		binding_descriptions[0].binding = 0;
+		binding_descriptions[0].stride = sizeof(MeshVertexPosition);
+		binding_descriptions[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+
+		binding_descriptions[1].binding = 1;
+		binding_descriptions[1].stride = sizeof(MeshVertexNormal);
+		binding_descriptions[1].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+
+		binding_descriptions[2].binding = 2;
+		binding_descriptions[2].stride = sizeof(MeshVertexTangent);
+		binding_descriptions[2].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+
+		binding_descriptions[3].binding = 3;
+		binding_descriptions[3].stride = sizeof(MeshVertexUV);
+		binding_descriptions[3].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+
+		return binding_descriptions;
 	}
 
-	static std::array<VkVertexInputAttributeDescription, 2> getAttributeDescriptions() {
-		std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions{};
+	static std::array<VkVertexInputAttributeDescription, 4> getAttributeDescriptions() {
+		std::array<VkVertexInputAttributeDescription, 4> attributeDescriptions{};
 
 		attributeDescriptions[0].binding = 0;
 		attributeDescriptions[0].location = 0;
 		attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
-		attributeDescriptions[0].offset = offsetof(Vertex, pos);
+		attributeDescriptions[0].offset = offsetof(MeshVertexPosition, position);
 
-		attributeDescriptions[1].binding = 0;
+		attributeDescriptions[1].binding = 1;
 		attributeDescriptions[1].location = 1;
 		attributeDescriptions[1].format = VK_FORMAT_R32G32_SFLOAT;
-		attributeDescriptions[1].offset = offsetof(Vertex, texCoord);
+		attributeDescriptions[1].offset = offsetof(MeshVertexNormal, normal);
+
+		attributeDescriptions[2].binding = 2;
+		attributeDescriptions[2].location = 2;
+		attributeDescriptions[2].format = VK_FORMAT_R32G32B32_SFLOAT;
+		attributeDescriptions[2].offset = offsetof(MeshVertexTangent, tangent);
+
+		attributeDescriptions[3].binding = 3;
+		attributeDescriptions[3].location = 3;
+		attributeDescriptions[3].format = VK_FORMAT_R32G32_SFLOAT;
+		attributeDescriptions[3].offset = offsetof(MeshVertexUV, uv);
 
 		return attributeDescriptions;
 	}
 
-	bool operator==(const Vertex& other) const {
+	bool operator==(const MeshVertex& other) const {
 		return pos == other.pos  && texCoord == other.texCoord;
 	}
 };
@@ -100,8 +144,8 @@ struct SwapChainSupportDetails {
 };
 
 namespace std {
-	template<> struct hash<Vertex> {
-		size_t operator()(Vertex const& vertex) const {
+	template<> struct hash<MeshVertex> {
+		size_t operator()(MeshVertex const& vertex) const {
 			return ((hash<glm::vec3>()(vertex.pos)  ^ (hash<glm::vec2>()(vertex.texCoord) << 1)));
 		}
 	};
@@ -260,7 +304,7 @@ namespace QYHS
 		VkImageView textureImageView;
 		VkSampler textureSampler;
 
-		std::vector<Vertex> vertices;
+		std::vector<MeshVertex> vertices;
 		std::vector<uint32_t> indices;
 		VkBuffer vertexBuffer;
 		VkDeviceMemory vertexBufferMemory;

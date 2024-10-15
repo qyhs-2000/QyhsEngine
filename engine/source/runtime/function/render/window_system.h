@@ -17,16 +17,20 @@ namespace QYHS
 	{
 	public:
 		typedef std::function<void(float, float)>		 onScrollFunc;
-		typedef std::function<void(int, int, int, int)>   onKeyFunc;
+		typedef std::function<void(int, int, int, int)>  onKeyFunc;
 		typedef std::function<void(int, int)>			 onCursorFunc;
+		typedef std::function<void(int, int, int)>		 onMouseButtonFunc;
 	public:
 		void initialize(WindowCreateInfo* window_create_info);
 		void pollEvents();
 		void registerOnScrollFunc(onScrollFunc func) { m_onScrollFunc.push_back(func); }
 		void registerOnKeyFunc(onKeyFunc func) { m_onKeyFunc.push_back(func); }
 		void registerOnCursorPos(onCursorFunc func) { m_onCursorPosFunc.push_back(func); }
+		void registerOnMouseButton(onMouseButtonFunc func) { m_onMouseButtonFunc.push_back(func); }
+		void hideCursor(bool is_hidden);
 		GLFWwindow* getWindow() { return m_window; }
 		bool shouldCloseWindow() { return glfwWindowShouldClose(m_window); }
+		bool isMouseButton(int button)const;
 
 	protected:
 		static void onScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
@@ -58,6 +62,15 @@ namespace QYHS
 
 		}
 
+		static void onMouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+		{
+			WindowSystem* app = reinterpret_cast<WindowSystem*>(glfwGetWindowUserPointer(window));
+			if (app)
+			{
+				app->onMouseButton(button,action,mods);
+			}
+		}
+
 		void onScroll(float xoffset, float yoffset)
 		{
 			for (auto& func : m_onScrollFunc)
@@ -71,6 +84,14 @@ namespace QYHS
 			for (auto& func : m_onCursorPosFunc)
 			{
 				func(x_pos, y_pos);
+			}
+		}
+
+		void onMouseButton(int button, int action, int mods)
+		{
+			for (auto& func : m_onMouseButtonFunc)
+			{
+				func(button, action, mods);
 			}
 		}
 	private:
@@ -97,6 +118,7 @@ namespace QYHS
 		 std::vector<onScrollFunc>	m_onScrollFunc;
 		 std::vector<onKeyFunc>     m_onKeyFunc;
 		 std::vector< onCursorFunc> m_onCursorPosFunc;
+		 std::vector<onMouseButtonFunc>	m_onMouseButtonFunc;
 	};
 	
 }

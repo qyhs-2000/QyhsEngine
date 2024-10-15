@@ -7,6 +7,7 @@ namespace QYHS
 {
 	template<typename...>
 	inline constexpr bool always_false = false;
+
 	class Serializer
 	{
 
@@ -47,7 +48,7 @@ namespace QYHS
 			}
 			else
 			{
-				//static_assert(always_false<T>, "PSerializer::read<T> has not been implemented yet!");
+				static_assert(always_false<T>, "PSerializer::read<T> has not been implemented yet!");
 				return instance;
 			}
 		}
@@ -63,6 +64,9 @@ namespace QYHS
 	
 	template<>
 	int& Serializer::read(const Json& json_context, int& instance);
+
+	template<>
+	uint16_t& Serializer::read(const Json& json_context, uint16_t& instance);
 
 	
 	template<>

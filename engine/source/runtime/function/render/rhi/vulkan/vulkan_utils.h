@@ -22,7 +22,7 @@ namespace QYHS
 		static void copyBufferToImage(RHI* vulkan_rhi, VkBuffer buffer, VkImage image, uint32_t width, uint32_t height,uint32_t layer_count);
 		static void generateMipmaps(RHI* vulkan_rhi, VkImage image, VkFormat format, uint32_t tex_width, uint32_t tex_height, uint32_t mip_levels);
 		static void createTextureImageView(VkDevice device, VkImage image, VkImageView &image_view, uint32_t mip_levels);
-		static void copyBuffer(RHI* vulkan_rhi,VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
+		static void copyBuffer(RHI* rhi, VkBuffer srcBuffer, VkBuffer dstBuffer,VkDeviceSize src_offset,VkDeviceSize dst_offset, VkDeviceSize size);
 		static VkSampler& getOrCreateMipMapSampler(VkPhysicalDevice physical_device, VkDevice device, uint32_t mip_levels);
 		static std::unordered_map<uint32_t, VkSampler> m_mipmap_sampler_map;
 		static void createCubeMap(RHI* rhi, VkImage& image, VkImageView& image_view, VmaAllocation& allocation, uint32_t width, uint32_t height, std::array<void*, 6> pixels, PIXEL_FORMAT texture_image_format, uint32_t miplevels);

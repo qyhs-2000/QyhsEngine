@@ -200,7 +200,7 @@ namespace QYHS
 		vkMapMemory(m_vulkan_rhi->getDevice(), storage_buffer_memory, 0, buffer_size, 0, &data);
 		memcpy(data, skyboxVertices, buffer_size);
 		vkUnmapMemory(m_vulkan_rhi->getDevice(), storage_buffer_memory);
-		VulkanUtils::copyBuffer(static_cast<RHI*>(m_vulkan_rhi.get()), storage_buffer, skybox_cube_vertex_buffer, buffer_size);
+		VulkanUtils::copyBuffer(static_cast<RHI*>(m_vulkan_rhi.get()), storage_buffer, skybox_cube_vertex_buffer,0,0, buffer_size);
 		vkDestroyBuffer(m_vulkan_rhi->getDevice(),storage_buffer,nullptr);
 		vkFreeMemory(m_vulkan_rhi->getDevice(), storage_buffer_memory, nullptr);
 	}
@@ -498,12 +498,12 @@ namespace QYHS
 			VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
 			vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 
-			auto bindingDescription = Vertex::getBindingDescription();
-			auto attributeDescriptions = Vertex::getAttributeDescriptions();
+			auto bindingDescription = MeshVertex::getBindingDescription();
+			auto attributeDescriptions = MeshVertex::getAttributeDescriptions();
 
-			vertexInputInfo.vertexBindingDescriptionCount = 1;
+			vertexInputInfo.vertexBindingDescriptionCount = static_cast<uint32_t>(bindingDescription.size());
 			vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
-			vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
+			vertexInputInfo.pVertexBindingDescriptions = bindingDescription.data();
 			vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
 
 			VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
@@ -883,12 +883,12 @@ namespace QYHS
 							vkCmdBindDescriptorSets(m_vulkan_rhi->getCurrentCommandBuffer(),
 								VK_PIPELINE_BIND_POINT_GRAPHICS, m_render_pipelines[render_pipeline_type_mesh_global_buffer].pipeline_layout,
 								0, 1, &m_descriptors[global_mesh].descriptor_set, 2, dynamic_offsets);
-							VkBuffer vertexBuffers[] = { mesh.mesh_vertex_buffer };
+							VkBuffer vertexBuffers[4] = { mesh.mesh_vertex_position_buffer,mesh.mesh_vertex_normal_buffer,mesh.mesh_vertex_tangent_buffer,mesh.mesh_vertex_uv_buffer  };
 							VkBuffer indices_buffer = mesh.mesh_vertex_index_buffer;
 							size_t indices_count = mesh.indices_count;
-							VkDeviceSize offsets[] = { 0 };
+							VkDeviceSize offsets[] = { 0,0,0,0 };
 
-							vkCmdBindVertexBuffers(m_vulkan_rhi->getCurrentCommandBuffer(), 0, 1, vertexBuffers, offsets);
+							vkCmdBindVertexBuffers(m_vulkan_rhi->getCurrentCommandBuffer(), 0, (sizeof(vertexBuffers)/sizeof(vertexBuffers[0])), vertexBuffers, offsets);
 
 							vkCmdBindIndexBuffer(m_vulkan_rhi->getCurrentCommandBuffer(), indices_buffer, 0, VK_INDEX_TYPE_UINT16);
 							vkCmdDrawIndexed(m_vulkan_rhi->getCurrentCommandBuffer(), static_cast<uint32_t>(indices_count), current_instance_count, 0, 0, 0);

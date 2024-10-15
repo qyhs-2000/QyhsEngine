@@ -82,6 +82,126 @@ namespace QYHS
 				{
 					return false;
 				}
+				static void set_nx(void * instance,void * field_value)
+				{
+					static_cast<Vertex*>(instance)->nx = *static_cast<float*>(field_value);
+				}
+				static void* get_nx(void * instance)
+				{
+					return &(static_cast<Vertex*>(instance)->nx);
+				}
+				static const char* getFieldName_nx()
+				{
+					return "nx";
+				}
+				static const char* getFieldTypeName_nx()
+				{
+					return "float";
+				}
+				static bool isArray_nx()
+				{
+					return false;
+				}
+				static void set_ny(void * instance,void * field_value)
+				{
+					static_cast<Vertex*>(instance)->ny = *static_cast<float*>(field_value);
+				}
+				static void* get_ny(void * instance)
+				{
+					return &(static_cast<Vertex*>(instance)->ny);
+				}
+				static const char* getFieldName_ny()
+				{
+					return "ny";
+				}
+				static const char* getFieldTypeName_ny()
+				{
+					return "float";
+				}
+				static bool isArray_ny()
+				{
+					return false;
+				}
+				static void set_nz(void * instance,void * field_value)
+				{
+					static_cast<Vertex*>(instance)->nz = *static_cast<float*>(field_value);
+				}
+				static void* get_nz(void * instance)
+				{
+					return &(static_cast<Vertex*>(instance)->nz);
+				}
+				static const char* getFieldName_nz()
+				{
+					return "nz";
+				}
+				static const char* getFieldTypeName_nz()
+				{
+					return "float";
+				}
+				static bool isArray_nz()
+				{
+					return false;
+				}
+				static void set_tx(void * instance,void * field_value)
+				{
+					static_cast<Vertex*>(instance)->tx = *static_cast<float*>(field_value);
+				}
+				static void* get_tx(void * instance)
+				{
+					return &(static_cast<Vertex*>(instance)->tx);
+				}
+				static const char* getFieldName_tx()
+				{
+					return "tx";
+				}
+				static const char* getFieldTypeName_tx()
+				{
+					return "float";
+				}
+				static bool isArray_tx()
+				{
+					return false;
+				}
+				static void set_ty(void * instance,void * field_value)
+				{
+					static_cast<Vertex*>(instance)->ty = *static_cast<float*>(field_value);
+				}
+				static void* get_ty(void * instance)
+				{
+					return &(static_cast<Vertex*>(instance)->ty);
+				}
+				static const char* getFieldName_ty()
+				{
+					return "ty";
+				}
+				static const char* getFieldTypeName_ty()
+				{
+					return "float";
+				}
+				static bool isArray_ty()
+				{
+					return false;
+				}
+				static void set_tz(void * instance,void * field_value)
+				{
+					static_cast<Vertex*>(instance)->tz = *static_cast<float*>(field_value);
+				}
+				static void* get_tz(void * instance)
+				{
+					return &(static_cast<Vertex*>(instance)->tz);
+				}
+				static const char* getFieldName_tz()
+				{
+					return "tz";
+				}
+				static const char* getFieldTypeName_tz()
+				{
+					return "float";
+				}
+				static bool isArray_tz()
+				{
+					return false;
+				}
 				static void set_u(void * instance,void * field_value)
 				{
 					static_cast<Vertex*>(instance)->u = *static_cast<float*>(field_value);
@@ -253,6 +373,60 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeVertexOperator::isArray_pz
 			);
 			REGISTER_TO_FIELD_MAP("pz",f_field_function_tuple_pz);
+			FieldFunctionTuple * f_field_function_tuple_nx = new FieldFunctionTuple(
+			&TypeFieldReflectionOperator::TypeVertexOperator::set_nx,
+			&TypeFieldReflectionOperator::TypeVertexOperator::get_nx,
+			&TypeFieldReflectionOperator::TypeVertexOperator::getClassName,
+			&TypeFieldReflectionOperator::TypeVertexOperator::getFieldName_nx,
+			&TypeFieldReflectionOperator::TypeVertexOperator::getFieldTypeName_nx,
+			&TypeFieldReflectionOperator::TypeVertexOperator::isArray_nx
+			);
+			REGISTER_TO_FIELD_MAP("nx",f_field_function_tuple_nx);
+			FieldFunctionTuple * f_field_function_tuple_ny = new FieldFunctionTuple(
+			&TypeFieldReflectionOperator::TypeVertexOperator::set_ny,
+			&TypeFieldReflectionOperator::TypeVertexOperator::get_ny,
+			&TypeFieldReflectionOperator::TypeVertexOperator::getClassName,
+			&TypeFieldReflectionOperator::TypeVertexOperator::getFieldName_ny,
+			&TypeFieldReflectionOperator::TypeVertexOperator::getFieldTypeName_ny,
+			&TypeFieldReflectionOperator::TypeVertexOperator::isArray_ny
+			);
+			REGISTER_TO_FIELD_MAP("ny",f_field_function_tuple_ny);
+			FieldFunctionTuple * f_field_function_tuple_nz = new FieldFunctionTuple(
+			&TypeFieldReflectionOperator::TypeVertexOperator::set_nz,
+			&TypeFieldReflectionOperator::TypeVertexOperator::get_nz,
+			&TypeFieldReflectionOperator::TypeVertexOperator::getClassName,
+			&TypeFieldReflectionOperator::TypeVertexOperator::getFieldName_nz,
+			&TypeFieldReflectionOperator::TypeVertexOperator::getFieldTypeName_nz,
+			&TypeFieldReflectionOperator::TypeVertexOperator::isArray_nz
+			);
+			REGISTER_TO_FIELD_MAP("nz",f_field_function_tuple_nz);
+			FieldFunctionTuple * f_field_function_tuple_tx = new FieldFunctionTuple(
+			&TypeFieldReflectionOperator::TypeVertexOperator::set_tx,
+			&TypeFieldReflectionOperator::TypeVertexOperator::get_tx,
+			&TypeFieldReflectionOperator::TypeVertexOperator::getClassName,
+			&TypeFieldReflectionOperator::TypeVertexOperator::getFieldName_tx,
+			&TypeFieldReflectionOperator::TypeVertexOperator::getFieldTypeName_tx,
+			&TypeFieldReflectionOperator::TypeVertexOperator::isArray_tx
+			);
+			REGISTER_TO_FIELD_MAP("tx",f_field_function_tuple_tx);
+			FieldFunctionTuple * f_field_function_tuple_ty = new FieldFunctionTuple(
+			&TypeFieldReflectionOperator::TypeVertexOperator::set_ty,
+			&TypeFieldReflectionOperator::TypeVertexOperator::get_ty,
+			&TypeFieldReflectionOperator::TypeVertexOperator::getClassName,
+			&TypeFieldReflectionOperator::TypeVertexOperator::getFieldName_ty,
+			&TypeFieldReflectionOperator::TypeVertexOperator::getFieldTypeName_ty,
+			&TypeFieldReflectionOperator::TypeVertexOperator::isArray_ty
+			);
+			REGISTER_TO_FIELD_MAP("ty",f_field_function_tuple_ty);
+			FieldFunctionTuple * f_field_function_tuple_tz = new FieldFunctionTuple(
+			&TypeFieldReflectionOperator::TypeVertexOperator::set_tz,
+			&TypeFieldReflectionOperator::TypeVertexOperator::get_tz,
+			&TypeFieldReflectionOperator::TypeVertexOperator::getClassName,
+			&TypeFieldReflectionOperator::TypeVertexOperator::getFieldName_tz,
+			&TypeFieldReflectionOperator::TypeVertexOperator::getFieldTypeName_tz,
+			&TypeFieldReflectionOperator::TypeVertexOperator::isArray_tz
+			);
+			REGISTER_TO_FIELD_MAP("tz",f_field_function_tuple_tz);
 			FieldFunctionTuple * f_field_function_tuple_u = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeVertexOperator::set_u,
 			&TypeFieldReflectionOperator::TypeVertexOperator::get_u,

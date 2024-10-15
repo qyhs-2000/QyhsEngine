@@ -39,17 +39,36 @@ namespace QYHS
 		glfwSetFramebufferSizeCallback(m_window, framebufferResizeCallback);
 		glfwSetKeyCallback(m_window, onKeyCallback);
 		glfwSetCursorPosCallback(m_window, onMouseScrollCallback);
-		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		glfwSetMouseButtonCallback(m_window, onMouseButtonCallback);
+		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		glfwSetScrollCallback(m_window, onScrollCallback);
 
 	}
 
-
-
-
 	void WindowSystem::pollEvents()
 	{
 		glfwPollEvents();
+	}
+
+	bool WindowSystem::isMouseButton(int button) const
+	{
+		if (!m_window || button<GLFW_MOUSE_BUTTON_1 || button > GLFW_MOUSE_BUTTON_LAST)
+		{
+			return false;
+		}
+		return glfwGetMouseButton(m_window, button) == GLFW_PRESS;
+	}
+
+	void WindowSystem::hideCursor(bool is_hidden)
+	{
+		if (is_hidden)
+		{
+			glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+		}
+		else
+		{
+			glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		}
 	}
 
 }

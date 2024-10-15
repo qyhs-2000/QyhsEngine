@@ -19,8 +19,17 @@ namespace QYHS
 
 	struct VulkanMesh
 	{
-		VkBuffer mesh_vertex_buffer;
-		VkDeviceMemory mesh_vertex_buffer_memory;
+		VkBuffer mesh_vertex_position_buffer;
+		VkDeviceMemory mesh_vertex_position_buffer_memory;
+
+		VkBuffer mesh_vertex_normal_buffer;
+		VkDeviceMemory mesh_vertex_normal_buffer_memory;
+
+		VkBuffer mesh_vertex_tangent_buffer;
+		VkDeviceMemory mesh_vertex_tangent_buffer_memory;
+
+		VkBuffer mesh_vertex_uv_buffer;
+		VkDeviceMemory mesh_vertex_uv_buffer_memory;
 		
 		VkBuffer mesh_vertex_index_buffer;
 		VkDeviceMemory mesh_vertex_index_buffer_memory;

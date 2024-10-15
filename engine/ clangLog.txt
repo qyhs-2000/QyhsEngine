@@ -171,7 +171,7 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/model.h \
   tinygltf/tiny_gltf.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/Texture.h \
-  vulkanmemoryallocator/include/vk_mem_alloc.h \
+  vulkanmemoryallocator/include/vk_mem_alloc.h core/math/vector2.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/component.h \
   function/framework/game_object/game_object.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/mesh/mesh_component.h \
@@ -194,7 +194,6 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/passes/main_camera_render_pass.h \
   function/render/render_pass.h function/render/render_common.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_camera.h \
-  core/math/vector2.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_common.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_entity.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_guid_allocator.h \

@@ -1,12 +1,14 @@
 #include "include/editor.h"
 #include "editor_input_manager.h"
+#include "function/global/global_context.h"
 namespace QYHS
 {
 	void QyhsEditor::initialize(QyhsEngine* engine)
 	{
 		assert(engine);
 		m_engine = engine;
-		g_editor_global_context.initialize();
+		EditorGlobalContextInitInfo init_info = { g_runtime_global_context.m_window.get() };
+		g_editor_global_context.initialize(init_info);
 	}
 
 	void QyhsEditor::run()

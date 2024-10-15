@@ -152,13 +152,12 @@ namespace QYHS
 		image_view = createImageView(device, image, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_VIEW_TYPE_2D,1,mip_levels, VK_IMAGE_ASPECT_COLOR_BIT);
 	}
 
-	void VulkanUtils::copyBuffer(RHI* rhi, VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size)
+	void VulkanUtils::copyBuffer(RHI* rhi, VkBuffer srcBuffer, VkBuffer dstBuffer,VkDeviceSize src_offset,VkDeviceSize dst_offset, VkDeviceSize size)
 	{
 		VulkanRHI* vulkan_rhi = static_cast<VulkanRHI*>(rhi);
 		VkCommandBuffer commandBuffer = vulkan_rhi->beginSingleTimeCommands();
 
-		VkBufferCopy copyRegion{};
-		copyRegion.size = size;
+		VkBufferCopy copyRegion{src_offset,dst_offset,size};
 		vkCmdCopyBuffer(commandBuffer, srcBuffer, dstBuffer, 1, &copyRegion);
 
 		vulkan_rhi->endSingleTimeCommands(commandBuffer);
