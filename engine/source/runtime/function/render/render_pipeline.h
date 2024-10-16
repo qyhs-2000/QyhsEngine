@@ -10,6 +10,7 @@ namespace QYHS
 	public:
 		virtual void initialize(RenderPipelineInitInfo init_info) override final;
 		virtual void render(std::shared_ptr<RenderResourceBase> render_resource);
+		void updatePassAfterRecreatePipeline();
 	private:
 	};
 }

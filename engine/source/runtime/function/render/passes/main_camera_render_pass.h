@@ -177,6 +177,7 @@ namespace QYHS
 		void setupGlobalModelDescriptorSet();
 		void setupSkyboxDescriptorSet();
         void setupSkyboxCubeBuffer();
+        void updateAfterRecreateSwapChain();
 		virtual void prepareData(std::shared_ptr<RenderResourceBase> resource) override;
 		MeshPerFrameStorageBufferObject m_mesh_perframe_storage_buffer_object;
         VkBuffer skybox_cube_vertex_buffer;

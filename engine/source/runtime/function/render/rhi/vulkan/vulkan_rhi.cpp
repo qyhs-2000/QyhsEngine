@@ -387,6 +387,8 @@ namespace QYHS
 
 		swapChainImageFormat = surfaceFormat.format;
 		swapChainExtent = extent;
+		
+		
 	}
 
 	void VulkanRHI::createImageViews() {
@@ -827,6 +829,7 @@ namespace QYHS
 		cleanupSwapChain();
 
 		createSwapChain();
+		createViewport();
 		createImageViews();
 		createColorResource();
 		createDepthResources();
@@ -919,11 +922,11 @@ namespace QYHS
 		}
 	}
 
-	void VulkanRHI::prepareBeforeRender()
+	void VulkanRHI::prepareBeforeRender(std::function<void()> update_pass_after_recreate_swap_chain)
 	{
 		waitForFence();
 		resetCommandBuffer();
-		getNextImage();
+		getNextImage(update_pass_after_recreate_swap_chain);
 		resetFence();
 		beginCommandBuffer();
 	}
@@ -1010,7 +1013,7 @@ namespace QYHS
 		}
 	}
 
-	void VulkanRHI::submitCommandBuffer()
+	void VulkanRHI::submitRender(std::function<void()> update_pass_after_recreate_swap_chain)
 	{
 
 		if (vkEndCommandBuffer(commandBuffers[m_current_frame_index]) != VK_SUCCESS) {
@@ -1050,9 +1053,11 @@ namespace QYHS
 
 		VkResult result = vkQueuePresentKHR(present_queue, &presentInfo);
 
-		if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || framebufferResized) {
-			framebufferResized = false;
+		if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR ) {
+			
 			recreateSwapChain();
+			update_pass_after_recreate_swap_chain();
+
 		}
 		else if (result != VK_SUCCESS) {
 			throw std::runtime_error("failed to present swap chain image!");
@@ -1383,13 +1388,18 @@ namespace QYHS
 		vkWaitForFences(device, 1, &inFlightFences[m_current_frame_index], VK_TRUE, UINT64_MAX);
 	}
 
-	void VulkanRHI::getNextImage()
+	void VulkanRHI::getNextImage(std::function<void()> update_pass_after_recreate_swap_chain)
 	{
 		VkResult result = vkAcquireNextImageKHR(device, swap_chain, UINT64_MAX, imageAvailableSemaphores[m_current_frame_index], VK_NULL_HANDLE, &current_image_index);
 
 		if (result == VK_ERROR_OUT_OF_DATE_KHR) {
 			recreateSwapChain();
+			update_pass_after_recreate_swap_chain();
 			return;
+		}
+		else if (result == VK_SUBOPTIMAL_KHR)
+		{
+			system("pause");
 		}
 		else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
 			throw std::runtime_error("failed to acquire swap chain image!");

@@ -205,6 +205,28 @@ namespace QYHS
 		vkFreeMemory(m_vulkan_rhi->getDevice(), storage_buffer_memory, nullptr);
 	}
 
+	void MainCameraRenderPass::updateAfterRecreateSwapChain()
+	{
+		for (size_t i = 0; i < m_framebuffer.attachments.size(); ++i)
+		{
+			vkDestroyImage(m_vulkan_rhi->getDevice(), m_framebuffer.attachments[i].image, nullptr);
+			vkDestroyImageView(m_vulkan_rhi->getDevice(), m_framebuffer.attachments[i].image_view, nullptr);
+			vkFreeMemory(m_vulkan_rhi->getDevice(), m_framebuffer.attachments[i].memory,nullptr);
+		}
+
+		for (size_t i = 0; i < m_swapchain_framebuffers.size(); ++i)
+		{
+			vkDestroyFramebuffer(m_vulkan_rhi->getDevice(), m_swapchain_framebuffers[i], nullptr);
+		}
+
+		setupAttachments();
+		//setupRenderPass();
+		setupDescriptorSets();
+		setupSwapChainFrameBuffers();
+	}
+
+	
+
 	void MainCameraRenderPass::prepareData(std::shared_ptr<RenderResourceBase> resource)
 	{
 		RenderResource* m_resource = static_cast<RenderResource*>(resource.get());

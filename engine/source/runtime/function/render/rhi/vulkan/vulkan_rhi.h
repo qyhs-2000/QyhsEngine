@@ -168,12 +168,12 @@ namespace QYHS
 
 		void endSingleTimeCommands(VkCommandBuffer commandBuffer);
 		void waitForFence();
-		void getNextImage();
+		void getNextImage(std::function<void()> update_pass_after_recreate_swap_chain);
 		void updateUniformBuffer();
 		void resetFence();
 		void resetCommandBuffer();
 		void recordCommandBuffer();
-		void submitCommandBuffer();
+		void submitRender(std::function<void()>);
 		int getMaxFrameInFlight() { return MAX_FRAMES_IN_FLIGHT; }
 		VkDevice getDevice() { return device; }
 		VkPhysicalDevice getPhysicalDevice() { return physical_device; }
@@ -197,7 +197,7 @@ namespace QYHS
 			return swapChainImageViews;
 		}
 		VkViewport &getViewport() { return m_viewport; }
-		void prepareBeforeRender();
+		void prepareBeforeRender(std::function<void()> update_pass_after_recreate_swap_chain);
 	private:
 		void initVulkan();
 

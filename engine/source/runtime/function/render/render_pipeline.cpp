@@ -20,9 +20,15 @@ void QYHS::RenderPipeline::render(std::shared_ptr<RenderResourceBase> render_res
 	VulkanRHI * vulkan_rhi = static_cast<VulkanRHI*>(m_rhi.get());
 	RenderResource* m_render_resource = static_cast<RenderResource*>(render_resource.get());
 	m_render_resource->resetRingBufferOffset(vulkan_rhi->getCurrentFrameIndex());
-	vulkan_rhi->prepareBeforeRender();
+	vulkan_rhi->prepareBeforeRender(std::bind(&RenderPipeline::updatePassAfterRecreatePipeline,this));
 	static_cast<MainCameraRenderPass*>(m_main_camera_pass.get())->draw();
-	vulkan_rhi->submitCommandBuffer();
+	vulkan_rhi->submitRender(std::bind(&RenderPipeline::updatePassAfterRecreatePipeline,this));
 
 	
+}
+
+void QYHS::RenderPipeline::updatePassAfterRecreatePipeline()
+{
+	MainCameraRenderPass* main_camera_pass = static_cast<MainCameraRenderPass*>(m_main_camera_pass.get());
+	main_camera_pass->updateAfterRecreateSwapChain();
 }
