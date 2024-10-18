@@ -124,16 +124,16 @@ namespace QYHS
 
 	void EditorInputManager::onMouseButton(int button, int action, int mods)
 	{
-		static bool cursor_hide = false;
-		if ((action == GLFW_PRESS) && (button == GLFW_MOUSE_BUTTON_RIGHT) && !cursor_hide)
+		static bool cursor_disable = false;
+		if ((action == GLFW_PRESS) && (button == GLFW_MOUSE_BUTTON_RIGHT) && !cursor_disable)
 		{
-			cursor_hide = true;
-			g_runtime_global_context.m_window->hideCursor(true);
+			cursor_disable = true;
+			g_runtime_global_context.m_window->disableCursor(true);
 		}
-		if ((action == GLFW_RELEASE) && (button == GLFW_MOUSE_BUTTON_RIGHT) && cursor_hide)
+		if ((action == GLFW_RELEASE) && (button == GLFW_MOUSE_BUTTON_RIGHT) && cursor_disable)
 		{
-			cursor_hide = false;
-			g_runtime_global_context.m_window->hideCursor(false);
+			cursor_disable = false;
+			g_runtime_global_context.m_window->disableCursor(false);
 		}
 	}
 

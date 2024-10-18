@@ -28,6 +28,7 @@ namespace QYHS
 		void registerOnCursorPos(onCursorFunc func) { m_onCursorPosFunc.push_back(func); }
 		void registerOnMouseButton(onMouseButtonFunc func) { m_onMouseButtonFunc.push_back(func); }
 		void hideCursor(bool is_hidden);
+		void disableCursor(bool is_disabled);
 		GLFWwindow* getWindow() { return m_window; }
 		bool shouldCloseWindow() { return glfwWindowShouldClose(m_window); }
 		bool isMouseButton(int button)const;

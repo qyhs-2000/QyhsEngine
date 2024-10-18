@@ -185,7 +185,7 @@ namespace QYHS
 		VkBuffer getVertexBuffer() { return vertexBuffer; }
 		VkBuffer getIndexBuffer() { return indexBuffer; }
 		std::vector<uint32_t>& getIndices() { return indices; }
-		VkDescriptorPool& getDescriptorPool();
+		VkDescriptorPool& getDescriptorPool() { return m_descriptor_pool; }
 		VkBuffer getUniformBuffer(uint32_t index) {
 			return uniformBuffers[index];
 		}
@@ -200,7 +200,7 @@ namespace QYHS
 		void prepareBeforeRender(std::function<void()> update_pass_after_recreate_swap_chain);
 	private:
 		void initVulkan();
-
+		
 		void createInstance();
 		void setupDebugMessenger();
 		void createSurface();
@@ -315,7 +315,7 @@ namespace QYHS
 		std::vector<VkDeviceMemory> uniformBuffersMemory;
 		std::vector<void*> uniformBuffersMapped;
 
-		VkDescriptorPool descriptorPool;
+		VkDescriptorPool m_descriptor_pool;
 		std::vector<VkDescriptorSet> descriptorSets;
 
 		std::vector<VkCommandBuffer> commandBuffers;
