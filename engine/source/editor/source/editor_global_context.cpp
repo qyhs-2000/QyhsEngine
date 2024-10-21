@@ -17,5 +17,6 @@ namespace QYHS
 		m_input_manager->initialize();
 
 		m_window_system = info.window_system;
+		m_render_system = info.render_system;
 	}
 }

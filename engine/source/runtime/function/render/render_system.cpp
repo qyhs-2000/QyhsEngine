@@ -19,6 +19,7 @@ namespace QYHS
 		processSwapData();
 
 		m_render_scene->updateVisibleObject(m_render_resource);
+		m_rhi->prepareContext();
 		m_render_resource->updatePerframeBuffer(m_render_camera);
 
 		m_render_pipeline->prepareDataForRenderPass(m_render_resource);
@@ -111,6 +112,11 @@ namespace QYHS
 		}
 	}
 
+	size_t RenderSystem::getGObjectIDByMeshID(size_t mesh_id)
+	{
+		return  0;
+	}
+
 	void RenderSystem::initialize()
 	{
 		m_rhi = std::make_shared<VulkanRHI>();
@@ -157,6 +163,9 @@ namespace QYHS
 		
 	}
 
-	
+	uint32_t RenderSystem::getMeshIDByPickedUV(Vector2 picked_uv)
+	{
+		return  m_render_pipeline->getGUIDOfPickedMesh(picked_uv);
+	}
 	
 }

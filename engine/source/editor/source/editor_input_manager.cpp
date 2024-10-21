@@ -8,6 +8,7 @@
 #include <glfw/glfw3.h>
 #include "core/math/vector2.h"
 #include <iostream>
+#include "function/render/render_system.h"
 namespace QYHS
 {
 	/*EditorInputManager::EditorInputManager()
@@ -124,16 +125,28 @@ namespace QYHS
 
 	void EditorInputManager::onMouseButton(int button, int action, int mods)
 	{
+
 		static bool cursor_disable = false;
-		if ((action == GLFW_PRESS) && (button == GLFW_MOUSE_BUTTON_RIGHT) && !cursor_disable)
+		if(button == GLFW_MOUSE_BUTTON_LEFT)
 		{
-			cursor_disable = true;
-			g_runtime_global_context.m_window->disableCursor(true);
+			Vector2 picked_uv = Vector2(m_mouse_x / m_engine_window_size.x, m_mouse_y / m_engine_window_size.y);
+			size_t select_mesh_id = g_editor_global_context.m_scene_manager->getMeshIDByPickedUV(picked_uv);
+			size_t select_gobject_id = g_editor_global_context.m_render_system->getGObjectIDByMeshID(select_mesh_id);
+			g_editor_global_context.m_scene_manager->GObjectSelected(select_gobject_id);
 		}
-		if ((action == GLFW_RELEASE) && (button == GLFW_MOUSE_BUTTON_RIGHT) && cursor_disable)
+		else if (button == GLFW_MOUSE_BUTTON_RIGHT)
 		{
-			cursor_disable = false;
-			g_runtime_global_context.m_window->disableCursor(false);
+			if ((action == GLFW_PRESS) && !cursor_disable)
+			{
+				cursor_disable = true;
+				g_runtime_global_context.m_window->disableCursor(true);
+			}
+			if ((action == GLFW_RELEASE) && cursor_disable)
+			{
+				cursor_disable = false;
+				g_runtime_global_context.m_window->disableCursor(false);
+			}
+
 		}
 	}
 

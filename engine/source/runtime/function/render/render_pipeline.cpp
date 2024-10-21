@@ -1,10 +1,13 @@
 #include "render_pipeline.h"
 #include <function/render/passes/main_camera_render_pass.h>
 
+#include "passes/pick_render_pass.h"
+
 void QYHS::RenderPipeline::initialize(RenderPipelineInitInfo init_info)
 {
 
 	m_main_camera_pass = std::make_shared<MainCameraRenderPass>();
+	m_pick_pass = std::make_shared<PickRenderPass>();
 
 	RenderPassCommonInfo pass_common_info;
 	pass_common_info.rhi = m_rhi;
@@ -12,6 +15,9 @@ void QYHS::RenderPipeline::initialize(RenderPipelineInitInfo init_info)
 
 	m_main_camera_pass->setCommonInfo(pass_common_info);
 	m_main_camera_pass->initialize();
+
+	m_pick_pass->setCommonInfo(pass_common_info);
+	m_pick_pass->initialize();
 }
 
 void QYHS::RenderPipeline::render(std::shared_ptr<RenderResourceBase> render_resource)
@@ -25,6 +31,12 @@ void QYHS::RenderPipeline::render(std::shared_ptr<RenderResourceBase> render_res
 	vulkan_rhi->submitRender(std::bind(&RenderPipeline::updatePassAfterRecreatePipeline,this));
 
 	
+}
+
+uint32_t QYHS::RenderPipeline::getGUIDOfPickedMesh(const Vector2& picked_uv)
+{
+	PickRenderPass * pick_pass = static_cast<PickRenderPass*>(m_pick_pass.get());
+	return pick_pass->pick(picked_uv);
 }
 
 void QYHS::RenderPipeline::updatePassAfterRecreatePipeline()

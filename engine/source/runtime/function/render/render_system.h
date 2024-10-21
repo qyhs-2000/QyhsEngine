@@ -18,8 +18,10 @@ namespace QYHS
 		void swapLogicRenderData();
 		void processRenderEntity();
 		void processSwapData();
+		size_t getGObjectIDByMeshID(size_t mesh_id);
 		RenderSwapContext& getSwapContext() { return m_swap_context; }
 		std::shared_ptr<RenderCamera> getRenderCamera() { return m_render_camera; }
+		uint32_t getMeshIDByPickedUV(Vector2 picked_uv);
 	private:
 		std::shared_ptr<RenderCamera>			m_render_camera;
 		std::shared_ptr<RHI> m_rhi;

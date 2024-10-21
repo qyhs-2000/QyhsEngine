@@ -6,6 +6,7 @@ namespace QYHS
 	public:
 		virtual ~RHI() = 0;
 		virtual void initialize() = 0;
+		virtual void prepareContext() = 0;
 	};
 
 	inline RHI::~RHI() = default;

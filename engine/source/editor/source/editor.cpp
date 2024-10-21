@@ -7,7 +7,7 @@ namespace QYHS
 	{
 		assert(engine);
 		m_engine = engine;
-		EditorGlobalContextInitInfo init_info = { g_runtime_global_context.m_window.get() };
+		EditorGlobalContextInitInfo init_info = { g_runtime_global_context.m_window.get(),g_runtime_global_context.m_render_system.get() };
 		g_editor_global_context.initialize(init_info);
 	}
 

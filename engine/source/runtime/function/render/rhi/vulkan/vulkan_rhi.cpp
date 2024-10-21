@@ -13,7 +13,7 @@
 
 namespace QYHS
 {
-	
+
 	VulkanRHI::~VulkanRHI()
 	{
 		cleanup();
@@ -22,7 +22,7 @@ namespace QYHS
 	{
 		m_window = g_runtime_global_context.m_window->getWindow();
 		initVulkan();
-		
+
 
 		current_time = glfwGetTime();
 	}
@@ -30,40 +30,40 @@ namespace QYHS
 	void VulkanRHI::cleanup() {
 		cleanupSwapChain();
 
-		vkDestroyPipeline(device, graphicsPipeline, nullptr);
-		vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
-		vkDestroyRenderPass(device, renderPass, nullptr);
+		vkDestroyPipeline(m_device, graphicsPipeline, nullptr);
+		vkDestroyPipelineLayout(m_device, pipelineLayout, nullptr);
+		vkDestroyRenderPass(m_device, renderPass, nullptr);
 
 		for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-			vkDestroyBuffer(device, uniformBuffers[i], nullptr);
-			vkFreeMemory(device, uniformBuffersMemory[i], nullptr);
+			vkDestroyBuffer(m_device, uniformBuffers[i], nullptr);
+			vkFreeMemory(m_device, uniformBuffersMemory[i], nullptr);
 		}
 
-		vkDestroyDescriptorPool(device, m_descriptor_pool, nullptr);
+		vkDestroyDescriptorPool(m_device, m_descriptor_pool, nullptr);
 
-		vkDestroySampler(device, textureSampler, nullptr);
-		vkDestroyImageView(device, textureImageView, nullptr);
+		vkDestroySampler(m_device, textureSampler, nullptr);
+		vkDestroyImageView(m_device, textureImageView, nullptr);
 
-		vkDestroyImage(device, textureImage, nullptr);
-		vkFreeMemory(device, textureImageMemory, nullptr);
+		vkDestroyImage(m_device, textureImage, nullptr);
+		vkFreeMemory(m_device, textureImageMemory, nullptr);
 
-		vkDestroyDescriptorSetLayout(device, descriptorSetLayout, nullptr);
+		vkDestroyDescriptorSetLayout(m_device, descriptorSetLayout, nullptr);
 
-		vkDestroyBuffer(device, indexBuffer, nullptr);
-		vkFreeMemory(device, indexBufferMemory, nullptr);
+		vkDestroyBuffer(m_device, indexBuffer, nullptr);
+		vkFreeMemory(m_device, indexBufferMemory, nullptr);
 
-		vkDestroyBuffer(device, vertexBuffer, nullptr);
-		vkFreeMemory(device, vertexBufferMemory, nullptr);
+		vkDestroyBuffer(m_device, vertexBuffer, nullptr);
+		vkFreeMemory(m_device, vertexBufferMemory, nullptr);
 
 		for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-			vkDestroySemaphore(device, renderFinishedSemaphores[i], nullptr);
-			vkDestroySemaphore(device, imageAvailableSemaphores[i], nullptr);
-			vkDestroyFence(device, inFlightFences[i], nullptr);
+			vkDestroySemaphore(m_device, renderFinishedSemaphores[i], nullptr);
+			vkDestroySemaphore(m_device, imageAvailableSemaphores[i], nullptr);
+			vkDestroyFence(m_device, m_is_frame_in_flight_fences[i], nullptr);
 		}
 
-		vkDestroyCommandPool(device, commandPool, nullptr);
+		vkDestroyCommandPool(m_device, command_pool, nullptr);
 
-		vkDestroyDevice(device, nullptr);
+		vkDestroyDevice(m_device, nullptr);
 
 		if (enableValidationLayers) {
 			DestroyDebugUtilsMessengerEXT(instance, debugMessenger, nullptr);
@@ -257,7 +257,8 @@ namespace QYHS
 		for (const auto& device : devices) {
 			if (isDeviceSuitable(device)) {
 				physical_device = device;
-				msaa_samples = getMaxAvailableSamplerCount();
+				//msaa_samples = getMaxAvailableSamplerCount();
+				msaa_samples = VK_SAMPLE_COUNT_1_BIT;
 				break;
 			}
 		}
@@ -268,53 +269,53 @@ namespace QYHS
 	}
 
 	void VulkanRHI::createLogicalDevice() {
-			QueueFamilyIndices indices = findQueueFamilies(physical_device);
+		queue_family_indices = findQueueFamilies(physical_device);
 
-			std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
-			std::set<uint32_t> uniqueQueueFamilies = { indices.graphicsFamily.value(), indices.presentFamily.value() };
+		std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
+		std::set<uint32_t> uniqueQueueFamilies = { queue_family_indices.graphicsFamily.value(), queue_family_indices.presentFamily.value() };
 
-			float queuePriority = 1.0f;
-			for (uint32_t queueFamily : uniqueQueueFamilies) {
-				VkDeviceQueueCreateInfo queueCreateInfo{};
-				queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-				queueCreateInfo.queueFamilyIndex = queueFamily;
-				queueCreateInfo.queueCount = 1;
-				queueCreateInfo.pQueuePriorities = &queuePriority;
-				queueCreateInfos.push_back(queueCreateInfo);
-			}
-
-			VkPhysicalDeviceFeatures deviceFeatures{};
-			deviceFeatures.samplerAnisotropy = VK_TRUE;
-			deviceFeatures.sampleRateShading = VK_TRUE;
-
-			VkDeviceCreateInfo createInfo{};
-			createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-
-			createInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
-			createInfo.pQueueCreateInfos = queueCreateInfos.data();
-
-			createInfo.pEnabledFeatures = &deviceFeatures;
-
-			createInfo.enabledExtensionCount = static_cast<uint32_t>(deviceExtensions.size());
-			createInfo.ppEnabledExtensionNames = deviceExtensions.data();
-
-			if (enableValidationLayers) {
-				createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
-				createInfo.ppEnabledLayerNames = validationLayers.data();
-			}
-			else {
-				createInfo.enabledLayerCount = 0;
-			}
-
-			if (vkCreateDevice(physical_device, &createInfo, nullptr, &device) != VK_SUCCESS) {
-				throw std::runtime_error("failed to create logical device!");
-			}
-
-			vkGetDeviceQueue(device, indices.graphicsFamily.value(), 0, &graphics_queue);
-			vkGetDeviceQueue(device, indices.presentFamily.value(), 0, &present_queue);
-
-			m_depth_image_format = findDepthFormat();
+		float queuePriority = 1.0f;
+		for (uint32_t queueFamily : uniqueQueueFamilies) {
+			VkDeviceQueueCreateInfo queueCreateInfo{};
+			queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+			queueCreateInfo.queueFamilyIndex = queueFamily;
+			queueCreateInfo.queueCount = 1;
+			queueCreateInfo.pQueuePriorities = &queuePriority;
+			queueCreateInfos.push_back(queueCreateInfo);
 		}
+
+		VkPhysicalDeviceFeatures deviceFeatures{};
+		deviceFeatures.samplerAnisotropy = VK_TRUE;
+		deviceFeatures.sampleRateShading = VK_TRUE;
+
+		VkDeviceCreateInfo createInfo{};
+		createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+
+		createInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
+		createInfo.pQueueCreateInfos = queueCreateInfos.data();
+
+		createInfo.pEnabledFeatures = &deviceFeatures;
+
+		createInfo.enabledExtensionCount = static_cast<uint32_t>(deviceExtensions.size());
+		createInfo.ppEnabledExtensionNames = deviceExtensions.data();
+
+		if (enableValidationLayers) {
+			createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
+			createInfo.ppEnabledLayerNames = validationLayers.data();
+		}
+		else {
+			createInfo.enabledLayerCount = 0;
+		}
+
+		if (vkCreateDevice(physical_device, &createInfo, nullptr, &m_device) != VK_SUCCESS) {
+			throw std::runtime_error("failed to create logical device!");
+		}
+
+		vkGetDeviceQueue(m_device, queue_family_indices.graphicsFamily.value(), 0, &graphics_queue);
+		vkGetDeviceQueue(m_device, queue_family_indices.presentFamily.value(), 0, &present_queue);
+
+		m_depth_image_format = findDepthFormat();
+	}
 
 	void VulkanRHI::createSwapChain() {
 		SwapChainSupportDetails swapChainSupport = querySwapChainSupport(physical_device);
@@ -356,18 +357,18 @@ namespace QYHS
 		createInfo.presentMode = presentMode;
 		createInfo.clipped = VK_TRUE;
 
-		if (vkCreateSwapchainKHR(device, &createInfo, nullptr, &swap_chain) != VK_SUCCESS) {
+		if (vkCreateSwapchainKHR(m_device, &createInfo, nullptr, &swap_chain) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create swap chain!");
 		}
 
-		vkGetSwapchainImagesKHR(device, swap_chain, &imageCount, nullptr);
+		vkGetSwapchainImagesKHR(m_device, swap_chain, &imageCount, nullptr);
 		swapChainImages.resize(imageCount);
-		vkGetSwapchainImagesKHR(device, swap_chain, &imageCount, swapChainImages.data());
+		vkGetSwapchainImagesKHR(m_device, swap_chain, &imageCount, swapChainImages.data());
 
 		swapChainImageFormat = surfaceFormat.format;
-		swapChainExtent = extent;
-		
-		
+		m_swapchain_extent = extent;
+
+		m_scissor = { {0, 0}, {m_swapchain_extent.width, m_swapchain_extent.height} };
 	}
 
 	void VulkanRHI::createImageViews() {
@@ -426,7 +427,7 @@ namespace QYHS
 		subpass.colorAttachmentCount = 1;
 		subpass.pColorAttachments = &colorAttachmentRef;
 		subpass.pDepthStencilAttachment = &depthAttachmentRef;
-		subpass.pResolveAttachments = &colorAttachmentResolveRef;
+		subpass.pResolveAttachments = nullptr;
 
 		VkSubpassDependency dependency{};
 		dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
@@ -446,7 +447,7 @@ namespace QYHS
 		renderPassInfo.dependencyCount = 1;
 		renderPassInfo.pDependencies = &dependency;
 
-		if (vkCreateRenderPass(device, &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS) {
+		if (vkCreateRenderPass(m_device, &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create render pass!");
 		}
 	}
@@ -472,7 +473,7 @@ namespace QYHS
 		layoutInfo.bindingCount = static_cast<uint32_t>(bindings.size());
 		layoutInfo.pBindings = bindings.data();
 
-		if (vkCreateDescriptorSetLayout(device, &layoutInfo, nullptr, &descriptorSetLayout) != VK_SUCCESS) {
+		if (vkCreateDescriptorSetLayout(m_device, &layoutInfo, nullptr, &descriptorSetLayout) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create descriptor set layout!");
 		}
 	}
@@ -591,7 +592,7 @@ namespace QYHS
 		pipelineLayoutInfo.setLayoutCount = 1;
 		pipelineLayoutInfo.pSetLayouts = &descriptorSetLayout;
 
-		if (vkCreatePipelineLayout(device, &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS) {
+		if (vkCreatePipelineLayout(m_device, &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create pipeline layout!");
 		}
 
@@ -612,12 +613,12 @@ namespace QYHS
 		pipelineInfo.subpass = 0;
 		pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
-		if (vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &graphicsPipeline) != VK_SUCCESS) {
+		if (vkCreateGraphicsPipelines(m_device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &graphicsPipeline) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create graphics pipeline!");
 		}
 
-		vkDestroyShaderModule(device, fragShaderModule, nullptr);
-		vkDestroyShaderModule(device, vertShaderModule, nullptr);
+		vkDestroyShaderModule(m_device, fragShaderModule, nullptr);
+		vkDestroyShaderModule(m_device, vertShaderModule, nullptr);
 	}
 
 	QueueFamilyIndices VulkanRHI::findQueueFamilies(VkPhysicalDevice device) {
@@ -668,28 +669,45 @@ namespace QYHS
 	}
 
 	void VulkanRHI::createCommandPool() {
-		QueueFamilyIndices queueFamilyIndices = findQueueFamilies(physical_device);
+		{
+			VkCommandPoolCreateInfo poolInfo{};
+			poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+			poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+			poolInfo.queueFamilyIndex = queue_family_indices.graphicsFamily.value();
 
-		VkCommandPoolCreateInfo poolInfo{};
-		poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-		poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-		poolInfo.queueFamilyIndex = queueFamilyIndices.graphicsFamily.value();
+			if (vkCreateCommandPool(m_device, &poolInfo, nullptr, &command_pool) != VK_SUCCESS) {
+				throw std::runtime_error("failed to create graphics command pool!");
+			}
 
-		if (vkCreateCommandPool(device, &poolInfo, nullptr, &commandPool) != VK_SUCCESS) {
-			throw std::runtime_error("failed to create graphics command pool!");
+		}
+
+		{
+			VkCommandPoolCreateInfo command_pool_create_info;
+			command_pool_create_info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+			command_pool_create_info.pNext = NULL;
+			command_pool_create_info.flags = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
+			command_pool_create_info.queueFamilyIndex = queue_family_indices.graphicsFamily.value();
+
+			for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+			{
+				if (vkCreateCommandPool(m_device, &command_pool_create_info, NULL, &m_command_pools[i]) != VK_SUCCESS)
+				{
+					throw std::runtime_error("vk create command pool");
+				}
+			}
 		}
 	}
 
 	void VulkanRHI::createDepthResources() {
 		VkFormat depthFormat = findDepthFormat();
 
-		createImage(swapChainExtent.width, swapChainExtent.height, depthFormat, 1, msaa_samples, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, depthImage, depthImageMemory);
-		depthImageView = createImageView(depthImage, depthFormat, 1, VK_IMAGE_ASPECT_DEPTH_BIT);
+		createImage(m_swapchain_extent.width, m_swapchain_extent.height, depthFormat, 1, msaa_samples, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, depthImage, depthImageMemory);
+		depth_image_view = createImageView(depthImage, depthFormat, 1, VK_IMAGE_ASPECT_DEPTH_BIT);
 	}
 
 	void VulkanRHI::createColorResource()
 	{
-		createImage(swapChainExtent.width, swapChainExtent.height, swapChainImageFormat, 1, msaa_samples,
+		createImage(m_swapchain_extent.width, m_swapchain_extent.height, swapChainImageFormat, 1, msaa_samples,
 			VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
 			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, colorImage, colorImageMemory);
 		colorImageView = createImageView(colorImage, swapChainImageFormat, 1, VK_IMAGE_ASPECT_COLOR_BIT);
@@ -701,7 +719,7 @@ namespace QYHS
 		for (size_t i = 0; i < swapChainImageViews.size(); i++) {
 			std::array<VkImageView, 3> attachments = {
 				colorImageView,
-				depthImageView,
+				depth_image_view,
 				swapChainImageViews[i]
 			};
 
@@ -710,11 +728,11 @@ namespace QYHS
 			framebufferInfo.renderPass = renderPass;
 			framebufferInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
 			framebufferInfo.pAttachments = attachments.data();
-			framebufferInfo.width = swapChainExtent.width;
-			framebufferInfo.height = swapChainExtent.height;
+			framebufferInfo.width = m_swapchain_extent.width;
+			framebufferInfo.height = m_swapchain_extent.height;
 			framebufferInfo.layers = 1;
 
-			if (vkCreateFramebuffer(device, &framebufferInfo, nullptr, &swapChainFramebuffers[i]) != VK_SUCCESS) {
+			if (vkCreateFramebuffer(m_device, &framebufferInfo, nullptr, &swapChainFramebuffers[i]) != VK_SUCCESS) {
 				throw std::runtime_error("failed to create framebuffer!");
 			}
 		}
@@ -728,23 +746,23 @@ namespace QYHS
 		bufferInfo.usage = usage;
 		bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-		if (vkCreateBuffer(device, &bufferInfo, nullptr, &buffer) != VK_SUCCESS) {
+		if (vkCreateBuffer(m_device, &bufferInfo, nullptr, &buffer) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create buffer!");
 		}
 
 		VkMemoryRequirements memRequirements;
-		vkGetBufferMemoryRequirements(device, buffer, &memRequirements);
+		vkGetBufferMemoryRequirements(m_device, buffer, &memRequirements);
 
 		VkMemoryAllocateInfo allocInfo{};
 		allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 		allocInfo.allocationSize = memRequirements.size;
 		allocInfo.memoryTypeIndex = findMemoryType(memRequirements.memoryTypeBits, properties);
 
-		if (vkAllocateMemory(device, &allocInfo, nullptr, &bufferMemory) != VK_SUCCESS) {
+		if (vkAllocateMemory(m_device, &allocInfo, nullptr, &bufferMemory) != VK_SUCCESS) {
 			throw std::runtime_error("failed to allocate buffer memory!");
 		}
 
-		vkBindBufferMemory(device, buffer, bufferMemory, 0);
+		vkBindBufferMemory(m_device, buffer, bufferMemory, 0);
 	}
 
 	void VulkanRHI::createTextureImage() {
@@ -763,9 +781,9 @@ namespace QYHS
 		createBuffer(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
 
 		void* data;
-		vkMapMemory(device, stagingBufferMemory, 0, imageSize, 0, &data);
+		vkMapMemory(m_device, stagingBufferMemory, 0, imageSize, 0, &data);
 		memcpy(data, pixels, static_cast<size_t>(imageSize));
-		vkUnmapMemory(device, stagingBufferMemory);
+		vkUnmapMemory(m_device, stagingBufferMemory);
 
 		stbi_image_free(pixels);
 
@@ -776,8 +794,8 @@ namespace QYHS
 
 		//transitionImageLayout(textureImage, VK_FORMAT_R8G8B8A8_SRGB, mip_levels,VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
-		vkDestroyBuffer(device, stagingBuffer, nullptr);
-		vkFreeMemory(device, stagingBufferMemory, nullptr);
+		vkDestroyBuffer(m_device, stagingBuffer, nullptr);
+		vkFreeMemory(m_device, stagingBufferMemory, nullptr);
 		generateMipmaps(textureImage, VK_FORMAT_R8G8B8A8_SRGB, texWidth, texHeight);
 	}
 
@@ -803,7 +821,7 @@ namespace QYHS
 			glfwWaitEvents();
 		}
 
-		vkDeviceWaitIdle(device);
+		vkDeviceWaitIdle(m_device);
 
 		cleanupSwapChain();
 
@@ -816,23 +834,23 @@ namespace QYHS
 	}
 
 	void VulkanRHI::cleanupSwapChain() {
-		vkDestroyImageView(device, depthImageView, nullptr);
-		vkDestroyImage(device, depthImage, nullptr);
-		vkFreeMemory(device, depthImageMemory, nullptr);
+		vkDestroyImageView(m_device, depth_image_view, nullptr);
+		vkDestroyImage(m_device, depthImage, nullptr);
+		vkFreeMemory(m_device, depthImageMemory, nullptr);
 
-		vkDestroyImageView(device, colorImageView, nullptr);
-		vkDestroyImage(device, colorImage, nullptr);
-		vkFreeMemory(device, colorImageMemory, nullptr);
+		vkDestroyImageView(m_device, colorImageView, nullptr);
+		vkDestroyImage(m_device, colorImage, nullptr);
+		vkFreeMemory(m_device, colorImageMemory, nullptr);
 
 		for (auto framebuffer : swapChainFramebuffers) {
-			vkDestroyFramebuffer(device, framebuffer, nullptr);
+			vkDestroyFramebuffer(m_device, framebuffer, nullptr);
 		}
 
 		for (auto imageView : swapChainImageViews) {
-			vkDestroyImageView(device, imageView, nullptr);
+			vkDestroyImageView(m_device, imageView, nullptr);
 		}
 
-		vkDestroySwapchainKHR(device, swap_chain, nullptr);
+		vkDestroySwapchainKHR(m_device, swap_chain, nullptr);
 	}
 
 	void VulkanRHI::createTextureSampler() {
@@ -857,7 +875,7 @@ namespace QYHS
 		samplerInfo.maxLod = static_cast<float>(mip_levels);
 		samplerInfo.mipLodBias = 0.0f; // Optional
 
-		if (vkCreateSampler(device, &samplerInfo, nullptr, &textureSampler) != VK_SUCCESS) {
+		if (vkCreateSampler(m_device, &samplerInfo, nullptr, &textureSampler) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create texture sampler!");
 		}
 	}
@@ -904,7 +922,7 @@ namespace QYHS
 	void VulkanRHI::prepareBeforeRender(std::function<void()> update_pass_after_recreate_swap_chain)
 	{
 		waitForFence();
-		resetCommandBuffer();
+		resetCommandPool();
 		getNextImage(update_pass_after_recreate_swap_chain);
 		resetFence();
 		beginCommandBuffer();
@@ -916,9 +934,9 @@ namespace QYHS
 		beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 		beginInfo.flags = 0;
 		beginInfo.pInheritanceInfo = nullptr;
-		VkCommandBuffer commandBuffer = commandBuffers[m_current_frame_index];
+		VkCommandBuffer commandBuffer = m_command_buffers[m_current_frame_index];
 
-		if (vkBeginCommandBuffer(commandBuffers[m_current_frame_index], &beginInfo) != VK_SUCCESS) {
+		if (vkBeginCommandBuffer(m_command_buffers[m_current_frame_index], &beginInfo) != VK_SUCCESS) {
 			throw std::runtime_error("failed to begin recording command buffer!");
 		}
 	}
@@ -936,10 +954,10 @@ namespace QYHS
 	void VulkanRHI::recordCommandBuffer() {
 		VkCommandBufferBeginInfo beginInfo{};
 		beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-		VkCommandBuffer commandBuffer = commandBuffers[m_current_frame_index];
+		VkCommandBuffer commandBuffer = m_command_buffers[m_current_frame_index];
 		uint32_t imageIndex = current_image_index;
 
-		if (vkBeginCommandBuffer(commandBuffers[m_current_frame_index], &beginInfo) != VK_SUCCESS) {
+		if (vkBeginCommandBuffer(m_command_buffers[m_current_frame_index], &beginInfo) != VK_SUCCESS) {
 			throw std::runtime_error("failed to begin recording command buffer!");
 		}
 
@@ -948,7 +966,7 @@ namespace QYHS
 		renderPassInfo.renderPass = renderPass;
 		renderPassInfo.framebuffer = swapChainFramebuffers[current_image_index];
 		renderPassInfo.renderArea.offset = { 0, 0 };
-		renderPassInfo.renderArea.extent = swapChainExtent;
+		renderPassInfo.renderArea.extent = m_swapchain_extent;
 
 		std::array<VkClearValue, 2> clearValues{};
 		clearValues[0].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
@@ -964,15 +982,15 @@ namespace QYHS
 		VkViewport viewport{};
 		viewport.x = 0.0f;
 		viewport.y = 0.0f;
-		viewport.width = (float)swapChainExtent.width;
-		viewport.height = (float)swapChainExtent.height;
+		viewport.width = (float)m_swapchain_extent.width;
+		viewport.height = (float)m_swapchain_extent.height;
 		viewport.minDepth = 0.0f;
 		viewport.maxDepth = 1.0f;
 		vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
 
 		VkRect2D scissor{};
 		scissor.offset = { 0, 0 };
-		scissor.extent = swapChainExtent;
+		scissor.extent = m_swapchain_extent;
 		vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 
 		VkBuffer vertexBuffers[] = { vertexBuffer };
@@ -995,7 +1013,7 @@ namespace QYHS
 	void VulkanRHI::submitRender(std::function<void()> update_pass_after_recreate_swap_chain)
 	{
 
-		if (vkEndCommandBuffer(commandBuffers[m_current_frame_index]) != VK_SUCCESS) {
+		if (vkEndCommandBuffer(m_command_buffers[m_current_frame_index]) != VK_SUCCESS) {
 			throw std::runtime_error("failed to record command buffer!");
 		}
 		VkSubmitInfo submitInfo{};
@@ -1008,13 +1026,13 @@ namespace QYHS
 		submitInfo.pWaitDstStageMask = waitStages;
 
 		submitInfo.commandBufferCount = 1;
-		submitInfo.pCommandBuffers = &commandBuffers[m_current_frame_index];
+		submitInfo.pCommandBuffers = &m_command_buffers[m_current_frame_index];
 
 		VkSemaphore signalSemaphores[] = { renderFinishedSemaphores[m_current_frame_index] };
 		submitInfo.signalSemaphoreCount = 1;
 		submitInfo.pSignalSemaphores = signalSemaphores;
 
-		if (vkQueueSubmit(graphics_queue, 1, &submitInfo, inFlightFences[m_current_frame_index]) != VK_SUCCESS) {
+		if (vkQueueSubmit(graphics_queue, 1, &submitInfo, m_is_frame_in_flight_fences[m_current_frame_index]) != VK_SUCCESS) {
 			throw std::runtime_error("failed to submit draw command buffer!");
 		}
 
@@ -1032,8 +1050,8 @@ namespace QYHS
 
 		VkResult result = vkQueuePresentKHR(present_queue, &presentInfo);
 
-		if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR ) {
-			
+		if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) {
+
 			recreateSwapChain();
 			update_pass_after_recreate_swap_chain();
 
@@ -1062,7 +1080,7 @@ namespace QYHS
 		Vector3 camera_front = g_editor_global_context.m_scene_manager->getEditorCamera()->getCameraFront();
 		Vector3 camera_up = g_editor_global_context.m_scene_manager->getEditorCamera()->getCameraUp();
 		auto camera_fov = g_editor_global_context.m_scene_manager->getEditorCamera()->getCameraFOV();
-		ubo.proj = glm::perspective(glm::radians(camera_fov), swapChainExtent.width / (float)swapChainExtent.height, 0.1f, 1000.0f);
+		ubo.proj = glm::perspective(glm::radians(camera_fov), m_swapchain_extent.width / (float)m_swapchain_extent.height, 0.1f, 1000.0f);
 		ubo.proj[1][1] *= -1;
 
 		memcpy(uniformBuffersMapped[m_current_frame_index], &ubo, sizeof(ubo));
@@ -1070,17 +1088,25 @@ namespace QYHS
 
 	void VulkanRHI::resetFence()
 	{
-		vkResetFences(device, 1, &inFlightFences[m_current_frame_index]);
+		vkResetFences(m_device, 1, &m_is_frame_in_flight_fences[m_current_frame_index]);
 	}
 
 	void VulkanRHI::resetCommandBuffer()
 	{
-		vkResetCommandBuffer(commandBuffers[m_current_frame_index], /*VkCommandBufferResetFlagBits*/ 0);
+		vkResetCommandBuffer(m_command_buffers[m_current_frame_index], /*VkCommandBufferResetFlagBits*/ 0);
+	}
+
+	void VulkanRHI::resetCommandPool()
+	{
+		if (vkResetCommandPool(m_device, m_command_pools[m_current_frame_index], 0) != VK_SUCCESS)
+		{
+			throw std::runtime_error("failed to reset command pool");
+		}
 	}
 
 	void VulkanRHI::initCamera()
 	{
-		
+
 	}
 
 	void VulkanRHI::createVertexBuffer() {
@@ -1091,16 +1117,16 @@ namespace QYHS
 		createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
 
 		void* data;
-		vkMapMemory(device, stagingBufferMemory, 0, bufferSize, 0, &data);
+		vkMapMemory(m_device, stagingBufferMemory, 0, bufferSize, 0, &data);
 		memcpy(data, vertices.data(), (size_t)bufferSize);
-		vkUnmapMemory(device, stagingBufferMemory);
+		vkUnmapMemory(m_device, stagingBufferMemory);
 
 		createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vertexBuffer, vertexBufferMemory);
 
 		copyBuffer(stagingBuffer, vertexBuffer, bufferSize);
 
-		vkDestroyBuffer(device, stagingBuffer, nullptr);
-		vkFreeMemory(device, stagingBufferMemory, nullptr);
+		vkDestroyBuffer(m_device, stagingBuffer, nullptr);
+		vkFreeMemory(m_device, stagingBufferMemory, nullptr);
 	}
 
 	void VulkanRHI::createIndexBuffer() {
@@ -1111,16 +1137,16 @@ namespace QYHS
 		createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
 
 		void* data;
-		vkMapMemory(device, stagingBufferMemory, 0, bufferSize, 0, &data);
+		vkMapMemory(m_device, stagingBufferMemory, 0, bufferSize, 0, &data);
 		memcpy(data, indices.data(), (size_t)bufferSize);
-		vkUnmapMemory(device, stagingBufferMemory);
+		vkUnmapMemory(m_device, stagingBufferMemory);
 
 		createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, indexBuffer, indexBufferMemory);
 
 		copyBuffer(stagingBuffer, indexBuffer, bufferSize);
 
-		vkDestroyBuffer(device, stagingBuffer, nullptr);
-		vkFreeMemory(device, stagingBufferMemory, nullptr);
+		vkDestroyBuffer(m_device, stagingBuffer, nullptr);
+		vkFreeMemory(m_device, stagingBufferMemory, nullptr);
 	}
 
 	void VulkanRHI::createUniformBuffers() {
@@ -1133,20 +1159,21 @@ namespace QYHS
 		for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
 			createBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, uniformBuffers[i], uniformBuffersMemory[i]);
 
-			vkMapMemory(device, uniformBuffersMemory[i], 0, bufferSize, 0, &uniformBuffersMapped[i]);
+			vkMapMemory(m_device, uniformBuffersMemory[i], 0, bufferSize, 0, &uniformBuffersMapped[i]);
 		}
 	}
 
+	//TODO:now the descriptor is not correct
 	void VulkanRHI::createDescriptorPool() {
 		std::array<VkDescriptorPoolSize, 4> poolSizes{};
 		poolSizes[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
 		poolSizes[0].descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
-		
+
 		poolSizes[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		poolSizes[1].descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT*4);
+		poolSizes[1].descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT * 4);
 
 		poolSizes[2].type = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC;
-		poolSizes[2].descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+		poolSizes[2].descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT * 4);
 
 		poolSizes[3].type = VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT;
 		poolSizes[3].descriptorCount = static_cast<uint32_t>(4);
@@ -1157,10 +1184,12 @@ namespace QYHS
 		poolInfo.pPoolSizes = poolSizes.data();
 		poolInfo.maxSets = static_cast<uint32_t>(10);
 
-		if (vkCreateDescriptorPool(device, &poolInfo, nullptr, &m_descriptor_pool) != VK_SUCCESS) {
+
+		if (vkCreateDescriptorPool(m_device, &poolInfo, nullptr, &m_descriptor_pool) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create descriptor pool!");
 		}
 	}
+
 
 	void VulkanRHI::createDescriptorSets() {
 		std::vector<VkDescriptorSetLayout> layouts(MAX_FRAMES_IN_FLIGHT, descriptorSetLayout);
@@ -1171,7 +1200,7 @@ namespace QYHS
 		allocInfo.pSetLayouts = layouts.data();
 
 		descriptorSets.resize(MAX_FRAMES_IN_FLIGHT);
-		if (vkAllocateDescriptorSets(device, &allocInfo, descriptorSets.data()) != VK_SUCCESS) {
+		if (vkAllocateDescriptorSets(m_device, &allocInfo, descriptorSets.data()) != VK_SUCCESS) {
 			throw std::runtime_error("failed to allocate descriptor sets!");
 		}
 
@@ -1204,28 +1233,31 @@ namespace QYHS
 			descriptorWrites[1].descriptorCount = 1;
 			descriptorWrites[1].pImageInfo = &imageInfo;
 
-			vkUpdateDescriptorSets(device, static_cast<uint32_t>(descriptorWrites.size()), descriptorWrites.data(), 0, nullptr);
+			vkUpdateDescriptorSets(m_device, static_cast<uint32_t>(descriptorWrites.size()), descriptorWrites.data(), 0, nullptr);
 		}
 	}
 
 	void VulkanRHI::createCommandBuffers() {
-		commandBuffers.resize(MAX_FRAMES_IN_FLIGHT);
+		m_command_buffers.resize(MAX_FRAMES_IN_FLIGHT);
 
 		VkCommandBufferAllocateInfo allocInfo{};
 		allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-		allocInfo.commandPool = commandPool;
+		allocInfo.commandPool = command_pool;
 		allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-		allocInfo.commandBufferCount = (uint32_t)commandBuffers.size();
-
-		if (vkAllocateCommandBuffers(device, &allocInfo, commandBuffers.data()) != VK_SUCCESS) {
-			throw std::runtime_error("failed to allocate command buffers!");
+		allocInfo.commandBufferCount = 1U;
+		for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+		{
+			allocInfo.commandPool = m_command_pools[i];
+			if (vkAllocateCommandBuffers(m_device, &allocInfo, &m_command_buffers[i]) != VK_SUCCESS) {
+				throw std::runtime_error("failed to allocate command buffers!");
+			}
 		}
 	}
 
 	void VulkanRHI::createSyncObjects() {
 		imageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
 		renderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
-		inFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
+		m_is_frame_in_flight_fences.resize(MAX_FRAMES_IN_FLIGHT);
 
 		VkSemaphoreCreateInfo semaphoreInfo{};
 		semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
@@ -1235,9 +1267,9 @@ namespace QYHS
 		fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 
 		for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-			if (vkCreateSemaphore(device, &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) != VK_SUCCESS ||
-				vkCreateSemaphore(device, &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) != VK_SUCCESS ||
-				vkCreateFence(device, &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS) {
+			if (vkCreateSemaphore(m_device, &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) != VK_SUCCESS ||
+				vkCreateSemaphore(m_device, &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) != VK_SUCCESS ||
+				vkCreateFence(m_device, &fenceInfo, nullptr, &m_is_frame_in_flight_fences[i]) != VK_SUCCESS) {
 				throw std::runtime_error("failed to create synchronization objects for a frame!");
 			}
 		}
@@ -1245,18 +1277,26 @@ namespace QYHS
 
 	void VulkanRHI::createAllocator()
 	{
-		VmaVulkanFunctions vulkanFunctions    = {};
-        vulkanFunctions.vkGetInstanceProcAddr = &vkGetInstanceProcAddr;
-        vulkanFunctions.vkGetDeviceProcAddr   = &vkGetDeviceProcAddr;
+		VmaVulkanFunctions vulkanFunctions = {};
+		vulkanFunctions.vkGetInstanceProcAddr = &vkGetInstanceProcAddr;
+		vulkanFunctions.vkGetDeviceProcAddr = &vkGetDeviceProcAddr;
 
-        VmaAllocatorCreateInfo create_info = {};
-        create_info.vulkanApiVersion       = m_vulkan_api_version;
-        create_info.physicalDevice         = physical_device;
-        create_info.device                 = device;
-        create_info.instance               = instance;
-        create_info.pVulkanFunctions       = &vulkanFunctions;
+		VmaAllocatorCreateInfo create_info = {};
+		create_info.vulkanApiVersion = m_vulkan_api_version;
+		create_info.physicalDevice = physical_device;
+		create_info.device = m_device;
+		create_info.instance = instance;
+		create_info.pVulkanFunctions = &vulkanFunctions;
 
 		vmaCreateAllocator(&create_info, &m_assets_allocator);
+	}
+
+	void VulkanRHI::prepareContext()
+	{
+		m_p_current_frame_index = &m_current_frame_index;
+		m_current_command_buffer = m_command_buffers[m_current_frame_index];
+		m_p_command_buffers = m_command_buffers.data();
+		m_p_command_pools = m_command_pools;
 	}
 
 	void VulkanRHI::generateMipmaps(VkImage image, VkFormat format, uint32_t tex_width, uint32_t tex_height)
@@ -1340,11 +1380,11 @@ namespace QYHS
 		VkCommandBufferAllocateInfo allocInfo{};
 		allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 		allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-		allocInfo.commandPool = commandPool;
+		allocInfo.commandPool = command_pool;
 		allocInfo.commandBufferCount = 1;
 
 		VkCommandBuffer commandBuffer;
-		vkAllocateCommandBuffers(device, &allocInfo, &commandBuffer);
+		vkAllocateCommandBuffers(m_device, &allocInfo, &commandBuffer);
 
 		VkCommandBufferBeginInfo beginInfo{};
 		beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -1366,17 +1406,17 @@ namespace QYHS
 		vkQueueSubmit(graphics_queue, 1, &submitInfo, VK_NULL_HANDLE);
 		vkQueueWaitIdle(graphics_queue);
 
-		vkFreeCommandBuffers(device, commandPool, 1, &commandBuffer);
+		vkFreeCommandBuffers(m_device, command_pool, 1, &commandBuffer);
 	}
 
 	void VulkanRHI::waitForFence()
 	{
-		vkWaitForFences(device, 1, &inFlightFences[m_current_frame_index], VK_TRUE, UINT64_MAX);
+		vkWaitForFences(m_device, 1, &m_is_frame_in_flight_fences[m_current_frame_index], VK_TRUE, UINT64_MAX);
 	}
 
 	void VulkanRHI::getNextImage(std::function<void()> update_pass_after_recreate_swap_chain)
 	{
-		VkResult result = vkAcquireNextImageKHR(device, swap_chain, UINT64_MAX, imageAvailableSemaphores[m_current_frame_index], VK_NULL_HANDLE, &current_image_index);
+		VkResult result = vkAcquireNextImageKHR(m_device, swap_chain, UINT64_MAX, imageAvailableSemaphores[m_current_frame_index], VK_NULL_HANDLE, &current_image_index);
 
 		if (result == VK_ERROR_OUT_OF_DATE_KHR) {
 			recreateSwapChain();
@@ -1392,13 +1432,13 @@ namespace QYHS
 		}
 	}
 
-	
 
-	
 
-	
 
-	
+
+
+
+
 
 	SwapChainSupportDetails VulkanRHI::querySwapChainSupport(VkPhysicalDevice device) {
 		SwapChainSupportDetails details;
@@ -1510,7 +1550,7 @@ namespace QYHS
 		viewInfo.subresourceRange.layerCount = 1;
 
 		VkImageView imageView;
-		if (vkCreateImageView(device, &viewInfo, nullptr, &imageView) != VK_SUCCESS) {
+		if (vkCreateImageView(m_device, &viewInfo, nullptr, &imageView) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create texture image view!");
 		}
 
@@ -1533,23 +1573,23 @@ namespace QYHS
 		imageInfo.samples = num_samples;
 		imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-		if (vkCreateImage(device, &imageInfo, nullptr, &image) != VK_SUCCESS) {
+		if (vkCreateImage(m_device, &imageInfo, nullptr, &image) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create image!");
 		}
 
 		VkMemoryRequirements memRequirements;
-		vkGetImageMemoryRequirements(device, image, &memRequirements);
+		vkGetImageMemoryRequirements(m_device, image, &memRequirements);
 
 		VkMemoryAllocateInfo allocInfo{};
 		allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 		allocInfo.allocationSize = memRequirements.size;
 		allocInfo.memoryTypeIndex = findMemoryType(memRequirements.memoryTypeBits, properties);
 
-		if (vkAllocateMemory(device, &allocInfo, nullptr, &imageMemory) != VK_SUCCESS) {
+		if (vkAllocateMemory(m_device, &allocInfo, nullptr, &imageMemory) != VK_SUCCESS) {
 			throw std::runtime_error("failed to allocate image memory!");
 		}
 
-		vkBindImageMemory(device, image, imageMemory, 0);
+		vkBindImageMemory(m_device, image, imageMemory, 0);
 	}
 
 	VkResult VulkanRHI::CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger)
@@ -1679,7 +1719,7 @@ namespace QYHS
 		throw std::runtime_error("failed to find supported format!");
 	}
 
-	
+
 
 	VkShaderModule VulkanRHI::createShaderModule(const std::vector<char>& code) {
 		VkShaderModuleCreateInfo createInfo{};
@@ -1688,7 +1728,7 @@ namespace QYHS
 		createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
 
 		VkShaderModule shaderModule;
-		if (vkCreateShaderModule(device, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
+		if (vkCreateShaderModule(m_device, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create shader module!");
 		}
 

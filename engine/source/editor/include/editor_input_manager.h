@@ -1,5 +1,5 @@
 #pragma once
-//
+#include  "core/math/vector2.h"
 namespace QYHS
 {
 	
@@ -34,6 +34,7 @@ namespace QYHS
 		void processEditorCommand(float delta_time);
 		float m_mouse_x{ 0.0f };
 		float m_mouse_y{ 0.0f };
+		Vector2 m_engine_window_size{ 1280.f,960.f };
 		float m_camera_speed{ 0.01f };
 		unsigned int m_command{ 0 };
 		unsigned int k_complement_control_command = 0xFFFFFFFF;

@@ -16,20 +16,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e1937938-874e-4ea3-9a8e-66e191945d06" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.QyhsEngine/.idea/projectSettingsUpdater.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.QyhsEngine/.idea/projectSettingsUpdater.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.QyhsEngine/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.QyhsEngine/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/asset/objects/environment/fence/fence.object_without_rigidbody.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/engine/shader/compile_shader.bat" beforeDir="false" afterPath="$PROJECT_DIR$/engine/shader/compile_shader.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/source/editor/source/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/editor/source/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/Texture.h" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/Texture.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/passes/main_camera_render_pass.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/passes/main_camera_render_pass.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/passes/main_camera_render_pass.h" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/passes/main_camera_render_pass.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/render_pass.h" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/render_pass.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/source/editor/include/editor_global_context.h" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/editor/include/editor_global_context.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/source/editor/include/editor_input_manager.h" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/editor/include/editor_input_manager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/source/editor/include/editor_scene_manager.h" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/editor/include/editor_scene_manager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/source/editor/source/editor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/editor/source/editor.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/source/editor/source/editor_global_context.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/editor/source/editor_global_context.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/source/editor/source/editor_input_manager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/editor/source/editor_input_manager.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/source/editor/source/editor_scene_manager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/editor/source/editor_scene_manager.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/render_common.h" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/render_common.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/render_pass_base.h" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/render_pass_base.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/render_pipeline.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/render_pipeline.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/render_pipeline.h" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/render_pipeline.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/render_pipeline_base.h" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/render_pipeline_base.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/render_resource.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/render_resource.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/render_resource.h" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/render_resource.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/render_scene.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/render_scene.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/render_structure.h" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/render_structure.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/render_system.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/render_system.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/render_system.h" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/render_system.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/rhi/vulkan/vulkan_rhi.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/rhi/vulkan/vulkan_rhi.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/rhi/vulkan/vulkan_rhi.h" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/rhi/vulkan/vulkan_rhi.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/rhi/vulkan/vulkan_utils.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/rhi/vulkan/vulkan_utils.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,42 +49,41 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/../../VS2022/VC/Tools/MSVC/14.38.33130/include/limits.h" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/passes/main_camera_render_pass.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/passes/main_camera_render_pass.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/passes/main_camera_render_pass.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/passes/main_camera_render_pass.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/passes/main_camera_render_pass.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/engine/3rdparty/VulkanSDK/include/vulkan/vulkan_core.h" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
 }</component>
   <component name="ProjectId" id="2mPSI5GEPVwfFPTogPIpWJcCtLZ" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "C++ Project.QyhsEditor.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;C++ Project.QyhsEditor.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.editor.code.editing&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "rider.external.source.directories": [
-      "C:\\Users\\1\\AppData\\Roaming\\JetBrains\\Rider2023.3\\resharper-host\\DecompilerCache",
-      "C:\\Users\\1\\AppData\\Roaming\\JetBrains\\Rider2023.3\\resharper-host\\SourcesCache",
-      "C:\\Users\\1\\AppData\\Local\\Symbols\\src"
+  &quot;keyToStringList&quot;: {
+    &quot;rider.external.source.directories&quot;: [
+      &quot;C:\\Users\\zzx\\AppData\\Roaming\\JetBrains\\Rider2023.3\\resharper-host\\DecompilerCache&quot;,
+      &quot;C:\\Users\\zzx\\AppData\\Roaming\\JetBrains\\Rider2023.3\\resharper-host\\SourcesCache&quot;,
+      &quot;C:\\Users\\zzx\\AppData\\Local\\Symbols\\src&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="C++ Project.QyhsEditor">
     <configuration name="ALL_BUILD" type="CppProject" factoryName="C++ Project">
       <configuration_1>
@@ -539,6 +547,9 @@
       <workItem from="1726976637685" duration="31000" />
       <workItem from="1728488933920" duration="47000" />
       <workItem from="1728550174247" duration="6635000" />
+      <workItem from="1729412179166" duration="10140000" />
+      <workItem from="1729472006064" duration="11677000" />
+      <workItem from="1729494847068" duration="706000" />
     </task>
     <servers />
   </component>

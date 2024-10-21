@@ -5,6 +5,7 @@ namespace QYHS
 	struct EditorGlobalContextInitInfo
 	{
 		class WindowSystem* window_system;
+		class RenderSystem * render_system;
 	};
 
 	class EditorGlobalContext
@@ -14,6 +15,7 @@ namespace QYHS
 		class WindowSystem* m_window_system{ nullptr };
 		class EditorSceneManager* m_scene_manager{ nullptr };
 		class EditorInputManager* m_input_manager{ nullptr };
+		class RenderSystem * m_render_system{nullptr};
 	};
 
 	extern EditorGlobalContext g_editor_global_context;

@@ -70,6 +70,7 @@ namespace QYHS
 		std::shared_ptr<TextureData> loadTextureHDR(const std::string& material_file,int desired_channels=4);
 		GlobalRenderResource m_global_render_resource;
 		MeshPerFrameStorageBufferObject m_mesh_per_frame_storage_buffer_object;
+		MeshInefficientPickPerFrameStorageBuffer m_mesh_inefficient_pick_perframe_storage_buffer_object;
 		
 	private:
 		std::unordered_map<size_t, VulkanMaterial> m_materials;

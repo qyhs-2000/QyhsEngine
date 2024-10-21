@@ -21,4 +21,16 @@ namespace QYHS
 		Matrix4x4 project_view_matrix;
 		Vector3 camera_position;
 	};
+
+	struct MeshInefficientPickPerFrameStorageBuffer
+	{
+		Matrix4x4 project_view_matrix;
+	};
+
+	struct MeshInefficientPickPerDrawCallStorageBuffer
+	{
+		Matrix4x4 model_matrices[mesh_per_drawcall_max_instance_count];
+		uint32_t node_ids[mesh_per_drawcall_max_instance_count];
+	};
+	
 }

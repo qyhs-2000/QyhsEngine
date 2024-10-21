@@ -42,7 +42,7 @@ struct MeshVertex {
 
 	struct MeshVertexTangent
 	{
-		QYHS::Vector3 tangent;  //ÇÐÏß
+		QYHS::Vector3 tangent;  //åˆ‡çº¿
 	};
 
 	struct MeshVertexUV
@@ -172,16 +172,17 @@ namespace QYHS
 		void updateUniformBuffer();
 		void resetFence();
 		void resetCommandBuffer();
+		void resetCommandPool();
 		void recordCommandBuffer();
 		void submitRender(std::function<void()>);
 		int getMaxFrameInFlight() { return MAX_FRAMES_IN_FLIGHT; }
-		VkDevice getDevice() { return device; }
+		VkDevice getDevice() { return m_device; }
 		VkPhysicalDevice getPhysicalDevice() { return physical_device; }
 		VkFormat getSwapChainImageFormat() { return swapChainImageFormat; }
 		VkSampleCountFlagBits getMSAASamples() { return VK_SAMPLE_COUNT_1_BIT; }
 		VkFormat getDepthImageFormat() { return m_depth_image_format; }
-		VkExtent2D getSwapChainExtent() { return swapChainExtent; }
-		VkCommandBuffer& getCurrentCommandBuffer() { return commandBuffers[m_current_frame_index]; }
+		VkExtent2D getSwapChainExtent() { return m_swapchain_extent; }
+		VkCommandBuffer& getCurrentCommandBuffer() { return m_command_buffers[m_current_frame_index]; }
 		VkBuffer getVertexBuffer() { return vertexBuffer; }
 		VkBuffer getIndexBuffer() { return indexBuffer; }
 		std::vector<uint32_t>& getIndices() { return indices; }
@@ -198,6 +199,7 @@ namespace QYHS
 		}
 		VkViewport &getViewport() { return m_viewport; }
 		void prepareBeforeRender(std::function<void()> update_pass_after_recreate_swap_chain);
+		virtual void prepareContext() override;
 	private:
 		void initVulkan();
 		
@@ -261,11 +263,20 @@ namespace QYHS
 
 	public:
 		VmaAllocator m_assets_allocator;
-	private:
-		VkCommandPool command_pool;
+		VkRect2D m_scissor;
+		
+		VkImage depthImage;
+		VkDeviceMemory depthImageMemory;
+		VkImageView depth_image_view;
+
+		uint8_t* m_p_current_frame_index{ nullptr };
+		VkCommandPool* m_p_command_pools{ nullptr };
+		VkCommandBuffer* m_p_command_buffers{ nullptr };
+		VkCommandBuffer  m_current_command_buffer;
+	public:
 		VkQueue graphics_queue;
 		VkQueue present_queue;
-		VkDevice device;
+		VkDevice m_device;
 		VkInstance instance;
 		VkDebugUtilsMessengerEXT debugMessenger;
 		GLFWwindow* m_window;
@@ -279,7 +290,7 @@ namespace QYHS
 		std::vector<VkImage> swapChainImages;
 		VkFormat swapChainImageFormat;
 		VkFormat m_depth_image_format;
-		VkExtent2D swapChainExtent;
+		VkExtent2D m_swapchain_extent;
 		std::vector<VkImageView> swapChainImageViews;
 		std::vector<VkFramebuffer> swapChainFramebuffers;
 
@@ -288,17 +299,19 @@ namespace QYHS
 		VkPipelineLayout pipelineLayout;
 		VkPipeline graphicsPipeline;
 
-		VkCommandPool commandPool;
+		//base  render command pool
+		VkCommandPool command_pool;
 
-		VkImage depthImage;
-		VkDeviceMemory depthImageMemory;
-		VkImageView depthImageView;
+		//other command pool and command buffer
+		VkCommandPool m_command_pools[MAX_FRAMES_IN_FLIGHT];
+		
+		
 
 		VkImage colorImage;
 		VkDeviceMemory colorImageMemory;
 		VkImageView colorImageView;
 
-
+		QueueFamilyIndices queue_family_indices;
 		VkImage textureImage;
 		VkDeviceMemory textureImageMemory;
 		VkImageView textureImageView;
@@ -318,12 +331,12 @@ namespace QYHS
 		VkDescriptorPool m_descriptor_pool;
 		std::vector<VkDescriptorSet> descriptorSets;
 
-		std::vector<VkCommandBuffer> commandBuffers;
+		std::vector<VkCommandBuffer> m_command_buffers;
 
 		std::vector<VkSemaphore> imageAvailableSemaphores;
 		std::vector<VkSemaphore> renderFinishedSemaphores;
-		std::vector<VkFence> inFlightFences;
-		uint32_t m_current_frame_index = 0;
+		std::vector<VkFence> m_is_frame_in_flight_fences;
+		uint8_t m_current_frame_index = 0;
 
 		bool framebufferResized = false;
 		uint32_t mip_levels;

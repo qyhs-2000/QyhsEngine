@@ -42,5 +42,6 @@ namespace QYHS
 		Matrix4x4 model_matrix;
 		VulkanMesh* p_mesh;
 		VulkanMaterial* p_material;
+		uint32_t node_id;
 	};
 }

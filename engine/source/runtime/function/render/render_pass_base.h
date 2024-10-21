@@ -15,6 +15,7 @@ namespace QYHS
 	class RenderPassBase
 	{
 	public:
+		virtual ~RenderPassBase() = default;
 		virtual void initialize() = 0;
 		virtual void prepareData(std::shared_ptr<RenderResourceBase> resource) {}
 		virtual void setCommonInfo(RenderPassCommonInfo common_info);

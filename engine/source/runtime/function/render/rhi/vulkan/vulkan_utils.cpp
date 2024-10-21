@@ -402,7 +402,12 @@ namespace QYHS
 
 
 
-	void VulkanUtils::createImage(VkPhysicalDevice physical_device, VkDevice device, uint32_t width, uint32_t height, VkFormat format, uint32_t mip_levels, VkSampleCountFlagBits num_samples, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory) {
+	void VulkanUtils::createImage(VkPhysicalDevice physical_device,
+		VkDevice device, uint32_t width, uint32_t height, VkFormat format,
+		uint32_t mip_levels, VkSampleCountFlagBits num_samples, VkImageTiling tiling,
+		VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image,
+		VkDeviceMemory& imageMemory) {
+
 		VkImageCreateInfo imageInfo{};
 		imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
 		imageInfo.imageType = VK_IMAGE_TYPE_2D;

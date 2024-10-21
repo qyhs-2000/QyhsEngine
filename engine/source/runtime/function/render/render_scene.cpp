@@ -18,7 +18,7 @@ namespace QYHS
 				node.p_material = &material;
 				VulkanMesh& mesh = render_resource->getEntityMesh(entity);
 				node.p_mesh = &mesh;
-				
+				node.node_id = entity.m_instance_id;
 			}
 		}
 	}
