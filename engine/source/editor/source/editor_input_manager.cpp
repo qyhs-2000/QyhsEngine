@@ -127,7 +127,7 @@ namespace QYHS
 	{
 
 		static bool cursor_disable = false;
-		if(button == GLFW_MOUSE_BUTTON_LEFT)
+		if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 		{
 			Vector2 picked_uv = Vector2(m_mouse_x / m_engine_window_size.x, m_mouse_y / m_engine_window_size.y);
 			size_t select_mesh_id = g_editor_global_context.m_scene_manager->getMeshIDByPickedUV(picked_uv);

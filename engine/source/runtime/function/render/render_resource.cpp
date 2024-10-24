@@ -454,7 +454,7 @@ namespace QYHS
 	{
 
 		updateVertexBuffer(rhi, vertex_buffer_size, vertex_buffer, mesh);
-		mesh.indices_count = index_buffer_size/sizeof(uint16_t);
+		mesh.index_count = index_buffer_size/sizeof(uint16_t);
 		updateIndexBuffer(rhi, index_buffer_size, index_buffer, mesh);
 	}
 	void RenderResource::updateVertexBuffer(std::shared_ptr<RHI> rhi, uint32_t vertex_buffer_size, MeshVertexDataDefinition const* vertex_buffer, VulkanMesh& mesh)

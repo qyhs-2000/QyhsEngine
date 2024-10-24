@@ -1,14 +1,14 @@
 #include "render_system.h"
 #include <function/render/render_pass.h>
 #include "function/global/global_context.h"
-#include <stack>
 #include "render_type.h"
 #include "passes/main_camera_render_pass.h"
 #include "function/framework/component/motor/motor_component.h"
-#include "function/global/global_context.h"
+
 #include "resource/config_manager/config_manager.h"
 #include "resource/asset_manager/asset_manager.h"
 #include "resource/type/global_rendering_resource.h"
+#include "render_camera.h"
 namespace QYHS
 {
 
@@ -114,7 +114,7 @@ namespace QYHS
 
 	size_t RenderSystem::getGObjectIDByMeshID(size_t mesh_id)
 	{
-		return  0;
+		return  m_render_scene->getGameObjectIDByInstance(mesh_id);
 	}
 
 	void RenderSystem::initialize()
@@ -167,5 +167,34 @@ namespace QYHS
 	{
 		return  m_render_pipeline->getGUIDOfPickedMesh(picked_uv);
 	}
+	
+	void RenderSystem::setVisibleAxis(std::optional<RenderEntity> axis)
+	{
+		if (axis.has_value())
+		{
+			m_render_scene->setVisibleAxisEntity(axis);
+			static_cast<RenderPipeline*>(m_render_pipeline.get())->setVisibleAxis(true);
+		}
+		else
+		{
+			static_cast<RenderPipeline*>(m_render_pipeline.get())->setVisibleAxis(false);
+		}
+	}
+
+	RenderGUIDAllocator<MeshSourceDesc>& RenderSystem::getMeshAssetIDAllocator()
+	{
+		return m_render_scene->getMeshAssetIdAllocator();
+	}
+
+	RenderGUIDAllocator<GameObjectPartId>& RenderSystem::getInstanceIDAllocator()
+	{
+		return m_render_scene->getInstanceIdAllocator();
+	}
+
+	void RenderSystem::uploadGameResource(RenderEntity* entity, RenderMeshData mesh_data)
+	{
+		m_render_resource->uploadGameObjectRenderResource(m_rhi,*entity,mesh_data);
+	}
+
 	
 }

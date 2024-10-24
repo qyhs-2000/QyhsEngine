@@ -44,3 +44,9 @@ void QYHS::RenderPipeline::updatePassAfterRecreatePipeline()
 	MainCameraRenderPass* main_camera_pass = static_cast<MainCameraRenderPass*>(m_main_camera_pass.get());
 	main_camera_pass->updateAfterRecreateSwapChain();
 }
+
+void QYHS::RenderPipeline::setVisibleAxis(bool state)
+{
+	MainCameraRenderPass* main_camera_pass = static_cast<MainCameraRenderPass*>(m_main_camera_pass.get());
+	main_camera_pass->setVisibleAxis(state);
+}

@@ -499,7 +499,7 @@ namespace  QYHS
 
 					uint32_t dynamic_offset[2] = { perframe_dynamic_offset,perdrawcall_dynamic_offset };
 					vkCmdBindDescriptorSets(m_vulkan_rhi->m_command_buffers[m_vulkan_rhi->m_current_frame_index], VK_PIPELINE_BIND_POINT_GRAPHICS, m_render_pipelines[0].pipeline_layout, 0, 1, &m_descriptors[0].descriptor_set, (sizeof(dynamic_offset) / sizeof(dynamic_offset[0])), dynamic_offset);
-					vkCmdDrawIndexed(m_vulkan_rhi->m_command_buffers[m_vulkan_rhi->m_current_frame_index], mesh.indices_count, current_draw_call_count, 0, 0, 0);
+					vkCmdDrawIndexed(m_vulkan_rhi->m_command_buffers[m_vulkan_rhi->m_current_frame_index], mesh.index_count, current_draw_call_count, 0, 0, 0);
 				}
 
 			}
@@ -595,7 +595,7 @@ namespace  QYHS
 		uint32_t* data = nullptr;
 		vkMapMemory(m_vulkan_rhi->m_device, inefficient_staging_buffer_memory, 0, buffer_size, 0, (void**)&data);
 
-#if 1
+#if 0
 		auto                 w = m_vulkan_rhi->m_swapchain_extent.width;
 		auto                 h = m_vulkan_rhi->m_swapchain_extent.height;
 		std::vector<uint8_t> image_data(w * h * 4);

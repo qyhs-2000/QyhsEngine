@@ -33,6 +33,7 @@
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/game_object_desc.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/model.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/passes/main_camera_render_pass.h"
+#include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/passes/pick_render_pass.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_camera.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_common.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_entity.h"
@@ -65,6 +66,7 @@
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/level_resource.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/world_resource.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/editor/include/editor.h"
+#include "E:/VS_Project/QyhsEngine/engine/source/editor/include/editor_axis.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/editor/include/editor_global_context.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/editor/include/editor_input_manager.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/editor/include/editor_scene_manager.h

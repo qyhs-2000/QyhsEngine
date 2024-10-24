@@ -12,6 +12,7 @@ namespace QYHS
 		bool load(const std::string & level_url);
 		void createGameObject(ObjectInstanceResource& instance);
 		std::unordered_map<GameObjectID, std::shared_ptr<GameObject>>& getObjectsInLevel();
+		std::weak_ptr<GameObject> getGameObjectByID(size_t gobject_id);
 	private:
 		std::unordered_map<GameObjectID, std::shared_ptr<GameObject>>		m_game_objects;
 		GameObjectIdAllocator	m_go_id_allocator;

@@ -225,7 +225,27 @@ namespace QYHS
 		setupSwapChainFrameBuffers();
 	}
 
-	
+	void MainCameraRenderPass::setVisibleAxis(bool state)
+	{
+		m_axis_show = state;
+	}
+
+	void MainCameraRenderPass::drawAxis()
+	{
+		if (!m_axis_show) return;
+
+
+		//vkCmdBindDescriptorSets(m_vulkan_rhi->getCurrentCommandBuffer(),VK_PIPELINE_BIND_POINT_GRAPHICS,m_render_pipelines[AXIS])
+		
+		VkBuffer vertex_buffers[] = { m_visible_render_meshes.p_axis_node->p_mesh->mesh_vertex_position_buffer,
+		m_visible_render_meshes.p_axis_node->p_mesh->mesh_vertex_normal_buffer,
+		m_visible_render_meshes.p_axis_node->p_mesh->mesh_vertex_tangent_buffer,
+		m_visible_render_meshes.p_axis_node->p_mesh->mesh_vertex_uv_buffer };
+		VkDeviceSize offsets[] = { 0,0,0,0 };
+		vkCmdBindVertexBuffers(m_vulkan_rhi->getCurrentCommandBuffer(), 0, (sizeof(vertex_buffers) / sizeof(vertex_buffers[0])), vertex_buffers, offsets);
+		vkCmdBindIndexBuffer(m_vulkan_rhi->getCurrentCommandBuffer(), m_visible_render_meshes.p_axis_node->p_mesh->mesh_vertex_index_buffer, 0, VK_INDEX_TYPE_UINT16);
+		vkCmdDrawIndexed(m_vulkan_rhi->getCurrentCommandBuffer(), m_visible_render_meshes.p_axis_node->p_mesh->index_count, 1, 0, 0, 0);
+	}
 
 	void MainCameraRenderPass::prepareData(std::shared_ptr<RenderResourceBase> resource)
 	{
@@ -907,7 +927,7 @@ namespace QYHS
 								0, 1, &m_descriptors[global_mesh].descriptor_set, 2, dynamic_offsets);
 							VkBuffer vertexBuffers[4] = { mesh.mesh_vertex_position_buffer,mesh.mesh_vertex_normal_buffer,mesh.mesh_vertex_tangent_buffer,mesh.mesh_vertex_uv_buffer  };
 							VkBuffer indices_buffer = mesh.mesh_vertex_index_buffer;
-							size_t indices_count = mesh.indices_count;
+							size_t indices_count = mesh.index_count;
 							VkDeviceSize offsets[] = { 0,0,0,0 };
 
 							vkCmdBindVertexBuffers(m_vulkan_rhi->getCurrentCommandBuffer(), 0, (sizeof(vertexBuffers)/sizeof(vertexBuffers[0])), vertexBuffers, offsets);

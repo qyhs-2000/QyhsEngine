@@ -52,4 +52,13 @@ namespace QYHS
 	{
 		return m_game_objects;
 	}
+
+	std::weak_ptr<GameObject> Level::getGameObjectByID(size_t gobject_id)
+	{
+		if (m_game_objects.find(gobject_id) != m_game_objects.end())
+		{
+			return m_game_objects[gobject_id];
+		}
+		return std::weak_ptr<GameObject>();
+	}
 }

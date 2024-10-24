@@ -34,7 +34,7 @@ namespace QYHS
 		VkBuffer mesh_vertex_index_buffer;
 		VkDeviceMemory mesh_vertex_index_buffer_memory;
 
-		size_t indices_count;
+		size_t index_count;
 	};
 
 	struct RenderMeshNode

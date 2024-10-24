@@ -11,6 +11,7 @@ namespace QYHS
 		virtual void render(std::shared_ptr<RenderResourceBase> render_resource);
 		virtual uint32_t getGUIDOfPickedMesh(const Vector2 & picked_uv) override final;
 		void updatePassAfterRecreatePipeline();
+		void setVisibleAxis(bool state);
 	private:
 	};
 }

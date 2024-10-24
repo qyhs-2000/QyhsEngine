@@ -38,4 +38,18 @@ namespace QYHS
         m_mat[3][2] = 0;
         m_mat[3][3] = 1;
     }
+
+    void Matrix4x4::decomposition(Vector3& position, Vector3& scale, Quaternion& orientation) const
+    {
+        Matrix3x3 matrix3x3;
+        extract3x3Matrix(matrix3x3);
+
+        Matrix3x3 mat_q;
+        Vector3 vec_u;
+        matrix3x3.calculateQDUDecomposition(mat_q,scale,vec_u);
+
+        orientation = Quaternion(mat_q);
+        position = Vector3(m_mat[0][3],m_mat[1][3],m_mat[2][3]);
+    }
+
 }

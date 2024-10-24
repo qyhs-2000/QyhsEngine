@@ -2,12 +2,12 @@
 #include "function/render/render_pipeline.h"
 #include <function/render/render_swap_context.h>
 #include <function/render/render_scene.h>
-#include <function/render/render_guid_allocator.h>
+
 #include "render_camera.h"
 namespace QYHS
 {
 	
-
+	class RenderCamera;
 	class RenderSystem
 	{
 	public:
@@ -22,6 +22,10 @@ namespace QYHS
 		RenderSwapContext& getSwapContext() { return m_swap_context; }
 		std::shared_ptr<RenderCamera> getRenderCamera() { return m_render_camera; }
 		uint32_t getMeshIDByPickedUV(Vector2 picked_uv);
+		void setVisibleAxis(std::optional<RenderEntity> axis);
+		RenderGUIDAllocator<MeshSourceDesc> & getMeshAssetIDAllocator();
+		RenderGUIDAllocator<GameObjectPartId> & getInstanceIDAllocator();
+		void uploadGameResource(RenderEntity * entity,RenderMeshData mesh_data);
 	private:
 		std::shared_ptr<RenderCamera>			m_render_camera;
 		std::shared_ptr<RHI> m_rhi;

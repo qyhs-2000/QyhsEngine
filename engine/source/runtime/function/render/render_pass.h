@@ -47,6 +47,7 @@ namespace QYHS
 		struct VisibleRenderNode
 		{
 			std::vector<RenderMeshNode>* p_main_camera_pass_visible_mesh_nodes{ nullptr };
+			RenderMeshNode* p_axis_node;
 		};
 
 		struct FrameBuffer

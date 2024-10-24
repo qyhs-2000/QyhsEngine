@@ -6,6 +6,7 @@
 #include <editor/include/editor_input_manager.h>
 #include <editor/include/editor_scene_manager.h>
 #include <function/render/window_system.h>
+#include "function/render/render_camera.h"
 #include <filesystem>
 #include <fstream>
 #include <ostream>
