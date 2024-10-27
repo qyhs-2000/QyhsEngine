@@ -4,7 +4,10 @@
 #include "render_resource_base.h"
 namespace QYHS
 {
-	
+	struct RenderPassInitInfo
+	{
+
+	};
 
 	struct RenderPassCommonInfo
 	{
@@ -16,7 +19,7 @@ namespace QYHS
 	{
 	public:
 		virtual ~RenderPassBase() = default;
-		virtual void initialize() = 0;
+		virtual void initialize(RenderPassInitInfo * info) = 0;
 		virtual void prepareData(std::shared_ptr<RenderResourceBase> resource) {}
 		virtual void setCommonInfo(RenderPassCommonInfo common_info);
 	protected:

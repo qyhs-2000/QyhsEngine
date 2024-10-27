@@ -12,7 +12,7 @@ namespace QYHS
 	{
 		enum class EditorAxisType
 		{
-			Translate,
+			Translate = 0,
 			Rotate,
 			Scale
 		};

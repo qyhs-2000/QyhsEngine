@@ -23,6 +23,7 @@ namespace QYHS
 		std::shared_ptr<RHI> m_rhi;
 		std::shared_ptr< RenderPassBase> m_main_camera_pass;
 		std::shared_ptr<RenderPassBase>  m_pick_pass;
+		std::shared_ptr<RenderPassBase>  m_combine_ui_pass;
 	private:
 
 	};

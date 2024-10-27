@@ -4,10 +4,15 @@
 
 namespace  QYHS
 {
+    struct PickPassInitInfo:public RenderPassInitInfo
+    {
+
+    };
+
     class PickRenderPass:public RenderPass
     {
     public:
-        virtual void initialize() override;
+        virtual void initialize(RenderPassInitInfo * info) override;
         void setupAttachments();
         void setupRenderPass();
         void setupDescriptorSetLayout();

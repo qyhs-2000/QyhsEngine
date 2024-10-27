@@ -4,13 +4,13 @@
 #include <function/render/render_common.h>
 #include <function/render/render_helper.h>
 #include <cassert>
-#include <iostream>
+
 #include <stdexcept>
 namespace QYHS
 {
-	void MainCameraRenderPass::initialize()
+	void MainCameraRenderPass::initialize(RenderPassInitInfo * info)
 	{
-		RenderPass::initialize();
+		RenderPass::initialize(info);
 		setupSkyboxCubeBuffer();
 		setupAttachments();
 		setupRenderPass();
@@ -29,21 +29,23 @@ namespace QYHS
 		//set format of attachments
 		m_framebuffer.attachments[main_camera_pass_base_color_attachment].format = m_vulkan_rhi->getSwapChainImageFormat();
 		m_framebuffer.attachments[main_camera_pass_depth_attachment].format = m_vulkan_rhi->getDepthImageFormat();
+		m_framebuffer.attachments[main_camera_pass_backup_odd_color_attachment].format = m_vulkan_rhi->getSwapChainImageFormat();
+		m_framebuffer.attachments[main_camera_pass_backup_even_color_attachment].format = m_vulkan_rhi->getSwapChainImageFormat();
 		//m_framebuffer.attachments[main_camera_pass_skybox_attachment].format = m_vulkan_rhi->getSwapChainImageFormat();
 
 		for (size_t i = 0; i < main_camera_pass_attachment_count; ++i)
 		{
-			if (i == main_camera_pass_base_color_attachment)
+			if (i == main_camera_pass_base_color_attachment || i == main_camera_pass_backup_odd_color_attachment || i == main_camera_pass_backup_even_color_attachment)
 			{
 				VulkanUtils::createImage(m_vulkan_rhi->getPhysicalDevice(), m_vulkan_rhi->getDevice(), extent.width, extent.height,
-					m_framebuffer.attachments[main_camera_pass_base_color_attachment].format,
+					m_framebuffer.attachments[i].format,
 					1, m_vulkan_rhi->getMSAASamples(), VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT,
-					VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_framebuffer.attachments[main_camera_pass_base_color_attachment].image,
-					m_framebuffer.attachments[main_camera_pass_base_color_attachment].memory);
-				m_framebuffer.attachments[main_camera_pass_base_color_attachment].image_view
+					VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_framebuffer.attachments[i].image,
+					m_framebuffer.attachments[i].memory);
+				m_framebuffer.attachments[i].image_view
 					= VulkanUtils::createImageView(m_vulkan_rhi->getDevice(),
-						m_framebuffer.attachments[main_camera_pass_base_color_attachment].image,
-						m_framebuffer.attachments[main_camera_pass_base_color_attachment].format,VK_IMAGE_VIEW_TYPE_2D,1,
+						m_framebuffer.attachments[i].image,
+						m_framebuffer.attachments[i].format,VK_IMAGE_VIEW_TYPE_2D,1,
 						1, VK_IMAGE_ASPECT_COLOR_BIT);
 
 			}
@@ -60,19 +62,7 @@ namespace QYHS
 						1, VK_IMAGE_ASPECT_DEPTH_BIT);
 
 			}
-			/*else if (i == main_camera_pass_skybox_attachment)
-			{
-				VulkanUtils::createImage(m_vulkan_rhi->getPhysicalDevice(), m_vulkan_rhi->getDevice(), extent.width, extent.height,
-					m_framebuffer.attachments[main_camera_pass_skybox_attachment].format,
-					1, m_vulkan_rhi->getMSAASamples(), VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT,
-					VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_framebuffer.attachments[main_camera_pass_skybox_attachment].image,
-					m_framebuffer.attachments[main_camera_pass_skybox_attachment].memory);
-				m_framebuffer.attachments[main_camera_pass_skybox_attachment].image_view
-					= VulkanUtils::createImageView(m_vulkan_rhi->getDevice(),
-						m_framebuffer.attachments[main_camera_pass_skybox_attachment].image,
-						m_framebuffer.attachments[main_camera_pass_skybox_attachment].format,VK_IMAGE_VIEW_TYPE_2D,1,
-						1, VK_IMAGE_ASPECT_COLOR_BIT);
-			}*/
+			
 		}
 	}
 
@@ -121,6 +111,59 @@ namespace QYHS
 		descriptorWrites[1].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC;
 		descriptorWrites[1].descriptorCount = 1;
 		descriptorWrites[1].pBufferInfo = &mesh_perdrawcall_storage_buffer;
+
+		vkUpdateDescriptorSets(m_vulkan_rhi->getDevice(), static_cast<uint32_t>(sizeof(descriptorWrites) / sizeof(descriptorWrites[0])), descriptorWrites, 0, nullptr);
+	}
+
+	void MainCameraRenderPass::setAxisDescriptorSet()
+	{
+		VkDescriptorSetAllocateInfo allocInfo{};
+		allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+		allocInfo.descriptorPool = m_vulkan_rhi->getDescriptorPool();
+		allocInfo.descriptorSetCount = 1;
+		allocInfo.pSetLayouts = &m_descriptors[axis].descriptor_set_layout;
+
+		if (vkAllocateDescriptorSets(m_vulkan_rhi->getDevice(), &allocInfo, &m_descriptors[axis].descriptor_set) != VK_SUCCESS) {
+			throw std::runtime_error("failed to allocate descriptor sets!");
+		}
+
+
+		VkDescriptorBufferInfo mesh_perframe_storage_buffer = {};
+		mesh_perframe_storage_buffer.offset = 0;
+		mesh_perframe_storage_buffer.buffer = m_global_render_resource->storage_buffer.global_ringbuffer;
+		mesh_perframe_storage_buffer.range = sizeof(MeshPerFrameStorageBufferObject);
+		assert(mesh_perframe_storage_buffer.range < m_global_render_resource->storage_buffer.max_storage_buffer_size);
+
+		VkDescriptorBufferInfo axis_storage_buffer = {};
+		axis_storage_buffer.offset = 0;
+		axis_storage_buffer.buffer = m_global_render_resource->storage_buffer.axis_storage_buffer;
+		axis_storage_buffer.range = sizeof(AxisStorageBufferObject);
+
+		VkDescriptorImageInfo backup_color_attachment = {};
+		backup_color_attachment.imageView = m_framebuffer.attachments[main_camera_pass_backup_odd_color_attachment].image_view;
+		backup_color_attachment.sampler = VulkanUtils::getOrCreateNearestSampler(m_vulkan_rhi->getPhysicalDevice(), m_vulkan_rhi->getDevice());
+		backup_color_attachment.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		
+		VkWriteDescriptorSet descriptorWrites[2];
+
+		descriptorWrites[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+		descriptorWrites[0].pNext = NULL;
+		descriptorWrites[0].dstSet = m_descriptors[axis].descriptor_set;
+		descriptorWrites[0].dstBinding = 0;
+		descriptorWrites[0].dstArrayElement = 0;
+		descriptorWrites[0].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC;
+		descriptorWrites[0].descriptorCount = 1;
+		descriptorWrites[0].pBufferInfo = &mesh_perframe_storage_buffer;
+
+		descriptorWrites[1].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+		descriptorWrites[1].pNext = NULL;
+		descriptorWrites[1].dstSet = m_descriptors[axis].descriptor_set;
+		descriptorWrites[1].dstBinding = 1;
+		descriptorWrites[1].dstArrayElement = 0;
+		descriptorWrites[1].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+		descriptorWrites[1].descriptorCount = 1;
+		descriptorWrites[1].pBufferInfo = &axis_storage_buffer;
+
 
 		vkUpdateDescriptorSets(m_vulkan_rhi->getDevice(), static_cast<uint32_t>(sizeof(descriptorWrites) / sizeof(descriptorWrites[0])), descriptorWrites, 0, nullptr);
 	}
@@ -233,9 +276,20 @@ namespace QYHS
 	void MainCameraRenderPass::drawAxis()
 	{
 		if (!m_axis_show) return;
+		uint32_t current_frame_index = m_vulkan_rhi->getCurrentFrameIndex();
+		uint32_t perframe_storage_buffer_offset = roundUp(m_global_render_resource->storage_buffer.ringbuffer_end[current_frame_index],m_global_render_resource->storage_buffer.min_storage_buffer_offset_alignment);
+		m_global_render_resource->storage_buffer.ringbuffer_end[current_frame_index] = perframe_storage_buffer_offset + sizeof(MeshPerFrameStorageBufferObject);
+		assert(m_global_render_resource->storage_buffer.ringbuffer_end[current_frame_index] <= m_global_render_resource->storage_buffer.ringbuffer_begin[current_frame_index] + m_global_render_resource->storage_buffer.ringbuffer_size[current_frame_index]);
+		(*reinterpret_cast<MeshPerFrameStorageBufferObject*>(reinterpret_cast<uintptr_t>(m_global_render_resource->storage_buffer.global_ringbuffer_memory_pointer) + perframe_storage_buffer_offset)) = m_mesh_perframe_storage_buffer_object;
 
+		m_axis_storage_buffer_object.model_matrix = m_visible_render_meshes.p_axis_node->model_matrix;
+		m_axis_storage_buffer_object.selected_axis = m_selected_axis;
+		
+		(*reinterpret_cast<AxisStorageBufferObject*>(reinterpret_cast<uintptr_t>(m_global_render_resource->storage_buffer.axis_storage_buffer_memory_pointer))) = m_axis_storage_buffer_object;
 
-		//vkCmdBindDescriptorSets(m_vulkan_rhi->getCurrentCommandBuffer(),VK_PIPELINE_BIND_POINT_GRAPHICS,m_render_pipelines[AXIS])
+		uint32_t dynamic_offsets[1] = {perframe_storage_buffer_offset};
+		vkCmdBindPipeline(m_vulkan_rhi->getCurrentCommandBuffer(),VK_PIPELINE_BIND_POINT_GRAPHICS,m_render_pipelines[render_pipeline_type_axis].pipeline);
+		vkCmdBindDescriptorSets(m_vulkan_rhi->getCurrentCommandBuffer(),VK_PIPELINE_BIND_POINT_GRAPHICS,m_render_pipelines[render_pipeline_type_axis].pipeline_layout,0,1,&m_descriptors[axis].descriptor_set,(sizeof(dynamic_offsets)/sizeof(dynamic_offsets[0])),dynamic_offsets);
 		
 		VkBuffer vertex_buffers[] = { m_visible_render_meshes.p_axis_node->p_mesh->mesh_vertex_position_buffer,
 		m_visible_render_meshes.p_axis_node->p_mesh->mesh_vertex_normal_buffer,
@@ -291,6 +345,26 @@ namespace QYHS
 		//skybox_attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 		//skybox_attachment.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
+		VkAttachmentDescription& backup_odd_color_attachment = attachments[main_camera_pass_backup_odd_color_attachment];
+		backup_odd_color_attachment.format = m_vulkan_rhi->getSwapChainImageFormat();
+		backup_odd_color_attachment.samples = m_vulkan_rhi->getMSAASamples();
+		backup_odd_color_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+		backup_odd_color_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+		backup_odd_color_attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+		backup_odd_color_attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+		backup_odd_color_attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+		backup_odd_color_attachment.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+
+		VkAttachmentDescription& backup_even_color_attachment = attachments[main_camera_pass_backup_even_color_attachment];
+		backup_even_color_attachment.format = m_vulkan_rhi->getSwapChainImageFormat();
+		backup_even_color_attachment.samples = m_vulkan_rhi->getMSAASamples();
+		backup_even_color_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+		backup_even_color_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+		backup_even_color_attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+		backup_even_color_attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+		backup_even_color_attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+		backup_even_color_attachment.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+
 		VkAttachmentDescription& swap_chain_attachment = attachments[main_camera_pass_swap_chain_image_attachment];
 		swap_chain_attachment.format = m_vulkan_rhi->getSwapChainImageFormat();
 		swap_chain_attachment.samples = VK_SAMPLE_COUNT_1_BIT;
@@ -309,9 +383,9 @@ namespace QYHS
 		depth_attachment_ref.attachment = &depth_attachment - attachments;
 		depth_attachment_ref.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
-		VkAttachmentReference swap_chain_attachment_ref{};
-		swap_chain_attachment_ref.attachment = &swap_chain_attachment - attachments;
-		swap_chain_attachment_ref.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+		VkAttachmentReference skybox_color_attachment_reference{};
+		skybox_color_attachment_reference.attachment = &backup_odd_color_attachment - attachments;
+		skybox_color_attachment_reference.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 		VkSubpassDescription subpass[main_camera_subpass_count] = {};
 
 		//base subpass
@@ -345,12 +419,37 @@ namespace QYHS
 		main_camera_skybox_subpass.inputAttachmentCount = (sizeof(skybox_input_attachment_references)/sizeof(skybox_input_attachment_references[0]));
 		main_camera_skybox_subpass.pInputAttachments = skybox_input_attachment_references;
 		main_camera_skybox_subpass.colorAttachmentCount = 1;
-		main_camera_skybox_subpass.pColorAttachments = &swap_chain_attachment_ref;
+		main_camera_skybox_subpass.pColorAttachments = &skybox_color_attachment_reference;
 
-		/*VkAttachmentReference msaa_input_attachment_ref{};
-		msaa_input_attachment_ref.attachment = &skybox_attachment - attachments;
-		msaa_input_attachment_ref.layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;*/
 
+		VkAttachmentReference ui_subpass_color_attachment_reference;
+		ui_subpass_color_attachment_reference.attachment = &backup_even_color_attachment - attachments;
+		ui_subpass_color_attachment_reference.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+		//ui subpass
+		VkSubpassDescription & main_camera_axis_subpass = subpass[main_camera_subpass_ui];
+		main_camera_axis_subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+		main_camera_axis_subpass.inputAttachmentCount = 0;
+		main_camera_axis_subpass.pInputAttachments = nullptr;
+		main_camera_axis_subpass.colorAttachmentCount = 1;
+		main_camera_axis_subpass.pColorAttachments = &ui_subpass_color_attachment_reference;
+
+		VkAttachmentReference combine_ui_subpass_input_attachments[2];
+		combine_ui_subpass_input_attachments[0].attachment = &backup_odd_color_attachment - attachments;
+		combine_ui_subpass_input_attachments[0].layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		combine_ui_subpass_input_attachments[1].attachment = &backup_even_color_attachment - attachments;
+		combine_ui_subpass_input_attachments[1].layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+
+		VkAttachmentReference swap_chain_attachment_reference;
+		swap_chain_attachment_reference.attachment = &swap_chain_attachment - attachments;
+		swap_chain_attachment_reference.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+		//combine ui
+		VkSubpassDescription& main_camera_combine_ui_subpass = subpass[main_camera_subpass_combine_ui];
+		main_camera_combine_ui_subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+		main_camera_combine_ui_subpass.inputAttachmentCount = sizeof(combine_ui_subpass_input_attachments) / sizeof(combine_ui_subpass_input_attachments[0]);
+		main_camera_combine_ui_subpass.pInputAttachments = combine_ui_subpass_input_attachments;
+		main_camera_combine_ui_subpass.colorAttachmentCount = 1;
+		main_camera_combine_ui_subpass.pColorAttachments = &swap_chain_attachment_reference;
 		
 
 		VkSubpassDependency dependency[main_camera_subpass_dependency_count] = {};
@@ -370,6 +469,24 @@ namespace QYHS
 		skybox_pass_depend_on_base_pass.srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
 		skybox_pass_depend_on_base_pass.dstAccessMask = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
 		skybox_pass_depend_on_base_pass.dependencyFlags = 0;
+
+		VkSubpassDependency& ui_pass_depend_on_skybox_pass = dependency[main_camera_subpass_dependency_ui];
+		ui_pass_depend_on_skybox_pass.srcSubpass = main_camera_subpass_skybox;
+		ui_pass_depend_on_skybox_pass.dstSubpass = main_camera_subpass_ui;
+		ui_pass_depend_on_skybox_pass.srcStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+		ui_pass_depend_on_skybox_pass.dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+		ui_pass_depend_on_skybox_pass.srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+		ui_pass_depend_on_skybox_pass.dstAccessMask = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
+		ui_pass_depend_on_skybox_pass.dependencyFlags = 0;
+
+		VkSubpassDependency& combine_ui_pass_depend_on_ui_pass = dependency[main_camera_subpass_dependency_combine_ui];
+		combine_ui_pass_depend_on_ui_pass.srcSubpass = main_camera_subpass_ui;
+		combine_ui_pass_depend_on_ui_pass.dstSubpass = main_camera_subpass_combine_ui;
+		combine_ui_pass_depend_on_ui_pass.srcStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+		combine_ui_pass_depend_on_ui_pass.dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+		combine_ui_pass_depend_on_ui_pass.srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+		combine_ui_pass_depend_on_ui_pass.dstAccessMask = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
+		combine_ui_pass_depend_on_ui_pass.dependencyFlags = 0;
 
 
 		VkRenderPassCreateInfo renderPassInfo{};
@@ -498,7 +615,63 @@ namespace QYHS
 				throw std::runtime_error("failed to create skybox layout");
 			}
 		}
+		//ui pass descriptor set layout
+		{
+			VkDescriptorSetLayoutBinding axis_descriptor_set_layout_bindings[2];
+			VkDescriptorSetLayoutBinding & perframe_storage_buffer_binding = axis_descriptor_set_layout_bindings[0];
+			perframe_storage_buffer_binding.binding = 0;
+			perframe_storage_buffer_binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC;
+			perframe_storage_buffer_binding.descriptorCount = 1;
+			perframe_storage_buffer_binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+			perframe_storage_buffer_binding.pImmutableSamplers = nullptr;
 
+			VkDescriptorSetLayoutBinding & axis_storage_buffer_binding = axis_descriptor_set_layout_bindings[1];
+			axis_storage_buffer_binding.binding = 1;
+			axis_storage_buffer_binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+			axis_storage_buffer_binding.descriptorCount = 1;
+			axis_storage_buffer_binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+			axis_storage_buffer_binding.pImmutableSamplers = nullptr;
+			
+			VkDescriptorSetLayoutCreateInfo layout_create_info{};
+			layout_create_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+			layout_create_info.bindingCount = sizeof(axis_descriptor_set_layout_bindings) / sizeof(axis_descriptor_set_layout_bindings[0]);
+			layout_create_info.pBindings = axis_descriptor_set_layout_bindings;
+			layout_create_info.pNext = nullptr;
+			
+			if(vkCreateDescriptorSetLayout(m_vulkan_rhi->m_device,&layout_create_info,nullptr,&m_descriptors[axis].descriptor_set_layout)!=VK_SUCCESS)
+			{
+				throw std::runtime_error("failed tot create descriptor set layout");
+			}
+		}
+
+		//combine ui pass descriptor set layout
+		{
+			VkDescriptorSetLayoutBinding axis_descriptor_set_layout_bindings[2];
+			VkDescriptorSetLayoutBinding & perframe_storage_buffer_binding = axis_descriptor_set_layout_bindings[0];
+			perframe_storage_buffer_binding.binding = 0;
+			perframe_storage_buffer_binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC;
+			perframe_storage_buffer_binding.descriptorCount = 1;
+			perframe_storage_buffer_binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+			perframe_storage_buffer_binding.pImmutableSamplers = nullptr;
+
+			VkDescriptorSetLayoutBinding & axis_storage_buffer_binding = axis_descriptor_set_layout_bindings[1];
+			axis_storage_buffer_binding.binding = 1;
+			axis_storage_buffer_binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+			axis_storage_buffer_binding.descriptorCount = 1;
+			axis_storage_buffer_binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+			axis_storage_buffer_binding.pImmutableSamplers = nullptr;
+
+			VkDescriptorSetLayoutCreateInfo layout_create_info{};
+			layout_create_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+			layout_create_info.bindingCount = sizeof(axis_descriptor_set_layout_bindings) / sizeof(axis_descriptor_set_layout_bindings[0]);
+			layout_create_info.pBindings = axis_descriptor_set_layout_bindings;
+			layout_create_info.pNext = nullptr;
+
+			if(vkCreateDescriptorSetLayout(m_vulkan_rhi->m_device,&layout_create_info,nullptr,&m_descriptors[axis].descriptor_set_layout)!=VK_SUCCESS)
+			{
+				throw std::runtime_error("failed tot create descriptor set layout");
+			}
+		}
 	}
 
 	void MainCameraRenderPass::setupRenderPipelines()
@@ -770,6 +943,136 @@ namespace QYHS
 			vkDestroyShaderModule(m_vulkan_rhi->getDevice(), vertex_shader_module, nullptr);
 			vkDestroyShaderModule(m_vulkan_rhi->getDevice(), fragment_shader_module, nullptr);
 		}
+
+		//axis pipeline
+		{
+			VkDescriptorSetLayout  descriptorSetLayout[1] = { m_descriptors[axis].descriptor_set_layout };
+			VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
+			pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+			uint32_t descriptorset_layout_count = static_cast<uint32_t>(sizeof(descriptorSetLayout) / sizeof(descriptorSetLayout[0]));
+			pipelineLayoutInfo.setLayoutCount = descriptorset_layout_count;
+			pipelineLayoutInfo.pSetLayouts = descriptorSetLayout;
+
+			if (vkCreatePipelineLayout(m_vulkan_rhi->getDevice(), &pipelineLayoutInfo, nullptr, &m_render_pipelines[render_pipeline_type_axis].pipeline_layout) != VK_SUCCESS) {
+				throw std::runtime_error("failed to create pipeline layout!");
+			}
+
+			auto vertShaderCode = Util::readFile("E://VS_Project//QyhsEngine//engine//shader//axis_vert.spv");
+			auto fragShaderCode = Util::readFile("E://VS_Project//QyhsEngine//engine//shader//axis_frag.spv");
+
+			VkShaderModule vertShaderModule = VulkanUtils::createShaderModule(m_vulkan_rhi->getDevice(), vertShaderCode);
+			VkShaderModule fragShaderModule = VulkanUtils::createShaderModule(m_vulkan_rhi->getDevice(), fragShaderCode);
+
+			VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
+			vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+			vertShaderStageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
+			vertShaderStageInfo.module = vertShaderModule;
+			vertShaderStageInfo.pName = "main";
+
+			VkPipelineShaderStageCreateInfo fragShaderStageInfo{};
+			fragShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+			fragShaderStageInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+			fragShaderStageInfo.module = fragShaderModule;
+			fragShaderStageInfo.pName = "main";
+
+			VkPipelineShaderStageCreateInfo shaderStages[] = { vertShaderStageInfo, fragShaderStageInfo };
+
+			VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
+			vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+
+			auto bindingDescription = MeshVertex::getBindingDescription();
+			auto attributeDescriptions = MeshVertex::getAttributeDescriptions();
+
+			vertexInputInfo.vertexBindingDescriptionCount = static_cast<uint32_t>(bindingDescription.size());
+			vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
+			vertexInputInfo.pVertexBindingDescriptions = bindingDescription.data();
+			vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
+
+			VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
+			inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
+			inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+			inputAssembly.primitiveRestartEnable = VK_FALSE;
+
+			VkPipelineViewportStateCreateInfo viewportState{};
+			viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+			viewportState.viewportCount = 1;
+			viewportState.scissorCount = 1;
+
+			VkPipelineRasterizationStateCreateInfo rasterizer{};
+			rasterizer.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+			rasterizer.depthClampEnable = VK_FALSE;
+			rasterizer.rasterizerDiscardEnable = VK_FALSE;
+			rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
+			rasterizer.lineWidth = 1.0f;
+			rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
+			rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
+			rasterizer.depthBiasEnable = VK_FALSE;
+
+			VkPipelineMultisampleStateCreateInfo multisampling{};
+			multisampling.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
+			multisampling.sampleShadingEnable = VK_FALSE;
+			multisampling.rasterizationSamples = m_vulkan_rhi->getMSAASamples();
+			multisampling.sampleShadingEnable = VK_TRUE;
+			multisampling.minSampleShading = .2f;
+
+			VkPipelineDepthStencilStateCreateInfo depthStencil{};
+			depthStencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+			depthStencil.depthTestEnable = VK_FALSE;
+			depthStencil.depthWriteEnable = VK_FALSE;
+			depthStencil.depthCompareOp = VK_COMPARE_OP_LESS;
+			depthStencil.depthBoundsTestEnable = VK_FALSE;
+			depthStencil.stencilTestEnable = VK_FALSE;
+
+			VkPipelineColorBlendAttachmentState colorBlendAttachment{};
+			colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+			colorBlendAttachment.blendEnable = VK_FALSE;
+
+			VkPipelineColorBlendStateCreateInfo colorBlending{};
+			colorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+			colorBlending.logicOpEnable = VK_FALSE;
+			colorBlending.logicOp = VK_LOGIC_OP_COPY;
+			colorBlending.attachmentCount = 1;
+			colorBlending.pAttachments = &colorBlendAttachment;
+			colorBlending.blendConstants[0] = 0.0f;
+			colorBlending.blendConstants[1] = 0.0f;
+			colorBlending.blendConstants[2] = 0.0f;
+			colorBlending.blendConstants[3] = 0.0f;
+
+			std::vector<VkDynamicState> dynamicStates = {
+				VK_DYNAMIC_STATE_VIEWPORT,
+				VK_DYNAMIC_STATE_SCISSOR
+			};
+			VkPipelineDynamicStateCreateInfo dynamicState{};
+			dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+			dynamicState.dynamicStateCount = static_cast<uint32_t>(dynamicStates.size());
+			dynamicState.pDynamicStates = dynamicStates.data();
+
+
+
+			VkGraphicsPipelineCreateInfo pipelineInfo{};
+			pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+			pipelineInfo.stageCount = 2;
+			pipelineInfo.pStages = shaderStages;
+			pipelineInfo.pVertexInputState = &vertexInputInfo;
+			pipelineInfo.pInputAssemblyState = &inputAssembly;
+			pipelineInfo.pViewportState = &viewportState;
+			pipelineInfo.pRasterizationState = &rasterizer;
+			pipelineInfo.pMultisampleState = &multisampling;
+			pipelineInfo.pDepthStencilState = &depthStencil;
+			pipelineInfo.pColorBlendState = &colorBlending;
+			pipelineInfo.pDynamicState = &dynamicState;
+			pipelineInfo.layout = m_render_pipelines[render_pipeline_type_axis].pipeline_layout;
+			pipelineInfo.renderPass = m_framebuffer.render_pass;
+			pipelineInfo.subpass = main_camera_subpass_ui;
+			pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
+
+			if (vkCreateGraphicsPipelines(m_vulkan_rhi->getDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_render_pipelines[render_pipeline_type_axis].pipeline) != VK_SUCCESS) {
+				throw std::runtime_error("failed to create graphics pipeline!");
+			}
+
+			vkDestroyShaderModule(m_vulkan_rhi->getDevice(), fragShaderModule, nullptr);
+			vkDestroyShaderModule(m_vulkan_rhi->getDevice(), vertShaderModule, nullptr);
+		}
 	}
 
 
@@ -777,6 +1080,7 @@ namespace QYHS
 	{
 		setupGlobalModelDescriptorSet();
 		setupSkyboxDescriptorSet();
+		setAxisDescriptorSet();
 	}
 
 	void MainCameraRenderPass::setupSwapChainFrameBuffers()
@@ -787,6 +1091,8 @@ namespace QYHS
 			std::array<VkImageView, main_camera_pass_attachment_count> attachments = {
 				m_framebuffer.attachments[main_camera_pass_base_color_attachment].image_view,
 				m_framebuffer.attachments[main_camera_pass_depth_attachment].image_view,
+				m_framebuffer.attachments[main_camera_pass_backup_odd_color_attachment].image_view,
+				m_framebuffer.attachments[main_camera_pass_backup_even_color_attachment].image_view,
 				m_vulkan_rhi->getSwapChainImageView()[i]
 			};
 
@@ -806,7 +1112,7 @@ namespace QYHS
 
 	}
 
-	void MainCameraRenderPass::draw()
+	void MainCameraRenderPass::draw(CombineUIPass & combine_ui_pass)
 	{
 		VkRenderPassBeginInfo renderPassInfo{};
 		renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -827,8 +1133,10 @@ namespace QYHS
 		drawMesh();
 		vkCmdNextSubpass(m_vulkan_rhi->getCurrentCommandBuffer(), VK_SUBPASS_CONTENTS_INLINE);
 		drawSkyBox();
-		//vkCmdNextSubpass(m_vulkan_rhi->getCurrentCommandBuffer(), VK_SUBPASS_CONTENTS_INLINE);
-		//drawMSAA();
+		vkCmdNextSubpass(m_vulkan_rhi->getCurrentCommandBuffer(), VK_SUBPASS_CONTENTS_INLINE);
+		drawAxis();
+		vkCmdNextSubpass(m_vulkan_rhi->getCurrentCommandBuffer(), VK_SUBPASS_CONTENTS_INLINE);
+		combine_ui_pass.draw();
 		vkCmdEndRenderPass(m_vulkan_rhi->getCurrentCommandBuffer());
 	}
 

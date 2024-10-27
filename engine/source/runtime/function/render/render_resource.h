@@ -22,6 +22,10 @@ namespace QYHS
 		std::vector<uint32_t> ringbuffer_end;
 		std::vector<uint32_t> ringbuffer_size;
 
+		VkBuffer axis_storage_buffer;
+		VkDeviceMemory axis_storage_buffer_memory;
+		void * axis_storage_buffer_memory_pointer;
+
 		uint32_t min_uniform_buffer_offset_alignment{ 256 };
 		uint32_t min_storage_buffer_offset_alignment{ 256 };
 		uint32_t max_storage_buffer_size{ 1 << 27 };

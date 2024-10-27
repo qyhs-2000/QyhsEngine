@@ -21,9 +21,9 @@ namespace  QYHS
 	}
 
 
-	void PickRenderPass::initialize()
+	void PickRenderPass::initialize(RenderPassInitInfo * info)
 	{
-		RenderPass::initialize();
+		RenderPass::initialize(info);
 		setupAttachments();
 		setupRenderPass();
 		setupDescriptorSetLayout();

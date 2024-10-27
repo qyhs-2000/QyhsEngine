@@ -27,6 +27,12 @@ namespace QYHS
 		Matrix4x4 project_view_matrix;
 	};
 
+	struct AxisStorageBufferObject
+	{
+		Matrix4x4 model_matrix;
+		unsigned int selected_axis;
+	};
+	
 	struct MeshInefficientPickPerDrawCallStorageBuffer
 	{
 		Matrix4x4 model_matrices[mesh_per_drawcall_max_instance_count];

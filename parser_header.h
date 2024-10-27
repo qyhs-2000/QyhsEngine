@@ -32,6 +32,7 @@
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/Texture.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/game_object_desc.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/model.h"
+#include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/passes/combine_ui_pass.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/passes/main_camera_render_pass.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/passes/pick_render_pass.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_camera.h"

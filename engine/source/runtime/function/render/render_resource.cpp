@@ -236,6 +236,7 @@ namespace QYHS
 
 	void RenderResource::createAndMapStorageBuffer(std::shared_ptr<RHI> rhi)
 	{
+		//global ring buffer
 		VulkanRHI* m_rhi = static_cast<VulkanRHI*>(rhi.get());
 		StorageBuffer& global_storage_buffer = m_global_render_resource.storage_buffer;
 		uint32_t global_storage_buffer_size = 1024 * 1024 * 128;
@@ -262,6 +263,12 @@ namespace QYHS
 		}
 
 		vkMapMemory(m_rhi->getDevice(), global_storage_buffer.global_ringbuffer_memory, 0, VK_WHOLE_SIZE, 0, &global_storage_buffer.global_ringbuffer_memory_pointer);
+
+		//axis storage buffer
+		VulkanUtils::createBuffer(m_rhi->physical_device,m_rhi->m_device,sizeof(AxisStorageBufferObject),VK_BUFFER_USAGE_STORAGE_BUFFER_BIT,
+			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,m_global_render_resource.storage_buffer.axis_storage_buffer,m_global_render_resource.storage_buffer.axis_storage_buffer_memory);
+
+		vkMapMemory(m_rhi->m_device,global_storage_buffer.axis_storage_buffer_memory,0,VK_WHOLE_SIZE,0,&global_storage_buffer.axis_storage_buffer_memory_pointer);
 	}
 
 	void RenderResource::uploadIBLResource(std::shared_ptr<RHI> rhi,LevelResourceDesc level_resource_desc)
