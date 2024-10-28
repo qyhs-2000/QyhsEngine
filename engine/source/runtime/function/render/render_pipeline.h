@@ -12,6 +12,7 @@ namespace QYHS
 		virtual uint32_t getGUIDOfPickedMesh(const Vector2 & picked_uv) override final;
 		void updatePassAfterRecreatePipeline();
 		void setVisibleAxis(bool state);
+		void setSelectedAxis(size_t selected_axis);
 	private:
 	};
 }

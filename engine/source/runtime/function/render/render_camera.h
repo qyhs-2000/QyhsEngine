@@ -13,8 +13,6 @@ namespace QYHS
 		void initialize();
 		//void updateCursorPos(float x_pos, float y_pos);
 		float getCameraSpeed() { return camera_speed; }
-		Vector3 getCameraFront() const{ return camera_front; }
-		Vector3 getCameraUp() { return camera_up; }
 		void updateCameraOffset(Vector3 offset) { camera_pos_offset = offset; }
 		void updateCameraPosition();
 		Vector3 getCameraPos() const{ return m_position; }

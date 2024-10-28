@@ -163,6 +163,11 @@ namespace QYHS
 
 			g_editor_global_context.m_scene_manager->getEditorCamera()->rotate(Vector2(y_pos - m_mouse_y, x_pos - m_mouse_x)*0.14);
 		}
+		else
+		{
+			Vector2 cursor_uv = Vector2((m_mouse_x / m_engine_window_size.x), (m_mouse_y / m_engine_window_size.y));
+			m_selected_axis_by_cursor = g_editor_global_context.m_scene_manager->updateCursorOnAxis(cursor_uv,m_engine_window_size);
+		}
 		m_mouse_x = x_pos;
 		m_mouse_y = y_pos;
 	}

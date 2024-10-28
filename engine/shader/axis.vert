@@ -30,7 +30,7 @@ void main()
 	gl_Position = clip_position;
 	if(in_texcoord.x < 0.01)
 	{
-		if(selected_axis == uint(1))
+		if(selected_axis == uint(0))
 		{
 			out_color = vec3(1.0,1.0,0.0);
 		}
@@ -53,7 +53,7 @@ void main()
 	}
 	else if(in_texcoord.x < 2.01)
 	{
-		if(selected_axis == uint(1))
+		if(selected_axis == uint(2))
 		{
 			out_color = vec3(1.0,1.0,0.0);
 		}

@@ -34,9 +34,13 @@ namespace QYHS
 		{
 			TransformComponent* transform_comp = selected_game_object->TryGetComponent(TransformComponent);
 			m_selected_gobject_matrix = transform_comp->getMatrix();
+			drawSelectedEntityAxis();
+			m_is_show_axis = true;
 		}
-
-		drawSelectedEntityAxis();
+		else
+		{
+			m_is_show_axis = false;
+		}
 		std::cout << go_id << std::endl;
 	}
 
@@ -89,7 +93,7 @@ namespace QYHS
 
 	RenderEntity* EditorSceneManager::getAxisMeshByType(EditorAxisType axis_type)
 	{
-		RenderEntity * value;
+		RenderEntity* value;
 		switch (axis_type)
 		{
 		case EditorAxisType::Translate:
@@ -106,34 +110,154 @@ namespace QYHS
 
 	void EditorSceneManager::uploadAxisResource()
 	{
-		auto & instance_allocator = m_render_system->getInstanceIDAllocator();
-		auto & mesh_allocator = m_render_system->getMeshAssetIDAllocator();
-		GameObjectPartId translate_axis_id = {0XFFAA,0XFFAA};
+		auto& instance_allocator = m_render_system->getInstanceIDAllocator();
+		auto& mesh_allocator = m_render_system->getMeshAssetIDAllocator();
+		GameObjectPartId translate_axis_id = { 0XFFAA,0XFFAA };
 		m_translate_axis_render_entity.m_instance_id = instance_allocator.allocateGUId(translate_axis_id);
 
-		MeshSourceDesc translate_axis_mesh = {"%%axis_translate%%"};
+		MeshSourceDesc translate_axis_mesh = { "%%axis_translate%%" };
 		m_translate_axis_render_entity.mesh_asset_id = mesh_allocator.allocateGUId(translate_axis_mesh);
 
-		GameObjectPartId rotate_axis_id = {0XFFBB,0XFFBB};
+		GameObjectPartId rotate_axis_id = { 0XFFBB,0XFFBB };
 		m_rotate_axis_render_entity.m_instance_id = instance_allocator.allocateGUId(rotate_axis_id);
 
-		MeshSourceDesc rotate_axis_mesh = {"%%axis_translate%%"};
+		MeshSourceDesc rotate_axis_mesh = { "%%axis_translate%%" };
 		m_rotate_axis_render_entity.mesh_asset_id = mesh_allocator.allocateGUId(rotate_axis_mesh);
 
-		GameObjectPartId scale_axis_id = {0XFFCC,0XFFCC};
+		GameObjectPartId scale_axis_id = { 0XFFCC,0XFFCC };
 		m_scale_axis_render_entity.m_instance_id = instance_allocator.allocateGUId(scale_axis_id);
 
-		MeshSourceDesc scale_axis_mesh = {"%%axis_translate%%"};
-		m_scale_axis_render_entity.mesh_asset_id =  mesh_allocator.allocateGUId(scale_axis_mesh);
+		MeshSourceDesc scale_axis_mesh = { "%%axis_translate%%" };
+		m_scale_axis_render_entity.mesh_asset_id = mesh_allocator.allocateGUId(scale_axis_mesh);
 
-		std::vector<RenderEntity * > entities = {&m_translate_axis_render_entity,&m_rotate_axis_render_entity,&m_scale_axis_render_entity};
-		std::vector<RenderMeshData > mesh_data = {m_translate_axis_render_entity.m_mesh_data,m_rotate_axis_render_entity.m_mesh_data,m_scale_axis_render_entity.m_mesh_data};
+		std::vector<RenderEntity* > entities = { &m_translate_axis_render_entity,&m_rotate_axis_render_entity,&m_scale_axis_render_entity };
+		std::vector<RenderMeshData > mesh_data = { m_translate_axis_render_entity.m_mesh_data,m_rotate_axis_render_entity.m_mesh_data,m_scale_axis_render_entity.m_mesh_data };
 
-		for(int i = 0;i<entities.size();++i)
+		for (int i = 0; i < entities.size(); ++i)
 		{
-			m_render_system->uploadGameResource(entities[i],mesh_data[i]);
+			m_render_system->uploadGameResource(entities[i], mesh_data[i]);
 		}
-		
+
+	}
+
+	float intersectPlaneRay(Vector3 normal, float d, Vector3 origin, Vector3 dir)
+	{
+		float deno = normal.dotProduct(dir);
+		if (fabs(deno) < 0.0001)
+		{
+			deno = 0.0001;
+		}
+
+		return -(normal.dotProduct(origin) + d) / deno;
+	}
+
+	size_t EditorSceneManager::updateCursorOnAxis(Vector2 cursor_uv, Vector2 window_size)
+	{
+		float camera_fov = m_camera->getCameraFOV();
+		float camera_near_face_distance = (window_size.y / 2) / tan(Degree(camera_fov).valueRadians()/2);
+		Vector3 camera_forward = m_camera->forward();
+		Vector3 camera_right = m_camera->right();
+		Vector3 camera_up = m_camera->up();
+		Vector3 camera_position = m_camera->getCameraPos();
+
+		if (m_selected_game_object_id == k_invalid_gobject_id)
+		{
+			return m_selected_axis;
+		}
+
+		Vector2 screen_uv = Vector2(cursor_uv.x, 1 - cursor_uv.y) - Vector2(0.5f, 0.5f);
+		Vector3 world_ray_direction = camera_forward * camera_near_face_distance +
+			camera_right * (float)screen_uv.x * window_size.x +
+			camera_up * (float)screen_uv.y * window_size.y;
+
+		RenderEntity* axis_entity = getAxisMeshByType(m_axis_mode);
+		m_selected_axis = 3;
+		if (m_is_show_axis == false)
+		{
+			return m_selected_axis;
+		}
+		Matrix4x4 model_matrix = axis_entity->model_matrix;
+		Vector3 translation;
+		Quaternion rotation;
+		Vector3 scale;
+		model_matrix.decomposition(translation, scale, rotation);
+
+		Vector4 local_ray_origin = model_matrix.inverse() * Vector4(camera_position, 1.0f);
+		Vector3 local_ray_origin_xyz = Vector3(local_ray_origin.x, local_ray_origin.y, local_ray_origin.z);
+		Quaternion inverse_rotation = rotation.inverse();
+		inverse_rotation.normalise();
+		Vector3 local_ray_direction = inverse_rotation * world_ray_direction;
+
+
+		Vector3 normal[3] = { Vector3(1.0,0.0,0.0),Vector3(0.0,1.0,0.0),Vector3(0.0,0.0,1.0) };
+		float interact_dist[3] = {													//distance from ray origin to face yoz,xoz,xoy
+			intersectPlaneRay(normal[0],0,  local_ray_origin_xyz,local_ray_direction),
+			intersectPlaneRay(normal[1],0,  local_ray_origin_xyz,local_ray_direction),
+			intersectPlaneRay(normal[2],0,  local_ray_origin_xyz,local_ray_direction)
+		};
+
+		Vector3 interact_pt[3] = {													//interact point position 
+			local_ray_origin_xyz + local_ray_direction * interact_dist[0],
+			local_ray_origin_xyz + local_ray_direction * interact_dist[1],
+			local_ray_origin_xyz + local_ray_direction * interact_dist[2]
+		};
+
+		float max_dist = 0.0f;
+		const float DIST_THRESHOLD = 0.6f;
+		const float AXIS_MIN_EDGE = 0.1f;
+		const float AXIS_MAX_EDGE = 2.0f;
+		const float AXIS_LENGTH = 2.0f;
+		for (int i = 0; i < 3; ++i)
+		{
+			float alpha = Math::abs((normal[i].dotProduct(local_ray_direction)));
+			if (alpha <= 0.1)										//when ray is almost parallel with face
+			{
+				int index00 = (i + 1) % 3;
+				int index01 = 3 - i - index00;
+				int index10 = (i + 2) % 3;
+				int index11 = 3 - i - index10;
+				int axis_dist = (Math::abs(interact_pt[index00][i]) + Math::abs(interact_pt[index10][i])) / 2;
+				if (axis_dist >= DIST_THRESHOLD)				//if it is too far from parallel face
+				{
+					continue;
+				}
+
+				if ((interact_pt[index00][index01] > AXIS_MIN_EDGE) && (interact_pt[index00][index01] < AXIS_LENGTH) && (interact_pt[index00][index01] > max_dist) &&
+					(Math::abs(interact_pt[00][i] < AXIS_MAX_EDGE)))
+				{
+					max_dist = interact_pt[index00][index01];
+					m_selected_axis = index01;
+				}
+				if ((interact_pt[index10][index11] > AXIS_MIN_EDGE) && (interact_pt[index10][index11] < AXIS_LENGTH) && (interact_pt[index10][index11] > max_dist) &&
+					(Math::abs(interact_pt[index10][i] < AXIS_MAX_EDGE)))
+				{
+					max_dist = interact_pt[index10][index11];
+					m_selected_axis = index11;
+				}
+			}
+		}
+		if (m_selected_axis == 3)
+		{
+			float min_dist = 1e10f;
+			for (int i = 0; i < 3; ++i)
+			{
+				int index_alpha = (i + 1) % 3;
+				int index_beta = (i + 2) % 3;
+				float dist = Math::sqr(interact_pt[index_alpha][index_beta]) + Math::sqr(interact_pt[index_beta][index_alpha]);
+				std::cout << dist << std::endl;
+				if ((interact_pt[index_alpha][i] > AXIS_MIN_EDGE) && (interact_pt[index_alpha][i] < AXIS_MAX_EDGE) && (dist < DIST_THRESHOLD) &&
+					(dist < min_dist))
+				{
+					min_dist = dist;
+					m_selected_axis = i;
+					std::cout << "selected axis changed to " << m_selected_axis << std::endl;
+				}
+			}
+		}
+		m_render_system->setSelectedAxis(m_selected_axis);
+		return m_selected_axis;
+
+
 	}
 
 }

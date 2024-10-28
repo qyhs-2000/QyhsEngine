@@ -283,6 +283,7 @@ namespace QYHS
 		(*reinterpret_cast<MeshPerFrameStorageBufferObject*>(reinterpret_cast<uintptr_t>(m_global_render_resource->storage_buffer.global_ringbuffer_memory_pointer) + perframe_storage_buffer_offset)) = m_mesh_perframe_storage_buffer_object;
 
 		m_axis_storage_buffer_object.model_matrix = m_visible_render_meshes.p_axis_node->model_matrix;
+		
 		m_axis_storage_buffer_object.selected_axis = m_selected_axis;
 		
 		(*reinterpret_cast<AxisStorageBufferObject*>(reinterpret_cast<uintptr_t>(m_global_render_resource->storage_buffer.axis_storage_buffer_memory_pointer))) = m_axis_storage_buffer_object;

@@ -63,3 +63,8 @@ void QYHS::RenderPipeline::setVisibleAxis(bool state)
 	MainCameraRenderPass* main_camera_pass = static_cast<MainCameraRenderPass*>(m_main_camera_pass.get());
 	main_camera_pass->setVisibleAxis(state);
 }
+
+void QYHS::RenderPipeline::setSelectedAxis(size_t selected_axis)
+{
+	static_cast<MainCameraRenderPass*>(m_main_camera_pass.get())->m_selected_axis = selected_axis;
+}

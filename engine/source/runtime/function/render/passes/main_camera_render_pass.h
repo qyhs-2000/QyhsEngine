@@ -188,7 +188,7 @@ namespace QYHS
 		MeshPerFrameStorageBufferObject m_mesh_perframe_storage_buffer_object;
         VkBuffer skybox_cube_vertex_buffer;
         VkDeviceMemory skybox_cube_vertex_buffer_memory;
-		size_t m_selected_axis = 0;
+		size_t m_selected_axis = 3;
 		AxisStorageBufferObject m_axis_storage_buffer_object;
 	private:
 		std::vector<VkFramebuffer> m_swapchain_framebuffers;

@@ -196,5 +196,8 @@ namespace QYHS
 		m_render_resource->uploadGameObjectRenderResource(m_rhi,*entity,mesh_data);
 	}
 
-	
+	void RenderSystem::setSelectedAxis(size_t selected_axis)
+	{
+		static_cast<RenderPipeline*>(m_render_pipeline.get())->setSelectedAxis(selected_axis);
+	}
 }

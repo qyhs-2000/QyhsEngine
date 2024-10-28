@@ -26,6 +26,7 @@ namespace QYHS
 		RenderGUIDAllocator<MeshSourceDesc> & getMeshAssetIDAllocator();
 		RenderGUIDAllocator<GameObjectPartId> & getInstanceIDAllocator();
 		void uploadGameResource(RenderEntity * entity,RenderMeshData mesh_data);
+		void setSelectedAxis(size_t selected_axis);
 	private:
 		std::shared_ptr<RenderCamera>			m_render_camera;
 		std::shared_ptr<RHI> m_rhi;
@@ -33,7 +34,6 @@ namespace QYHS
 		RenderSwapContext						m_swap_context;
 		std::shared_ptr<RenderScene>			m_render_scene;
 		std::shared_ptr<RenderResource>			m_render_resource;
-		
 	};
 
 	
