@@ -9,4 +9,10 @@ namespace QYHS
 		m_is_dirty = true;
 
 	}
+
+	void TransformComponent::setPosition(Vector3 position)
+	{
+		m_transform.m_position = position; 
+		m_is_dirty = true; 
+	}
 }

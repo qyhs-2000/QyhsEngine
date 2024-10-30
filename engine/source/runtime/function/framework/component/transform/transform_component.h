@@ -15,6 +15,7 @@ namespace QYHS
         virtual void postLoadResource(std::weak_ptr<GameObject> parent_object) override;
         bool isDirty() { return m_is_dirty; }
         void setDirty(bool is_dirty) { m_is_dirty = is_dirty; }
+        void setPosition(Vector3 position);
         Matrix4x4 getMatrix() { return m_transform.getMatrix(); }
     protected:
         META(Enable)

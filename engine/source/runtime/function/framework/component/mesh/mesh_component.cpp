@@ -6,6 +6,7 @@
 #include "function/framework/component/transform/transform_component.h"
 #include "resource/asset_manager/asset_manager.h"
 #include "resource/type/data/material.h"
+#include <iostream>
 namespace QYHS
 {
 	void MeshComponent::tick(double time)
@@ -20,6 +21,7 @@ namespace QYHS
 			{
 				Matrix4x4 local_transform_matrix = part.m_transform_desc.m_transform_matrix;
 				part.m_transform_desc.m_transform_matrix = transform_component->getMatrix() * local_transform_matrix;
+				Vector3 translate = part.m_transform_desc.m_transform_matrix.getTrans();
 				dirty_mesh_parts.emplace_back(part);
 				part.m_transform_desc.m_transform_matrix = local_transform_matrix;
 			}

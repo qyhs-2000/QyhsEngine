@@ -125,7 +125,7 @@ namespace QYHS
 
 	void EditorInputManager::onMouseButton(int button, int action, int mods)
 	{
-
+		if (m_selected_axis_by_cursor != 3) return;
 		static bool cursor_disable = false;
 		if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 		{
@@ -162,6 +162,10 @@ namespace QYHS
 		{
 
 			g_editor_global_context.m_scene_manager->getEditorCamera()->rotate(Vector2(y_pos - m_mouse_y, x_pos - m_mouse_x)*0.14);
+		}
+		else if (g_editor_global_context.m_window_system->isMouseButton(GLFW_MOUSE_BUTTON_LEFT))
+		{
+			g_editor_global_context.m_scene_manager->moveObject(x_pos,y_pos,m_mouse_x,m_mouse_y,m_engine_window_size);
 		}
 		else
 		{

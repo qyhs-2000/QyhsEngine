@@ -203,7 +203,7 @@ namespace QYHS
 		};
 
 		float max_dist = 0.0f;
-		const float DIST_THRESHOLD = 0.6f;
+		const float DIST_THRESHOLD = 2.6f;
 		const float AXIS_MIN_EDGE = 0.1f;
 		const float AXIS_MAX_EDGE = 2.0f;
 		const float AXIS_LENGTH = 2.0f;
@@ -256,8 +256,85 @@ namespace QYHS
 		}
 		m_render_system->setSelectedAxis(m_selected_axis);
 		return m_selected_axis;
+	}
 
+	void EditorSceneManager::moveObject(const float &new_mouse_x,const float &new_mouse_y,const float & old_mouse_x,const float & old_mouse_y,const Vector2 & engine_window_size)
+	{
+		if ((new_mouse_x == old_mouse_x) && new_mouse_y == old_mouse_y)
+		{
+			return;
+		}
+		Vector3 gobject_translation;
+		Quaternion rotation;
+		Vector3 scale;
+		Matrix4x4 gobject_model_matrix = m_selected_gobject_matrix;
+		gobject_model_matrix.decomposition(gobject_translation,scale, rotation );
+		Matrix4x4 model_translate_matrix;
+		model_translate_matrix.makeTrans(gobject_translation);
+		Vector2 delta_mouse_uv = Vector2(new_mouse_x - old_mouse_x, new_mouse_y - old_mouse_y);
+		float angularVelocity = 18.f / std::max(engine_window_size.x, engine_window_size.y);
+
+		
+		std::shared_ptr<GameObject> selected_game_object = getSelectedGameObject().lock();
+		TransformComponent* transform_component = selected_game_object->TryGetComponent(TransformComponent);
+		Matrix4x4 model_matrix = transform_component->getMatrix();
+		Matrix4x4 view_matrix = m_camera->getViewMatrix();
+		Matrix4x4 projection_matrix = m_camera->getProjMatrix();
+		Vector4 model_origin_clip_position = projection_matrix * view_matrix * Vector4(gobject_translation,1.0f);
+		model_origin_clip_position /= model_origin_clip_position.w;
+		Vector2 model_origin_clip_uv = Vector2((model_origin_clip_position.x + 1) / 2, (model_origin_clip_position.y + 1) / 2);     //make uv range from 0 to 1;
+		
+		Vector4 axis_x_direction = { 1,0,0 ,1};
+		Vector4 axis_x_clip_direction =  projection_matrix * view_matrix * model_translate_matrix*axis_x_direction;
+		axis_x_clip_direction /= axis_x_clip_direction.w;
+		Vector2 axis_x_clip_uv = Vector2((axis_x_clip_direction.x + 1) / 2, (axis_x_clip_direction.y + 1) / 2);
+		Vector2 axis_x_direction_uv = axis_x_clip_uv - model_origin_clip_uv;
+		axis_x_direction_uv.normalise();
+
+		Vector4 axis_y_direction = { 0,1,0 ,1};
+		Vector4 axis_y_clip_direction =  projection_matrix * view_matrix * model_translate_matrix*axis_y_direction;
+		axis_y_clip_direction /= axis_y_clip_direction.w;
+		Vector2 axis_y_clip_uv = Vector2((axis_y_clip_direction.x + 1) / 2, (axis_y_clip_direction.y + 1) / 2);
+		Vector2 axis_y_direction_uv = axis_y_clip_uv - model_origin_clip_uv;
+		axis_y_direction_uv.normalise();
+
+		Vector4 axis_z_direction = { 0,0,1 ,1};
+		Vector4 axis_z_clip_direction =  projection_matrix * view_matrix * model_translate_matrix*axis_z_direction;
+		axis_z_clip_direction /= axis_z_clip_direction.w;
+		Vector2 axis_z_clip_uv = Vector2((axis_z_clip_direction.x + 1) / 2, (axis_z_clip_direction.y + 1) / 2);
+		Vector2 axis_z_direction_uv = axis_z_clip_uv - model_origin_clip_uv;
+		axis_z_direction_uv.normalise();
+
+		RenderEntity* axis_entitiy = &m_translate_axis_render_entity;
+		Vector3 move_vector{ 0,0,0 };
+		if (m_selected_axis == 0)
+		{
+			move_vector.x = delta_mouse_uv.dotProduct(axis_x_direction_uv) * angularVelocity;
+		}
+		else if (m_selected_axis == 1)
+		{
+			move_vector.y = delta_mouse_uv.dotProduct(axis_y_direction_uv) * angularVelocity;
+		}
+		else if (m_selected_axis == 2)
+		{
+			move_vector.z = delta_mouse_uv.dotProduct(axis_z_direction_uv) * angularVelocity;
+		}
+		Matrix4x4 translate_matrix;
+		translate_matrix.makeTrans(move_vector);
+		Matrix4x4 new_model_matrix = model_translate_matrix * translate_matrix;
+		Vector3 new_translation;
+		Vector3 new_scale;
+		Quaternion new_rotation;
+		new_model_matrix.decomposition(new_translation, new_scale, new_rotation);
+		Matrix4x4 axis_model_matrix = Matrix4x4::getTrans(new_translation) * Matrix4x4::buildScaleMatrix(1.f, 1.f, 1.f);
+		
+		m_translate_axis_render_entity.model_matrix = axis_model_matrix;
+		g_editor_global_context.m_render_system->setVisibleAxis(m_translate_axis_render_entity);
+		
+		transform_component->setPosition(new_translation);
+		m_selected_gobject_matrix = new_model_matrix;
 
 	}
 
+	
 }

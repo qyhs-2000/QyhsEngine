@@ -41,6 +41,7 @@ namespace QYHS
 		void swap();
 		SwapData& getRenderSwapData() { return m_swap_data[m_render_swap_data_index]; }
 		SwapData& getLogicSwapData() { return m_swap_data[m_logic_swap_data_index]; }
+		void resetGameObjectRenderSwapData();
 	private:
 		uint8_t				m_render_swap_data_index{ RenderSwapDataType };
 		uint8_t				m_logic_swap_data_index{ LogicSwapDataType };

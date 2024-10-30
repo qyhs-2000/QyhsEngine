@@ -30,6 +30,7 @@ namespace QYHS
 		EditorRotateAxis  m_rotate_axis_render_entity;
 		EditorScaleAxis  m_scale_axis_render_entity;
 		//float intersectPlaneRay(Vector3 normal, float d, Vector3 origin, Vector3 dir);
+		void moveObject(const float &new_mouse_x,const float &new_mouse_y,const float & old_mouse_x,const float & old_mouse_y,const Vector2 & engine_window_size);
 	private:
 		std::shared_ptr<RenderCamera>    m_camera;
 		std::shared_ptr<RenderSystem>    m_render_system;

@@ -107,7 +107,7 @@ namespace QYHS
 				swap_data.m_game_object_resource->pop();
 			}
 
-			return;
+			m_swap_context.resetGameObjectRenderSwapData();
 			
 		}
 	}
