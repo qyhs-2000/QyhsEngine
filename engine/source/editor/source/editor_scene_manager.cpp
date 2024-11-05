@@ -244,7 +244,6 @@ namespace QYHS
 				int index_alpha = (i + 1) % 3;
 				int index_beta = (i + 2) % 3;
 				float dist = Math::sqr(interact_pt[index_alpha][index_beta]) + Math::sqr(interact_pt[index_beta][index_alpha]);
-				std::cout << dist << std::endl;
 				if ((interact_pt[index_alpha][i] > AXIS_MIN_EDGE) && (interact_pt[index_alpha][i] < AXIS_MAX_EDGE) && (dist < DIST_THRESHOLD) &&
 					(dist < min_dist))
 				{

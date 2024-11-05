@@ -17,25 +17,13 @@
   <component name="ChangeListManager">
     <list default="true" id="e1937938-874e-4ea3-9a8e-66e191945d06" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.QyhsEngine/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.QyhsEngine/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/ clangLog.txt" beforeDir="false" afterPath="$PROJECT_DIR$/engine/ clangLog.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/shader/axis.frag" beforeDir="false" afterPath="$PROJECT_DIR$/engine/shader/axis.frag" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/shader/axis_frag.spv" beforeDir="false" afterPath="$PROJECT_DIR$/engine/shader/axis_frag.spv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/shader/compile_shader.bat" beforeDir="false" afterPath="$PROJECT_DIR$/engine/shader/compile_shader.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/source/editor/include/editor_scene_manager.h" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/editor/include/editor_scene_manager.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/passes/main_camera_render_pass.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/passes/main_camera_render_pass.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/passes/main_camera_render_pass.h" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/passes/main_camera_render_pass.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/passes/pick_render_pass.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/passes/pick_render_pass.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/passes/pick_render_pass.h" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/passes/pick_render_pass.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/render_common.h" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/render_common.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/render_pass.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/render_pass.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/render_pass.h" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/render_pass.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/render_pass_base.h" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/render_pass_base.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/render_pipeline.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/render_pipeline.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/render_pipeline_base.h" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/render_pipeline_base.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/render_resource.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/render_resource.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/render_resource.h" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/render_resource.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/rhi/vulkan/vulkan_rhi.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/rhi/vulkan/vulkan_rhi.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/parser_header.h" beforeDir="false" afterPath="$PROJECT_DIR$/parser_header.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/rhi/vulkan/vulkan_rhi.h" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/rhi/vulkan/vulkan_rhi.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/source/runtime/function/render/window_system.h" beforeDir="false" afterPath="$PROJECT_DIR$/engine/source/runtime/function/render/window_system.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,66 +34,12 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../VS2022/VC/Tools/MSVC/14.41.34120/include/functional" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../VS2022/VC/Tools/MSVC/14.41.34120/include/memory" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../VS2022/VC/Tools/MSVC/14.41.34120/include/type_traits" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../VS2022/VC/Tools/MSVC/14.41.34120/include/vector" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/engine/3rdparty/VulkanSDK/include/vulkan/vulkan_core.h" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/engine/3rdparty/imgui/imgui.h" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
@@ -614,6 +548,7 @@
       <workItem from="1729905274006" duration="1325000" />
       <workItem from="1729941370449" duration="515000" />
       <workItem from="1729992836999" duration="1248000" />
+      <workItem from="1730684141444" duration="6822000" />
     </task>
     <servers />
   </component>
@@ -638,26 +573,6 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/engine/source/runtime/function/render/render_pipeline.cpp</url>
-          <line>30</line>
-          <option name="timeStamp" value="16" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/engine/source/runtime/function/render/render_pipeline.cpp</url>
-          <line>24</line>
-          <option name="timeStamp" value="17" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/engine/source/runtime/function/render/render_pipeline.cpp</url>
-          <line>9</line>
-          <option name="timeStamp" value="18" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/engine/source/runtime/function/render/passes/combine_ui_pass.cpp</url>
-          <line>221</line>
-          <option name="timeStamp" value="19" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/engine/source/runtime/function/render/render_system.cpp</url>
           <line>139</line>

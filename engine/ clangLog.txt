@@ -198,6 +198,8 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   function/render/render_pass.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/passes/main_camera_render_pass.h \
   function/render/render_common.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/passes/ui_pass.h \
+  function/render/ui/window_ui.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/passes/pick_render_pass.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_camera.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_common.h \
@@ -217,7 +219,9 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   resource/type/global_rendering_resource.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_pipeline.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_pipeline_base.h \
-  function/render/render_pass_base.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/ui/editor_ui.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/ui/window_ui.h \
+  function/render/window_system.h function/render/render_pass_base.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_scene.h \
   function/render/render_resource.h \
   function/render/render_guid_allocator.h \
@@ -286,6 +290,7 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   E:/VS_Project/QyhsEngine/engine/source/editor/include/editor.h \
   engine.h \
   E:/VS_Project/QyhsEngine/engine/source/editor/include/editor_global_context.h \
+  function/render/ui/editor_ui.h \
   E:/VS_Project/QyhsEngine/engine/source/editor/include/editor_axis.h \
   function/render/render_entity.h \
   E:/VS_Project/QyhsEngine/engine/source/editor/include/editor_input_manager.h

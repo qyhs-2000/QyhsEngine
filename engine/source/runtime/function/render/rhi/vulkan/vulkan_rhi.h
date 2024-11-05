@@ -122,8 +122,10 @@ const std::vector<const char*> deviceExtensions = {
 
 #ifdef NDEBUG
 const bool enableValidationLayers = false;
+const bool enable_debug_utils_label = false;
 #else
 const bool enableValidationLayers = true;
+const bool enable_debug_utils_label = true;
 #endif
 
 
@@ -199,7 +201,17 @@ namespace QYHS
 		}
 		VkViewport &getViewport() { return m_viewport; }
 		void prepareBeforeRender(std::function<void()> update_pass_after_recreate_swap_chain);
+		void beginEvent(VkCommandBuffer command_buffer,std::string event_name, std::array<float,4> color = {1.0f,1.0f,1.0f,1.0f});
+		void endEvent(VkCommandBuffer command_buffer);
 		virtual void prepareContext() override;
+		QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
+		VkQueue getGraphicsQueue() { return graphics_queue; }
+		VkResult allocatecommandbuffers(VkCommandBufferAllocateInfo* allocate_info, VkCommandBuffer* command_buffer);
+		VkResult beginCommandBuffer(VkCommandBuffer* command_buffer, VkCommandBufferBeginInfo* begin_info);
+		VkResult endCommandBuffer(VkCommandBuffer* command_buffer);
+		VkResult queueSubmit(VkQueue queue, uint32_t submit_count, VkSubmitInfo* submit_info, VkFence fence);
+		VkResult queueWaitIdle(VkQueue queue);
+		void freeCommandBuffers(VkCommandPool command_pool, size_t free_count, VkCommandBuffer* p_command_buffer);
 	private:
 		void initVulkan();
 		
@@ -234,8 +246,9 @@ namespace QYHS
 		void createAllocator();
 		VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger);
 		void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator);
+		void initInstanceFunction();
 
-		QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
+		
 		bool isDeviceSuitable(VkPhysicalDevice device);
 		bool checkDeviceExtensionSupport(VkPhysicalDevice device);
 		SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
@@ -260,7 +273,8 @@ namespace QYHS
 		void cleanupSwapChain();
 		void beginCommandBuffer();
 		void createViewport();
-
+		PFN_vkCmdBeginDebugUtilsLabelEXT _vkCmdBeginDebugUtilsLabelEXT;
+		PFN_vkCmdEndDebugUtilsLabelEXT _vkCmdEndDebugUtilsLabelEXT;
 	public:
 		VmaAllocator m_assets_allocator;
 		VkRect2D m_scissor;
@@ -347,6 +361,6 @@ namespace QYHS
 
 		GLTFModel m_model;
 		uint32_t                       m_vulkan_api_version {VK_API_VERSION_1_0};
-		
+		bool m_enable_debug_util{ true };
 	};
 }

@@ -18,10 +18,10 @@ namespace QYHS
 		m_logger_system = std::make_shared<LogSystem>();
 		m_world_manager = std::make_shared<WorldManager>();
 		m_world_manager->initialize();
-		m_window = std::make_shared<WindowSystem>();
+		m_window_system = std::make_shared<WindowSystem>();
 		m_render_system = std::make_shared<RenderSystem>();
 		WindowCreateInfo info;
-		m_window->initialize(&info);
+		m_window_system->initialize(&info);
 		m_render_system->initialize();
 	}
 }

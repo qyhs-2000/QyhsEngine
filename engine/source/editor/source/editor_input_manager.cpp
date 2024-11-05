@@ -47,10 +47,10 @@ namespace QYHS
 
 	void EditorInputManager::registerInput()
 	{				
-		g_runtime_global_context.m_window->registerOnScrollFunc(std::bind(&EditorInputManager::onScroll, this, std::placeholders::_1, std::placeholders::_2));
-		g_runtime_global_context.m_window->registerOnKeyFunc(std::bind(&EditorInputManager::onKey, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-		g_runtime_global_context.m_window->registerOnCursorPos(std::bind(&EditorInputManager::onCursorPos, this, std::placeholders::_1, std::placeholders::_2));
-		g_runtime_global_context.m_window->registerOnMouseButton(std::bind(&EditorInputManager::onMouseButton, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+		g_runtime_global_context.m_window_system->registerOnScrollFunc(std::bind(&EditorInputManager::onScroll, this, std::placeholders::_1, std::placeholders::_2));
+		g_runtime_global_context.m_window_system->registerOnKeyFunc(std::bind(&EditorInputManager::onKey, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+		g_runtime_global_context.m_window_system->registerOnCursorPos(std::bind(&EditorInputManager::onCursorPos, this, std::placeholders::_1, std::placeholders::_2));
+		g_runtime_global_context.m_window_system->registerOnMouseButton(std::bind(&EditorInputManager::onMouseButton, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 	}
 
 	void EditorInputManager::initialize()
@@ -139,12 +139,12 @@ namespace QYHS
 			if ((action == GLFW_PRESS) && !cursor_disable)
 			{
 				cursor_disable = true;
-				g_runtime_global_context.m_window->disableCursor(true);
+				g_runtime_global_context.m_window_system->disableCursor(true);
 			}
 			if ((action == GLFW_RELEASE) && cursor_disable)
 			{
 				cursor_disable = false;
-				g_runtime_global_context.m_window->disableCursor(false);
+				g_runtime_global_context.m_window_system->disableCursor(false);
 			}
 
 		}

@@ -4,6 +4,7 @@
 #include <function/render/render_scene.h>
 
 #include "render_camera.h"
+#include "ui/editor_ui.h"
 namespace QYHS
 {
 	
@@ -27,6 +28,7 @@ namespace QYHS
 		RenderGUIDAllocator<GameObjectPartId> & getInstanceIDAllocator();
 		void uploadGameResource(RenderEntity * entity,RenderMeshData mesh_data);
 		void setSelectedAxis(size_t selected_axis);
+		void initializeUIRenderBackend(WindowUI* ui);
 	private:
 		std::shared_ptr<RenderCamera>			m_render_camera;
 		std::shared_ptr<RHI> m_rhi;

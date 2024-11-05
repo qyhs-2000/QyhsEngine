@@ -200,4 +200,8 @@ namespace QYHS
 	{
 		static_cast<RenderPipeline*>(m_render_pipeline.get())->setSelectedAxis(selected_axis);
 	}
+	void RenderSystem::initializeUIRenderBackend(WindowUI* ui)
+	{
+		m_render_pipeline->initializeUIRenderBackend(ui);
+	}
 }

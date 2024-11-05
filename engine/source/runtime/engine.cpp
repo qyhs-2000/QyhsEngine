@@ -35,8 +35,8 @@ namespace QYHS
 		logicTick(delta_time);
 		g_runtime_global_context.m_render_system->swapLogicRenderData();
 		renderTick();
-		g_runtime_global_context.m_window->pollEvents();
-		const bool should_close_window = g_runtime_global_context.m_window->shouldCloseWindow();
+		g_runtime_global_context.m_window_system->pollEvents();
+		const bool should_close_window = g_runtime_global_context.m_window_system->shouldCloseWindow();
 		return !should_close_window;
 	}
 

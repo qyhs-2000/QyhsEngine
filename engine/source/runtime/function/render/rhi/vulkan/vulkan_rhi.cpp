@@ -21,7 +21,7 @@ namespace QYHS
 	}
 	void VulkanRHI::initialize()
 	{
-		m_window = g_runtime_global_context.m_window->getWindow();
+		m_window = g_runtime_global_context.m_window_system->getWindow();
 		initVulkan();
 
 
@@ -82,6 +82,7 @@ namespace QYHS
 	{
 		createInstance();
 		setupDebugMessenger();
+		initInstanceFunction();
 		createSurface();
 		pickPhysicalDevice();
 		createLogicalDevice();
@@ -109,6 +110,7 @@ namespace QYHS
 		createCommandBuffers();
 		createSyncObjects();
 		createAllocator();
+		
 	}
 
 	void VulkanRHI::loadAssets()
@@ -165,9 +167,11 @@ namespace QYHS
 
 		std::vector<const char*> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
 
-		if (enableValidationLayers) {
+		if (enableValidationLayers || enable_debug_utils_label) {
 			extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
 		}
+
+
 
 		return extensions;
 	}
@@ -654,6 +658,41 @@ namespace QYHS
 		return indices;
 	}
 
+	VkResult VulkanRHI::allocatecommandbuffers(VkCommandBufferAllocateInfo* allocate_info, VkCommandBuffer* command_buffer)
+	{
+		return vkAllocateCommandBuffers(m_device, allocate_info, command_buffer);
+	}
+
+	VkResult VulkanRHI::beginCommandBuffer(VkCommandBuffer* command_buffer, VkCommandBufferBeginInfo* begin_info)
+	{
+		return vkBeginCommandBuffer(*command_buffer, begin_info);
+	}
+
+	VkResult VulkanRHI::endCommandBuffer(VkCommandBuffer* command_buffer)
+	{
+		return vkEndCommandBuffer(*command_buffer);
+	}
+
+	VkResult queueSubmit(VkQueue queue, uint32_t submit_count, VkSubmitInfo* submit_info, VkFence fence)
+	{
+		return  vkQueueSubmit(queue, submit_count, submit_info, fence);
+	}
+
+	VkResult VulkanRHI::queueWaitIdle(VkQueue queue)
+	{
+		return vkQueueWaitIdle(queue);
+	}
+
+	void VulkanRHI::freeCommandBuffers(VkCommandPool command_pool, size_t free_count, VkCommandBuffer* p_command_buffer)
+	{
+		vkFreeCommandBuffers(m_device, command_pool, free_count, p_command_buffer);
+	}
+
+	VkResult VulkanRHI::queueSubmit(VkQueue queue, uint32_t submit_count, VkSubmitInfo* submit_info, VkFence fence)
+	{
+		return vkQueueSubmit(queue, submit_count, submit_info, fence);
+	}
+
 	VkSampleCountFlagBits VulkanRHI::getMaxAvailableSamplerCount()
 	{
 		VkPhysicalDeviceProperties properties;
@@ -927,6 +966,24 @@ namespace QYHS
 		getNextImage(update_pass_after_recreate_swap_chain);
 		resetFence();
 		beginCommandBuffer();
+	}
+
+	void VulkanRHI::beginEvent(VkCommandBuffer command_buffer,std::string event_name,std::array<float,4> color )
+	{
+		if (!m_enable_debug_util) return;
+		VkDebugUtilsLabelEXT label_info;
+		label_info.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT;
+		label_info.pNext = nullptr;
+		label_info.pLabelName = event_name.c_str();
+		for (int i = 0; i < 4; ++i)
+			label_info.color[i] = color[i];
+		_vkCmdBeginDebugUtilsLabelEXT( command_buffer, &label_info);
+	}
+
+	void VulkanRHI::endEvent(VkCommandBuffer command_buffer)
+	{
+		if (!m_enable_debug_util) return;
+		_vkCmdEndDebugUtilsLabelEXT(command_buffer);
 	}
 
 	void VulkanRHI::beginCommandBuffer()
@@ -1597,6 +1654,12 @@ namespace QYHS
 		if (func != nullptr) {
 			func(instance, debugMessenger, pAllocator);
 		}
+	}
+
+	void VulkanRHI::initInstanceFunction()
+	{
+		_vkCmdBeginDebugUtilsLabelEXT = (PFN_vkCmdBeginDebugUtilsLabelEXT)vkGetInstanceProcAddr(instance, "vkCmdBeginDebugUtilsLabelEXT");
+		_vkCmdEndDebugUtilsLabelEXT = (PFN_vkCmdEndDebugUtilsLabelEXT)vkGetInstanceProcAddr(instance, "vkCmdEndDebugUtilsLabelEXT");
 	}
 
 	void VulkanRHI::transitionImageLayout(VkImage image, VkFormat format, uint32_t mip_levels, VkImageLayout oldLayout, VkImageLayout newLayout) {

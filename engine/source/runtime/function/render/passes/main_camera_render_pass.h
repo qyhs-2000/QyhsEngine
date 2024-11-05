@@ -1,6 +1,7 @@
 #pragma once
 #include "function/render/render_pass.h"
 #include "function/render/render_common.h"
+#include "ui_pass.h"
 #include "combine_ui_pass.h"
 namespace QYHS
 {
@@ -93,51 +94,6 @@ namespace QYHS
          1.0f, -1.0f,  1.0f
     };
 
-    //static float skyboxVertices[] = {
-    //    // positions          
-    //    0.f,  .0f, -.0f,
-    //    -.0f, -.0f, -.0f,
-    //     0.0f, -0.0f, -0.0f,
-    //     0.0f, -0.0f, -0.0f,
-    //     0.0f,  0.0f, -0.0f,
-    //    -0.0f,  0.0f, -0.0f,
-
-    //    0.f,  .0f, -.0f,
-    //    -.0f, -.0f, -.0f,
-    //     0.0f, -0.0f, -0.0f,
-    //     0.0f, -0.0f, -0.0f,
-    //     0.0f,  0.0f, -0.0f,
-    //    -0.0f,  0.0f, -0.0f,
-
-    //     0.f,  .0f, -.0f,
-    //    -.0f, -.0f, -.0f,
-    //     0.0f, -0.0f, -0.0f,
-    //     0.0f, -0.0f, -0.0f,
-    //     0.0f,  0.0f, -0.0f,
-    //    -0.0f,  0.0f, -0.0f,
-
-    //    0.f,  .0f, -.0f,
-    //    -.0f, -.0f, -.0f,
-    //     0.0f, -0.0f, -0.0f,
-    //     0.0f, -0.0f, -0.0f,
-    //     0.0f,  0.0f, -0.0f,
-    //    -0.0f,  0.0f, -0.0f,
-
-    //    0.f,  .0f, -.0f,
-    //    -.0f, -.0f, -.0f,
-    //     0.0f, -0.0f, -0.0f,
-    //     0.0f, -0.0f, -0.0f,
-    //     0.0f,  0.0f, -0.0f,
-    //    -0.0f,  0.0f, -0.0f,
-
-    //    0.f,  .0f, -.0f,
-    //    -.0f, -.0f, -.0f,
-    //     0.0f, -0.0f, -0.0f,
-    //     0.0f, -0.0f, -0.0f,
-    //     0.0f,  0.0f, -0.0f,
-    //    -0.0f,  0.0f, -0.0f
-    //};
-
     struct MainCameraPassInitInfo :public RenderPassInitInfo
     {
 
@@ -164,7 +120,7 @@ namespace QYHS
 	};
 
 	
-		void draw(CombineUIPass & combine_ui_pass);
+		void draw(UIPass & ui_pass,CombineUIPass & combine_ui_pass);
 		void setupRenderPass();
 		void setupAttachments();
 		void setupRenderPipelines();
@@ -182,7 +138,7 @@ namespace QYHS
         void updateAfterRecreateSwapChain();
         void setVisibleAxis(bool state);
         void drawAxis();
-
+        VkRenderPass &getRenderPass() { return m_framebuffer.render_pass; }
         
 		virtual void prepareData(std::shared_ptr<RenderResourceBase> resource) override;
 		MeshPerFrameStorageBufferObject m_mesh_perframe_storage_buffer_object;

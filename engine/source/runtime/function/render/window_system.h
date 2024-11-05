@@ -32,6 +32,8 @@ namespace QYHS
 		GLFWwindow* getWindow() { return m_window; }
 		bool shouldCloseWindow() { return glfwWindowShouldClose(m_window); }
 		bool isMouseButton(int button)const;
+		const int getWidth(){return m_width;}
+		const int getHeight(){return m_height;}
 
 	protected:
 		static void onScrollCallback(GLFWwindow* window, double xoffset, double yoffset)

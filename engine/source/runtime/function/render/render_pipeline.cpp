@@ -10,7 +10,8 @@ void QYHS::RenderPipeline::initialize(RenderPipelineInitInfo init_info)
 	m_main_camera_pass = std::make_shared<MainCameraRenderPass>();
 	m_pick_pass = std::make_shared<PickRenderPass>();
 	m_combine_ui_pass = std::make_shared<CombineUIPass>();
-
+	m_ui_pass = std::make_shared<UIPass>();
+	
 	RenderPassCommonInfo pass_common_info;
 	pass_common_info.rhi = m_rhi;
 	pass_common_info.render_resource = init_info.m_render_resource;
@@ -25,6 +26,12 @@ void QYHS::RenderPipeline::initialize(RenderPipelineInitInfo init_info)
 	m_pick_pass->initialize(&pack_pass_init_info);
 
 	MainCameraRenderPass* p_main_camera_pass = static_cast<MainCameraRenderPass*>(m_main_camera_pass.get());
+
+	UIPassInitInfo ui_pass_init_info;
+	ui_pass_init_info.render_pass = &(p_main_camera_pass->getRenderPass());
+	m_ui_pass->setCommonInfo(pass_common_info);
+	m_ui_pass->initialize(&ui_pass_init_info);
+
 	CombineUIPassInitInfo combine_ui_pass_init_info;
 	combine_ui_pass_init_info.scene_input_attachment = p_main_camera_pass->getFrameBufferImageViews()[main_camera_pass_backup_odd_color_attachment];
 	combine_ui_pass_init_info.ui_input_attachment = p_main_camera_pass->getFrameBufferImageViews()[main_camera_pass_backup_even_color_attachment];
@@ -40,7 +47,7 @@ void QYHS::RenderPipeline::render(std::shared_ptr<RenderResourceBase> render_res
 	RenderResource* m_render_resource = static_cast<RenderResource*>(render_resource.get());
 	m_render_resource->resetRingBufferOffset(vulkan_rhi->getCurrentFrameIndex());
 	vulkan_rhi->prepareBeforeRender(std::bind(&RenderPipeline::updatePassAfterRecreatePipeline,this));
-	static_cast<MainCameraRenderPass*>(m_main_camera_pass.get())->draw(*static_cast<CombineUIPass*>(m_combine_ui_pass.get()));
+	static_cast<MainCameraRenderPass*>(m_main_camera_pass.get())->draw(*static_cast<UIPass*>(m_ui_pass.get()),*static_cast<CombineUIPass*>(m_combine_ui_pass.get()));
 	vulkan_rhi->submitRender(std::bind(&RenderPipeline::updatePassAfterRecreatePipeline,this));
 
 	

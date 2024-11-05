@@ -1113,7 +1113,7 @@ namespace QYHS
 
 	}
 
-	void MainCameraRenderPass::draw(CombineUIPass & combine_ui_pass)
+	void MainCameraRenderPass::draw(UIPass & ui_pass,CombineUIPass & combine_ui_pass)
 	{
 		VkRenderPassBeginInfo renderPassInfo{};
 		renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -1136,6 +1136,7 @@ namespace QYHS
 		drawSkyBox();
 		vkCmdNextSubpass(m_vulkan_rhi->getCurrentCommandBuffer(), VK_SUBPASS_CONTENTS_INLINE);
 		drawAxis();
+		ui_pass.draw();
 		vkCmdNextSubpass(m_vulkan_rhi->getCurrentCommandBuffer(), VK_SUBPASS_CONTENTS_INLINE);
 		combine_ui_pass.draw();
 		vkCmdEndRenderPass(m_vulkan_rhi->getCurrentCommandBuffer());
