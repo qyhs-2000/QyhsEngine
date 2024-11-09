@@ -20,6 +20,12 @@ namespace QYHS
 					Serializer::read(json_context,*ret_instance);
 					return ret_instance;
 				}
+				static int getVector4BaseClassReflectionInstanceList(ReflectionInstance* &out_list, void* instance)
+				{
+					int count = 0;
+					
+					return count;	
+				}
 				//field
 				static void set_x(void * instance,void * field_value)
 				{
@@ -116,7 +122,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeVector4Operator::getFieldTypeName_x,
 			&TypeFieldReflectionOperator::TypeVector4Operator::isArray_x
 			);
-			REGISTER_TO_FIELD_MAP("x",f_field_function_tuple_x);
+			REGISTER_TO_FIELD_MAP("Vector4",f_field_function_tuple_x);
 			FieldFunctionTuple * f_field_function_tuple_y = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeVector4Operator::set_y,
 			&TypeFieldReflectionOperator::TypeVector4Operator::get_y,
@@ -125,7 +131,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeVector4Operator::getFieldTypeName_y,
 			&TypeFieldReflectionOperator::TypeVector4Operator::isArray_y
 			);
-			REGISTER_TO_FIELD_MAP("y",f_field_function_tuple_y);
+			REGISTER_TO_FIELD_MAP("Vector4",f_field_function_tuple_y);
 			FieldFunctionTuple * f_field_function_tuple_z = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeVector4Operator::set_z,
 			&TypeFieldReflectionOperator::TypeVector4Operator::get_z,
@@ -134,7 +140,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeVector4Operator::getFieldTypeName_z,
 			&TypeFieldReflectionOperator::TypeVector4Operator::isArray_z
 			);
-			REGISTER_TO_FIELD_MAP("z",f_field_function_tuple_z);
+			REGISTER_TO_FIELD_MAP("Vector4",f_field_function_tuple_z);
 			FieldFunctionTuple * f_field_function_tuple_w = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeVector4Operator::set_w,
 			&TypeFieldReflectionOperator::TypeVector4Operator::get_w,
@@ -143,12 +149,12 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeVector4Operator::getFieldTypeName_w,
 			&TypeFieldReflectionOperator::TypeVector4Operator::isArray_w
 			);
-			REGISTER_TO_FIELD_MAP("w",f_field_function_tuple_w);
+			REGISTER_TO_FIELD_MAP("Vector4",f_field_function_tuple_w);
 		
 		
 		ClassFunctionTuple * f_class_function_tuple_Vector4 = new ClassFunctionTuple(
-			//&TypeFieldReflectionOperator::TypeVector4Operator::getVector4BaseClassReflectionInstanceList,
-            &TypeFieldReflectionOperator::TypeVector4Operator::constructorWithJson
+            &TypeFieldReflectionOperator::TypeVector4Operator::constructorWithJson,
+            &TypeFieldReflectionOperator::TypeVector4Operator::getVector4BaseClassReflectionInstanceList
             //&TypeFieldReflectionOperator::TypeVector4Operator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("Vector4",f_class_function_tuple_Vector4);

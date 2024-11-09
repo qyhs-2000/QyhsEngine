@@ -23,6 +23,17 @@ namespace QYHS
 					Serializer::read(json_context,*ret_instance);
 					return ret_instance;
 				}
+				static int get{{class_name}}BaseClassReflectionInstanceList(ReflectionInstance* &out_list, void* instance)
+				{
+					int count = {{class_base_class_size}};
+					{{#class_has_base}}out_list = new ReflectionInstance[count];
+					for(int i = 0;i<count;++i){
+					{{#class_base_class_defines}}
+						out_list[i] = TYPE_META_DEF({{class_base_class_name}},static_cast<{{class_name}}*>(instance));
+					{{/class_base_class_defines}}
+					}{{/class_has_base}}
+					return count;	
+				}
 				//field
 				{{#class_field_defines}}
 				static void set_{{class_field_name}}(void * instance,void * field_value)
@@ -86,7 +97,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::Type{{class_name}}Operator::getFieldTypeName_{{class_field_name}},
 			&TypeFieldReflectionOperator::Type{{class_name}}Operator::isArray_{{class_field_name}}
 			);
-			REGISTER_TO_FIELD_MAP("{{class_field_name}}",f_field_function_tuple_{{class_field_name}});
+			REGISTER_TO_FIELD_MAP("{{class_name}}",f_field_function_tuple_{{class_field_name}});
 		{{/class_field_defines}}
 		
 		{{#vector_exist}}{{#vector_defines}} 
@@ -101,8 +112,8 @@ namespace QYHS
 		{{/vector_defines}}
 		{{/vector_exist}}
 		{{#class_need_register}}ClassFunctionTuple * f_class_function_tuple_{{class_name}} = new ClassFunctionTuple(
-			//&TypeFieldReflectionOperator::Type{{class_name}}Operator::get{{class_name}}BaseClassReflectionInstanceList,
-            &TypeFieldReflectionOperator::Type{{class_name}}Operator::constructorWithJson
+            &TypeFieldReflectionOperator::Type{{class_name}}Operator::constructorWithJson,
+            &TypeFieldReflectionOperator::Type{{class_name}}Operator::get{{class_name}}BaseClassReflectionInstanceList
             //&TypeFieldReflectionOperator::Type{{class_name}}Operator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("{{class_name}}",f_class_function_tuple_{{class_name}});

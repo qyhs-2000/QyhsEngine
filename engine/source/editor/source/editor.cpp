@@ -26,6 +26,7 @@ namespace QYHS
 		{
 			delta_time = m_engine->caculateDeltaTime();
 			g_editor_global_context.m_input_manager->tick(delta_time);
+			g_editor_global_context.m_scene_manager->tick(delta_time);
 			if (!m_engine->tick(delta_time))
 			{
 				return;

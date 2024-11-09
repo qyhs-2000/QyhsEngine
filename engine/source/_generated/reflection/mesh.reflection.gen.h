@@ -21,6 +21,12 @@ namespace QYHS
 					Serializer::read(json_context,*ret_instance);
 					return ret_instance;
 				}
+				static int getSubMeshResBaseClassReflectionInstanceList(ReflectionInstance* &out_list, void* instance)
+				{
+					int count = 0;
+					
+					return count;	
+				}
 				//field
 				static void set_m_material(void * instance,void * field_value)
 				{
@@ -100,6 +106,12 @@ namespace QYHS
 					Serializer::read(json_context,*ret_instance);
 					return ret_instance;
 				}
+				static int getMeshComponentResBaseClassReflectionInstanceList(ReflectionInstance* &out_list, void* instance)
+				{
+					int count = 0;
+					
+					return count;	
+				}
 				//field
 				static void set_m_sub_meshes(void * instance,void * field_value)
 				{
@@ -156,7 +168,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeSubMeshResOperator::getFieldTypeName_m_material,
 			&TypeFieldReflectionOperator::TypeSubMeshResOperator::isArray_m_material
 			);
-			REGISTER_TO_FIELD_MAP("m_material",f_field_function_tuple_m_material);
+			REGISTER_TO_FIELD_MAP("SubMeshRes",f_field_function_tuple_m_material);
 			FieldFunctionTuple * f_field_function_tuple_m_obj_file_ref = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeSubMeshResOperator::set_m_obj_file_ref,
 			&TypeFieldReflectionOperator::TypeSubMeshResOperator::get_m_obj_file_ref,
@@ -165,7 +177,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeSubMeshResOperator::getFieldTypeName_m_obj_file_ref,
 			&TypeFieldReflectionOperator::TypeSubMeshResOperator::isArray_m_obj_file_ref
 			);
-			REGISTER_TO_FIELD_MAP("m_obj_file_ref",f_field_function_tuple_m_obj_file_ref);
+			REGISTER_TO_FIELD_MAP("SubMeshRes",f_field_function_tuple_m_obj_file_ref);
 			FieldFunctionTuple * f_field_function_tuple_m_transform = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeSubMeshResOperator::set_m_transform,
 			&TypeFieldReflectionOperator::TypeSubMeshResOperator::get_m_transform,
@@ -174,12 +186,12 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeSubMeshResOperator::getFieldTypeName_m_transform,
 			&TypeFieldReflectionOperator::TypeSubMeshResOperator::isArray_m_transform
 			);
-			REGISTER_TO_FIELD_MAP("m_transform",f_field_function_tuple_m_transform);
+			REGISTER_TO_FIELD_MAP("SubMeshRes",f_field_function_tuple_m_transform);
 		
 		
 		ClassFunctionTuple * f_class_function_tuple_SubMeshRes = new ClassFunctionTuple(
-			//&TypeFieldReflectionOperator::TypeSubMeshResOperator::getSubMeshResBaseClassReflectionInstanceList,
-            &TypeFieldReflectionOperator::TypeSubMeshResOperator::constructorWithJson
+            &TypeFieldReflectionOperator::TypeSubMeshResOperator::constructorWithJson,
+            &TypeFieldReflectionOperator::TypeSubMeshResOperator::getSubMeshResBaseClassReflectionInstanceList
             //&TypeFieldReflectionOperator::TypeSubMeshResOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("SubMeshRes",f_class_function_tuple_SubMeshRes);
@@ -194,7 +206,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeMeshComponentResOperator::getFieldTypeName_m_sub_meshes,
 			&TypeFieldReflectionOperator::TypeMeshComponentResOperator::isArray_m_sub_meshes
 			);
-			REGISTER_TO_FIELD_MAP("m_sub_meshes",f_field_function_tuple_m_sub_meshes);
+			REGISTER_TO_FIELD_MAP("MeshComponentRes",f_field_function_tuple_m_sub_meshes);
 		
 			ArrayFunctionTuple * array_function_tuple_stdSSvectorLSubMeshResR = new ArrayFunctionTuple(
 			&ArrayReflectionOperator::ArraystdSSvectorLSubMeshResROperator::set,
@@ -205,8 +217,8 @@ namespace QYHS
 		);
 		REGISTER_TO_ARRAY_MAP("stdSSvectorLSubMeshResR",array_function_tuple_stdSSvectorLSubMeshResR);
 		ClassFunctionTuple * f_class_function_tuple_MeshComponentRes = new ClassFunctionTuple(
-			//&TypeFieldReflectionOperator::TypeMeshComponentResOperator::getMeshComponentResBaseClassReflectionInstanceList,
-            &TypeFieldReflectionOperator::TypeMeshComponentResOperator::constructorWithJson
+            &TypeFieldReflectionOperator::TypeMeshComponentResOperator::constructorWithJson,
+            &TypeFieldReflectionOperator::TypeMeshComponentResOperator::getMeshComponentResBaseClassReflectionInstanceList
             //&TypeFieldReflectionOperator::TypeMeshComponentResOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("MeshComponentRes",f_class_function_tuple_MeshComponentRes);

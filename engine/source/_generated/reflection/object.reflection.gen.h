@@ -21,6 +21,12 @@ namespace QYHS
 					Serializer::read(json_context,*ret_instance);
 					return ret_instance;
 				}
+				static int getObjectDefinitionResourceBaseClassReflectionInstanceList(ReflectionInstance* &out_list, void* instance)
+				{
+					int count = 0;
+					
+					return count;	
+				}
 				//field
 				static void set_m_components(void * instance,void * field_value)
 				{
@@ -79,6 +85,12 @@ namespace QYHS
 					ObjectInstanceResource * ret_instance = new ObjectInstanceResource;
 					Serializer::read(json_context,*ret_instance);
 					return ret_instance;
+				}
+				static int getObjectInstanceResourceBaseClassReflectionInstanceList(ReflectionInstance* &out_list, void* instance)
+				{
+					int count = 0;
+					
+					return count;	
 				}
 				//field
 				static void set_m_name(void * instance,void * field_value)
@@ -176,7 +188,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeObjectDefinitionResourceOperator::getFieldTypeName_m_components,
 			&TypeFieldReflectionOperator::TypeObjectDefinitionResourceOperator::isArray_m_components
 			);
-			REGISTER_TO_FIELD_MAP("m_components",f_field_function_tuple_m_components);
+			REGISTER_TO_FIELD_MAP("ObjectDefinitionResource",f_field_function_tuple_m_components);
 		
 			ArrayFunctionTuple * array_function_tuple_stdSSvectorLReflectionSSReflectionPtrLComponentRR = new ArrayFunctionTuple(
 			&ArrayReflectionOperator::ArraystdSSvectorLReflectionSSReflectionPtrLComponentRROperator::set,
@@ -187,8 +199,8 @@ namespace QYHS
 		);
 		REGISTER_TO_ARRAY_MAP("stdSSvectorLReflectionSSReflectionPtrLComponentRR",array_function_tuple_stdSSvectorLReflectionSSReflectionPtrLComponentRR);
 		ClassFunctionTuple * f_class_function_tuple_ObjectDefinitionResource = new ClassFunctionTuple(
-			//&TypeFieldReflectionOperator::TypeObjectDefinitionResourceOperator::getObjectDefinitionResourceBaseClassReflectionInstanceList,
-            &TypeFieldReflectionOperator::TypeObjectDefinitionResourceOperator::constructorWithJson
+            &TypeFieldReflectionOperator::TypeObjectDefinitionResourceOperator::constructorWithJson,
+            &TypeFieldReflectionOperator::TypeObjectDefinitionResourceOperator::getObjectDefinitionResourceBaseClassReflectionInstanceList
             //&TypeFieldReflectionOperator::TypeObjectDefinitionResourceOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("ObjectDefinitionResource",f_class_function_tuple_ObjectDefinitionResource);
@@ -203,7 +215,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeObjectInstanceResourceOperator::getFieldTypeName_m_name,
 			&TypeFieldReflectionOperator::TypeObjectInstanceResourceOperator::isArray_m_name
 			);
-			REGISTER_TO_FIELD_MAP("m_name",f_field_function_tuple_m_name);
+			REGISTER_TO_FIELD_MAP("ObjectInstanceResource",f_field_function_tuple_m_name);
 			FieldFunctionTuple * f_field_function_tuple_m_definition = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeObjectInstanceResourceOperator::set_m_definition,
 			&TypeFieldReflectionOperator::TypeObjectInstanceResourceOperator::get_m_definition,
@@ -212,7 +224,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeObjectInstanceResourceOperator::getFieldTypeName_m_definition,
 			&TypeFieldReflectionOperator::TypeObjectInstanceResourceOperator::isArray_m_definition
 			);
-			REGISTER_TO_FIELD_MAP("m_definition",f_field_function_tuple_m_definition);
+			REGISTER_TO_FIELD_MAP("ObjectInstanceResource",f_field_function_tuple_m_definition);
 			FieldFunctionTuple * f_field_function_tuple_m_instanced_components = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeObjectInstanceResourceOperator::set_m_instanced_components,
 			&TypeFieldReflectionOperator::TypeObjectInstanceResourceOperator::get_m_instanced_components,
@@ -221,7 +233,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeObjectInstanceResourceOperator::getFieldTypeName_m_instanced_components,
 			&TypeFieldReflectionOperator::TypeObjectInstanceResourceOperator::isArray_m_instanced_components
 			);
-			REGISTER_TO_FIELD_MAP("m_instanced_components",f_field_function_tuple_m_instanced_components);
+			REGISTER_TO_FIELD_MAP("ObjectInstanceResource",f_field_function_tuple_m_instanced_components);
 		
 			ArrayFunctionTuple * array_function_tuple_stdSSvectorLReflectionSSReflectionPtrLComponentRR = new ArrayFunctionTuple(
 			&ArrayReflectionOperator::ArraystdSSvectorLReflectionSSReflectionPtrLComponentRROperator::set,
@@ -232,8 +244,8 @@ namespace QYHS
 		);
 		REGISTER_TO_ARRAY_MAP("stdSSvectorLReflectionSSReflectionPtrLComponentRR",array_function_tuple_stdSSvectorLReflectionSSReflectionPtrLComponentRR);
 		ClassFunctionTuple * f_class_function_tuple_ObjectInstanceResource = new ClassFunctionTuple(
-			//&TypeFieldReflectionOperator::TypeObjectInstanceResourceOperator::getObjectInstanceResourceBaseClassReflectionInstanceList,
-            &TypeFieldReflectionOperator::TypeObjectInstanceResourceOperator::constructorWithJson
+            &TypeFieldReflectionOperator::TypeObjectInstanceResourceOperator::constructorWithJson,
+            &TypeFieldReflectionOperator::TypeObjectInstanceResourceOperator::getObjectInstanceResourceBaseClassReflectionInstanceList
             //&TypeFieldReflectionOperator::TypeObjectInstanceResourceOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("ObjectInstanceResource",f_class_function_tuple_ObjectInstanceResource);

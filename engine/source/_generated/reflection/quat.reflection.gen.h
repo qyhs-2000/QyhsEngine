@@ -20,6 +20,12 @@ namespace QYHS
 					Serializer::read(json_context,*ret_instance);
 					return ret_instance;
 				}
+				static int getQuaternionBaseClassReflectionInstanceList(ReflectionInstance* &out_list, void* instance)
+				{
+					int count = 0;
+					
+					return count;	
+				}
 				//field
 				static void set_w(void * instance,void * field_value)
 				{
@@ -116,7 +122,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeQuaternionOperator::getFieldTypeName_w,
 			&TypeFieldReflectionOperator::TypeQuaternionOperator::isArray_w
 			);
-			REGISTER_TO_FIELD_MAP("w",f_field_function_tuple_w);
+			REGISTER_TO_FIELD_MAP("Quaternion",f_field_function_tuple_w);
 			FieldFunctionTuple * f_field_function_tuple_x = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeQuaternionOperator::set_x,
 			&TypeFieldReflectionOperator::TypeQuaternionOperator::get_x,
@@ -125,7 +131,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeQuaternionOperator::getFieldTypeName_x,
 			&TypeFieldReflectionOperator::TypeQuaternionOperator::isArray_x
 			);
-			REGISTER_TO_FIELD_MAP("x",f_field_function_tuple_x);
+			REGISTER_TO_FIELD_MAP("Quaternion",f_field_function_tuple_x);
 			FieldFunctionTuple * f_field_function_tuple_y = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeQuaternionOperator::set_y,
 			&TypeFieldReflectionOperator::TypeQuaternionOperator::get_y,
@@ -134,7 +140,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeQuaternionOperator::getFieldTypeName_y,
 			&TypeFieldReflectionOperator::TypeQuaternionOperator::isArray_y
 			);
-			REGISTER_TO_FIELD_MAP("y",f_field_function_tuple_y);
+			REGISTER_TO_FIELD_MAP("Quaternion",f_field_function_tuple_y);
 			FieldFunctionTuple * f_field_function_tuple_z = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeQuaternionOperator::set_z,
 			&TypeFieldReflectionOperator::TypeQuaternionOperator::get_z,
@@ -143,12 +149,12 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeQuaternionOperator::getFieldTypeName_z,
 			&TypeFieldReflectionOperator::TypeQuaternionOperator::isArray_z
 			);
-			REGISTER_TO_FIELD_MAP("z",f_field_function_tuple_z);
+			REGISTER_TO_FIELD_MAP("Quaternion",f_field_function_tuple_z);
 		
 		
 		ClassFunctionTuple * f_class_function_tuple_Quaternion = new ClassFunctionTuple(
-			//&TypeFieldReflectionOperator::TypeQuaternionOperator::getQuaternionBaseClassReflectionInstanceList,
-            &TypeFieldReflectionOperator::TypeQuaternionOperator::constructorWithJson
+            &TypeFieldReflectionOperator::TypeQuaternionOperator::constructorWithJson,
+            &TypeFieldReflectionOperator::TypeQuaternionOperator::getQuaternionBaseClassReflectionInstanceList
             //&TypeFieldReflectionOperator::TypeQuaternionOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("Quaternion",f_class_function_tuple_Quaternion);

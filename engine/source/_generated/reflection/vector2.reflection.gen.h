@@ -20,6 +20,12 @@ namespace QYHS
 					Serializer::read(json_context,*ret_instance);
 					return ret_instance;
 				}
+				static int getVector2BaseClassReflectionInstanceList(ReflectionInstance* &out_list, void* instance)
+				{
+					int count = 0;
+					
+					return count;	
+				}
 				//field
 				static void set_x(void * instance,void * field_value)
 				{
@@ -76,7 +82,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeVector2Operator::getFieldTypeName_x,
 			&TypeFieldReflectionOperator::TypeVector2Operator::isArray_x
 			);
-			REGISTER_TO_FIELD_MAP("x",f_field_function_tuple_x);
+			REGISTER_TO_FIELD_MAP("Vector2",f_field_function_tuple_x);
 			FieldFunctionTuple * f_field_function_tuple_y = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeVector2Operator::set_y,
 			&TypeFieldReflectionOperator::TypeVector2Operator::get_y,
@@ -85,12 +91,12 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeVector2Operator::getFieldTypeName_y,
 			&TypeFieldReflectionOperator::TypeVector2Operator::isArray_y
 			);
-			REGISTER_TO_FIELD_MAP("y",f_field_function_tuple_y);
+			REGISTER_TO_FIELD_MAP("Vector2",f_field_function_tuple_y);
 		
 		
 		ClassFunctionTuple * f_class_function_tuple_Vector2 = new ClassFunctionTuple(
-			//&TypeFieldReflectionOperator::TypeVector2Operator::getVector2BaseClassReflectionInstanceList,
-            &TypeFieldReflectionOperator::TypeVector2Operator::constructorWithJson
+            &TypeFieldReflectionOperator::TypeVector2Operator::constructorWithJson,
+            &TypeFieldReflectionOperator::TypeVector2Operator::getVector2BaseClassReflectionInstanceList
             //&TypeFieldReflectionOperator::TypeVector2Operator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("Vector2",f_class_function_tuple_Vector2);

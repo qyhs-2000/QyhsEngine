@@ -21,6 +21,12 @@ namespace QYHS
 					Serializer::read(json_context,*ret_instance);
 					return ret_instance;
 				}
+				static int getSkyBoxSpecularMapBaseClassReflectionInstanceList(ReflectionInstance* &out_list, void* instance)
+				{
+					int count = 0;
+					
+					return count;	
+				}
 				//field
 				static void set_m_positive_x_map(void * instance,void * field_value)
 				{
@@ -160,6 +166,12 @@ namespace QYHS
 					Serializer::read(json_context,*ret_instance);
 					return ret_instance;
 				}
+				static int getGlobalRenderConfigBaseClassReflectionInstanceList(ReflectionInstance* &out_list, void* instance)
+				{
+					int count = 0;
+					
+					return count;	
+				}
 				//field
 				static void set_camera_config(void * instance,void * field_value)
 				{
@@ -216,7 +228,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::getFieldTypeName_m_positive_x_map,
 			&TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::isArray_m_positive_x_map
 			);
-			REGISTER_TO_FIELD_MAP("m_positive_x_map",f_field_function_tuple_m_positive_x_map);
+			REGISTER_TO_FIELD_MAP("SkyBoxSpecularMap",f_field_function_tuple_m_positive_x_map);
 			FieldFunctionTuple * f_field_function_tuple_m_negative_x_map = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::set_m_negative_x_map,
 			&TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::get_m_negative_x_map,
@@ -225,7 +237,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::getFieldTypeName_m_negative_x_map,
 			&TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::isArray_m_negative_x_map
 			);
-			REGISTER_TO_FIELD_MAP("m_negative_x_map",f_field_function_tuple_m_negative_x_map);
+			REGISTER_TO_FIELD_MAP("SkyBoxSpecularMap",f_field_function_tuple_m_negative_x_map);
 			FieldFunctionTuple * f_field_function_tuple_m_positive_y_map = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::set_m_positive_y_map,
 			&TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::get_m_positive_y_map,
@@ -234,7 +246,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::getFieldTypeName_m_positive_y_map,
 			&TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::isArray_m_positive_y_map
 			);
-			REGISTER_TO_FIELD_MAP("m_positive_y_map",f_field_function_tuple_m_positive_y_map);
+			REGISTER_TO_FIELD_MAP("SkyBoxSpecularMap",f_field_function_tuple_m_positive_y_map);
 			FieldFunctionTuple * f_field_function_tuple_m_negative_y_map = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::set_m_negative_y_map,
 			&TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::get_m_negative_y_map,
@@ -243,7 +255,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::getFieldTypeName_m_negative_y_map,
 			&TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::isArray_m_negative_y_map
 			);
-			REGISTER_TO_FIELD_MAP("m_negative_y_map",f_field_function_tuple_m_negative_y_map);
+			REGISTER_TO_FIELD_MAP("SkyBoxSpecularMap",f_field_function_tuple_m_negative_y_map);
 			FieldFunctionTuple * f_field_function_tuple_m_positive_z_map = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::set_m_positive_z_map,
 			&TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::get_m_positive_z_map,
@@ -252,7 +264,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::getFieldTypeName_m_positive_z_map,
 			&TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::isArray_m_positive_z_map
 			);
-			REGISTER_TO_FIELD_MAP("m_positive_z_map",f_field_function_tuple_m_positive_z_map);
+			REGISTER_TO_FIELD_MAP("SkyBoxSpecularMap",f_field_function_tuple_m_positive_z_map);
 			FieldFunctionTuple * f_field_function_tuple_m_negative_z_map = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::set_m_negative_z_map,
 			&TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::get_m_negative_z_map,
@@ -261,12 +273,12 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::getFieldTypeName_m_negative_z_map,
 			&TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::isArray_m_negative_z_map
 			);
-			REGISTER_TO_FIELD_MAP("m_negative_z_map",f_field_function_tuple_m_negative_z_map);
+			REGISTER_TO_FIELD_MAP("SkyBoxSpecularMap",f_field_function_tuple_m_negative_z_map);
 		
 		
 		ClassFunctionTuple * f_class_function_tuple_SkyBoxSpecularMap = new ClassFunctionTuple(
-			//&TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::getSkyBoxSpecularMapBaseClassReflectionInstanceList,
-            &TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::constructorWithJson
+            &TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::constructorWithJson,
+            &TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::getSkyBoxSpecularMapBaseClassReflectionInstanceList
             //&TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("SkyBoxSpecularMap",f_class_function_tuple_SkyBoxSpecularMap);
@@ -281,7 +293,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeGlobalRenderConfigOperator::getFieldTypeName_camera_config,
 			&TypeFieldReflectionOperator::TypeGlobalRenderConfigOperator::isArray_camera_config
 			);
-			REGISTER_TO_FIELD_MAP("camera_config",f_field_function_tuple_camera_config);
+			REGISTER_TO_FIELD_MAP("GlobalRenderConfig",f_field_function_tuple_camera_config);
 			FieldFunctionTuple * f_field_function_tuple_m_skybox_specular_map = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeGlobalRenderConfigOperator::set_m_skybox_specular_map,
 			&TypeFieldReflectionOperator::TypeGlobalRenderConfigOperator::get_m_skybox_specular_map,
@@ -290,12 +302,12 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeGlobalRenderConfigOperator::getFieldTypeName_m_skybox_specular_map,
 			&TypeFieldReflectionOperator::TypeGlobalRenderConfigOperator::isArray_m_skybox_specular_map
 			);
-			REGISTER_TO_FIELD_MAP("m_skybox_specular_map",f_field_function_tuple_m_skybox_specular_map);
+			REGISTER_TO_FIELD_MAP("GlobalRenderConfig",f_field_function_tuple_m_skybox_specular_map);
 		
 		
 		ClassFunctionTuple * f_class_function_tuple_GlobalRenderConfig = new ClassFunctionTuple(
-			//&TypeFieldReflectionOperator::TypeGlobalRenderConfigOperator::getGlobalRenderConfigBaseClassReflectionInstanceList,
-            &TypeFieldReflectionOperator::TypeGlobalRenderConfigOperator::constructorWithJson
+            &TypeFieldReflectionOperator::TypeGlobalRenderConfigOperator::constructorWithJson,
+            &TypeFieldReflectionOperator::TypeGlobalRenderConfigOperator::getGlobalRenderConfigBaseClassReflectionInstanceList
             //&TypeFieldReflectionOperator::TypeGlobalRenderConfigOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("GlobalRenderConfig",f_class_function_tuple_GlobalRenderConfig);

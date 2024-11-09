@@ -21,6 +21,12 @@ namespace QYHS
 					Serializer::read(json_context,*ret_instance);
 					return ret_instance;
 				}
+				static int getCameraPoseBaseClassReflectionInstanceList(ReflectionInstance* &out_list, void* instance)
+				{
+					int count = 0;
+					
+					return count;	
+				}
 				//field
 				static void set_m_position(void * instance,void * field_value)
 				{
@@ -99,6 +105,12 @@ namespace QYHS
 					CameraConfig * ret_instance = new CameraConfig;
 					Serializer::read(json_context,*ret_instance);
 					return ret_instance;
+				}
+				static int getCameraConfigBaseClassReflectionInstanceList(ReflectionInstance* &out_list, void* instance)
+				{
+					int count = 0;
+					
+					return count;	
 				}
 				//field
 				static void set_m_pose(void * instance,void * field_value)
@@ -196,7 +208,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeCameraPoseOperator::getFieldTypeName_m_position,
 			&TypeFieldReflectionOperator::TypeCameraPoseOperator::isArray_m_position
 			);
-			REGISTER_TO_FIELD_MAP("m_position",f_field_function_tuple_m_position);
+			REGISTER_TO_FIELD_MAP("CameraPose",f_field_function_tuple_m_position);
 			FieldFunctionTuple * f_field_function_tuple_m_target = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeCameraPoseOperator::set_m_target,
 			&TypeFieldReflectionOperator::TypeCameraPoseOperator::get_m_target,
@@ -205,7 +217,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeCameraPoseOperator::getFieldTypeName_m_target,
 			&TypeFieldReflectionOperator::TypeCameraPoseOperator::isArray_m_target
 			);
-			REGISTER_TO_FIELD_MAP("m_target",f_field_function_tuple_m_target);
+			REGISTER_TO_FIELD_MAP("CameraPose",f_field_function_tuple_m_target);
 			FieldFunctionTuple * f_field_function_tuple_m_up = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeCameraPoseOperator::set_m_up,
 			&TypeFieldReflectionOperator::TypeCameraPoseOperator::get_m_up,
@@ -214,12 +226,12 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeCameraPoseOperator::getFieldTypeName_m_up,
 			&TypeFieldReflectionOperator::TypeCameraPoseOperator::isArray_m_up
 			);
-			REGISTER_TO_FIELD_MAP("m_up",f_field_function_tuple_m_up);
+			REGISTER_TO_FIELD_MAP("CameraPose",f_field_function_tuple_m_up);
 		
 		
 		ClassFunctionTuple * f_class_function_tuple_CameraPose = new ClassFunctionTuple(
-			//&TypeFieldReflectionOperator::TypeCameraPoseOperator::getCameraPoseBaseClassReflectionInstanceList,
-            &TypeFieldReflectionOperator::TypeCameraPoseOperator::constructorWithJson
+            &TypeFieldReflectionOperator::TypeCameraPoseOperator::constructorWithJson,
+            &TypeFieldReflectionOperator::TypeCameraPoseOperator::getCameraPoseBaseClassReflectionInstanceList
             //&TypeFieldReflectionOperator::TypeCameraPoseOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("CameraPose",f_class_function_tuple_CameraPose);
@@ -234,7 +246,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeCameraConfigOperator::getFieldTypeName_m_pose,
 			&TypeFieldReflectionOperator::TypeCameraConfigOperator::isArray_m_pose
 			);
-			REGISTER_TO_FIELD_MAP("m_pose",f_field_function_tuple_m_pose);
+			REGISTER_TO_FIELD_MAP("CameraConfig",f_field_function_tuple_m_pose);
 			FieldFunctionTuple * f_field_function_tuple_m_aspect = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeCameraConfigOperator::set_m_aspect,
 			&TypeFieldReflectionOperator::TypeCameraConfigOperator::get_m_aspect,
@@ -243,7 +255,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeCameraConfigOperator::getFieldTypeName_m_aspect,
 			&TypeFieldReflectionOperator::TypeCameraConfigOperator::isArray_m_aspect
 			);
-			REGISTER_TO_FIELD_MAP("m_aspect",f_field_function_tuple_m_aspect);
+			REGISTER_TO_FIELD_MAP("CameraConfig",f_field_function_tuple_m_aspect);
 			FieldFunctionTuple * f_field_function_tuple_m_z_far = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeCameraConfigOperator::set_m_z_far,
 			&TypeFieldReflectionOperator::TypeCameraConfigOperator::get_m_z_far,
@@ -252,7 +264,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeCameraConfigOperator::getFieldTypeName_m_z_far,
 			&TypeFieldReflectionOperator::TypeCameraConfigOperator::isArray_m_z_far
 			);
-			REGISTER_TO_FIELD_MAP("m_z_far",f_field_function_tuple_m_z_far);
+			REGISTER_TO_FIELD_MAP("CameraConfig",f_field_function_tuple_m_z_far);
 			FieldFunctionTuple * f_field_function_tuple_m_z_near = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeCameraConfigOperator::set_m_z_near,
 			&TypeFieldReflectionOperator::TypeCameraConfigOperator::get_m_z_near,
@@ -261,12 +273,12 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeCameraConfigOperator::getFieldTypeName_m_z_near,
 			&TypeFieldReflectionOperator::TypeCameraConfigOperator::isArray_m_z_near
 			);
-			REGISTER_TO_FIELD_MAP("m_z_near",f_field_function_tuple_m_z_near);
+			REGISTER_TO_FIELD_MAP("CameraConfig",f_field_function_tuple_m_z_near);
 		
 		
 		ClassFunctionTuple * f_class_function_tuple_CameraConfig = new ClassFunctionTuple(
-			//&TypeFieldReflectionOperator::TypeCameraConfigOperator::getCameraConfigBaseClassReflectionInstanceList,
-            &TypeFieldReflectionOperator::TypeCameraConfigOperator::constructorWithJson
+            &TypeFieldReflectionOperator::TypeCameraConfigOperator::constructorWithJson,
+            &TypeFieldReflectionOperator::TypeCameraConfigOperator::getCameraConfigBaseClassReflectionInstanceList
             //&TypeFieldReflectionOperator::TypeCameraConfigOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("CameraConfig",f_class_function_tuple_CameraConfig);

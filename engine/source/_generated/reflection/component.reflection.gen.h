@@ -20,6 +20,12 @@ namespace QYHS
 					Serializer::read(json_context,*ret_instance);
 					return ret_instance;
 				}
+				static int getComponentBaseClassReflectionInstanceList(ReflectionInstance* &out_list, void* instance)
+				{
+					int count = 0;
+					
+					return count;	
+				}
 				//field
 				
 			};
@@ -33,8 +39,8 @@ namespace QYHS
 		
 		
 		ClassFunctionTuple * f_class_function_tuple_Component = new ClassFunctionTuple(
-			//&TypeFieldReflectionOperator::TypeComponentOperator::getComponentBaseClassReflectionInstanceList,
-            &TypeFieldReflectionOperator::TypeComponentOperator::constructorWithJson
+            &TypeFieldReflectionOperator::TypeComponentOperator::constructorWithJson,
+            &TypeFieldReflectionOperator::TypeComponentOperator::getComponentBaseClassReflectionInstanceList
             //&TypeFieldReflectionOperator::TypeComponentOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("Component",f_class_function_tuple_Component);

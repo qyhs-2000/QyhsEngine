@@ -15,6 +15,7 @@ namespace QYHS
 	}
 	bool GameObject::load(const ObjectInstanceResource& instance_resource)
 	{
+		m_name = instance_resource.m_name;
 		m_components.clear();
 
 		m_components = instance_resource.m_instanced_components;

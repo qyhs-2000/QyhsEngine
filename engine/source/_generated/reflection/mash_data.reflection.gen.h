@@ -21,6 +21,12 @@ namespace QYHS
 					Serializer::read(json_context,*ret_instance);
 					return ret_instance;
 				}
+				static int getVertexBaseClassReflectionInstanceList(ReflectionInstance* &out_list, void* instance)
+				{
+					int count = 0;
+					
+					return count;	
+				}
 				//field
 				static void set_px(void * instance,void * field_value)
 				{
@@ -260,6 +266,12 @@ namespace QYHS
 					Serializer::read(json_context,*ret_instance);
 					return ret_instance;
 				}
+				static int getMeshDataBaseClassReflectionInstanceList(ReflectionInstance* &out_list, void* instance)
+				{
+					int count = 0;
+					
+					return count;	
+				}
 				//field
 				static void set_vertex_buffer(void * instance,void * field_value)
 				{
@@ -354,7 +366,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeVertexOperator::getFieldTypeName_px,
 			&TypeFieldReflectionOperator::TypeVertexOperator::isArray_px
 			);
-			REGISTER_TO_FIELD_MAP("px",f_field_function_tuple_px);
+			REGISTER_TO_FIELD_MAP("Vertex",f_field_function_tuple_px);
 			FieldFunctionTuple * f_field_function_tuple_py = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeVertexOperator::set_py,
 			&TypeFieldReflectionOperator::TypeVertexOperator::get_py,
@@ -363,7 +375,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeVertexOperator::getFieldTypeName_py,
 			&TypeFieldReflectionOperator::TypeVertexOperator::isArray_py
 			);
-			REGISTER_TO_FIELD_MAP("py",f_field_function_tuple_py);
+			REGISTER_TO_FIELD_MAP("Vertex",f_field_function_tuple_py);
 			FieldFunctionTuple * f_field_function_tuple_pz = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeVertexOperator::set_pz,
 			&TypeFieldReflectionOperator::TypeVertexOperator::get_pz,
@@ -372,7 +384,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeVertexOperator::getFieldTypeName_pz,
 			&TypeFieldReflectionOperator::TypeVertexOperator::isArray_pz
 			);
-			REGISTER_TO_FIELD_MAP("pz",f_field_function_tuple_pz);
+			REGISTER_TO_FIELD_MAP("Vertex",f_field_function_tuple_pz);
 			FieldFunctionTuple * f_field_function_tuple_nx = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeVertexOperator::set_nx,
 			&TypeFieldReflectionOperator::TypeVertexOperator::get_nx,
@@ -381,7 +393,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeVertexOperator::getFieldTypeName_nx,
 			&TypeFieldReflectionOperator::TypeVertexOperator::isArray_nx
 			);
-			REGISTER_TO_FIELD_MAP("nx",f_field_function_tuple_nx);
+			REGISTER_TO_FIELD_MAP("Vertex",f_field_function_tuple_nx);
 			FieldFunctionTuple * f_field_function_tuple_ny = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeVertexOperator::set_ny,
 			&TypeFieldReflectionOperator::TypeVertexOperator::get_ny,
@@ -390,7 +402,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeVertexOperator::getFieldTypeName_ny,
 			&TypeFieldReflectionOperator::TypeVertexOperator::isArray_ny
 			);
-			REGISTER_TO_FIELD_MAP("ny",f_field_function_tuple_ny);
+			REGISTER_TO_FIELD_MAP("Vertex",f_field_function_tuple_ny);
 			FieldFunctionTuple * f_field_function_tuple_nz = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeVertexOperator::set_nz,
 			&TypeFieldReflectionOperator::TypeVertexOperator::get_nz,
@@ -399,7 +411,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeVertexOperator::getFieldTypeName_nz,
 			&TypeFieldReflectionOperator::TypeVertexOperator::isArray_nz
 			);
-			REGISTER_TO_FIELD_MAP("nz",f_field_function_tuple_nz);
+			REGISTER_TO_FIELD_MAP("Vertex",f_field_function_tuple_nz);
 			FieldFunctionTuple * f_field_function_tuple_tx = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeVertexOperator::set_tx,
 			&TypeFieldReflectionOperator::TypeVertexOperator::get_tx,
@@ -408,7 +420,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeVertexOperator::getFieldTypeName_tx,
 			&TypeFieldReflectionOperator::TypeVertexOperator::isArray_tx
 			);
-			REGISTER_TO_FIELD_MAP("tx",f_field_function_tuple_tx);
+			REGISTER_TO_FIELD_MAP("Vertex",f_field_function_tuple_tx);
 			FieldFunctionTuple * f_field_function_tuple_ty = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeVertexOperator::set_ty,
 			&TypeFieldReflectionOperator::TypeVertexOperator::get_ty,
@@ -417,7 +429,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeVertexOperator::getFieldTypeName_ty,
 			&TypeFieldReflectionOperator::TypeVertexOperator::isArray_ty
 			);
-			REGISTER_TO_FIELD_MAP("ty",f_field_function_tuple_ty);
+			REGISTER_TO_FIELD_MAP("Vertex",f_field_function_tuple_ty);
 			FieldFunctionTuple * f_field_function_tuple_tz = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeVertexOperator::set_tz,
 			&TypeFieldReflectionOperator::TypeVertexOperator::get_tz,
@@ -426,7 +438,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeVertexOperator::getFieldTypeName_tz,
 			&TypeFieldReflectionOperator::TypeVertexOperator::isArray_tz
 			);
-			REGISTER_TO_FIELD_MAP("tz",f_field_function_tuple_tz);
+			REGISTER_TO_FIELD_MAP("Vertex",f_field_function_tuple_tz);
 			FieldFunctionTuple * f_field_function_tuple_u = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeVertexOperator::set_u,
 			&TypeFieldReflectionOperator::TypeVertexOperator::get_u,
@@ -435,7 +447,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeVertexOperator::getFieldTypeName_u,
 			&TypeFieldReflectionOperator::TypeVertexOperator::isArray_u
 			);
-			REGISTER_TO_FIELD_MAP("u",f_field_function_tuple_u);
+			REGISTER_TO_FIELD_MAP("Vertex",f_field_function_tuple_u);
 			FieldFunctionTuple * f_field_function_tuple_v = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeVertexOperator::set_v,
 			&TypeFieldReflectionOperator::TypeVertexOperator::get_v,
@@ -444,12 +456,12 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeVertexOperator::getFieldTypeName_v,
 			&TypeFieldReflectionOperator::TypeVertexOperator::isArray_v
 			);
-			REGISTER_TO_FIELD_MAP("v",f_field_function_tuple_v);
+			REGISTER_TO_FIELD_MAP("Vertex",f_field_function_tuple_v);
 		
 		
 		ClassFunctionTuple * f_class_function_tuple_Vertex = new ClassFunctionTuple(
-			//&TypeFieldReflectionOperator::TypeVertexOperator::getVertexBaseClassReflectionInstanceList,
-            &TypeFieldReflectionOperator::TypeVertexOperator::constructorWithJson
+            &TypeFieldReflectionOperator::TypeVertexOperator::constructorWithJson,
+            &TypeFieldReflectionOperator::TypeVertexOperator::getVertexBaseClassReflectionInstanceList
             //&TypeFieldReflectionOperator::TypeVertexOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("Vertex",f_class_function_tuple_Vertex);
@@ -464,7 +476,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeMeshDataOperator::getFieldTypeName_vertex_buffer,
 			&TypeFieldReflectionOperator::TypeMeshDataOperator::isArray_vertex_buffer
 			);
-			REGISTER_TO_FIELD_MAP("vertex_buffer",f_field_function_tuple_vertex_buffer);
+			REGISTER_TO_FIELD_MAP("MeshData",f_field_function_tuple_vertex_buffer);
 			FieldFunctionTuple * f_field_function_tuple_index_buffer = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeMeshDataOperator::set_index_buffer,
 			&TypeFieldReflectionOperator::TypeMeshDataOperator::get_index_buffer,
@@ -473,7 +485,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeMeshDataOperator::getFieldTypeName_index_buffer,
 			&TypeFieldReflectionOperator::TypeMeshDataOperator::isArray_index_buffer
 			);
-			REGISTER_TO_FIELD_MAP("index_buffer",f_field_function_tuple_index_buffer);
+			REGISTER_TO_FIELD_MAP("MeshData",f_field_function_tuple_index_buffer);
 		
 			ArrayFunctionTuple * array_function_tuple_stdSSvectorLVertexR = new ArrayFunctionTuple(
 			&ArrayReflectionOperator::ArraystdSSvectorLVertexROperator::set,
@@ -492,8 +504,8 @@ namespace QYHS
 		);
 		REGISTER_TO_ARRAY_MAP("stdSSvectorLuint16_tR",array_function_tuple_stdSSvectorLuint16_tR);
 		ClassFunctionTuple * f_class_function_tuple_MeshData = new ClassFunctionTuple(
-			//&TypeFieldReflectionOperator::TypeMeshDataOperator::getMeshDataBaseClassReflectionInstanceList,
-            &TypeFieldReflectionOperator::TypeMeshDataOperator::constructorWithJson
+            &TypeFieldReflectionOperator::TypeMeshDataOperator::constructorWithJson,
+            &TypeFieldReflectionOperator::TypeMeshDataOperator::getMeshDataBaseClassReflectionInstanceList
             //&TypeFieldReflectionOperator::TypeMeshDataOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("MeshData",f_class_function_tuple_MeshData);

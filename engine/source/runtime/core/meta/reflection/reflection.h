@@ -35,6 +35,9 @@ namespace QYHS
         } \
     };
 
+#define TYPE_META_DEF(class_name,ptr)\
+	QYHS::Reflection::ReflectionInstance(QYHS::Reflection::TypeMeta::newMetaFromName(#class_name),(class_name*)ptr)
+
 #define REFLECTION_BODY(class_name)\
 	friend class Reflection::TypeFieldReflectionOperator::Type##class_name##Operator;\
 	friend class Serializer;
@@ -58,12 +61,15 @@ namespace QYHS
 
 	typedef std::tuple<SetFuncion, GetFuncion, GetNameFuncion, GetNameFuncion, GetNameFuncion, GetBoolFunc>
 		FieldFunctionTuple;
-	typedef std::tuple<ConstructorWithPJson>
+	typedef std::tuple<GetNameFuncion> MethodFunctionTuple;
+	typedef std::tuple<ConstructorWithPJson, GetBaseClassReflectionInstanceListFunc>
 		ClassFunctionTuple;
 	typedef std::tuple<SetArrayFunc, GetArrayFunc, GetSizeFunc, GetNameFuncion, GetNameFuncion> ArrayFunctionTuple;
 
 	namespace Reflection
 	{
+		static const char* k_unknown_type = "UnKnown Type";
+		static const char* k_unknown = "UnKnown";
 		class TypeMetaRegisterInterface
 		{
 		public:
@@ -72,23 +78,84 @@ namespace QYHS
 			static void registerToArrayMap(const char* name, ArrayFunctionTuple* value);
 		private:
 		};
+
+		class ArrayAccessor
+		{
+		public:
+			ArrayAccessor();
+			ArrayAccessor(ArrayFunctionTuple* function_tuple);
+			std::string getElementType();
+			int getSize(void* instances);
+			void* get(int index, void* instance);
+		private:
+			ArrayFunctionTuple* m_functions;
+			int m_array_size;
+			void* m_p_array;
+		};
+
+		class FieldAccessor
+		{
+			enum
+			{
+				_SET_CLASS_FIELD_FUNCTION_ = 0,
+				_GET_CLASS_FIELD_FUNCTION_,
+				_GET_CLASS_NAME_,
+				_GET_FIELD_NAME_,
+				_GET_FIELD_TYPE_NAME_,
+				_GET_IS_ARRAY_
+			};
+		public:
+			FieldAccessor();
+			FieldAccessor(FieldFunctionTuple* function_tuple);
+			std::string getFieldTypeName() { return m_field_type_name; }
+			bool isArray() { return m_is_array; }
+			void* get(void* instance);
+			bool getTypeMeta(Reflection::TypeMeta &type_meta);
+			std::string getTypeName() { return m_field_type_name; }
+		private:
+			std::string m_field_type_name;
+			std::string m_field_name;
+			FieldFunctionTuple *m_functions;
+			bool m_is_array{ false };
+		};
+
+		class MethodAccessor
+		{
+		public:
+			MethodAccessor();
+			MethodAccessor(MethodFunctionTuple* functions);
+		private:
+			MethodFunctionTuple* m_functions;
+			std::string	m_method_name;
+		};
+
 		class TypeMeta
 		{
 		public:
 			TypeMeta() {}
-			TypeMeta(std::string type_name) :m_type_name(type_name) {}
+			TypeMeta(std::string type_name);
+			TypeMeta& operator=(const TypeMeta& type_meta);
 			static ReflectionInstance newFromNameAndJson(std::string type_name, const Json& json_context);
+			static TypeMeta newMetaFromName(std::string name);
+			static bool newArrayAccessorFromName(std::string type_name, ArrayAccessor& array_accessor);
+			int getBaseClassReflectionInstanceList(Reflection::ReflectionInstance* &reflection_instance_list, void* object_instance);
+			int getFields(FieldAccessor*& p_fields);
+			std::string getTypeName();
+			bool m_is_valid = false;
 		private:
 			std::string m_type_name;
+			std::vector<FieldAccessor, std::allocator<FieldAccessor>> m_fields;
+			std::vector<MethodAccessor, std::allocator<MethodAccessor>> m_methods;
 		};
 		class ReflectionInstance
 		{
 		public:
 			ReflectionInstance();
 			ReflectionInstance(TypeMeta meta, void* instance) :m_meta(meta), m_instance(instance) {}
+
 			void* m_instance;
-		private:
 			TypeMeta m_meta;
+		private:
 		};
 
 

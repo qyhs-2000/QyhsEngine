@@ -16,6 +16,19 @@ namespace QYHS
 		m_render_system = g_runtime_global_context.m_render_system;
 	}
 
+	void EditorSceneManager::tick(float delta_time)
+	{
+		std::shared_ptr<GameObject> selected_game_object = getSelectedGameObject().lock();
+		if (selected_game_object)
+		{
+			TransformComponent* transform_component = selected_game_object->TryGetComponent(TransformComponent);
+			if (transform_component)
+			{
+				transform_component->setDirty(true);
+			}
+		}
+	}
+
 	uint32_t EditorSceneManager::getMeshIDByPickedUV(Vector2 picked_id)
 	{
 		return m_render_system->getMeshIDByPickedUV(picked_id);
@@ -259,7 +272,7 @@ namespace QYHS
 
 	void EditorSceneManager::moveObject(const float &new_mouse_x,const float &new_mouse_y,const float & old_mouse_x,const float & old_mouse_y,const Vector2 & engine_window_size)
 	{
-		if ((new_mouse_x == old_mouse_x) && new_mouse_y == old_mouse_y)
+		if (((new_mouse_x == old_mouse_x) && (new_mouse_y == old_mouse_y))||(m_selected_axis == 3))
 		{
 			return;
 		}

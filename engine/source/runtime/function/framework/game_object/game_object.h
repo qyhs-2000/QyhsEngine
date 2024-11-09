@@ -28,7 +28,8 @@ namespace QYHS
 			}
 			return nullptr;
 		}
-
+		std::string m_name;
+		std::vector<Reflection::ReflectionPtr<Component>> &getComponents() { return m_components; }
 #define TryGetComponent(component_type) tryGetComponent<component_type>(#component_type);
 	private:
 		std::vector<Reflection::ReflectionPtr<Component>> m_components;

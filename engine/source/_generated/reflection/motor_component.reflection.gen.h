@@ -20,6 +20,15 @@ namespace QYHS
 					Serializer::read(json_context,*ret_instance);
 					return ret_instance;
 				}
+				static int getMotorComponentBaseClassReflectionInstanceList(ReflectionInstance* &out_list, void* instance)
+				{
+					int count = 1;
+					out_list = new ReflectionInstance[count];
+					for(int i = 0;i<count;++i){
+						out_list[i] = TYPE_META_DEF(QYHS::Component,static_cast<MotorComponent*>(instance));
+					}
+					return count;	
+				}
 				//field
 				static void set_m_transform(void * instance,void * field_value)
 				{
@@ -56,12 +65,12 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeMotorComponentOperator::getFieldTypeName_m_transform,
 			&TypeFieldReflectionOperator::TypeMotorComponentOperator::isArray_m_transform
 			);
-			REGISTER_TO_FIELD_MAP("m_transform",f_field_function_tuple_m_transform);
+			REGISTER_TO_FIELD_MAP("MotorComponent",f_field_function_tuple_m_transform);
 		
 		
 		ClassFunctionTuple * f_class_function_tuple_MotorComponent = new ClassFunctionTuple(
-			//&TypeFieldReflectionOperator::TypeMotorComponentOperator::getMotorComponentBaseClassReflectionInstanceList,
-            &TypeFieldReflectionOperator::TypeMotorComponentOperator::constructorWithJson
+            &TypeFieldReflectionOperator::TypeMotorComponentOperator::constructorWithJson,
+            &TypeFieldReflectionOperator::TypeMotorComponentOperator::getMotorComponentBaseClassReflectionInstanceList
             //&TypeFieldReflectionOperator::TypeMotorComponentOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("MotorComponent",f_class_function_tuple_MotorComponent);

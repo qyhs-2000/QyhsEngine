@@ -6,7 +6,7 @@ void Generator::GeneratorInterface::genClassRenderData(std::shared_ptr<Class> cl
 	std::cout << "Generating Class Render File" << std::endl;
 	std::cout << "class_name:" << class_temp->getClassName() << " ";
 	class_def.set("class_name", class_temp->getClassName());
-	class_def.set("class_base_class_size", class_temp->m_base_classes.size());
+	class_def.set("class_base_class_size", std::to_string(class_temp->m_base_classes.size()));
 	class_def.set("class_need_register", true);
 	std::string class_name = class_temp->getClassName();
 	if (class_name == "MeshComponent")

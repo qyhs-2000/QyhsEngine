@@ -20,6 +20,12 @@ namespace QYHS
 					Serializer::read(json_context,*ret_instance);
 					return ret_instance;
 				}
+				static int getVector3BaseClassReflectionInstanceList(ReflectionInstance* &out_list, void* instance)
+				{
+					int count = 0;
+					
+					return count;	
+				}
 				//field
 				static void set_x(void * instance,void * field_value)
 				{
@@ -96,7 +102,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeVector3Operator::getFieldTypeName_x,
 			&TypeFieldReflectionOperator::TypeVector3Operator::isArray_x
 			);
-			REGISTER_TO_FIELD_MAP("x",f_field_function_tuple_x);
+			REGISTER_TO_FIELD_MAP("Vector3",f_field_function_tuple_x);
 			FieldFunctionTuple * f_field_function_tuple_y = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeVector3Operator::set_y,
 			&TypeFieldReflectionOperator::TypeVector3Operator::get_y,
@@ -105,7 +111,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeVector3Operator::getFieldTypeName_y,
 			&TypeFieldReflectionOperator::TypeVector3Operator::isArray_y
 			);
-			REGISTER_TO_FIELD_MAP("y",f_field_function_tuple_y);
+			REGISTER_TO_FIELD_MAP("Vector3",f_field_function_tuple_y);
 			FieldFunctionTuple * f_field_function_tuple_z = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeVector3Operator::set_z,
 			&TypeFieldReflectionOperator::TypeVector3Operator::get_z,
@@ -114,12 +120,12 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeVector3Operator::getFieldTypeName_z,
 			&TypeFieldReflectionOperator::TypeVector3Operator::isArray_z
 			);
-			REGISTER_TO_FIELD_MAP("z",f_field_function_tuple_z);
+			REGISTER_TO_FIELD_MAP("Vector3",f_field_function_tuple_z);
 		
 		
 		ClassFunctionTuple * f_class_function_tuple_Vector3 = new ClassFunctionTuple(
-			//&TypeFieldReflectionOperator::TypeVector3Operator::getVector3BaseClassReflectionInstanceList,
-            &TypeFieldReflectionOperator::TypeVector3Operator::constructorWithJson
+            &TypeFieldReflectionOperator::TypeVector3Operator::constructorWithJson,
+            &TypeFieldReflectionOperator::TypeVector3Operator::getVector3BaseClassReflectionInstanceList
             //&TypeFieldReflectionOperator::TypeVector3Operator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("Vector3",f_class_function_tuple_Vector3);

@@ -20,6 +20,12 @@ namespace QYHS
 					Serializer::read(json_context,*ret_instance);
 					return ret_instance;
 				}
+				static int getWorldResourceBaseClassReflectionInstanceList(ReflectionInstance* &out_list, void* instance)
+				{
+					int count = 0;
+					
+					return count;	
+				}
 				//field
 				static void set_m_default_level_url(void * instance,void * field_value)
 				{
@@ -56,12 +62,12 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeWorldResourceOperator::getFieldTypeName_m_default_level_url,
 			&TypeFieldReflectionOperator::TypeWorldResourceOperator::isArray_m_default_level_url
 			);
-			REGISTER_TO_FIELD_MAP("m_default_level_url",f_field_function_tuple_m_default_level_url);
+			REGISTER_TO_FIELD_MAP("WorldResource",f_field_function_tuple_m_default_level_url);
 		
 		
 		ClassFunctionTuple * f_class_function_tuple_WorldResource = new ClassFunctionTuple(
-			//&TypeFieldReflectionOperator::TypeWorldResourceOperator::getWorldResourceBaseClassReflectionInstanceList,
-            &TypeFieldReflectionOperator::TypeWorldResourceOperator::constructorWithJson
+            &TypeFieldReflectionOperator::TypeWorldResourceOperator::constructorWithJson,
+            &TypeFieldReflectionOperator::TypeWorldResourceOperator::getWorldResourceBaseClassReflectionInstanceList
             //&TypeFieldReflectionOperator::TypeWorldResourceOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("WorldResource",f_class_function_tuple_WorldResource);

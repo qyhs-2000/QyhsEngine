@@ -20,6 +20,12 @@ namespace QYHS
 					Serializer::read(json_context,*ret_instance);
 					return ret_instance;
 				}
+				static int getTransformBaseClassReflectionInstanceList(ReflectionInstance* &out_list, void* instance)
+				{
+					int count = 0;
+					
+					return count;	
+				}
 				//field
 				static void set_m_position(void * instance,void * field_value)
 				{
@@ -96,7 +102,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeTransformOperator::getFieldTypeName_m_position,
 			&TypeFieldReflectionOperator::TypeTransformOperator::isArray_m_position
 			);
-			REGISTER_TO_FIELD_MAP("m_position",f_field_function_tuple_m_position);
+			REGISTER_TO_FIELD_MAP("Transform",f_field_function_tuple_m_position);
 			FieldFunctionTuple * f_field_function_tuple_m_scale = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeTransformOperator::set_m_scale,
 			&TypeFieldReflectionOperator::TypeTransformOperator::get_m_scale,
@@ -105,7 +111,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeTransformOperator::getFieldTypeName_m_scale,
 			&TypeFieldReflectionOperator::TypeTransformOperator::isArray_m_scale
 			);
-			REGISTER_TO_FIELD_MAP("m_scale",f_field_function_tuple_m_scale);
+			REGISTER_TO_FIELD_MAP("Transform",f_field_function_tuple_m_scale);
 			FieldFunctionTuple * f_field_function_tuple_m_rotation = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeTransformOperator::set_m_rotation,
 			&TypeFieldReflectionOperator::TypeTransformOperator::get_m_rotation,
@@ -114,12 +120,12 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeTransformOperator::getFieldTypeName_m_rotation,
 			&TypeFieldReflectionOperator::TypeTransformOperator::isArray_m_rotation
 			);
-			REGISTER_TO_FIELD_MAP("m_rotation",f_field_function_tuple_m_rotation);
+			REGISTER_TO_FIELD_MAP("Transform",f_field_function_tuple_m_rotation);
 		
 		
 		ClassFunctionTuple * f_class_function_tuple_Transform = new ClassFunctionTuple(
-			//&TypeFieldReflectionOperator::TypeTransformOperator::getTransformBaseClassReflectionInstanceList,
-            &TypeFieldReflectionOperator::TypeTransformOperator::constructorWithJson
+            &TypeFieldReflectionOperator::TypeTransformOperator::constructorWithJson,
+            &TypeFieldReflectionOperator::TypeTransformOperator::getTransformBaseClassReflectionInstanceList
             //&TypeFieldReflectionOperator::TypeTransformOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("Transform",f_class_function_tuple_Transform);

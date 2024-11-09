@@ -20,6 +20,12 @@ namespace QYHS
 					Serializer::read(json_context,*ret_instance);
 					return ret_instance;
 				}
+				static int getLevelResourceBaseClassReflectionInstanceList(ReflectionInstance* &out_list, void* instance)
+				{
+					int count = 0;
+					
+					return count;	
+				}
 				//field
 				static void set_m_gravity(void * instance,void * field_value)
 				{
@@ -116,7 +122,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeLevelResourceOperator::getFieldTypeName_m_gravity,
 			&TypeFieldReflectionOperator::TypeLevelResourceOperator::isArray_m_gravity
 			);
-			REGISTER_TO_FIELD_MAP("m_gravity",f_field_function_tuple_m_gravity);
+			REGISTER_TO_FIELD_MAP("LevelResource",f_field_function_tuple_m_gravity);
 			FieldFunctionTuple * f_field_function_tuple_m_character_name = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeLevelResourceOperator::set_m_character_name,
 			&TypeFieldReflectionOperator::TypeLevelResourceOperator::get_m_character_name,
@@ -125,7 +131,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeLevelResourceOperator::getFieldTypeName_m_character_name,
 			&TypeFieldReflectionOperator::TypeLevelResourceOperator::isArray_m_character_name
 			);
-			REGISTER_TO_FIELD_MAP("m_character_name",f_field_function_tuple_m_character_name);
+			REGISTER_TO_FIELD_MAP("LevelResource",f_field_function_tuple_m_character_name);
 			FieldFunctionTuple * f_field_function_tuple_m_objects = new FieldFunctionTuple(
 			&TypeFieldReflectionOperator::TypeLevelResourceOperator::set_m_objects,
 			&TypeFieldReflectionOperator::TypeLevelResourceOperator::get_m_objects,
@@ -134,7 +140,7 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeLevelResourceOperator::getFieldTypeName_m_objects,
 			&TypeFieldReflectionOperator::TypeLevelResourceOperator::isArray_m_objects
 			);
-			REGISTER_TO_FIELD_MAP("m_objects",f_field_function_tuple_m_objects);
+			REGISTER_TO_FIELD_MAP("LevelResource",f_field_function_tuple_m_objects);
 		
 			ArrayFunctionTuple * array_function_tuple_stdSSvectorLObjectInstanceResourceR = new ArrayFunctionTuple(
 			&ArrayReflectionOperator::ArraystdSSvectorLObjectInstanceResourceROperator::set,
@@ -145,8 +151,8 @@ namespace QYHS
 		);
 		REGISTER_TO_ARRAY_MAP("stdSSvectorLObjectInstanceResourceR",array_function_tuple_stdSSvectorLObjectInstanceResourceR);
 		ClassFunctionTuple * f_class_function_tuple_LevelResource = new ClassFunctionTuple(
-			//&TypeFieldReflectionOperator::TypeLevelResourceOperator::getLevelResourceBaseClassReflectionInstanceList,
-            &TypeFieldReflectionOperator::TypeLevelResourceOperator::constructorWithJson
+            &TypeFieldReflectionOperator::TypeLevelResourceOperator::constructorWithJson,
+            &TypeFieldReflectionOperator::TypeLevelResourceOperator::getLevelResourceBaseClassReflectionInstanceList
             //&TypeFieldReflectionOperator::TypeLevelResourceOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("LevelResource",f_class_function_tuple_LevelResource);
