@@ -219,6 +219,9 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/ui/editor_ui.h \
   function/render/window_system.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/ui/window_ui.h \
+  E:/VS_Project/QyhsEngine/engine/source\editor/include/editor_scene_manager.h \
+  E:/VS_Project/QyhsEngine/engine/source\editor/include/editor_axis.h \
+  function/render/render_entity.h function/render/render_type.h \
   function/render/render_pass_base.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_scene.h \
   function/render/render_resource.h \
@@ -230,7 +233,6 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   function/render/render_swap_context.h function/render/render_scene.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/rhi/vulkan/common/vulkan_render_type.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/rhi/vulkan/vulkan_utils.h \
-  function/render/render_type.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/window_system.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\iostream \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/asset_manager/asset_manager.h \
@@ -287,8 +289,8 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/world_resource.h \
   E:/VS_Project/QyhsEngine/engine/source/editor/include/editor.h \
   engine.h \
-  E:/VS_Project/QyhsEngine/engine/source/editor/include/editor_global_context.h \
+  E:/VS_Project/QyhsEngine/engine/source\editor/include/editor_global_context.h \
   function/render/ui/editor_ui.h \
   E:/VS_Project/QyhsEngine/engine/source/editor/include/editor_axis.h \
-  function/render/render_entity.h \
+  E:/VS_Project/QyhsEngine/engine/source/editor/include/editor_global_context.h \
   E:/VS_Project/QyhsEngine/engine/source/editor/include/editor_input_manager.h

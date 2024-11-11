@@ -4,6 +4,7 @@
 namespace QYHS
 {
 
+	//TODO:Destroy buffer  when application is destroyed
 	struct VulkanMaterial
 	{
 		//common base texture image
@@ -17,6 +18,7 @@ namespace QYHS
 		VkDescriptorSet material_descriptor_set;
 	};
 
+	//TODO:Destroy buffer
 	struct VulkanMesh
 	{
 		VkBuffer mesh_vertex_position_buffer;

@@ -15,6 +15,12 @@ static void framebufferResizeCallback(GLFWwindow* window, int width, int height)
 
 namespace QYHS
 {
+	WindowSystem::~WindowSystem()
+	{
+		glfwDestroyWindow(m_window);
+		glfwTerminate();
+	}
+
 	void WindowSystem::initialize(WindowCreateInfo* window_create_info)
 	{
 		if (!glfwInit())

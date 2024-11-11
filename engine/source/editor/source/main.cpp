@@ -18,6 +18,6 @@ int main(int argc, char** argv)
 	QYHS::QyhsEditor* editor = new QYHS::QyhsEditor();
 	editor->initialize(engine);
 	editor->run();
-
+	editor->clear();
 	return 0;
 }

@@ -12,6 +12,7 @@ namespace QYHS
 	{
 	public:
 		void initialize(EditorGlobalContextInitInfo & init_info);
+		void clear();
 		class WindowSystem* m_window_system{ nullptr };
 		class EditorSceneManager* m_scene_manager{ nullptr };
 		class EditorInputManager* m_input_manager{ nullptr };

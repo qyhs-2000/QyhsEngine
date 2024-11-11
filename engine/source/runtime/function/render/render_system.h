@@ -26,6 +26,7 @@ namespace QYHS
 		void setVisibleAxis(std::optional<RenderEntity> axis);
 		RenderGUIDAllocator<MeshSourceDesc> & getMeshAssetIDAllocator();
 		RenderGUIDAllocator<GameObjectPartId> & getInstanceIDAllocator();
+		void updateEngineContentViewport(Vector2 content_position, Vector2 content_size);
 		void uploadGameResource(RenderEntity * entity,RenderMeshData mesh_data);
 		void setSelectedAxis(size_t selected_axis);
 		void initializeUIRenderBackend(WindowUI* ui);

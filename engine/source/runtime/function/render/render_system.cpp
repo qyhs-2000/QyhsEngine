@@ -191,6 +191,15 @@ namespace QYHS
 		return m_render_scene->getInstanceIdAllocator();
 	}
 
+	void RenderSystem::updateEngineContentViewport(Vector2 content_position, Vector2 content_size)
+	{
+		VulkanRHI* m_vulkan_rhi = static_cast<VulkanRHI*>(m_rhi.get());
+		m_vulkan_rhi->m_viewport.x = content_position.x;
+		m_vulkan_rhi->m_viewport.y = content_position.y;
+		m_vulkan_rhi->m_viewport.width = content_size.x;
+		m_vulkan_rhi->m_viewport.height = content_size.y;
+	}
+
 	void RenderSystem::uploadGameResource(RenderEntity* entity, RenderMeshData mesh_data)
 	{
 		m_render_resource->uploadGameObjectRenderResource(m_rhi,*entity,mesh_data);

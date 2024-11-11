@@ -175,8 +175,11 @@ namespace QYHS
 		void resetFence();
 		void resetCommandBuffer();
 		void resetCommandPool();
-		void recordCommandBuffer();
 		void submitRender(std::function<void()>);
+		void destroyImage(VkImage image);
+		void destroyImageView(VkImageView image_view);
+		void freeMemory(VkDeviceMemory memory);
+		void destroyFrameBuffer(VkFramebuffer framebuffer);
 		int getMaxFrameInFlight() { return MAX_FRAMES_IN_FLIGHT; }
 		VkDevice getDevice() { return m_device; }
 		VkPhysicalDevice getPhysicalDevice() { return physical_device; }
@@ -185,9 +188,6 @@ namespace QYHS
 		VkFormat getDepthImageFormat() { return m_depth_image_format; }
 		VkExtent2D getSwapChainExtent() { return m_swapchain_extent; }
 		VkCommandBuffer& getCurrentCommandBuffer() { return m_command_buffers[m_current_frame_index]; }
-		VkBuffer getVertexBuffer() { return vertexBuffer; }
-		VkBuffer getIndexBuffer() { return indexBuffer; }
-		std::vector<uint32_t>& getIndices() { return indices; }
 		VkDescriptorPool& getDescriptorPool() { return m_descriptor_pool; }
 		VkBuffer getUniformBuffer(uint32_t index) {
 			return uniformBuffers[index];
@@ -222,25 +222,13 @@ namespace QYHS
 		void createLogicalDevice();
 		void createSwapChain();
 		void createImageViews();
-		void createRenderPass();
-		void createDescriptorSetLayout();
-		void createGraphicsPipeline();
 		void createCommandPool();
 		void createDepthResources();
-		void createColorResource();
 		void createFramebuffers();
-		void createTextureImage();
-		void createTextureImageView();
-		void createTextureSampler();
 		void loadModel();
-		void initCamera();
 		void loadAssets();
 		void loadglTFFile(const std::string& path);
-		void createVertexBuffer();
-		void createIndexBuffer();
-		void createUniformBuffers();
 		void createDescriptorPool();
-		void createDescriptorSets();
 		void createCommandBuffers();
 		void createSyncObjects();
 		void createAllocator();
@@ -311,15 +299,12 @@ namespace QYHS
 		VkRenderPass renderPass;
 		VkDescriptorSetLayout descriptorSetLayout;
 		VkPipelineLayout pipelineLayout;
-		VkPipeline graphicsPipeline;
 
 		//base  render command pool
 		VkCommandPool command_pool;
 
 		//other command pool and command buffer
 		VkCommandPool m_command_pools[MAX_FRAMES_IN_FLIGHT];
-		
-		
 
 		VkImage colorImage;
 		VkDeviceMemory colorImageMemory;

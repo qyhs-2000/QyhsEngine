@@ -4,12 +4,13 @@
 
 #include "editor/include/editor_global_context.h"
 #include "editor/include/editor_global_context.h"
-#include "editor/include/editor_scene_manager.h"
+
 #include "function/framework/world/world_manager.h"
 #include "function/global/global_context.h"
 #include "function/global/global_context.h"
 #include "function/render/render_system.h"
 #include "resource/config_manager/config_manager.h"
+#include "editor/include/editor_input_manager.h"
 #include "function/framework/component/transform/transform_component.h"
 
 #include <imgui/imgui.h>
@@ -67,6 +68,25 @@ namespace QYHS
 				drawVecControl("Position", transform->m_position);
 				drawVecControl("Rotation", rotation);
 				drawVecControl("Scale", transform->m_scale);
+
+				// calculate half of each component
+				float half_angle_x = Math::degreesToRadians(rotation.x / 2);
+				float half_angle_y = Math::degreesToRadians(rotation.y / 2);
+				float half_angle_z = Math::degreesToRadians(rotation.z / 2);
+
+				// modify rotation quaternion
+				transform->m_rotation.x = Math::sin(half_angle_x) * Math::cos(half_angle_y) * Math::cos(half_angle_z) -
+					Math::cos(half_angle_x) * Math::sin(half_angle_y) * Math::sin(half_angle_z);
+
+				transform->m_rotation.y = Math::cos(half_angle_x) * Math::sin(half_angle_y) * Math::cos(half_angle_z) +
+					Math::sin(half_angle_x) * Math::cos(half_angle_y) * Math::sin(half_angle_z);
+
+				transform->m_rotation.z = Math::cos(half_angle_x) * Math::cos(half_angle_y) * Math::sin(half_angle_z) -
+					Math::sin(half_angle_x) * Math::sin(half_angle_y) * Math::cos(half_angle_z);
+
+				transform->m_rotation.w = Math::cos(half_angle_x) * Math::cos(half_angle_y) * Math::cos(half_angle_z) +
+					Math::sin(half_angle_x) * Math::sin(half_angle_y) * Math::sin(half_angle_z);
+				transform->m_rotation.normalise();
 				g_editor_global_context.m_scene_manager->drawSelectedEntityAxis();
 			};
 
@@ -246,13 +266,17 @@ namespace QYHS
 	{
 		if (!p_bool_show) return;
 		GameObjectID gobject_id = g_editor_global_context.m_scene_manager->m_selected_game_object_id;
-		if (gobject_id == k_invalid_gobject_id) return;
-
 		if (!ImGui::Begin("Component Details", p_bool_show))
 		{
 			ImGui::End();
 			return;
 		}
+		if (gobject_id == k_invalid_gobject_id)
+		{
+			ImGui::End();
+			return;
+		}
+
 		ImGui::Text("Name");
 		ImGui::SameLine();
 		std::shared_ptr<GameObject> selected_object = g_editor_global_context.m_scene_manager->getSelectedGameObject().lock();
@@ -272,6 +296,114 @@ namespace QYHS
 		}
 
 		ImGui::End();
+	}
+
+	void EditorUI::showEditorGameUI(bool *p_show_game_engine_window)
+	{
+		if (!*p_show_game_engine_window)
+		{
+			return;
+		}
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_MenuBar;
+		if (!ImGui::Begin("Game Engine", p_show_game_engine_window, window_flags))
+		{
+			ImGui::End();
+			return;
+		}
+
+		static bool trans_button_ckecked  = false;
+		static bool rotate_button_ckecked = false;
+		static bool scale_button_ckecked  = false;
+
+		switch (g_editor_global_context.m_scene_manager->getEditorAxisMode())
+		{
+		case EditorSceneManager::EditorAxisType::Translate:
+			trans_button_ckecked  = true;
+			rotate_button_ckecked = false;
+			scale_button_ckecked  = false;
+			break;
+		case EditorSceneManager::EditorAxisType::Rotate:
+			trans_button_ckecked  = false;
+			rotate_button_ckecked = true;
+			scale_button_ckecked  = false;
+			break;
+		case EditorSceneManager::EditorAxisType::Scale:
+			trans_button_ckecked  = false;
+			rotate_button_ckecked = false;
+			scale_button_ckecked  = true;
+			break;
+		default:
+			break;
+		}
+		
+		if (ImGui::BeginMenuBar())
+		{
+			ImGui::Indent(10.f);
+			drawAxisToggleButton("Trans", trans_button_ckecked, EditorSceneManager::EditorAxisType::Translate);
+			ImGui::Unindent();
+
+			ImGui::SameLine();
+			drawAxisToggleButton("Rotate", rotate_button_ckecked, EditorSceneManager::EditorAxisType::Rotate);
+
+			ImGui::SameLine();
+			drawAxisToggleButton("Scale", scale_button_ckecked, EditorSceneManager::EditorAxisType::Scale);
+			ImGui::SameLine();
+
+			float indent_val = 0.0f;
+
+#if defined(__GNUC__) && defined(__MACH__)
+			float indent_scale = 1.0f;
+#else // Not tested on Linux
+			float x_scale, y_scale;
+			glfwGetWindowContentScale(g_editor_global_context.m_window_system->getWindow(), &x_scale, &y_scale);
+			float indent_scale = fmaxf(1.0f, fmaxf(x_scale, y_scale));
+#endif
+			indent_val = g_editor_global_context.m_input_manager->getEngineWindowSize().x - 100.0f * indent_scale;
+
+			ImGui::Indent(indent_val);
+			ImGui::Unindent();
+			ImGui::EndMenuBar();
+			Vector2 render_target_window_position{ 0,0 };
+			Vector2 render_target_window_size{ 0,0 };
+			ImRect menu_bar_rect = ImGui::GetCurrentWindow()->MenuBarRect();
+			render_target_window_position.x = ImGui::GetWindowPos().x;
+			render_target_window_position.y = menu_bar_rect.Max.y;
+			auto pos_y = ImGui::GetWindowPos().y;
+			auto size_y = g_runtime_global_context.m_window_system->getHeight();
+			auto max_y = menu_bar_rect.Max.y;
+			render_target_window_size.x = ImGui::GetWindowSize().x;
+			render_target_window_size.y = ImGui::GetWindowPos().y + size_y - menu_bar_rect.Max.y;
+
+			g_runtime_global_context.m_render_system->updateEngineContentViewport(render_target_window_position, render_target_window_size);
+			g_editor_global_context.m_input_manager->setEngineWindowPos(render_target_window_position);
+			g_editor_global_context.m_input_manager->setEngineWindowSize(render_target_window_size);
+
+		}
+		ImGui::End();
+	}
+
+	void EditorUI::drawAxisToggleButton(std::string name, bool button_checked, EditorSceneManager::EditorAxisType axis_type)
+	{
+		if (button_checked)
+		{
+			ImGui::PushID(name.c_str());
+			ImVec4 check_button_color = ImVec4(93.0f / 255.0f, 10.0f / 255.0f, 66.0f / 255.0f, 1.00f);
+			ImGui::PushStyleColor(ImGuiCol_Button,
+				ImVec4(check_button_color.x, check_button_color.y, check_button_color.z, 0.40f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, check_button_color);
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, check_button_color);
+			ImGui::Button(name.c_str());
+			ImGui::PopStyleColor(3);
+			ImGui::PopID();
+		}
+		else
+		{
+			if (ImGui::Button(name.c_str()))
+			{
+				g_editor_global_context.m_scene_manager->setEditorAxisMode(axis_type);
+				g_editor_global_context.m_scene_manager->drawSelectedEntityAxis();
+			}
+		}
 	}
 
 	void EditorUI::createClassUI(Reflection::ReflectionInstance& object_instance)
@@ -461,6 +593,7 @@ namespace QYHS
 	{
 		showEditorMenu(&m_editor_show_menu_ui);
 		showGameInstancesUI(&m_editor_show_game_instances);
+		showEditorGameUI(&m_game_engine_window_open);
 		showComponentDetails(&m_editor_show_component_details);
 	}
 

@@ -122,14 +122,22 @@ namespace QYHS
 		}
 		//g_editor_global_context.m_scene_manager->getEditorCamera()->updateCameraOffset(offset);
 	}
+	bool EditorInputManager::isCursorInRect(Vector2 rect_pos, Vector2 rect_size)
+	{
+		return rect_pos.x < m_mouse_x && m_mouse_x < rect_pos.x + rect_size.x && rect_pos.y < m_mouse_y && m_mouse_y < rect_pos.y + rect_size.y;
+	}
+
 
 	void EditorInputManager::onMouseButton(int button, int action, int mods)
 	{
 		if (m_selected_axis_by_cursor != 3) return;
+		
+		if (!isCursorInRect(m_engine_window_pos, m_engine_window_size)) return;
 		static bool cursor_disable = false;
 		if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 		{
-			Vector2 picked_uv = Vector2(m_mouse_x / m_engine_window_size.x, m_mouse_y / m_engine_window_size.y);
+			Vector2 picked_uv = Vector2((m_mouse_x - m_engine_window_pos.x) / m_engine_window_size.x, (m_mouse_y - m_engine_window_pos.y) / m_engine_window_size.y);
+			std::cout << "picked_uv  :" << picked_uv.x <<picked_uv.y  << std::endl;
 			size_t select_mesh_id = g_editor_global_context.m_scene_manager->getMeshIDByPickedUV(picked_uv);
 			size_t select_gobject_id = g_editor_global_context.m_render_system->getGObjectIDByMeshID(select_mesh_id);
 			g_editor_global_context.m_scene_manager->GObjectSelected(select_gobject_id);
@@ -174,6 +182,7 @@ namespace QYHS
 		}
 		m_mouse_x = x_pos;
 		m_mouse_y = y_pos;
+
 	}
 
 	void EditorInputManager::tick(float delta_time)

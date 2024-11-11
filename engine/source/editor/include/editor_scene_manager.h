@@ -10,13 +10,14 @@ namespace QYHS
 	class RenderSystem;
 	class EditorSceneManager
 	{
+	public:
 		enum class EditorAxisType
 		{
 			Translate = 0,
 			Rotate,
 			Scale
 		};
-	public:
+
 		std::shared_ptr<RenderCamera> getEditorCamera(){ return m_camera; }
 		uint32_t getMeshIDByPickedUV(Vector2 picked_id);
 		void initialize();
@@ -27,6 +28,8 @@ namespace QYHS
 		RenderEntity* getAxisMeshByType(EditorAxisType axis_type);
 		void uploadAxisResource();
 		size_t updateCursorOnAxis(Vector2 cursor_uv,Vector2 window_size);
+		inline EditorAxisType getEditorAxisMode() { return m_axis_mode; }
+		inline void setEditorAxisMode(EditorAxisType axis_type) { m_axis_mode = axis_type; }
 		EditorTranslateAxis  m_translate_axis_render_entity;
 		EditorRotateAxis  m_rotate_axis_render_entity;
 		EditorScaleAxis  m_scale_axis_render_entity;

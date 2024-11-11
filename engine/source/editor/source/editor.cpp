@@ -34,4 +34,9 @@ namespace QYHS
 		}
 	}
 
+	void QyhsEditor::clear()
+	{
+		g_editor_global_context.clear();
+	}
+
 }

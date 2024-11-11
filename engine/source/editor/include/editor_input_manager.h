@@ -25,6 +25,10 @@ namespace QYHS
 		void onKeyInEditorMode(int key, int scancode, int action, int mods);
 		void registerInput();
 		void initialize();
+		const Vector2 getEngineWindowSize() { return m_engine_window_size; }
+		void setEngineWindowSize(Vector2 new_window_size) { m_engine_window_size = new_window_size; }
+		void setEngineWindowPos(Vector2 pos) { m_engine_window_pos = pos; }
+		bool isCursorInRect(Vector2 rect_pos, Vector2 rect_size);
 	public:
 		void onScroll(double xoffset, double yoffset);
 		void onKey(int key, int scancode, int action, int mods);
@@ -35,6 +39,7 @@ namespace QYHS
 		float m_mouse_x{ 0.0f };
 		float m_mouse_y{ 0.0f };
 		Vector2 m_engine_window_size{ 1280.f,960.f };
+		Vector2 m_engine_window_pos{ 0.f,0.f };
 		float m_camera_speed{ 0.01f };
 		unsigned int m_command{ 0 };
 		unsigned int k_complement_control_command = 0xFFFFFFFF;

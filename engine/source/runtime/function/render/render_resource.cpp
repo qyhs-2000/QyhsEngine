@@ -234,6 +234,7 @@ namespace QYHS
 		uploadIBLResource(rhi,level_resource_desc);
 	}
 
+	//TODO:destroy global ring buffer and axis_storage_buffer when application is closed
 	void RenderResource::createAndMapStorageBuffer(std::shared_ptr<RHI> rhi)
 	{
 		//global ring buffer

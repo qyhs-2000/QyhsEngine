@@ -11,7 +11,7 @@ namespace QYHS
 	void MainCameraRenderPass::initialize(RenderPassInitInfo * info)
 	{
 		RenderPass::initialize(info);
-		setupSkyboxCubeBuffer();
+		//setupSkyboxCubeBuffer();
 		setupAttachments();
 		setupRenderPass();
 		setupDescriptorSetLayout();
@@ -227,25 +227,6 @@ namespace QYHS
 		write_descriptor_set[2].pImageInfo = &depth_input_attachment;
 
 		vkUpdateDescriptorSets(m_vulkan_rhi->getDevice(), (sizeof(write_descriptor_set) / sizeof(write_descriptor_set[0])), write_descriptor_set, 0, nullptr);
-	}
-
-	void MainCameraRenderPass::setupSkyboxCubeBuffer()
-	{
-		VkDeviceSize buffer_size = sizeof(skyboxVertices);
-		VulkanUtils::createBuffer(m_vulkan_rhi->getPhysicalDevice(),m_vulkan_rhi->getDevice(),buffer_size,VK_BUFFER_USAGE_TRANSFER_DST_BIT|VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, skybox_cube_vertex_buffer, skybox_cube_vertex_buffer_memory);
-		VkBuffer storage_buffer;
-		VkDeviceMemory storage_buffer_memory;
-
-		VulkanUtils::createBuffer(m_vulkan_rhi->getPhysicalDevice(), m_vulkan_rhi->getDevice(), buffer_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, 
-			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-			storage_buffer, storage_buffer_memory);
-		void* data;
-		vkMapMemory(m_vulkan_rhi->getDevice(), storage_buffer_memory, 0, buffer_size, 0, &data);
-		memcpy(data, skyboxVertices, buffer_size);
-		vkUnmapMemory(m_vulkan_rhi->getDevice(), storage_buffer_memory);
-		VulkanUtils::copyBuffer(static_cast<RHI*>(m_vulkan_rhi.get()), storage_buffer, skybox_cube_vertex_buffer,0,0, buffer_size);
-		vkDestroyBuffer(m_vulkan_rhi->getDevice(),storage_buffer,nullptr);
-		vkFreeMemory(m_vulkan_rhi->getDevice(), storage_buffer_memory, nullptr);
 	}
 
 	void MainCameraRenderPass::updateAfterRecreateSwapChain()

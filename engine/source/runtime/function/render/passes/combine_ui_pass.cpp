@@ -245,4 +245,45 @@ namespace QYHS
 
 		vkCmdDraw(m_vulkan_rhi->getCurrentCommandBuffer(), 3, 1, 0, 0);
 	}
+
+	void CombineUIPass::updateAfterRecreateSwapChain(VkImageView* input_color_attachment, VkImageView* input_ui_attachment)
+	{
+		VkDescriptorImageInfo per_frame_scene_input_attachment_info = {};
+		per_frame_scene_input_attachment_info.sampler = VulkanUtils::getOrCreateNearestSampler(m_vulkan_rhi->getPhysicalDevice(),m_vulkan_rhi->getDevice());
+		per_frame_scene_input_attachment_info.imageView   = *input_color_attachment;
+		per_frame_scene_input_attachment_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+
+		VkDescriptorImageInfo per_frame_ui_input_attachment_info = {};
+		per_frame_ui_input_attachment_info.sampler = VulkanUtils::getOrCreateNearestSampler(m_vulkan_rhi->getPhysicalDevice(),m_vulkan_rhi->getDevice());
+		per_frame_ui_input_attachment_info.imageView   = *input_ui_attachment;
+		per_frame_ui_input_attachment_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+
+		std::array<VkWriteDescriptorSet,2> post_process_descriptor_writes_info;
+
+		VkWriteDescriptorSet& per_frame_scene_input_attachment_write_info = post_process_descriptor_writes_info[0];
+		per_frame_scene_input_attachment_write_info.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+		per_frame_scene_input_attachment_write_info.pNext                 = NULL;
+		per_frame_scene_input_attachment_write_info.dstSet                = m_descriptors[0].descriptor_set;
+		per_frame_scene_input_attachment_write_info.dstBinding            = 0;
+		per_frame_scene_input_attachment_write_info.dstArrayElement       = 0;
+		per_frame_scene_input_attachment_write_info.descriptorType        = VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT;
+		per_frame_scene_input_attachment_write_info.descriptorCount       = 1;
+		per_frame_scene_input_attachment_write_info.pImageInfo            = &per_frame_scene_input_attachment_info;
+
+		VkWriteDescriptorSet& per_frame_ui_input_attachment_write_info = post_process_descriptor_writes_info[1];
+		per_frame_ui_input_attachment_write_info.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+		per_frame_ui_input_attachment_write_info.pNext                 = NULL;
+		per_frame_ui_input_attachment_write_info.dstSet                = m_descriptors[0].descriptor_set;
+		per_frame_ui_input_attachment_write_info.dstBinding            = 1;
+		per_frame_ui_input_attachment_write_info.dstArrayElement       = 0;
+		per_frame_ui_input_attachment_write_info.descriptorType        = VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT;
+		per_frame_ui_input_attachment_write_info.descriptorCount       = 1;
+		per_frame_ui_input_attachment_write_info.pImageInfo            = &per_frame_ui_input_attachment_info;
+
+		vkUpdateDescriptorSets(m_vulkan_rhi->m_device,post_process_descriptor_writes_info.size(),
+			post_process_descriptor_writes_info.data(),
+			0,
+			NULL);
+		
+	}
 }

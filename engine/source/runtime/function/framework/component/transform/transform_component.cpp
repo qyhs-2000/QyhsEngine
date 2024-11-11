@@ -13,7 +13,6 @@ namespace QYHS
 	void TransformComponent::setPosition(Vector3 position)
 	{
 		m_transform.m_position = position; 
-		std::cout << "set position" << std::endl;
 		m_is_dirty = true; 
 	}
 }

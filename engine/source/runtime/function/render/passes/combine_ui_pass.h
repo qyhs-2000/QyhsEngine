@@ -18,6 +18,7 @@ namespace QYHS
 		void setupPipelines();
 		void setupDescriptorSet();
 		void draw();
+		void updateAfterRecreateSwapChain(VkImageView* input_color_attachment, VkImageView* inpput_ui_attachment);
 	private:
 		VkImageView* m_scene_attachment;
 		VkImageView* m_ui_attachment;

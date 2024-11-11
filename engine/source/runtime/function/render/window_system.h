@@ -21,6 +21,7 @@ namespace QYHS
 		typedef std::function<void(int, int)>			 onCursorFunc;
 		typedef std::function<void(int, int, int)>		 onMouseButtonFunc;
 	public:
+		~WindowSystem();
 		void initialize(WindowCreateInfo* window_create_info);
 		void pollEvents();
 		void registerOnScrollFunc(onScrollFunc func) { m_onScrollFunc.push_back(func); }

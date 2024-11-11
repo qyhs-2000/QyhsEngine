@@ -10,7 +10,7 @@
 
 namespace  QYHS
 {
-	void PickRenderPass::prepareData(std::shared_ptr<RenderResourceBase> resource)
+	void PickPass::prepareData(std::shared_ptr<RenderResourceBase> resource)
 	{
 		const RenderResource* vulkan_resource = static_cast<const RenderResource*>(resource.get());
 		if (vulkan_resource)
@@ -21,7 +21,7 @@ namespace  QYHS
 	}
 
 
-	void PickRenderPass::initialize(RenderPassInitInfo * info)
+	void PickPass::initialize(RenderPassInitInfo * info)
 	{
 		RenderPass::initialize(info);
 		setupAttachments();
@@ -32,7 +32,7 @@ namespace  QYHS
 		setupFrameBuffer();
 	}
 
-	void PickRenderPass::setupAttachments()
+	void PickPass::setupAttachments()
 	{
 		// just need one attachment to store node_ids
 		m_framebuffer.attachments.resize(1);
@@ -46,7 +46,7 @@ namespace  QYHS
 
 	}
 
-	void PickRenderPass::setupRenderPass()
+	void PickPass::setupRenderPass()
 	{
 		VkAttachmentDescription color_attachment_description{};
 		color_attachment_description.format = m_framebuffer.attachments[0].format;
@@ -100,7 +100,7 @@ namespace  QYHS
 		}
 	}
 
-	void PickRenderPass::setupDescriptorSetLayout()
+	void PickPass::setupDescriptorSetLayout()
 	{
 		m_descriptors.resize(1);
 
@@ -142,7 +142,7 @@ namespace  QYHS
 		}
 	}
 
-	void PickRenderPass::setupPipeline()
+	void PickPass::setupPipeline()
 	{
 		m_render_pipelines.resize(1);
 
@@ -283,7 +283,20 @@ namespace  QYHS
 
 	}
 
-	void PickRenderPass::setupDescriptorSet()
+	void PickPass::recreateFrameBuffer()
+	{
+		for (int i = 0; i < m_framebuffer.attachments.size(); ++i)
+		{
+			m_vulkan_rhi->destroyImage(m_framebuffer.attachments[i].image);
+			m_vulkan_rhi->destroyImageView(m_framebuffer.attachments[i].image_view);
+			m_vulkan_rhi->freeMemory(m_framebuffer.attachments[i].memory);
+		}
+		m_vulkan_rhi->destroyFrameBuffer(m_framebuffer.framebuffer);
+		setupAttachments();
+		setupFrameBuffer();
+	}
+
+	void PickPass::setupDescriptorSet()
 	{
 		VkDescriptorSetAllocateInfo mesh_inefficient_pick_global_descriptor_set_alloc_info;
 		mesh_inefficient_pick_global_descriptor_set_alloc_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
@@ -345,7 +358,7 @@ namespace  QYHS
 			NULL);
 	}
 
-	void PickRenderPass::setupFrameBuffer()
+	void PickPass::setupFrameBuffer()
 	{
 		VkImageView attachments[2] = { m_framebuffer.attachments[0].image_view, m_vulkan_rhi->depth_image_view };
 
@@ -366,11 +379,11 @@ namespace  QYHS
 	}
 
 
-	uint32_t PickRenderPass::pick(const Vector2& picked_uv)
+	uint32_t PickPass::pick(const Vector2& picked_uv)
 	{
 		uint32_t pixel_x = static_cast<uint32_t>(picked_uv.x * m_vulkan_rhi->getViewport().width + m_vulkan_rhi->getViewport().x);
 		uint32_t pixel_y = static_cast<uint32_t>(picked_uv.y * m_vulkan_rhi->getViewport().height + m_vulkan_rhi->getViewport().y);
-		uint32_t picked_pixel_index = static_cast<uint32_t>(m_vulkan_rhi->getViewport().width * pixel_y + pixel_x);
+		uint32_t picked_pixel_index = static_cast<uint32_t>(m_vulkan_rhi->getSwapChainExtent().width * pixel_y + pixel_x);
 		if (pixel_x >= m_vulkan_rhi->getSwapChainExtent().width || pixel_y >= m_vulkan_rhi->getSwapChainExtent().height)
 		{
 			return 0;
@@ -436,8 +449,6 @@ namespace  QYHS
 				1,
 				&transfer_to_render_barrier);
 		}
-
-
 
 		VkRenderPassBeginInfo render_pass_begin_info{};
 		render_pass_begin_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -614,7 +625,7 @@ namespace  QYHS
 			}
 			//std::cout << std::endl;
 		}
-		stbi_write_png("pick_attachment.png", w, h, 4, image_data.data(), w * 4);
+		stbi_write_png("pick_color_attachment.png", w, h, 4, image_data.data(), w * 4);
 #endif
 
 

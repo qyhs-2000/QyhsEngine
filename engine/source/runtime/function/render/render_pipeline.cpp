@@ -8,7 +8,7 @@ void QYHS::RenderPipeline::initialize(RenderPipelineInitInfo init_info)
 {
 
 	m_main_camera_pass = std::make_shared<MainCameraRenderPass>();
-	m_pick_pass = std::make_shared<PickRenderPass>();
+	m_pick_pass = std::make_shared<PickPass>();
 	m_combine_ui_pass = std::make_shared<CombineUIPass>();
 	m_ui_pass = std::make_shared<UIPass>();
 	
@@ -55,14 +55,19 @@ void QYHS::RenderPipeline::render(std::shared_ptr<RenderResourceBase> render_res
 
 uint32_t QYHS::RenderPipeline::getGUIDOfPickedMesh(const Vector2& picked_uv)
 {
-	PickRenderPass * pick_pass = static_cast<PickRenderPass*>(m_pick_pass.get());
+	PickPass * pick_pass = static_cast<PickPass*>(m_pick_pass.get());
 	return pick_pass->pick(picked_uv);
 }
 
 void QYHS::RenderPipeline::updatePassAfterRecreatePipeline()
 {
 	MainCameraRenderPass* main_camera_pass = static_cast<MainCameraRenderPass*>(m_main_camera_pass.get());
+	CombineUIPass* combine_ui_pass = static_cast<CombineUIPass*>(m_combine_ui_pass.get());
+	PickPass* pick_pass = static_cast<PickPass*>(m_pick_pass.get());
+
 	main_camera_pass->updateAfterRecreateSwapChain();
+	combine_ui_pass->updateAfterRecreateSwapChain(main_camera_pass->getFrameBufferImageViews()[main_camera_pass_backup_odd_color_attachment],main_camera_pass->getFrameBufferImageViews()[main_camera_pass_backup_even_color_attachment]);
+	pick_pass->recreateFrameBuffer();
 }
 
 void QYHS::RenderPipeline::setVisibleAxis(bool state)

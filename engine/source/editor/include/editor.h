@@ -10,6 +10,7 @@ namespace QYHS
 	public:
 		void initialize(QyhsEngine * engine);
 		void run();
+		void clear();
 	private:
 		QyhsEngine* m_engine;
 		std::shared_ptr<EditorUI>  m_editor_ui;

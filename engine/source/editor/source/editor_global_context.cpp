@@ -19,4 +19,10 @@ namespace QYHS
 		m_window_system = info.window_system;
 		m_render_system = info.render_system;
 	}
+	
+	void EditorGlobalContext::clear()
+	{
+		delete m_input_manager;
+		delete m_scene_manager;
+	}
 }
