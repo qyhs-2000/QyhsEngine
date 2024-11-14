@@ -4,6 +4,7 @@
 #include "function/global/global_context.h"
 namespace QYHS
 {
+	std::unordered_set<std::string> g_editor_tick_component_types{};
 	void QyhsEditor::initialize(QyhsEngine* engine)
 	{
 		assert(engine);
@@ -17,6 +18,9 @@ namespace QYHS
 		WindowUIInitInfo ui_init_info = {g_runtime_global_context.m_window_system,
 			g_runtime_global_context.m_render_system};
 		m_editor_ui->initialize(&ui_init_info);
+
+		registerEditorTickComponent("TransformComponent");
+		registerEditorTickComponent("MeshComponent");
 	}
 
 	void QyhsEditor::run()
@@ -37,6 +41,11 @@ namespace QYHS
 	void QyhsEditor::clear()
 	{
 		g_editor_global_context.clear();
+	}
+
+	void QyhsEditor::registerEditorTickComponent(const std::string& component_name)
+	{
+		g_editor_tick_component_types.insert(component_name);
 	}
 
 }

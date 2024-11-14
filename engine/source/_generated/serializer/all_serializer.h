@@ -7,6 +7,7 @@
 #include "_generated\serializer\vector3.serializer.gen.h"
 #include "_generated\serializer\transform.serializer.gen.h"
 #include "_generated\serializer\vector4.serializer.gen.h"
+#include "_generated\serializer\camera_component.serializer.gen.h"
 #include "_generated\serializer\motor_component.serializer.gen.h"
 #include "_generated\serializer\transform_component.serializer.gen.h"
 #include "_generated\serializer\object.serializer.gen.h"

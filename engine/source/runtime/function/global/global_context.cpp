@@ -8,6 +8,7 @@
 namespace QYHS
 {
 	RuntimeGlobalContext g_runtime_global_context;
+	bool RuntimeGlobalContext::m_is_game_mode = false;
 	void RuntimeGlobalContext::startSystem(const std::string& config_file_path)
 	{
 		m_config_manager = std::make_shared<ConfigManager>();
@@ -23,5 +24,8 @@ namespace QYHS
 		WindowCreateInfo info;
 		m_window_system->initialize(&info);
 		m_render_system->initialize();
+
+		m_input_system = std::make_shared<InputSystem>();
+		m_input_system->initialize();
 	}
 }

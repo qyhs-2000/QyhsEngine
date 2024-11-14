@@ -166,7 +166,7 @@ namespace QYHS
 
 	size_t EditorSceneManager::updateCursorOnAxis(Vector2 cursor_uv, Vector2 window_size)
 	{
-		float camera_fov = m_camera->getCameraFOV();
+		float camera_fov = m_camera->getCameraFOVY();
 		float camera_near_face_distance = (window_size.y / 2) / tan(Degree(camera_fov).valueRadians()/2);
 		Vector3 camera_forward = m_camera->forward();
 		Vector3 camera_right = m_camera->right();

@@ -15,7 +15,6 @@ namespace QYHS
 		template<typename T>
 		static T*& readPointer(const Json& json_context, T*& instance)
 		{
-			assert(instance == nullptr);
 			std::string type_name = json_context["$typeName"].string_value();
 			assert(!type_name.empty());
 			if ('*' == type_name[0])
@@ -33,7 +32,7 @@ namespace QYHS
 		template<typename T>
 		static T*& read(const Json& json_context, Reflection::ReflectionPtr<T>& instance)
 		{
-			assert(instance == nullptr);
+			//assert(instance == nullptr);
 			std::string type_name = json_context["$typeName"].string_value();
 			instance.setTypeName(type_name);
 			return readPointer(json_context, instance.getPtrReference());

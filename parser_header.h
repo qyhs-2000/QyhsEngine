@@ -19,6 +19,7 @@
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/core/meta/serializer/serializer.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/core/utils/util.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/engine.h"
+#include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/camera/camera_component.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/component.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/mesh/mesh_component.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/motor/motor_component.h"

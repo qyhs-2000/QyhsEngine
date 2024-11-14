@@ -53,6 +53,21 @@
                 }
             },
             "$typeName": "MeshComponent"
+        },
+        {
+           "$context": {
+                "camera_res": {
+                    "parameter": {
+                        "$context": {
+                            "fov": 70,
+                            "horizontal_offset": 3,
+                            "vertical_offset": 1.5
+                        },
+                        "$typeName": "ThirdPersonCameraParameter"
+                    }
+                }
+            },
+            "$typeName": "CameraComponent"
         }
     ]
 }

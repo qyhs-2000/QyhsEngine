@@ -5,6 +5,7 @@
 #include "_generated\reflection\vector3.reflection.gen.h"
 #include "_generated\reflection\transform.reflection.gen.h"
 #include "_generated\reflection\vector4.reflection.gen.h"
+#include "_generated\reflection\camera_component.reflection.gen.h"
 #include "_generated\reflection\motor_component.reflection.gen.h"
 #include "_generated\reflection\transform_component.reflection.gen.h"
 #include "_generated\reflection\object.reflection.gen.h"
@@ -29,6 +30,10 @@ namespace QYHS
 			TypeWrapperRegister_Vector3();
 			TypeWrapperRegister_Transform();
 			TypeWrapperRegister_Vector4();
+			TypeWrapperRegister_CameraComponent();
+			TypeWrapperRegister_CameraComponentResource();
+			TypeWrapperRegister_CameraParamter();
+			TypeWrapperRegister_ThirdPersonCameraParameter();
 			TypeWrapperRegister_MotorComponent();
 			TypeWrapperRegister_TransformComponent();
 			TypeWrapperRegister_ObjectDefinitionResource();

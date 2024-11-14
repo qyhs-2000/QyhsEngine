@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <functional>
+#include "core//math/vector2.h"
 namespace QYHS
 {
 	struct WindowCreateInfo
@@ -35,7 +36,7 @@ namespace QYHS
 		bool isMouseButton(int button)const;
 		const int getWidth(){return m_width;}
 		const int getHeight(){return m_height;}
-
+		Vector2 getWindowSize(){return Vector2(m_width, m_height);}
 	protected:
 		static void onScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 		{

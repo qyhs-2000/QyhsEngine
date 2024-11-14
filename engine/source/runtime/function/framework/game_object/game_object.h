@@ -30,6 +30,7 @@ namespace QYHS
 		}
 		std::string m_name;
 		std::vector<Reflection::ReflectionPtr<Component>> &getComponents() { return m_components; }
+		bool shouldComponentTick(std::string component_type_name);
 #define TryGetComponent(component_type) tryGetComponent<component_type>(#component_type);
 	private:
 		std::vector<Reflection::ReflectionPtr<Component>> m_components;

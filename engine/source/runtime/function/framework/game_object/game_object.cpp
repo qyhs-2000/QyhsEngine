@@ -3,6 +3,7 @@
 #include "function/global/global_context.h"
 #include "resource/asset_manager/asset_manager.h"
 #include <memory>
+#include <editor/include/editor.h>
 
 namespace QYHS
 {
@@ -10,7 +11,10 @@ namespace QYHS
 	{
 		for (auto& component : m_components)
 		{
-			component->tick(delta_time);
+			if (shouldComponentTick(component.getTypeName()))
+			{
+				component->tick(delta_time);
+			}
 		}
 	}
 	bool GameObject::load(const ObjectInstanceResource& instance_resource)
@@ -53,5 +57,16 @@ namespace QYHS
 			}
 		}
 		return false;
+	}
+	bool GameObject::shouldComponentTick(std::string component_type_name)
+	{
+		if (g_is_editor_mode)
+		{
+			return g_editor_tick_component_types.find(component_type_name) != g_editor_tick_component_types.end();
+		}
+		else
+		{
+			return true;
+		}
 	}
 }

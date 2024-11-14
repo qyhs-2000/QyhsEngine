@@ -169,9 +169,13 @@ namespace QYHS
 			bool operator==(const T* ptr) { return m_instance == ptr; }
 			bool operator!=(const T* ptr) { return m_instance != ptr; }
 			std::string getTypeName() { return m_type_name; }
+			
+			template<typename T1>
+			explicit operator T1* () { return static_cast<T1*>(m_instance); }
+			
+			T* m_instance;
 		private:
 			std::string m_type_name;
-			T* m_instance;
 		};
 
 

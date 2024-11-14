@@ -13,7 +13,8 @@ namespace QYHS
 	bool RenderSwapContext::isReadyToSwap()
 	{
 		{
-			return !(m_swap_data[m_render_swap_data_index].m_game_object_resource.has_value());
+			return !(m_swap_data[m_render_swap_data_index].m_game_object_resource.has_value() &&
+				     m_swap_data[m_render_swap_data_index].m_camera_swap_data.has_value());
 
 		}
 	}
@@ -27,6 +28,11 @@ namespace QYHS
 	void RenderSwapContext::resetGameObjectRenderSwapData()
 	{
 		m_swap_data[m_render_swap_data_index].m_game_object_resource.reset();
+	}
+
+	void RenderSwapContext::resetCameraSwapData()
+	{
+		m_swap_data[m_render_swap_data_index].m_camera_swap_data.reset();
 	}
 
 	bool GameObjectResource::isEmpty()

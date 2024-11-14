@@ -572,7 +572,6 @@ namespace QYHS
 		Matrix4x4 proj_view_matrix = project_matrix * view_matrix;
 		m_mesh_per_frame_storage_buffer_object.project_view_matrix = proj_view_matrix;
 		m_mesh_per_frame_storage_buffer_object.camera_position = camera_position;
-		//std::cout << camera_position.x <<" "<<camera_position.y<<" "<<camera_position.z << std::endl;
 		m_mesh_inefficient_pick_perframe_storage_buffer_object.project_view_matrix = proj_view_matrix;
 	}
 }

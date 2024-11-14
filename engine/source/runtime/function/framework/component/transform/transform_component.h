@@ -17,6 +17,7 @@ namespace QYHS
         void setDirty(bool is_dirty) { m_is_dirty = is_dirty; }
         void setPosition(Vector3 position);
         Matrix4x4 getMatrix() { return m_transform.getMatrix(); }
+        const Transform& getTransformConst() { return m_transform; }
     protected:
         META(Enable)
             Transform m_transform;

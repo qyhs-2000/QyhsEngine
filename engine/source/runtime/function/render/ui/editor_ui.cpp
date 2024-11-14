@@ -12,7 +12,7 @@
 #include "resource/config_manager/config_manager.h"
 #include "editor/include/editor_input_manager.h"
 #include "function/framework/component/transform/transform_component.h"
-
+#include "engine.h"
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
 #include <stb_image.h>
@@ -361,6 +361,27 @@ namespace QYHS
 			indent_val = g_editor_global_context.m_input_manager->getEngineWindowSize().x - 100.0f * indent_scale;
 
 			ImGui::Indent(indent_val);
+			if (g_is_editor_mode)
+			{
+				ImGui::PushID("Editor Mode");
+				if (ImGui::Button("Editor Mode"))
+				{
+					g_is_editor_mode = false;
+					g_runtime_global_context.m_window_system->disableCursor(true);
+				}
+				ImGui::PopID();
+			}
+			else
+			{
+				ImGui::PushID("Editor Mode");
+				if (ImGui::Button("Game Mode"))
+				{
+					g_is_editor_mode = true;
+
+				}
+				ImGui::PopID();
+			}
+			
 			ImGui::Unindent();
 			ImGui::EndMenuBar();
 			Vector2 render_target_window_position{ 0,0 };

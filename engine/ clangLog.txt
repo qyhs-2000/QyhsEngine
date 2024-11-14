@@ -172,8 +172,10 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   tinygltf/tiny_gltf.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/Texture.h \
   vulkanmemoryallocator/include/vk_mem_alloc.h core/math/vector2.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/camera/camera_component.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/camera/../component.h \
+  function/framework/game_object/game_object.h core/math/quat.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/component.h \
-  function/framework/game_object/game_object.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/mesh/mesh_component.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/mesh/../component.h \
   resource/type/component/mesh/mesh.h function/render/game_object_desc.h \
@@ -184,9 +186,11 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/game_object/game_object_id_allocator.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\memory.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/level/level.h \
+  function/framework/game_object/character.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/world/world_manager.h \
   function/framework/level/level.h resource/type/world_resource.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/global/global_context.h \
+  function/input/input_system.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/input/input_system.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/game_object_desc.h \
   function/framework/game_object/game_object_id_allocator.h \
@@ -199,6 +203,11 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   function/render/ui/window_ui.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/passes/pick_render_pass.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_camera.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\mutex \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\thread \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\process.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_startup.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vcruntime_startup.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_common.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_entity.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_guid_allocator.h \
@@ -228,6 +237,7 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   function/render/render_guid_allocator.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_swap_context.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\deque \
+  function/render/render_camera.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_system.h \
   function/render/render_pipeline.h \
   function/render/render_swap_context.h function/render/render_scene.h \
@@ -235,6 +245,7 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/rhi/vulkan/vulkan_utils.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/window_system.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\iostream \
+  core//math/vector2.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/asset_manager/asset_manager.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\filesystem \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\sstream core/base/macro.h \
@@ -255,6 +266,8 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime\core\math\transform.h \
   E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\vector4.serializer.gen.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime\core\math\vector4.h \
+  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\camera_component.serializer.gen.h \
+  E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\camera\camera_component.h \
   E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\motor_component.serializer.gen.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\motor\motor_component.h \
   E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\transform_component.serializer.gen.h \

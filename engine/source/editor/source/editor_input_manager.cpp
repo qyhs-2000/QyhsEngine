@@ -137,7 +137,6 @@ namespace QYHS
 		if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 		{
 			Vector2 picked_uv = Vector2((m_mouse_x - m_engine_window_pos.x) / m_engine_window_size.x, (m_mouse_y - m_engine_window_pos.y) / m_engine_window_size.y);
-			std::cout << "picked_uv  :" << picked_uv.x <<picked_uv.y  << std::endl;
 			size_t select_mesh_id = g_editor_global_context.m_scene_manager->getMeshIDByPickedUV(picked_uv);
 			size_t select_gobject_id = g_editor_global_context.m_render_system->getGObjectIDByMeshID(select_mesh_id);
 			g_editor_global_context.m_scene_manager->GObjectSelected(select_gobject_id);

@@ -31,6 +31,21 @@ namespace QYHS
 		{
 			createGameObject(instance);
 		}
+
+		for (auto& object_pair : m_game_objects)
+		{
+			std::shared_ptr<GameObject> object = object_pair.second;
+			if (!object)
+			{
+				continue;
+			}
+			if (level_res.m_character_name == object->m_name)
+			{
+				m_current_active_character = std::make_shared<Character>(object);
+				break;
+			}
+		}
+
 		return true;
 	}
 	void Level::createGameObject(ObjectInstanceResource & instance_res)

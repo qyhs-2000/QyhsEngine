@@ -15,15 +15,11 @@
 
 namespace QYHS
 {
-	
+	extern bool g_is_editor_mode;
 	class QyhsEngine
 	{
 	public:
-		void run() {
-			initWindow();
-			loadAssets();
-			mainLoop();
-		}
+		
 		bool tick(double delta_time);
 		void logicTick(double delta_time);
 		void renderTick();
@@ -49,33 +45,8 @@ namespace QYHS
 		std::vector<VkImageView> swapChainImageViews;
 		std::vector<VkFramebuffer> swapChainFramebuffers;
 
-		 
-
-		void initWindow() {
-			glfwInit();
-
-			glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-
-			window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan", nullptr, nullptr);
-
-		}
-
-
-		void mainLoop() {
-			while (!glfwWindowShouldClose(window)) {
-				glfwPollEvents();
-				drawFrame();
-			}
-
-			vkDeviceWaitIdle(device);
-		}
-
 		bool hasStencilComponent(VkFormat format) {
 			return format == VK_FORMAT_D32_SFLOAT_S8_UINT || format == VK_FORMAT_D24_UNORM_S8_UINT;
-		}
-
-		void drawFrame() {
-			
 		}
 		
 	public:

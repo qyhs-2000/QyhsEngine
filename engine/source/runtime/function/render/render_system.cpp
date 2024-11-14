@@ -31,8 +31,8 @@ namespace QYHS
 	{
 		m_render_scene->m_render_entities.resize(0);
 		RenderEntity entity;
-		
-		
+
+
 		m_render_scene->m_render_entities.push_back(entity);
 	}
 
@@ -51,7 +51,7 @@ namespace QYHS
 					GameObjectPartDesc& game_object_part = gobject.getGameObjectParts()[part_index];
 
 					GameObjectPartId part_id = { gobject.m_go_id,part_index };
-					
+
 					bool is_entity_in_scene = m_render_scene->getInstanceIdAllocator().hasElement(part_id);
 					RenderEntity render_entity;
 					render_entity.m_instance_id = m_render_scene->getInstanceIdAllocator().allocateGUId(part_id);
@@ -102,14 +102,27 @@ namespace QYHS
 						}
 					}
 				}
-				
+
 				//remove this game object
 				swap_data.m_game_object_resource->pop();
 			}
 
 			m_swap_context.resetGameObjectRenderSwapData();
-			
+
 		}
+		if (swap_data.m_camera_swap_data.has_value())
+		{
+			if (swap_data.m_camera_swap_data->m_view_matrix.has_value())
+			{
+				m_render_camera->setMainViewMatrix(swap_data.m_camera_swap_data->m_view_matrix.value());
+			}
+			if (swap_data.m_camera_swap_data->m_camera_type.has_value())
+			{
+				m_render_camera->setCurrentCameraType(swap_data.m_camera_swap_data->m_camera_type.value());
+			}
+
+		}
+		m_swap_context.resetCameraSwapData();
 	}
 
 	size_t RenderSystem::getGObjectIDByMeshID(size_t mesh_id)
@@ -130,7 +143,7 @@ namespace QYHS
 		LevelResourceDesc level_resource_desc;
 		level_resource_desc.m_ibl_resource_desc.m_skybox_specular_map = global_render_config.m_skybox_specular_map;
 		m_render_resource = std::make_shared<RenderResource>();
-		m_render_resource->uploadGlobalRenderResource(m_rhi,level_resource_desc);
+		m_render_resource->uploadGlobalRenderResource(m_rhi, level_resource_desc);
 
 		//render pipeline
 		RenderPipelineInitInfo init_info;
@@ -151,7 +164,7 @@ namespace QYHS
 		m_render_camera->m_zfar = global_render_config.camera_config.m_z_far;
 		m_render_camera->m_znear = global_render_config.camera_config.m_z_near;
 		m_render_camera->setAspect(global_render_config.camera_config.m_aspect.x / global_render_config.camera_config.m_aspect.y);
-		
+
 		m_render_resource->m_material_descriptor_set_layout = &static_cast<RenderPass*>(m_render_pipeline->m_main_camera_pass.get())->m_descriptors[MainCameraRenderPass::DescriptorSetLayoutType::mesh_per_material].descriptor_set_layout;
 
 
@@ -160,14 +173,14 @@ namespace QYHS
 	void RenderSystem::swapLogicRenderData()
 	{
 		m_swap_context.swapLogicRenderData();
-		
+
 	}
 
 	uint32_t RenderSystem::getMeshIDByPickedUV(Vector2 picked_uv)
 	{
 		return  m_render_pipeline->getGUIDOfPickedMesh(picked_uv);
 	}
-	
+
 	void RenderSystem::setVisibleAxis(std::optional<RenderEntity> axis)
 	{
 		if (axis.has_value())
@@ -202,7 +215,7 @@ namespace QYHS
 
 	void RenderSystem::uploadGameResource(RenderEntity* entity, RenderMeshData mesh_data)
 	{
-		m_render_resource->uploadGameObjectRenderResource(m_rhi,*entity,mesh_data);
+		m_render_resource->uploadGameObjectRenderResource(m_rhi, *entity, mesh_data);
 	}
 
 	void RenderSystem::setSelectedAxis(size_t selected_axis)

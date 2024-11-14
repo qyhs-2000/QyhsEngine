@@ -1114,12 +1114,18 @@ namespace QYHS
 
 		drawMesh();
 		vkCmdNextSubpass(m_vulkan_rhi->getCurrentCommandBuffer(), VK_SUBPASS_CONTENTS_INLINE);
+		m_vulkan_rhi->beginEvent(m_vulkan_rhi->getCurrentCommandBuffer(), "Skybox");
 		drawSkyBox();
+		m_vulkan_rhi->endEvent(m_vulkan_rhi->getCurrentCommandBuffer());
 		vkCmdNextSubpass(m_vulkan_rhi->getCurrentCommandBuffer(), VK_SUBPASS_CONTENTS_INLINE);
+		m_vulkan_rhi->beginEvent(m_vulkan_rhi->getCurrentCommandBuffer(), "Axis");
 		drawAxis();
+		m_vulkan_rhi->endEvent(m_vulkan_rhi->getCurrentCommandBuffer());
 		ui_pass.draw();
 		vkCmdNextSubpass(m_vulkan_rhi->getCurrentCommandBuffer(), VK_SUBPASS_CONTENTS_INLINE);
+		m_vulkan_rhi->beginEvent(m_vulkan_rhi->getCurrentCommandBuffer(), "Combine UI");
 		combine_ui_pass.draw();
+		m_vulkan_rhi->endEvent(m_vulkan_rhi->getCurrentCommandBuffer());
 		vkCmdEndRenderPass(m_vulkan_rhi->getCurrentCommandBuffer());
 	}
 

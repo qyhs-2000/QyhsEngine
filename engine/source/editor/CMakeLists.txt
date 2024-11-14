@@ -16,6 +16,7 @@ set_target_properties(${TARGET_NAME} PROPERTIES FOLDER "Engine")
 target_compile_options(${TARGET_NAME} PUBLIC "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/WX->")
 
 target_link_libraries(${TARGET_NAME} QyhsRuntime)
+target_link_libraries(${TARGET_NAME} imgui)
 
 set(POST_BUILD_COMMANDS
 	COMMAND ${CMAKE_COMMAND} -E make_directory "${BINARY_ROOT_DIR}"

@@ -10,6 +10,7 @@
 #include <function/framework/world/world_manager.h>
 namespace QYHS
 {
+	bool g_is_editor_mode = true;
 	void QyhsEngine::startEngine(const std::string& config_file_path)
 	{
 		Reflection::TypeMetaRegister::Register();
@@ -43,33 +44,12 @@ namespace QYHS
 	void QyhsEngine::logicTick(double delta_time)
 	{
 		g_runtime_global_context.m_world_manager->tick(delta_time);
+		g_runtime_global_context.m_input_system->tick(delta_time);
 	}
 
 	void QyhsEngine::renderTick()
 	{
 		g_runtime_global_context.m_render_system->tick();
 	}
-
-	/*void QyhsEngine::loadAssets()
-	{
-		loadglTFFile("E://VS_Project//QyhsEngine//QyhsRuntime//resource//model//CesiumMan//glTF-Embedded//character_anim.gltf");
-	}*/
-
-	/*void QyhsEngine::loadglTFFile(const std::string& path)
-	{
-		tinygltf::Model glTFInput;
-		tinygltf::TinyGLTF gltf_context;
-		std::string error, warning;
-
-		bool file_loaded = gltf_context.LoadASCIIFromFile(&glTFInput, &error, &warning, path);
-		if (!file_loaded)
-		{
-			throw std::runtime_error("failed to load gltf file,make sure to load current file path!");
-		}
-
-		m_model->loadResourceFromFile(glTFInput);
-
-
-	}*/
 
 }

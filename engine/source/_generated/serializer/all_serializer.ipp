@@ -6,6 +6,7 @@
 #include "_generated\serializer\vector3.serializer.gen.h"
 #include "_generated\serializer\transform.serializer.gen.h"
 #include "_generated\serializer\vector4.serializer.gen.h"
+#include "_generated\serializer\camera_component.serializer.gen.h"
 #include "_generated\serializer\motor_component.serializer.gen.h"
 #include "_generated\serializer\transform_component.serializer.gen.h"
 #include "_generated\serializer\object.serializer.gen.h"
@@ -133,6 +134,62 @@ namespace QYHS
 		if(!json_context["w"].is_null())
 		{
 			Serializer::read(json_context["w"],instance.w);
+		}
+		return instance;
+	}
+	template<>
+	CameraParamter & Serializer::read(const Json & json_context,CameraParamter & instance)
+	{
+		assert(json_context.is_object());
+		
+		if(!json_context["fov"].is_null())
+		{
+			Serializer::read(json_context["fov"],instance.m_fov);
+		}
+		return instance;
+	}
+	template<>
+	ThirdPersonCameraParameter & Serializer::read(const Json & json_context,ThirdPersonCameraParameter & instance)
+	{
+		assert(json_context.is_object());
+		Serializer::read(json_context,*(QYHS::CameraParamter*)&instance);
+		if(!json_context["horizontal_offset"].is_null())
+		{
+			Serializer::read(json_context["horizontal_offset"],instance.m_horizontal_offset);
+		}
+		if(!json_context["vertical_offset"].is_null())
+		{
+			Serializer::read(json_context["vertical_offset"],instance.m_vertical_offset);
+		}
+		if(!json_context["cursor_pitch"].is_null())
+		{
+			Serializer::read(json_context["cursor_pitch"],instance.m_cursor_pitch);
+		}
+		if(!json_context["cursor_yaw"].is_null())
+		{
+			Serializer::read(json_context["cursor_yaw"],instance.m_cursor_yaw);
+		}
+		return instance;
+	}
+	template<>
+	CameraComponentResource & Serializer::read(const Json & json_context,CameraComponentResource & instance)
+	{
+		assert(json_context.is_object());
+		
+		if(!json_context["parameter"].is_null())
+		{
+			Serializer::read(json_context["parameter"],instance.m_parameter);
+		}
+		return instance;
+	}
+	template<>
+	CameraComponent & Serializer::read(const Json & json_context,CameraComponent & instance)
+	{
+		assert(json_context.is_object());
+		Serializer::read(json_context,*(QYHS::Component*)&instance);
+		if(!json_context["camera_res"].is_null())
+		{
+			Serializer::read(json_context["camera_res"],instance.m_camera_res);
 		}
 		return instance;
 	}
