@@ -16,7 +16,7 @@ namespace QYHS
 		static T*& readPointer(const Json& json_context, T*& instance)
 		{
 			std::string type_name = json_context["$typeName"].string_value();
-			assert(!type_name.empty());
+			//assert(!type_name.empty());
 			if ('*' == type_name[0])
 			{
 				instance = new T;

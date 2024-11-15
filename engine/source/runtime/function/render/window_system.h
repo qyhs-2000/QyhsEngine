@@ -31,12 +31,21 @@ namespace QYHS
 		void registerOnMouseButton(onMouseButtonFunc func) { m_onMouseButtonFunc.push_back(func); }
 		void hideCursor(bool is_hidden);
 		void disableCursor(bool is_disabled);
-		GLFWwindow* getWindow() { return m_window; }
-		bool shouldCloseWindow() { return glfwWindowShouldClose(m_window); }
+		void toggleFocusMode() { 
+			m_is_focus = !m_is_focus;
+			glfwSetInputMode(m_window, GLFW_CURSOR, m_is_focus ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+		}
+		void setFocusMode(bool focus_mode) {
+			m_is_focus = focus_mode;
+		}
+
 		bool isMouseButton(int button)const;
 		const int getWidth(){return m_width;}
 		const int getHeight(){return m_height;}
+		GLFWwindow* getWindow() { return m_window; }
+		bool shouldCloseWindow() { return glfwWindowShouldClose(m_window); }
 		Vector2 getWindowSize(){return Vector2(m_width, m_height);}
+		bool getFocusMode() { return m_is_focus; }
 	protected:
 		static void onScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 		{
@@ -102,6 +111,7 @@ namespace QYHS
 	private:
 		int m_width;
 		int m_height;
+		bool m_is_focus{ false };
 		GLFWwindow* m_window{ nullptr };
 		void onKey(int key, int scancode, int action, int mods)
 		{

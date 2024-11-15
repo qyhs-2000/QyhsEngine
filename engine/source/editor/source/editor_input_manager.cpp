@@ -120,7 +120,6 @@ namespace QYHS
 			}
 
 		}
-		//g_editor_global_context.m_scene_manager->getEditorCamera()->updateCameraOffset(offset);
 	}
 	bool EditorInputManager::isCursorInRect(Vector2 rect_pos, Vector2 rect_size)
 	{

@@ -26,6 +26,7 @@ namespace QYHS
 		void rotate(Vector2 delta);
 		void move(Vector3 delta) { m_position += delta; }
 		void setCameraPosition(Vector3 pos) { this->m_position = pos; };
+		void changeType(RenderCameraType camera_type);
 		Vector3 forward() const { return (m_invRotation * Y); }
 		Vector3 right() const { return (m_invRotation * X); }
 		Vector3 up() const { return (m_invRotation * Z); }

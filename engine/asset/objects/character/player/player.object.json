@@ -68,6 +68,14 @@
                 }
             },
             "$typeName": "CameraComponent"
+        },
+        {
+            "$context": {
+                "motor_res": {
+                    "move_speed": 10
+                }
+            },
+            "$typeName": "MotorComponent"
         }
     ]
 }

@@ -16,6 +16,9 @@ namespace QYHS
         bool isDirty() { return m_is_dirty; }
         void setDirty(bool is_dirty) { m_is_dirty = is_dirty; }
         void setPosition(Vector3 position);
+        const Vector3 getPosition() { return m_transform.m_position; }
+        const Quaternion& getRotation() { return m_transform.m_rotation; }
+        void setRotation(Quaternion new_quaternion) { m_transform.m_rotation = new_quaternion; }
         Matrix4x4 getMatrix() { return m_transform.getMatrix(); }
         const Transform& getTransformConst() { return m_transform; }
     protected:

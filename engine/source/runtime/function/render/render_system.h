@@ -19,6 +19,7 @@ namespace QYHS
 		void swapLogicRenderData();
 		void processRenderEntity();
 		void processSwapData();
+		void changeRenderCameraType(RenderCameraType camera_type) { m_render_camera->changeType(camera_type); }
 		size_t getGObjectIDByMeshID(size_t mesh_id);
 		RenderSwapContext& getSwapContext() { return m_swap_context; }
 		std::shared_ptr<RenderCamera> getRenderCamera() { return m_render_camera; }

@@ -368,6 +368,7 @@ namespace QYHS
 				{
 					g_is_editor_mode = false;
 					g_runtime_global_context.m_window_system->disableCursor(true);
+					g_runtime_global_context.m_window_system->setFocusMode(true);
 				}
 				ImGui::PopID();
 			}
@@ -377,7 +378,7 @@ namespace QYHS
 				if (ImGui::Button("Game Mode"))
 				{
 					g_is_editor_mode = true;
-
+					g_runtime_global_context.m_render_system->changeRenderCameraType(RenderCameraType::Editor);
 				}
 				ImGui::PopID();
 			}

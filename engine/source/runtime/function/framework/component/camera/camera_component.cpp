@@ -47,6 +47,7 @@ namespace QYHS
 		m_up = character->getRotation() * param->m_cursor_pitch * Vector3::UNIT_Z;
 		m_left = m_up.crossProduct(m_forward);
 
+		std::cout << q_yaw.x << "  " << q_yaw.y << "  " << q_yaw.z << "  " << q_yaw.w << std::endl;
 		character->setRotation(q_yaw * character->getRotation());
 		CameraSwapData camera_swap_data;
 		camera_swap_data.m_view_matrix = Math::makeLookAtMatrix(m_position, m_position + m_forward, m_up);
@@ -54,6 +55,7 @@ namespace QYHS
 		RenderSwapContext& swap_context = g_runtime_global_context.m_render_system->getSwapContext();
 		SwapData& logical_swap_data = swap_context.getLogicSwapData();
 		logical_swap_data.m_camera_swap_data = camera_swap_data;
+
 	}
 
 	void CameraComponent::postLoadResource(std::weak_ptr<GameObject> parent_object)

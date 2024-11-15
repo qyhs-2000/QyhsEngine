@@ -1,5 +1,6 @@
 #include "character.h"
 #include "function/framework/component/transform/transform_component.h"
+#include "function/framework/component/motor/motor_component.h"
 namespace QYHS
 {
 	Character::Character(std::shared_ptr<GameObject> gobject)
@@ -26,4 +27,26 @@ namespace QYHS
 			m_rotation = Quaternion::IDENTITY;
 		}
 	}
+
+	void Character::tick(double delta_time)
+	{
+		if (!m_character_object) return;
+		MotorComponent* motor_component = m_character_object->TryGetComponent(MotorComponent);
+		if (!motor_component) return;
+		TransformComponent* transform_component = m_character_object->TryGetComponent(TransformComponent);
+		if (!transform_component) return;
+		if (m_rotation_dirty)
+		{
+			transform_component->setRotation(m_rotation_buffer);
+			m_rotation_dirty = false;
+		}
+		if (motor_component->isMoving())
+		{
+			m_rotation_buffer = m_rotation;
+			m_rotation_dirty = true;
+		}
+		m_position = motor_component->getTargetPosition();
+
+	}
+
 }

@@ -36,6 +36,11 @@ namespace QYHS
 		m_invRotation = m_rotation.conjugate();
 	}
 
+	void RenderCamera::changeType(RenderCameraType camera_type)
+	{
+		m_current_camera_type = camera_type;
+	}
+
 	Matrix4x4 QYHS::RenderCamera::getViewMatrix() 
 	{
 		std::lock_guard< std::mutex> lock_guard(m_view_matrix_mutex);

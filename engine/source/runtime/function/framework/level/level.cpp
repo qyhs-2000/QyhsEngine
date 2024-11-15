@@ -5,6 +5,7 @@
 #include "resource/type/world_resource.h"
 #include "resource/common/object.h"
 #include <resource/asset_manager/asset_manager.h>
+#include "engine.h"
 namespace QYHS
 {
 	void Level::tick(double delta_time)
@@ -13,6 +14,10 @@ namespace QYHS
 		{
 			assert(pair.second);
 			pair.second->tick(delta_time);
+		}
+		if (m_current_active_character && !g_is_editor_mode)
+		{
+			m_current_active_character->tick(delta_time);
 		}
 	}
 	

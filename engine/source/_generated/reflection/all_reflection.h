@@ -35,6 +35,7 @@ namespace QYHS
 			TypeWrapperRegister_CameraParamter();
 			TypeWrapperRegister_ThirdPersonCameraParameter();
 			TypeWrapperRegister_MotorComponent();
+			TypeWrapperRegister_MotorComponentRes();
 			TypeWrapperRegister_TransformComponent();
 			TypeWrapperRegister_ObjectDefinitionResource();
 			TypeWrapperRegister_ObjectInstanceResource();

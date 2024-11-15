@@ -194,6 +194,17 @@ namespace QYHS
 		return instance;
 	}
 	template<>
+	MotorComponentRes & Serializer::read(const Json & json_context,MotorComponentRes & instance)
+	{
+		assert(json_context.is_object());
+		
+		if(!json_context["move_speed"].is_null())
+		{
+			Serializer::read(json_context["move_speed"],instance.move_speed);
+		}
+		return instance;
+	}
+	template<>
 	MotorComponent & Serializer::read(const Json & json_context,MotorComponent & instance)
 	{
 		assert(json_context.is_object());
@@ -201,6 +212,10 @@ namespace QYHS
 		if(!json_context["transform"].is_null())
 		{
 			Serializer::read(json_context["transform"],instance.m_transform);
+		}
+		if(!json_context["motor_res"].is_null())
+		{
+			Serializer::read(json_context["motor_res"],instance.m_motor_res);
 		}
 		return instance;
 	}
