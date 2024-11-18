@@ -26,7 +26,7 @@ namespace QYHS
 
 	void MotorComponent::calculateTargetPosition(Vector3 m_current_position,double delta_time)
 	{		
-		m_target_position = m_current_position + m_diresed_horizontal_direction * m_motor_res.move_speed * delta_time;
+		m_target_position = m_current_position + m_diresed_horizontal_direction * m_motor_res.move_speed * delta_time + m_diresed_vertical_direction;
 		m_is_moving = (m_target_position - m_current_position).squaredLength() > 0.f;
 	}
 

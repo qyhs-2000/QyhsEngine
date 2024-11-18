@@ -26,6 +26,10 @@ namespace QYHS
 					
 					return count;	
 				}
+				static Json writeByName(void * instance_ptr)
+				{
+					return Serializer::write(*(LevelResource*)instance_ptr);
+				}
 				//field
 				static void set_m_gravity(void * instance,void * field_value)
 				{
@@ -152,8 +156,8 @@ namespace QYHS
 		REGISTER_TO_ARRAY_MAP("stdSSvectorLObjectInstanceResourceR",array_function_tuple_stdSSvectorLObjectInstanceResourceR);
 		ClassFunctionTuple * f_class_function_tuple_LevelResource = new ClassFunctionTuple(
             &TypeFieldReflectionOperator::TypeLevelResourceOperator::constructorWithJson,
-            &TypeFieldReflectionOperator::TypeLevelResourceOperator::getLevelResourceBaseClassReflectionInstanceList
-            //&TypeFieldReflectionOperator::TypeLevelResourceOperator::writeByName
+            &TypeFieldReflectionOperator::TypeLevelResourceOperator::getLevelResourceBaseClassReflectionInstanceList,
+            &TypeFieldReflectionOperator::TypeLevelResourceOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("LevelResource",f_class_function_tuple_LevelResource);
 		}

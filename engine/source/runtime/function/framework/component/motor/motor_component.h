@@ -37,6 +37,7 @@ namespace QYHS
             MotorComponentRes m_motor_res;
         Vector3 m_target_position;
         Vector3 m_diresed_horizontal_direction{ Vector3::ZERO };
+        Vector3 m_diresed_vertical_direction{ Vector3::ZERO };
     private:
         bool m_is_dirty{ false };
         bool m_is_moving{ false };

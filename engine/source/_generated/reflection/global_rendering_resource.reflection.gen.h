@@ -27,6 +27,10 @@ namespace QYHS
 					
 					return count;	
 				}
+				static Json writeByName(void * instance_ptr)
+				{
+					return Serializer::write(*(SkyBoxSpecularMap*)instance_ptr);
+				}
 				//field
 				static void set_m_positive_x_map(void * instance,void * field_value)
 				{
@@ -172,6 +176,10 @@ namespace QYHS
 					
 					return count;	
 				}
+				static Json writeByName(void * instance_ptr)
+				{
+					return Serializer::write(*(GlobalRenderConfig*)instance_ptr);
+				}
 				//field
 				static void set_camera_config(void * instance,void * field_value)
 				{
@@ -278,8 +286,8 @@ namespace QYHS
 		
 		ClassFunctionTuple * f_class_function_tuple_SkyBoxSpecularMap = new ClassFunctionTuple(
             &TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::constructorWithJson,
-            &TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::getSkyBoxSpecularMapBaseClassReflectionInstanceList
-            //&TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::writeByName
+            &TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::getSkyBoxSpecularMapBaseClassReflectionInstanceList,
+            &TypeFieldReflectionOperator::TypeSkyBoxSpecularMapOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("SkyBoxSpecularMap",f_class_function_tuple_SkyBoxSpecularMap);
 		}
@@ -307,8 +315,8 @@ namespace QYHS
 		
 		ClassFunctionTuple * f_class_function_tuple_GlobalRenderConfig = new ClassFunctionTuple(
             &TypeFieldReflectionOperator::TypeGlobalRenderConfigOperator::constructorWithJson,
-            &TypeFieldReflectionOperator::TypeGlobalRenderConfigOperator::getGlobalRenderConfigBaseClassReflectionInstanceList
-            //&TypeFieldReflectionOperator::TypeGlobalRenderConfigOperator::writeByName
+            &TypeFieldReflectionOperator::TypeGlobalRenderConfigOperator::getGlobalRenderConfigBaseClassReflectionInstanceList,
+            &TypeFieldReflectionOperator::TypeGlobalRenderConfigOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("GlobalRenderConfig",f_class_function_tuple_GlobalRenderConfig);
 		}

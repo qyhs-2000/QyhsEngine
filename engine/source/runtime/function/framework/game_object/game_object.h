@@ -28,6 +28,7 @@ namespace QYHS
 			}
 			return nullptr;
 		}
+		void save(class ObjectInstanceResource& instance_res);
 		std::string m_name;
 		std::vector<Reflection::ReflectionPtr<Component>> &getComponents() { return m_components; }
 		bool shouldComponentTick(std::string component_type_name);

@@ -81,4 +81,33 @@ namespace QYHS
 		}
 		return std::weak_ptr<GameObject>();
 	}
+
+	bool Level::save()
+	{
+		LevelResource level_res;
+		std::vector<ObjectInstanceResource>& output_object_instances = level_res.m_objects;
+		level_res.m_character_name = m_current_active_character->getName();
+		const size_t object_size = m_game_objects.size();
+		output_object_instances.resize(object_size);
+		unsigned int index = 0;
+		for (const auto& id_object_pair : m_game_objects)
+		{
+			if (id_object_pair.second)
+			{
+				id_object_pair.second->save(output_object_instances[index]);
+				++index;
+			}
+		}
+
+		const bool is_save_success = g_runtime_global_context.m_asset_manager->saveAsset(level_res, m_current_level_url);
+		if (is_save_success)
+		{
+			LOG_INFO("Success to save level!");
+		}
+		else
+		{
+			LOG_ERROR("Failed to save level");
+		}
+		return is_save_success;
+	}
 }

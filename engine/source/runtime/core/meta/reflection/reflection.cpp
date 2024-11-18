@@ -83,6 +83,16 @@ namespace QYHS
 			return true;
 		}
 
+		Json TypeMeta::writeByName(std::string type_name, void* instance_ptr)
+		{
+			auto iter = m_class_map.find(type_name);
+			if (iter != m_class_map.end())
+			{
+				return std::get<2>(*iter->second)(instance_ptr);
+			}
+			return Json();
+		}
+
 		int TypeMeta::getBaseClassReflectionInstanceList(Reflection::ReflectionInstance*& reflection_instance_list, void* object_instance)
 		{
 			auto iter = m_class_map.find(m_type_name);

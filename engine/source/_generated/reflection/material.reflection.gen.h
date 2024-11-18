@@ -26,6 +26,10 @@ namespace QYHS
 					
 					return count;	
 				}
+				static Json writeByName(void * instance_ptr)
+				{
+					return Serializer::write(*(MaterialRes*)instance_ptr);
+				}
 				//field
 				static void set_m_base_colour_texture_file(void * instance,void * field_value)
 				{
@@ -67,8 +71,8 @@ namespace QYHS
 		
 		ClassFunctionTuple * f_class_function_tuple_MaterialRes = new ClassFunctionTuple(
             &TypeFieldReflectionOperator::TypeMaterialResOperator::constructorWithJson,
-            &TypeFieldReflectionOperator::TypeMaterialResOperator::getMaterialResBaseClassReflectionInstanceList
-            //&TypeFieldReflectionOperator::TypeMaterialResOperator::writeByName
+            &TypeFieldReflectionOperator::TypeMaterialResOperator::getMaterialResBaseClassReflectionInstanceList,
+            &TypeFieldReflectionOperator::TypeMaterialResOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("MaterialRes",f_class_function_tuple_MaterialRes);
 		}

@@ -27,6 +27,10 @@ namespace QYHS
 					
 					return count;	
 				}
+				static Json writeByName(void * instance_ptr)
+				{
+					return Serializer::write(*(CameraPose*)instance_ptr);
+				}
 				//field
 				static void set_m_position(void * instance,void * field_value)
 				{
@@ -111,6 +115,10 @@ namespace QYHS
 					int count = 0;
 					
 					return count;	
+				}
+				static Json writeByName(void * instance_ptr)
+				{
+					return Serializer::write(*(CameraConfig*)instance_ptr);
 				}
 				//field
 				static void set_m_pose(void * instance,void * field_value)
@@ -231,8 +239,8 @@ namespace QYHS
 		
 		ClassFunctionTuple * f_class_function_tuple_CameraPose = new ClassFunctionTuple(
             &TypeFieldReflectionOperator::TypeCameraPoseOperator::constructorWithJson,
-            &TypeFieldReflectionOperator::TypeCameraPoseOperator::getCameraPoseBaseClassReflectionInstanceList
-            //&TypeFieldReflectionOperator::TypeCameraPoseOperator::writeByName
+            &TypeFieldReflectionOperator::TypeCameraPoseOperator::getCameraPoseBaseClassReflectionInstanceList,
+            &TypeFieldReflectionOperator::TypeCameraPoseOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("CameraPose",f_class_function_tuple_CameraPose);
 		}
@@ -278,8 +286,8 @@ namespace QYHS
 		
 		ClassFunctionTuple * f_class_function_tuple_CameraConfig = new ClassFunctionTuple(
             &TypeFieldReflectionOperator::TypeCameraConfigOperator::constructorWithJson,
-            &TypeFieldReflectionOperator::TypeCameraConfigOperator::getCameraConfigBaseClassReflectionInstanceList
-            //&TypeFieldReflectionOperator::TypeCameraConfigOperator::writeByName
+            &TypeFieldReflectionOperator::TypeCameraConfigOperator::getCameraConfigBaseClassReflectionInstanceList,
+            &TypeFieldReflectionOperator::TypeCameraConfigOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("CameraConfig",f_class_function_tuple_CameraConfig);
 		}

@@ -27,6 +27,10 @@ namespace QYHS
 					
 					return count;	
 				}
+				static Json writeByName(void * instance_ptr)
+				{
+					return Serializer::write(*(Vertex*)instance_ptr);
+				}
 				//field
 				static void set_px(void * instance,void * field_value)
 				{
@@ -272,6 +276,10 @@ namespace QYHS
 					
 					return count;	
 				}
+				static Json writeByName(void * instance_ptr)
+				{
+					return Serializer::write(*(MeshData*)instance_ptr);
+				}
 				//field
 				static void set_vertex_buffer(void * instance,void * field_value)
 				{
@@ -461,8 +469,8 @@ namespace QYHS
 		
 		ClassFunctionTuple * f_class_function_tuple_Vertex = new ClassFunctionTuple(
             &TypeFieldReflectionOperator::TypeVertexOperator::constructorWithJson,
-            &TypeFieldReflectionOperator::TypeVertexOperator::getVertexBaseClassReflectionInstanceList
-            //&TypeFieldReflectionOperator::TypeVertexOperator::writeByName
+            &TypeFieldReflectionOperator::TypeVertexOperator::getVertexBaseClassReflectionInstanceList,
+            &TypeFieldReflectionOperator::TypeVertexOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("Vertex",f_class_function_tuple_Vertex);
 		}
@@ -505,8 +513,8 @@ namespace QYHS
 		REGISTER_TO_ARRAY_MAP("stdSSvectorLuint16_tR",array_function_tuple_stdSSvectorLuint16_tR);
 		ClassFunctionTuple * f_class_function_tuple_MeshData = new ClassFunctionTuple(
             &TypeFieldReflectionOperator::TypeMeshDataOperator::constructorWithJson,
-            &TypeFieldReflectionOperator::TypeMeshDataOperator::getMeshDataBaseClassReflectionInstanceList
-            //&TypeFieldReflectionOperator::TypeMeshDataOperator::writeByName
+            &TypeFieldReflectionOperator::TypeMeshDataOperator::getMeshDataBaseClassReflectionInstanceList,
+            &TypeFieldReflectionOperator::TypeMeshDataOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("MeshData",f_class_function_tuple_MeshData);
 		}

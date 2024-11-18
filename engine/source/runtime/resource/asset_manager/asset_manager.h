@@ -46,6 +46,25 @@ namespace QYHS
 
 		bool loadLevel(const std::string& level_url);
 		std::filesystem::path getFullPath(const std::string &asset_url);
+		template<typename AssetType>
+		bool saveAsset(AssetType& output_asset, std::string asset_url)
+		{
+			std::ofstream asset_json_file(getFullPath(asset_url));
+			if (!asset_json_file)
+			{
+				LOG_ERROR("Fail to open file {}", asset_url);
+				return false;
+			}
+			// write to json object and dump to string
+			Json &&        asset_json      = Serializer::write(output_asset);
+			std::string&& asset_json_text = asset_json.dump();
+
+			// write to file
+			asset_json_file << asset_json_text;
+			asset_json_file.flush();
+
+			return true;
+		}
 	private:
 		std::unordered_map<std::string, std::shared_ptr<Level>>  m_loaded_levels;
 	};

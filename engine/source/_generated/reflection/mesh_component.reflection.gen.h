@@ -29,6 +29,10 @@ namespace QYHS
 					}
 					return count;	
 				}
+				static Json writeByName(void * instance_ptr)
+				{
+					return Serializer::write(*(MeshComponent*)instance_ptr);
+				}
 				//field
 				static void set_m_mesh_res(void * instance,void * field_value)
 				{
@@ -70,8 +74,8 @@ namespace QYHS
 		
 		ClassFunctionTuple * f_class_function_tuple_MeshComponent = new ClassFunctionTuple(
             &TypeFieldReflectionOperator::TypeMeshComponentOperator::constructorWithJson,
-            &TypeFieldReflectionOperator::TypeMeshComponentOperator::getMeshComponentBaseClassReflectionInstanceList
-            //&TypeFieldReflectionOperator::TypeMeshComponentOperator::writeByName
+            &TypeFieldReflectionOperator::TypeMeshComponentOperator::getMeshComponentBaseClassReflectionInstanceList,
+            &TypeFieldReflectionOperator::TypeMeshComponentOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("MeshComponent",f_class_function_tuple_MeshComponent);
 		}

@@ -4,20 +4,20 @@
 
 namespace QYHS
 {
-	//template<>
-	//Json Serializer::write(const CameraParamter&instance);
+	template<>
+	Json Serializer::write(const CameraParamter&instance);
 	template<>
 	CameraParamter & Serializer::read(const Json & json_context,CameraParamter & instance);
-	//template<>
-	//Json Serializer::write(const ThirdPersonCameraParameter&instance);
+	template<>
+	Json Serializer::write(const ThirdPersonCameraParameter&instance);
 	template<>
 	ThirdPersonCameraParameter & Serializer::read(const Json & json_context,ThirdPersonCameraParameter & instance);
-	//template<>
-	//Json Serializer::write(const CameraComponentResource&instance);
+	template<>
+	Json Serializer::write(const CameraComponentResource&instance);
 	template<>
 	CameraComponentResource & Serializer::read(const Json & json_context,CameraComponentResource & instance);
-	//template<>
-	//Json Serializer::write(const CameraComponent&instance);
+	template<>
+	Json Serializer::write(const CameraComponent&instance);
 	template<>
 	CameraComponent & Serializer::read(const Json & json_context,CameraComponent & instance);
 }//namespace

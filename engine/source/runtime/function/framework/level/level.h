@@ -16,6 +16,7 @@ namespace QYHS
 		std::weak_ptr<GameObject> getGameObjectByID(size_t gobject_id);
 		std::unordered_map<GameObjectID, std::shared_ptr<GameObject>>& getAllGameObjects() { return m_game_objects; }
 		std::weak_ptr<Character> getCurrentActiveCharacter() { return m_current_active_character; }
+		bool save();
 	private:
 		std::unordered_map<GameObjectID, std::shared_ptr<GameObject>>		m_game_objects;
 		GameObjectIdAllocator	m_go_id_allocator;

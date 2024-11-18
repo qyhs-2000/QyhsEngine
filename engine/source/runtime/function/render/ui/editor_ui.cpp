@@ -583,6 +583,7 @@ namespace QYHS
 				if (ImGui::MenuItem("Save Current Level"))
 				{
 					std::cout << " Save Current Level" << std::endl;
+					g_runtime_global_context.m_world_manager->saveCurrentLevel();
 				}
 				if (ImGui::BeginMenu("Debug"))
 				{

@@ -29,6 +29,10 @@ namespace QYHS
 					
 					return count;	
 				}
+				static Json writeByName(void * instance_ptr)
+				{
+					return Serializer::write(*(CameraParamter*)instance_ptr);
+				}
 				//field
 				static void set_m_fov(void * instance,void * field_value)
 				{
@@ -76,6 +80,10 @@ namespace QYHS
 						out_list[i] = TYPE_META_DEF(QYHS::CameraParamter,static_cast<ThirdPersonCameraParameter*>(instance));
 					}
 					return count;	
+				}
+				static Json writeByName(void * instance_ptr)
+				{
+					return Serializer::write(*(ThirdPersonCameraParameter*)instance_ptr);
 				}
 				//field
 				static void set_m_horizontal_offset(void * instance,void * field_value)
@@ -182,6 +190,10 @@ namespace QYHS
 					
 					return count;	
 				}
+				static Json writeByName(void * instance_ptr)
+				{
+					return Serializer::write(*(CameraComponentResource*)instance_ptr);
+				}
 				//field
 				static void set_m_parameter(void * instance,void * field_value)
 				{
@@ -230,6 +242,10 @@ namespace QYHS
 					}
 					return count;	
 				}
+				static Json writeByName(void * instance_ptr)
+				{
+					return Serializer::write(*(CameraComponent*)instance_ptr);
+				}
 				//field
 				static void set_m_camera_res(void * instance,void * field_value)
 				{
@@ -271,8 +287,8 @@ namespace QYHS
 		
 		ClassFunctionTuple * f_class_function_tuple_CameraParamter = new ClassFunctionTuple(
             &TypeFieldReflectionOperator::TypeCameraParamterOperator::constructorWithJson,
-            &TypeFieldReflectionOperator::TypeCameraParamterOperator::getCameraParamterBaseClassReflectionInstanceList
-            //&TypeFieldReflectionOperator::TypeCameraParamterOperator::writeByName
+            &TypeFieldReflectionOperator::TypeCameraParamterOperator::getCameraParamterBaseClassReflectionInstanceList,
+            &TypeFieldReflectionOperator::TypeCameraParamterOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("CameraParamter",f_class_function_tuple_CameraParamter);
 		}
@@ -318,8 +334,8 @@ namespace QYHS
 		
 		ClassFunctionTuple * f_class_function_tuple_ThirdPersonCameraParameter = new ClassFunctionTuple(
             &TypeFieldReflectionOperator::TypeThirdPersonCameraParameterOperator::constructorWithJson,
-            &TypeFieldReflectionOperator::TypeThirdPersonCameraParameterOperator::getThirdPersonCameraParameterBaseClassReflectionInstanceList
-            //&TypeFieldReflectionOperator::TypeThirdPersonCameraParameterOperator::writeByName
+            &TypeFieldReflectionOperator::TypeThirdPersonCameraParameterOperator::getThirdPersonCameraParameterBaseClassReflectionInstanceList,
+            &TypeFieldReflectionOperator::TypeThirdPersonCameraParameterOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("ThirdPersonCameraParameter",f_class_function_tuple_ThirdPersonCameraParameter);
 		}
@@ -338,8 +354,8 @@ namespace QYHS
 		
 		ClassFunctionTuple * f_class_function_tuple_CameraComponentResource = new ClassFunctionTuple(
             &TypeFieldReflectionOperator::TypeCameraComponentResourceOperator::constructorWithJson,
-            &TypeFieldReflectionOperator::TypeCameraComponentResourceOperator::getCameraComponentResourceBaseClassReflectionInstanceList
-            //&TypeFieldReflectionOperator::TypeCameraComponentResourceOperator::writeByName
+            &TypeFieldReflectionOperator::TypeCameraComponentResourceOperator::getCameraComponentResourceBaseClassReflectionInstanceList,
+            &TypeFieldReflectionOperator::TypeCameraComponentResourceOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("CameraComponentResource",f_class_function_tuple_CameraComponentResource);
 		}
@@ -358,8 +374,8 @@ namespace QYHS
 		
 		ClassFunctionTuple * f_class_function_tuple_CameraComponent = new ClassFunctionTuple(
             &TypeFieldReflectionOperator::TypeCameraComponentOperator::constructorWithJson,
-            &TypeFieldReflectionOperator::TypeCameraComponentOperator::getCameraComponentBaseClassReflectionInstanceList
-            //&TypeFieldReflectionOperator::TypeCameraComponentOperator::writeByName
+            &TypeFieldReflectionOperator::TypeCameraComponentOperator::getCameraComponentBaseClassReflectionInstanceList,
+            &TypeFieldReflectionOperator::TypeCameraComponentOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("CameraComponent",f_class_function_tuple_CameraComponent);
 		}

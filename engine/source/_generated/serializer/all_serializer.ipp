@@ -27,6 +27,16 @@ namespace QYHS
 		
 		return instance;
 	}
+
+	template<>
+    Json Serializer::write(const Component& instance){
+        Json::object  ret_context;
+        
+        
+        return  Json(ret_context);
+    }
+
+
 	template<>
 	Vector2 & Serializer::read(const Json & json_context,Vector2 & instance)
 	{
@@ -42,6 +52,17 @@ namespace QYHS
 		}
 		return instance;
 	}
+
+	template<>
+    Json Serializer::write(const Vector2& instance){
+        Json::object  ret_context;
+        
+        ret_context.insert_or_assign("x", Serializer::write(instance.x));
+        ret_context.insert_or_assign("y", Serializer::write(instance.y));
+        return  Json(ret_context);
+    }
+
+
 	template<>
 	Quaternion & Serializer::read(const Json & json_context,Quaternion & instance)
 	{
@@ -65,6 +86,19 @@ namespace QYHS
 		}
 		return instance;
 	}
+
+	template<>
+    Json Serializer::write(const Quaternion& instance){
+        Json::object  ret_context;
+        
+        ret_context.insert_or_assign("w", Serializer::write(instance.w));
+        ret_context.insert_or_assign("x", Serializer::write(instance.x));
+        ret_context.insert_or_assign("y", Serializer::write(instance.y));
+        ret_context.insert_or_assign("z", Serializer::write(instance.z));
+        return  Json(ret_context);
+    }
+
+
 	template<>
 	MeshComponent & Serializer::read(const Json & json_context,MeshComponent & instance)
 	{
@@ -76,6 +110,19 @@ namespace QYHS
 		}
 		return instance;
 	}
+
+	template<>
+    Json Serializer::write(const MeshComponent& instance){
+        Json::object  ret_context;
+        auto&&  json_context_0 = Serializer::write(*(QYHS::Component*)&instance);
+        assert(json_context_0.is_object());
+        auto&& json_context_map_0 = json_context_0.object_items();
+        ret_context.insert(json_context_map_0.begin() , json_context_map_0.end());
+        ret_context.insert_or_assign("mesh_res", Serializer::write(instance.m_mesh_res));
+        return  Json(ret_context);
+    }
+
+
 	template<>
 	Vector3 & Serializer::read(const Json & json_context,Vector3 & instance)
 	{
@@ -95,6 +142,18 @@ namespace QYHS
 		}
 		return instance;
 	}
+
+	template<>
+    Json Serializer::write(const Vector3& instance){
+        Json::object  ret_context;
+        
+        ret_context.insert_or_assign("x", Serializer::write(instance.x));
+        ret_context.insert_or_assign("y", Serializer::write(instance.y));
+        ret_context.insert_or_assign("z", Serializer::write(instance.z));
+        return  Json(ret_context);
+    }
+
+
 	template<>
 	Transform & Serializer::read(const Json & json_context,Transform & instance)
 	{
@@ -114,6 +173,18 @@ namespace QYHS
 		}
 		return instance;
 	}
+
+	template<>
+    Json Serializer::write(const Transform& instance){
+        Json::object  ret_context;
+        
+        ret_context.insert_or_assign("position", Serializer::write(instance.m_position));
+        ret_context.insert_or_assign("scale", Serializer::write(instance.m_scale));
+        ret_context.insert_or_assign("rotation", Serializer::write(instance.m_rotation));
+        return  Json(ret_context);
+    }
+
+
 	template<>
 	Vector4 & Serializer::read(const Json & json_context,Vector4 & instance)
 	{
@@ -137,6 +208,19 @@ namespace QYHS
 		}
 		return instance;
 	}
+
+	template<>
+    Json Serializer::write(const Vector4& instance){
+        Json::object  ret_context;
+        
+        ret_context.insert_or_assign("x", Serializer::write(instance.x));
+        ret_context.insert_or_assign("y", Serializer::write(instance.y));
+        ret_context.insert_or_assign("z", Serializer::write(instance.z));
+        ret_context.insert_or_assign("w", Serializer::write(instance.w));
+        return  Json(ret_context);
+    }
+
+
 	template<>
 	CameraParamter & Serializer::read(const Json & json_context,CameraParamter & instance)
 	{
@@ -148,6 +232,16 @@ namespace QYHS
 		}
 		return instance;
 	}
+
+	template<>
+    Json Serializer::write(const CameraParamter& instance){
+        Json::object  ret_context;
+        
+        ret_context.insert_or_assign("fov", Serializer::write(instance.m_fov));
+        return  Json(ret_context);
+    }
+
+
 	template<>
 	ThirdPersonCameraParameter & Serializer::read(const Json & json_context,ThirdPersonCameraParameter & instance)
 	{
@@ -171,6 +265,22 @@ namespace QYHS
 		}
 		return instance;
 	}
+
+	template<>
+    Json Serializer::write(const ThirdPersonCameraParameter& instance){
+        Json::object  ret_context;
+        auto&&  json_context_0 = Serializer::write(*(QYHS::CameraParamter*)&instance);
+        assert(json_context_0.is_object());
+        auto&& json_context_map_0 = json_context_0.object_items();
+        ret_context.insert(json_context_map_0.begin() , json_context_map_0.end());
+        ret_context.insert_or_assign("horizontal_offset", Serializer::write(instance.m_horizontal_offset));
+        ret_context.insert_or_assign("vertical_offset", Serializer::write(instance.m_vertical_offset));
+        ret_context.insert_or_assign("cursor_pitch", Serializer::write(instance.m_cursor_pitch));
+        ret_context.insert_or_assign("cursor_yaw", Serializer::write(instance.m_cursor_yaw));
+        return  Json(ret_context);
+    }
+
+
 	template<>
 	CameraComponentResource & Serializer::read(const Json & json_context,CameraComponentResource & instance)
 	{
@@ -182,6 +292,16 @@ namespace QYHS
 		}
 		return instance;
 	}
+
+	template<>
+    Json Serializer::write(const CameraComponentResource& instance){
+        Json::object  ret_context;
+        
+        ret_context.insert_or_assign("parameter", Serializer::write(instance.m_parameter));
+        return  Json(ret_context);
+    }
+
+
 	template<>
 	CameraComponent & Serializer::read(const Json & json_context,CameraComponent & instance)
 	{
@@ -193,6 +313,19 @@ namespace QYHS
 		}
 		return instance;
 	}
+
+	template<>
+    Json Serializer::write(const CameraComponent& instance){
+        Json::object  ret_context;
+        auto&&  json_context_0 = Serializer::write(*(QYHS::Component*)&instance);
+        assert(json_context_0.is_object());
+        auto&& json_context_map_0 = json_context_0.object_items();
+        ret_context.insert(json_context_map_0.begin() , json_context_map_0.end());
+        ret_context.insert_or_assign("camera_res", Serializer::write(instance.m_camera_res));
+        return  Json(ret_context);
+    }
+
+
 	template<>
 	MotorComponentRes & Serializer::read(const Json & json_context,MotorComponentRes & instance)
 	{
@@ -204,6 +337,16 @@ namespace QYHS
 		}
 		return instance;
 	}
+
+	template<>
+    Json Serializer::write(const MotorComponentRes& instance){
+        Json::object  ret_context;
+        
+        ret_context.insert_or_assign("move_speed", Serializer::write(instance.move_speed));
+        return  Json(ret_context);
+    }
+
+
 	template<>
 	MotorComponent & Serializer::read(const Json & json_context,MotorComponent & instance)
 	{
@@ -219,6 +362,20 @@ namespace QYHS
 		}
 		return instance;
 	}
+
+	template<>
+    Json Serializer::write(const MotorComponent& instance){
+        Json::object  ret_context;
+        auto&&  json_context_0 = Serializer::write(*(QYHS::Component*)&instance);
+        assert(json_context_0.is_object());
+        auto&& json_context_map_0 = json_context_0.object_items();
+        ret_context.insert(json_context_map_0.begin() , json_context_map_0.end());
+        ret_context.insert_or_assign("transform", Serializer::write(instance.m_transform));
+        ret_context.insert_or_assign("motor_res", Serializer::write(instance.m_motor_res));
+        return  Json(ret_context);
+    }
+
+
 	template<>
 	TransformComponent & Serializer::read(const Json & json_context,TransformComponent & instance)
 	{
@@ -230,6 +387,19 @@ namespace QYHS
 		}
 		return instance;
 	}
+
+	template<>
+    Json Serializer::write(const TransformComponent& instance){
+        Json::object  ret_context;
+        auto&&  json_context_0 = Serializer::write(*(QYHS::Component*)&instance);
+        assert(json_context_0.is_object());
+        auto&& json_context_map_0 = json_context_0.object_items();
+        ret_context.insert(json_context_map_0.begin() , json_context_map_0.end());
+        ret_context.insert_or_assign("transform", Serializer::write(instance.m_transform));
+        return  Json(ret_context);
+    }
+
+
 	template<>
 	ObjectDefinitionResource & Serializer::read(const Json & json_context,ObjectDefinitionResource & instance)
 	{
@@ -247,6 +417,21 @@ namespace QYHS
 		}
 		return instance;
 	}
+
+	template<>
+    Json Serializer::write(const ObjectDefinitionResource& instance){
+        Json::object  ret_context;
+        
+        Json::array m_components_json;
+        for (auto& item : instance.m_components){
+            m_components_json.emplace_back(Serializer::write(item));
+        }
+        ret_context.insert_or_assign("components",m_components_json);
+        
+        return  Json(ret_context);
+    }
+
+
 	template<>
 	ObjectInstanceResource & Serializer::read(const Json & json_context,ObjectInstanceResource & instance)
 	{
@@ -272,6 +457,23 @@ namespace QYHS
 		}
 		return instance;
 	}
+
+	template<>
+    Json Serializer::write(const ObjectInstanceResource& instance){
+        Json::object  ret_context;
+        
+        ret_context.insert_or_assign("name", Serializer::write(instance.m_name));
+        ret_context.insert_or_assign("definition", Serializer::write(instance.m_definition));
+        Json::array m_instanced_components_json;
+        for (auto& item : instance.m_instanced_components){
+            m_instanced_components_json.emplace_back(Serializer::write(item));
+        }
+        ret_context.insert_or_assign("instanced_components",m_instanced_components_json);
+        
+        return  Json(ret_context);
+    }
+
+
 	template<>
 	Vertex & Serializer::read(const Json & json_context,Vertex & instance)
 	{
@@ -323,6 +525,26 @@ namespace QYHS
 		}
 		return instance;
 	}
+
+	template<>
+    Json Serializer::write(const Vertex& instance){
+        Json::object  ret_context;
+        
+        ret_context.insert_or_assign("px", Serializer::write(instance.px));
+        ret_context.insert_or_assign("py", Serializer::write(instance.py));
+        ret_context.insert_or_assign("pz", Serializer::write(instance.pz));
+        ret_context.insert_or_assign("nx", Serializer::write(instance.nx));
+        ret_context.insert_or_assign("ny", Serializer::write(instance.ny));
+        ret_context.insert_or_assign("nz", Serializer::write(instance.nz));
+        ret_context.insert_or_assign("tx", Serializer::write(instance.tx));
+        ret_context.insert_or_assign("ty", Serializer::write(instance.ty));
+        ret_context.insert_or_assign("tz", Serializer::write(instance.tz));
+        ret_context.insert_or_assign("u", Serializer::write(instance.u));
+        ret_context.insert_or_assign("v", Serializer::write(instance.v));
+        return  Json(ret_context);
+    }
+
+
 	template<>
 	MeshData & Serializer::read(const Json & json_context,MeshData & instance)
 	{
@@ -350,6 +572,27 @@ namespace QYHS
 		}
 		return instance;
 	}
+
+	template<>
+    Json Serializer::write(const MeshData& instance){
+        Json::object  ret_context;
+        
+        Json::array vertex_buffer_json;
+        for (auto& item : instance.vertex_buffer){
+            vertex_buffer_json.emplace_back(Serializer::write(item));
+        }
+        ret_context.insert_or_assign("vertex_buffer",vertex_buffer_json);
+        
+        Json::array index_buffer_json;
+        for (auto& item : instance.index_buffer){
+            index_buffer_json.emplace_back(Serializer::write(item));
+        }
+        ret_context.insert_or_assign("index_buffer",index_buffer_json);
+        
+        return  Json(ret_context);
+    }
+
+
 	template<>
 	SubMeshRes & Serializer::read(const Json & json_context,SubMeshRes & instance)
 	{
@@ -369,6 +612,18 @@ namespace QYHS
 		}
 		return instance;
 	}
+
+	template<>
+    Json Serializer::write(const SubMeshRes& instance){
+        Json::object  ret_context;
+        
+        ret_context.insert_or_assign("material", Serializer::write(instance.m_material));
+        ret_context.insert_or_assign("obj_file_ref", Serializer::write(instance.m_obj_file_ref));
+        ret_context.insert_or_assign("transform", Serializer::write(instance.m_transform));
+        return  Json(ret_context);
+    }
+
+
 	template<>
 	MeshComponentRes & Serializer::read(const Json & json_context,MeshComponentRes & instance)
 	{
@@ -386,6 +641,21 @@ namespace QYHS
 		}
 		return instance;
 	}
+
+	template<>
+    Json Serializer::write(const MeshComponentRes& instance){
+        Json::object  ret_context;
+        
+        Json::array m_sub_meshes_json;
+        for (auto& item : instance.m_sub_meshes){
+            m_sub_meshes_json.emplace_back(Serializer::write(item));
+        }
+        ret_context.insert_or_assign("sub_meshes",m_sub_meshes_json);
+        
+        return  Json(ret_context);
+    }
+
+
 	template<>
 	MaterialRes & Serializer::read(const Json & json_context,MaterialRes & instance)
 	{
@@ -397,6 +667,16 @@ namespace QYHS
 		}
 		return instance;
 	}
+
+	template<>
+    Json Serializer::write(const MaterialRes& instance){
+        Json::object  ret_context;
+        
+        ret_context.insert_or_assign("base_colour_texture_file", Serializer::write(instance.m_base_colour_texture_file));
+        return  Json(ret_context);
+    }
+
+
 	template<>
 	LevelResource & Serializer::read(const Json & json_context,LevelResource & instance)
 	{
@@ -422,6 +702,23 @@ namespace QYHS
 		}
 		return instance;
 	}
+
+	template<>
+    Json Serializer::write(const LevelResource& instance){
+        Json::object  ret_context;
+        
+        ret_context.insert_or_assign("gravity", Serializer::write(instance.m_gravity));
+        ret_context.insert_or_assign("character_name", Serializer::write(instance.m_character_name));
+        Json::array m_objects_json;
+        for (auto& item : instance.m_objects){
+            m_objects_json.emplace_back(Serializer::write(item));
+        }
+        ret_context.insert_or_assign("objects",m_objects_json);
+        
+        return  Json(ret_context);
+    }
+
+
 	template<>
 	WorldResource & Serializer::read(const Json & json_context,WorldResource & instance)
 	{
@@ -433,6 +730,16 @@ namespace QYHS
 		}
 		return instance;
 	}
+
+	template<>
+    Json Serializer::write(const WorldResource& instance){
+        Json::object  ret_context;
+        
+        ret_context.insert_or_assign("default_level_url", Serializer::write(instance.m_default_level_url));
+        return  Json(ret_context);
+    }
+
+
 	template<>
 	CameraPose & Serializer::read(const Json & json_context,CameraPose & instance)
 	{
@@ -452,6 +759,18 @@ namespace QYHS
 		}
 		return instance;
 	}
+
+	template<>
+    Json Serializer::write(const CameraPose& instance){
+        Json::object  ret_context;
+        
+        ret_context.insert_or_assign("position", Serializer::write(instance.m_position));
+        ret_context.insert_or_assign("target", Serializer::write(instance.m_target));
+        ret_context.insert_or_assign("up", Serializer::write(instance.m_up));
+        return  Json(ret_context);
+    }
+
+
 	template<>
 	CameraConfig & Serializer::read(const Json & json_context,CameraConfig & instance)
 	{
@@ -475,6 +794,19 @@ namespace QYHS
 		}
 		return instance;
 	}
+
+	template<>
+    Json Serializer::write(const CameraConfig& instance){
+        Json::object  ret_context;
+        
+        ret_context.insert_or_assign("pose", Serializer::write(instance.m_pose));
+        ret_context.insert_or_assign("aspect", Serializer::write(instance.m_aspect));
+        ret_context.insert_or_assign("z_far", Serializer::write(instance.m_z_far));
+        ret_context.insert_or_assign("z_near", Serializer::write(instance.m_z_near));
+        return  Json(ret_context);
+    }
+
+
 	template<>
 	SkyBoxSpecularMap & Serializer::read(const Json & json_context,SkyBoxSpecularMap & instance)
 	{
@@ -506,6 +838,21 @@ namespace QYHS
 		}
 		return instance;
 	}
+
+	template<>
+    Json Serializer::write(const SkyBoxSpecularMap& instance){
+        Json::object  ret_context;
+        
+        ret_context.insert_or_assign("positive_x_map", Serializer::write(instance.m_positive_x_map));
+        ret_context.insert_or_assign("negative_x_map", Serializer::write(instance.m_negative_x_map));
+        ret_context.insert_or_assign("positive_y_map", Serializer::write(instance.m_positive_y_map));
+        ret_context.insert_or_assign("negative_y_map", Serializer::write(instance.m_negative_y_map));
+        ret_context.insert_or_assign("positive_z_map", Serializer::write(instance.m_positive_z_map));
+        ret_context.insert_or_assign("negative_z_map", Serializer::write(instance.m_negative_z_map));
+        return  Json(ret_context);
+    }
+
+
 	template<>
 	GlobalRenderConfig & Serializer::read(const Json & json_context,GlobalRenderConfig & instance)
 	{
@@ -521,5 +868,16 @@ namespace QYHS
 		}
 		return instance;
 	}
+
+	template<>
+    Json Serializer::write(const GlobalRenderConfig& instance){
+        Json::object  ret_context;
+        
+        ret_context.insert_or_assign("camera_config", Serializer::write(instance.camera_config));
+        ret_context.insert_or_assign("skybox_specular_map", Serializer::write(instance.m_skybox_specular_map));
+        return  Json(ret_context);
+    }
+
+
 }
 

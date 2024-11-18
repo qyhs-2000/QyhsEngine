@@ -58,6 +58,14 @@ namespace QYHS
 		}
 		return false;
 	}
+
+	void GameObject::save(ObjectInstanceResource& instance_res)
+	{
+		instance_res.m_name = m_name;
+		instance_res.m_definition = m_definition_url;
+		instance_res.m_instanced_components = m_components;
+	}
+
 	bool GameObject::shouldComponentTick(std::string component_type_name)
 	{
 		if (g_is_editor_mode)

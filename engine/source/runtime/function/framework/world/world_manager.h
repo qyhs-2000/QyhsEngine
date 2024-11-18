@@ -11,6 +11,7 @@ namespace QYHS
 		void initialize();
 		bool loadWorld(const std::string& world_url);
 		bool loadLevel(const std::string& level_url);
+		void saveCurrentLevel();
 		Level		m_current_level;
 		std::weak_ptr<Level> getCurrentActiveLevel() { return m_current_active_level; }
 	private:

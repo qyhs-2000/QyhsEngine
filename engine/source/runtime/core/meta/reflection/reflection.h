@@ -62,7 +62,7 @@ namespace QYHS
 	typedef std::tuple<SetFuncion, GetFuncion, GetNameFuncion, GetNameFuncion, GetNameFuncion, GetBoolFunc>
 		FieldFunctionTuple;
 	typedef std::tuple<GetNameFuncion> MethodFunctionTuple;
-	typedef std::tuple<ConstructorWithPJson, GetBaseClassReflectionInstanceListFunc>
+	typedef std::tuple<ConstructorWithPJson, GetBaseClassReflectionInstanceListFunc,WritePJsonByName>
 		ClassFunctionTuple;
 	typedef std::tuple<SetArrayFunc, GetArrayFunc, GetSizeFunc, GetNameFuncion, GetNameFuncion> ArrayFunctionTuple;
 
@@ -138,6 +138,7 @@ namespace QYHS
 			static ReflectionInstance newFromNameAndJson(std::string type_name, const Json& json_context);
 			static TypeMeta newMetaFromName(std::string name);
 			static bool newArrayAccessorFromName(std::string type_name, ArrayAccessor& array_accessor);
+			static Json writeByName(std::string type_name, void* instance_ptr);
 			int getBaseClassReflectionInstanceList(Reflection::ReflectionInstance* &reflection_instance_list, void* object_instance);
 			int getFields(FieldAccessor*& p_fields);
 			std::string getTypeName();
@@ -166,9 +167,10 @@ namespace QYHS
 			void setTypeName(std::string name) { m_type_name = name; }
 			T*& getPtrReference() { return m_instance; }
 			T* operator->() { return m_instance; }
+			T* operator->() const { return m_instance; }
 			bool operator==(const T* ptr) { return m_instance == ptr; }
 			bool operator!=(const T* ptr) { return m_instance != ptr; }
-			std::string getTypeName() { return m_type_name; }
+			std::string getTypeName()const { return m_type_name; }
 			
 			template<typename T1>
 			explicit operator T1* () { return static_cast<T1*>(m_instance); }

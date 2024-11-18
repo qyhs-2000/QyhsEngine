@@ -26,6 +26,10 @@ namespace QYHS
 					
 					return count;	
 				}
+				static Json writeByName(void * instance_ptr)
+				{
+					return Serializer::write(*(Component*)instance_ptr);
+				}
 				//field
 				
 			};
@@ -40,8 +44,8 @@ namespace QYHS
 		
 		ClassFunctionTuple * f_class_function_tuple_Component = new ClassFunctionTuple(
             &TypeFieldReflectionOperator::TypeComponentOperator::constructorWithJson,
-            &TypeFieldReflectionOperator::TypeComponentOperator::getComponentBaseClassReflectionInstanceList
-            //&TypeFieldReflectionOperator::TypeComponentOperator::writeByName
+            &TypeFieldReflectionOperator::TypeComponentOperator::getComponentBaseClassReflectionInstanceList,
+            &TypeFieldReflectionOperator::TypeComponentOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("Component",f_class_function_tuple_Component);
 		}

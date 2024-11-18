@@ -27,6 +27,10 @@ namespace QYHS
 					
 					return count;	
 				}
+				static Json writeByName(void * instance_ptr)
+				{
+					return Serializer::write(*(SubMeshRes*)instance_ptr);
+				}
 				//field
 				static void set_m_material(void * instance,void * field_value)
 				{
@@ -112,6 +116,10 @@ namespace QYHS
 					
 					return count;	
 				}
+				static Json writeByName(void * instance_ptr)
+				{
+					return Serializer::write(*(MeshComponentRes*)instance_ptr);
+				}
 				//field
 				static void set_m_sub_meshes(void * instance,void * field_value)
 				{
@@ -191,8 +199,8 @@ namespace QYHS
 		
 		ClassFunctionTuple * f_class_function_tuple_SubMeshRes = new ClassFunctionTuple(
             &TypeFieldReflectionOperator::TypeSubMeshResOperator::constructorWithJson,
-            &TypeFieldReflectionOperator::TypeSubMeshResOperator::getSubMeshResBaseClassReflectionInstanceList
-            //&TypeFieldReflectionOperator::TypeSubMeshResOperator::writeByName
+            &TypeFieldReflectionOperator::TypeSubMeshResOperator::getSubMeshResBaseClassReflectionInstanceList,
+            &TypeFieldReflectionOperator::TypeSubMeshResOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("SubMeshRes",f_class_function_tuple_SubMeshRes);
 		}
@@ -218,8 +226,8 @@ namespace QYHS
 		REGISTER_TO_ARRAY_MAP("stdSSvectorLSubMeshResR",array_function_tuple_stdSSvectorLSubMeshResR);
 		ClassFunctionTuple * f_class_function_tuple_MeshComponentRes = new ClassFunctionTuple(
             &TypeFieldReflectionOperator::TypeMeshComponentResOperator::constructorWithJson,
-            &TypeFieldReflectionOperator::TypeMeshComponentResOperator::getMeshComponentResBaseClassReflectionInstanceList
-            //&TypeFieldReflectionOperator::TypeMeshComponentResOperator::writeByName
+            &TypeFieldReflectionOperator::TypeMeshComponentResOperator::getMeshComponentResBaseClassReflectionInstanceList,
+            &TypeFieldReflectionOperator::TypeMeshComponentResOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("MeshComponentRes",f_class_function_tuple_MeshComponentRes);
 		}

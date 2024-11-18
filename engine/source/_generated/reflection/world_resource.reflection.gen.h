@@ -26,6 +26,10 @@ namespace QYHS
 					
 					return count;	
 				}
+				static Json writeByName(void * instance_ptr)
+				{
+					return Serializer::write(*(WorldResource*)instance_ptr);
+				}
 				//field
 				static void set_m_default_level_url(void * instance,void * field_value)
 				{
@@ -67,8 +71,8 @@ namespace QYHS
 		
 		ClassFunctionTuple * f_class_function_tuple_WorldResource = new ClassFunctionTuple(
             &TypeFieldReflectionOperator::TypeWorldResourceOperator::constructorWithJson,
-            &TypeFieldReflectionOperator::TypeWorldResourceOperator::getWorldResourceBaseClassReflectionInstanceList
-            //&TypeFieldReflectionOperator::TypeWorldResourceOperator::writeByName
+            &TypeFieldReflectionOperator::TypeWorldResourceOperator::getWorldResourceBaseClassReflectionInstanceList,
+            &TypeFieldReflectionOperator::TypeWorldResourceOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("WorldResource",f_class_function_tuple_WorldResource);
 		}

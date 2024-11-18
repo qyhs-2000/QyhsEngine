@@ -26,6 +26,10 @@ namespace QYHS
 					
 					return count;	
 				}
+				static Json writeByName(void * instance_ptr)
+				{
+					return Serializer::write(*(Quaternion*)instance_ptr);
+				}
 				//field
 				static void set_w(void * instance,void * field_value)
 				{
@@ -154,8 +158,8 @@ namespace QYHS
 		
 		ClassFunctionTuple * f_class_function_tuple_Quaternion = new ClassFunctionTuple(
             &TypeFieldReflectionOperator::TypeQuaternionOperator::constructorWithJson,
-            &TypeFieldReflectionOperator::TypeQuaternionOperator::getQuaternionBaseClassReflectionInstanceList
-            //&TypeFieldReflectionOperator::TypeQuaternionOperator::writeByName
+            &TypeFieldReflectionOperator::TypeQuaternionOperator::getQuaternionBaseClassReflectionInstanceList,
+            &TypeFieldReflectionOperator::TypeQuaternionOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("Quaternion",f_class_function_tuple_Quaternion);
 		}

@@ -8,17 +8,11 @@ namespace QYHS
 		back = 1 << 1,  // S
 		foward = 1 << 2,  // W
 		right = 1 << 3,  // D
+		jump = 1 << 4
 	};
 
 	class InputSystem
 	{
-		enum class InputCommand :unsigned int
-		{
-			forward = 1 << 0,
-			back = 1 << 1,
-			left = 1 << 2,
-			right = 1 << 3
-		};
 	public:
 		void initialize();
 		void calculateCursorDeltaAngle();

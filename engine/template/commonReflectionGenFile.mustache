@@ -34,6 +34,10 @@ namespace QYHS
 					}{{/class_has_base}}
 					return count;	
 				}
+				static Json writeByName(void * instance_ptr)
+				{
+					return Serializer::write(*({{class_name}}*)instance_ptr);
+				}
 				//field
 				{{#class_field_defines}}
 				static void set_{{class_field_name}}(void * instance,void * field_value)
@@ -113,8 +117,8 @@ namespace QYHS
 		{{/vector_exist}}
 		{{#class_need_register}}ClassFunctionTuple * f_class_function_tuple_{{class_name}} = new ClassFunctionTuple(
             &TypeFieldReflectionOperator::Type{{class_name}}Operator::constructorWithJson,
-            &TypeFieldReflectionOperator::Type{{class_name}}Operator::get{{class_name}}BaseClassReflectionInstanceList
-            //&TypeFieldReflectionOperator::Type{{class_name}}Operator::writeByName
+            &TypeFieldReflectionOperator::Type{{class_name}}Operator::get{{class_name}}BaseClassReflectionInstanceList,
+            &TypeFieldReflectionOperator::Type{{class_name}}Operator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("{{class_name}}",f_class_function_tuple_{{class_name}});
 		{{/class_need_register}}

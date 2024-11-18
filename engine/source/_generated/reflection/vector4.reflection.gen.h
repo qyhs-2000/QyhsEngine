@@ -26,6 +26,10 @@ namespace QYHS
 					
 					return count;	
 				}
+				static Json writeByName(void * instance_ptr)
+				{
+					return Serializer::write(*(Vector4*)instance_ptr);
+				}
 				//field
 				static void set_x(void * instance,void * field_value)
 				{
@@ -154,8 +158,8 @@ namespace QYHS
 		
 		ClassFunctionTuple * f_class_function_tuple_Vector4 = new ClassFunctionTuple(
             &TypeFieldReflectionOperator::TypeVector4Operator::constructorWithJson,
-            &TypeFieldReflectionOperator::TypeVector4Operator::getVector4BaseClassReflectionInstanceList
-            //&TypeFieldReflectionOperator::TypeVector4Operator::writeByName
+            &TypeFieldReflectionOperator::TypeVector4Operator::getVector4BaseClassReflectionInstanceList,
+            &TypeFieldReflectionOperator::TypeVector4Operator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("Vector4",f_class_function_tuple_Vector4);
 		}

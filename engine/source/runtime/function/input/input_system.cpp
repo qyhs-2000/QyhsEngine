@@ -94,6 +94,9 @@ namespace QYHS
 			case GLFW_KEY_D:
 				m_game_command &= (k_complement_control_command^(unsigned int)GameCommand::right);
 				break;
+
+			case GLFW_KEY_SPACE:
+				m_game_command &= (k_complement_control_command ^ (unsigned int)GameCommand::jump);
 			default:
 				break;
 			}

@@ -27,6 +27,10 @@ namespace QYHS
 					
 					return count;	
 				}
+				static Json writeByName(void * instance_ptr)
+				{
+					return Serializer::write(*(ObjectDefinitionResource*)instance_ptr);
+				}
 				//field
 				static void set_m_components(void * instance,void * field_value)
 				{
@@ -91,6 +95,10 @@ namespace QYHS
 					int count = 0;
 					
 					return count;	
+				}
+				static Json writeByName(void * instance_ptr)
+				{
+					return Serializer::write(*(ObjectInstanceResource*)instance_ptr);
 				}
 				//field
 				static void set_m_name(void * instance,void * field_value)
@@ -200,8 +208,8 @@ namespace QYHS
 		REGISTER_TO_ARRAY_MAP("stdSSvectorLReflectionSSReflectionPtrLComponentRR",array_function_tuple_stdSSvectorLReflectionSSReflectionPtrLComponentRR);
 		ClassFunctionTuple * f_class_function_tuple_ObjectDefinitionResource = new ClassFunctionTuple(
             &TypeFieldReflectionOperator::TypeObjectDefinitionResourceOperator::constructorWithJson,
-            &TypeFieldReflectionOperator::TypeObjectDefinitionResourceOperator::getObjectDefinitionResourceBaseClassReflectionInstanceList
-            //&TypeFieldReflectionOperator::TypeObjectDefinitionResourceOperator::writeByName
+            &TypeFieldReflectionOperator::TypeObjectDefinitionResourceOperator::getObjectDefinitionResourceBaseClassReflectionInstanceList,
+            &TypeFieldReflectionOperator::TypeObjectDefinitionResourceOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("ObjectDefinitionResource",f_class_function_tuple_ObjectDefinitionResource);
 		}
@@ -245,8 +253,8 @@ namespace QYHS
 		REGISTER_TO_ARRAY_MAP("stdSSvectorLReflectionSSReflectionPtrLComponentRR",array_function_tuple_stdSSvectorLReflectionSSReflectionPtrLComponentRR);
 		ClassFunctionTuple * f_class_function_tuple_ObjectInstanceResource = new ClassFunctionTuple(
             &TypeFieldReflectionOperator::TypeObjectInstanceResourceOperator::constructorWithJson,
-            &TypeFieldReflectionOperator::TypeObjectInstanceResourceOperator::getObjectInstanceResourceBaseClassReflectionInstanceList
-            //&TypeFieldReflectionOperator::TypeObjectInstanceResourceOperator::writeByName
+            &TypeFieldReflectionOperator::TypeObjectInstanceResourceOperator::getObjectInstanceResourceBaseClassReflectionInstanceList,
+            &TypeFieldReflectionOperator::TypeObjectInstanceResourceOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("ObjectInstanceResource",f_class_function_tuple_ObjectInstanceResource);
 		}

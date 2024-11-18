@@ -3,8 +3,8 @@
 
 namespace QYHS
 {
-	//template<>
-	//Json Serializer::write(const Component&instance);
+	template<>
+	Json Serializer::write(const Component&instance);
 	template<>
 	Component & Serializer::read(const Json & json_context,Component & instance);
 }//namespace

@@ -16,6 +16,7 @@ namespace QYHS
 		void setGameObject(std::shared_ptr<GameObject> gobject);
 		GameObjectID getObjectID() { return m_character_object->getObjectId(); }
 		void tick(double delta_time);
+		std::string getName() {return m_character_object->m_name;};
 	private:
 		bool m_rotation_dirty{ false };
 		Vector3 m_position;

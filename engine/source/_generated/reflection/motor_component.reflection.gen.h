@@ -27,6 +27,10 @@ namespace QYHS
 					
 					return count;	
 				}
+				static Json writeByName(void * instance_ptr)
+				{
+					return Serializer::write(*(MotorComponentRes*)instance_ptr);
+				}
 				//field
 				static void set_move_speed(void * instance,void * field_value)
 				{
@@ -74,6 +78,10 @@ namespace QYHS
 						out_list[i] = TYPE_META_DEF(QYHS::Component,static_cast<MotorComponent*>(instance));
 					}
 					return count;	
+				}
+				static Json writeByName(void * instance_ptr)
+				{
+					return Serializer::write(*(MotorComponent*)instance_ptr);
 				}
 				//field
 				static void set_m_transform(void * instance,void * field_value)
@@ -136,8 +144,8 @@ namespace QYHS
 		
 		ClassFunctionTuple * f_class_function_tuple_MotorComponentRes = new ClassFunctionTuple(
             &TypeFieldReflectionOperator::TypeMotorComponentResOperator::constructorWithJson,
-            &TypeFieldReflectionOperator::TypeMotorComponentResOperator::getMotorComponentResBaseClassReflectionInstanceList
-            //&TypeFieldReflectionOperator::TypeMotorComponentResOperator::writeByName
+            &TypeFieldReflectionOperator::TypeMotorComponentResOperator::getMotorComponentResBaseClassReflectionInstanceList,
+            &TypeFieldReflectionOperator::TypeMotorComponentResOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("MotorComponentRes",f_class_function_tuple_MotorComponentRes);
 		}
@@ -165,8 +173,8 @@ namespace QYHS
 		
 		ClassFunctionTuple * f_class_function_tuple_MotorComponent = new ClassFunctionTuple(
             &TypeFieldReflectionOperator::TypeMotorComponentOperator::constructorWithJson,
-            &TypeFieldReflectionOperator::TypeMotorComponentOperator::getMotorComponentBaseClassReflectionInstanceList
-            //&TypeFieldReflectionOperator::TypeMotorComponentOperator::writeByName
+            &TypeFieldReflectionOperator::TypeMotorComponentOperator::getMotorComponentBaseClassReflectionInstanceList,
+            &TypeFieldReflectionOperator::TypeMotorComponentOperator::writeByName
 		);
 		REGISTER_TO_CLASS_MAP("MotorComponent",f_class_function_tuple_MotorComponent);
 		}
