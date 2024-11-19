@@ -2,11 +2,13 @@
 #include "_generated\serializer\component.serializer.gen.h"
 #include "_generated\serializer\vector2.serializer.gen.h"
 #include "_generated\serializer\quat.serializer.gen.h"
-#include "_generated\serializer\mesh_component.serializer.gen.h"
 #include "_generated\serializer\vector3.serializer.gen.h"
 #include "_generated\serializer\transform.serializer.gen.h"
 #include "_generated\serializer\vector4.serializer.gen.h"
+#include "_generated\serializer\camera_config.serializer.gen.h"
+#include "_generated\serializer\animation_component.serializer.gen.h"
 #include "_generated\serializer\camera_component.serializer.gen.h"
+#include "_generated\serializer\mesh_component.serializer.gen.h"
 #include "_generated\serializer\motor_component.serializer.gen.h"
 #include "_generated\serializer\transform_component.serializer.gen.h"
 #include "_generated\serializer\object.serializer.gen.h"
@@ -15,7 +17,6 @@
 #include "_generated\serializer\material.serializer.gen.h"
 #include "_generated\serializer\level_resource.serializer.gen.h"
 #include "_generated\serializer\world_resource.serializer.gen.h"
-#include "_generated\serializer\camera_config.serializer.gen.h"
 #include "_generated\serializer\global_rendering_resource.serializer.gen.h"
 namespace QYHS
 {
@@ -95,30 +96,6 @@ namespace QYHS
         ret_context.insert_or_assign("x", Serializer::write(instance.x));
         ret_context.insert_or_assign("y", Serializer::write(instance.y));
         ret_context.insert_or_assign("z", Serializer::write(instance.z));
-        return  Json(ret_context);
-    }
-
-
-	template<>
-	MeshComponent & Serializer::read(const Json & json_context,MeshComponent & instance)
-	{
-		assert(json_context.is_object());
-		Serializer::read(json_context,*(QYHS::Component*)&instance);
-		if(!json_context["mesh_res"].is_null())
-		{
-			Serializer::read(json_context["mesh_res"],instance.m_mesh_res);
-		}
-		return instance;
-	}
-
-	template<>
-    Json Serializer::write(const MeshComponent& instance){
-        Json::object  ret_context;
-        auto&&  json_context_0 = Serializer::write(*(QYHS::Component*)&instance);
-        assert(json_context_0.is_object());
-        auto&& json_context_map_0 = json_context_0.object_items();
-        ret_context.insert(json_context_map_0.begin() , json_context_map_0.end());
-        ret_context.insert_or_assign("mesh_res", Serializer::write(instance.m_mesh_res));
         return  Json(ret_context);
     }
 
@@ -217,6 +194,91 @@ namespace QYHS
         ret_context.insert_or_assign("y", Serializer::write(instance.y));
         ret_context.insert_or_assign("z", Serializer::write(instance.z));
         ret_context.insert_or_assign("w", Serializer::write(instance.w));
+        return  Json(ret_context);
+    }
+
+
+	template<>
+	CameraPose & Serializer::read(const Json & json_context,CameraPose & instance)
+	{
+		assert(json_context.is_object());
+		
+		if(!json_context["position"].is_null())
+		{
+			Serializer::read(json_context["position"],instance.m_position);
+		}
+		if(!json_context["target"].is_null())
+		{
+			Serializer::read(json_context["target"],instance.m_target);
+		}
+		if(!json_context["up"].is_null())
+		{
+			Serializer::read(json_context["up"],instance.m_up);
+		}
+		return instance;
+	}
+
+	template<>
+    Json Serializer::write(const CameraPose& instance){
+        Json::object  ret_context;
+        
+        ret_context.insert_or_assign("position", Serializer::write(instance.m_position));
+        ret_context.insert_or_assign("target", Serializer::write(instance.m_target));
+        ret_context.insert_or_assign("up", Serializer::write(instance.m_up));
+        return  Json(ret_context);
+    }
+
+
+	template<>
+	CameraConfig & Serializer::read(const Json & json_context,CameraConfig & instance)
+	{
+		assert(json_context.is_object());
+		
+		if(!json_context["pose"].is_null())
+		{
+			Serializer::read(json_context["pose"],instance.m_pose);
+		}
+		if(!json_context["aspect"].is_null())
+		{
+			Serializer::read(json_context["aspect"],instance.m_aspect);
+		}
+		if(!json_context["z_far"].is_null())
+		{
+			Serializer::read(json_context["z_far"],instance.m_z_far);
+		}
+		if(!json_context["z_near"].is_null())
+		{
+			Serializer::read(json_context["z_near"],instance.m_z_near);
+		}
+		return instance;
+	}
+
+	template<>
+    Json Serializer::write(const CameraConfig& instance){
+        Json::object  ret_context;
+        
+        ret_context.insert_or_assign("pose", Serializer::write(instance.m_pose));
+        ret_context.insert_or_assign("aspect", Serializer::write(instance.m_aspect));
+        ret_context.insert_or_assign("z_far", Serializer::write(instance.m_z_far));
+        ret_context.insert_or_assign("z_near", Serializer::write(instance.m_z_near));
+        return  Json(ret_context);
+    }
+
+
+	template<>
+	AnimationComponet & Serializer::read(const Json & json_context,AnimationComponet & instance)
+	{
+		assert(json_context.is_object());
+		
+		
+		return instance;
+	}
+
+	template<>
+    Json Serializer::write(const AnimationComponet& instance){
+        Json::object  ret_context;
+        
+        
         return  Json(ret_context);
     }
 
@@ -322,6 +384,30 @@ namespace QYHS
         auto&& json_context_map_0 = json_context_0.object_items();
         ret_context.insert(json_context_map_0.begin() , json_context_map_0.end());
         ret_context.insert_or_assign("camera_res", Serializer::write(instance.m_camera_res));
+        return  Json(ret_context);
+    }
+
+
+	template<>
+	MeshComponent & Serializer::read(const Json & json_context,MeshComponent & instance)
+	{
+		assert(json_context.is_object());
+		Serializer::read(json_context,*(QYHS::Component*)&instance);
+		if(!json_context["mesh_res"].is_null())
+		{
+			Serializer::read(json_context["mesh_res"],instance.m_mesh_res);
+		}
+		return instance;
+	}
+
+	template<>
+    Json Serializer::write(const MeshComponent& instance){
+        Json::object  ret_context;
+        auto&&  json_context_0 = Serializer::write(*(QYHS::Component*)&instance);
+        assert(json_context_0.is_object());
+        auto&& json_context_map_0 = json_context_0.object_items();
+        ret_context.insert(json_context_map_0.begin() , json_context_map_0.end());
+        ret_context.insert_or_assign("mesh_res", Serializer::write(instance.m_mesh_res));
         return  Json(ret_context);
     }
 
@@ -736,73 +822,6 @@ namespace QYHS
         Json::object  ret_context;
         
         ret_context.insert_or_assign("default_level_url", Serializer::write(instance.m_default_level_url));
-        return  Json(ret_context);
-    }
-
-
-	template<>
-	CameraPose & Serializer::read(const Json & json_context,CameraPose & instance)
-	{
-		assert(json_context.is_object());
-		
-		if(!json_context["position"].is_null())
-		{
-			Serializer::read(json_context["position"],instance.m_position);
-		}
-		if(!json_context["target"].is_null())
-		{
-			Serializer::read(json_context["target"],instance.m_target);
-		}
-		if(!json_context["up"].is_null())
-		{
-			Serializer::read(json_context["up"],instance.m_up);
-		}
-		return instance;
-	}
-
-	template<>
-    Json Serializer::write(const CameraPose& instance){
-        Json::object  ret_context;
-        
-        ret_context.insert_or_assign("position", Serializer::write(instance.m_position));
-        ret_context.insert_or_assign("target", Serializer::write(instance.m_target));
-        ret_context.insert_or_assign("up", Serializer::write(instance.m_up));
-        return  Json(ret_context);
-    }
-
-
-	template<>
-	CameraConfig & Serializer::read(const Json & json_context,CameraConfig & instance)
-	{
-		assert(json_context.is_object());
-		
-		if(!json_context["pose"].is_null())
-		{
-			Serializer::read(json_context["pose"],instance.m_pose);
-		}
-		if(!json_context["aspect"].is_null())
-		{
-			Serializer::read(json_context["aspect"],instance.m_aspect);
-		}
-		if(!json_context["z_far"].is_null())
-		{
-			Serializer::read(json_context["z_far"],instance.m_z_far);
-		}
-		if(!json_context["z_near"].is_null())
-		{
-			Serializer::read(json_context["z_near"],instance.m_z_near);
-		}
-		return instance;
-	}
-
-	template<>
-    Json Serializer::write(const CameraConfig& instance){
-        Json::object  ret_context;
-        
-        ret_context.insert_or_assign("pose", Serializer::write(instance.m_pose));
-        ret_context.insert_or_assign("aspect", Serializer::write(instance.m_aspect));
-        ret_context.insert_or_assign("z_far", Serializer::write(instance.m_z_far));
-        ret_context.insert_or_assign("z_near", Serializer::write(instance.m_z_near));
         return  Json(ret_context);
     }
 
