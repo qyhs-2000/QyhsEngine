@@ -2,9 +2,10 @@
 *.vcxproj
 *.vcxproj.filters
 *.zip
-!engine/3rdparty.zip
 *.so
 3rdparty/
+!engine/3rdparty
+!engine/3rdparty.zip
 CMakeFiles/
 QYHSEngine.sln
 cmake_install.cmake
