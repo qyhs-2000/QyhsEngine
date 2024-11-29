@@ -95,9 +95,10 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cassert \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\assert.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/matrix4.h \
-  core/math/matrix3.h core/math/vector4.h \
+  core/math/matrix3.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime/core/math/quaternion.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/quat.h \
+  core/math/vector4.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/matrix4x4.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime/core/meta/reflection/reflection.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime/core/meta/json.h \
   json11.hpp E:\VS2022\VC\Tools\MSVC\14.38.33130\include\functional \
@@ -114,6 +115,7 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\__msvc_bit_utils.hpp \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xbit_ops.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\unordered_set \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/quat.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/quaternion.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/random.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\random \
@@ -172,11 +174,23 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   tinygltf/tiny_gltf.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/Texture.h \
   vulkanmemoryallocator/include/vk_mem_alloc.h core/math/vector2.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/animation/animation.h \
+  core/math/matrix4.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/animation/animation_clip.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/animation/animation_component.h \
   function/framework/component/component.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/animation/blend_state.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/animation/animation_skeleton_map.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/animation/skeleton.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/animation/node.h \
+  core/math/quat.h resource/type/data/skeleton_data.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/animation/animation_loader.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/animation/animation_mask.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/animation/animation_manager.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\map \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/camera/camera_component.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/camera/../component.h \
-  function/framework/game_object/game_object.h core/math/quat.h \
+  function/framework/game_object/game_object.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/component.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/mesh/mesh_component.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/mesh/../component.h \
@@ -197,7 +211,6 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/input/input_system.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/game_object_desc.h \
   function/framework/game_object/game_object_id_allocator.h \
-  core/math/matrix4.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/passes/combine_ui_pass.h \
   function/render/render_pass.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/passes/main_camera_render_pass.h \
@@ -255,26 +268,40 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   core/meta/serializer/serializer.h \
   E:/VS_Project/QyhsEngine/engine/source\_generated/serializer/all_serializer.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime/core/meta/serializer/serializer.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\component.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\component.h \
   E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\vector2.serializer.gen.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime\core\math\vector2.h \
+  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\matrix4.serializer.gen.h \
+  E:/VS_Project/QyhsEngine/engine/source\runtime\core\math\matrix4.h \
   E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\quat.serializer.gen.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime\core\math\quat.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\mesh_component.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\mesh\mesh_component.h \
   E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\vector3.serializer.gen.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime\core\math\vector3.h \
   E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\transform.serializer.gen.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime\core\math\transform.h \
+  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\animation_clip.serializer.gen.h \
+  E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\animation\animation_clip.h \
   E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\vector4.serializer.gen.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime\core\math\vector4.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\camera_component.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\camera\camera_component.h \
   E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\motor_component.serializer.gen.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\motor\motor_component.h \
+  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\component.serializer.gen.h \
+  E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\component.h \
+  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\animation.serializer.gen.h \
+  E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\animation\animation.h \
+  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\animation_skeleton_map.serializer.gen.h \
+  E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\animation\animation_skeleton_map.h \
+  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\animation_component.serializer.gen.h \
+  E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\animation\animation_component.h \
+  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\animation_mask.serializer.gen.h \
+  E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\animation\animation_mask.h \
+  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\camera_component.serializer.gen.h \
+  E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\camera\camera_component.h \
+  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\mesh_component.serializer.gen.h \
+  E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\mesh\mesh_component.h \
   E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\transform_component.serializer.gen.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\transform\transform_component.h \
+  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\camera_config.serializer.gen.h \
+  E:/VS_Project/QyhsEngine/engine/source\runtime\resource\type\data\camera_config.h \
   E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\object.serializer.gen.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime\resource\common\object.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime/function/framework/component/component.h \
@@ -289,17 +316,18 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   resource/common/object.h \
   E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\world_resource.serializer.gen.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime\resource\type\world_resource.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\camera_config.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\resource\type\data\camera_config.h \
   E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\global_rendering_resource.serializer.gen.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime\resource\type\global_rendering_resource.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime\resource\type/data/camera_config.h \
+  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\skeleton_data.serializer.gen.h \
+  E:/VS_Project/QyhsEngine/engine/source\runtime\resource\type\data\skeleton_data.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/common/object.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/config_manager/config_manager.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/component/mesh/mesh.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/data/camera_config.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/data/mash_data.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/data/material.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/data/skeleton_data.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/global_rendering_resource.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/level_resource.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/world_resource.h \
