@@ -132,27 +132,12 @@ namespace QYHS
 		if (m_selected_axis_by_cursor != 3) return;
 		
 		if (!isCursorInRect(m_engine_window_pos, m_engine_window_size)) return;
-		static bool cursor_disable = false;
 		if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 		{
 			Vector2 picked_uv = Vector2((m_mouse_x - m_engine_window_pos.x) / m_engine_window_size.x, (m_mouse_y - m_engine_window_pos.y) / m_engine_window_size.y);
 			size_t select_mesh_id = g_editor_global_context.m_scene_manager->getMeshIDByPickedUV(picked_uv);
 			size_t select_gobject_id = g_editor_global_context.m_render_system->getGObjectIDByMeshID(select_mesh_id);
 			g_editor_global_context.m_scene_manager->GObjectSelected(select_gobject_id);
-		}
-		else if (button == GLFW_MOUSE_BUTTON_RIGHT)
-		{
-			if ((action == GLFW_PRESS) && !cursor_disable)
-			{
-				cursor_disable = true;
-				g_runtime_global_context.m_window_system->disableCursor(true);
-			}
-			if ((action == GLFW_RELEASE) && cursor_disable)
-			{
-				cursor_disable = false;
-				g_runtime_global_context.m_window_system->disableCursor(false);
-			}
-
 		}
 	}
 
@@ -166,17 +151,21 @@ namespace QYHS
 		}
 		if (g_editor_global_context.m_window_system->isMouseButton(GLFW_MOUSE_BUTTON_RIGHT))
 		{
-
+			b_control_camera = true;
+			g_runtime_global_context.m_window_system->disableCursor(b_control_camera);
 			g_editor_global_context.m_scene_manager->getEditorCamera()->rotate(Vector2(y_pos - m_mouse_y, x_pos - m_mouse_x)*0.14);
 		}
 		else if (g_editor_global_context.m_window_system->isMouseButton(GLFW_MOUSE_BUTTON_LEFT))
 		{
 			g_editor_global_context.m_scene_manager->moveObject(x_pos,y_pos,m_mouse_x,m_mouse_y,m_engine_window_size);
+			g_runtime_global_context.m_window_system->disableCursor(false);
 		}
 		else
 		{
 			Vector2 cursor_uv = Vector2((m_mouse_x / m_engine_window_size.x), (m_mouse_y / m_engine_window_size.y));
 			m_selected_axis_by_cursor = g_editor_global_context.m_scene_manager->updateCursorOnAxis(cursor_uv,m_engine_window_size);
+			b_control_camera = false;
+			g_runtime_global_context.m_window_system->disableCursor(b_control_camera);
 		}
 		m_mouse_x = x_pos;
 		m_mouse_y = y_pos;
@@ -218,8 +207,10 @@ namespace QYHS
 		{
 			camera_relative_position += Vector3{ 0.f,0.f,-1.f }*m_camera_speed;
 		}
-		
-		camera->move(camera_relative_position);
+		if (b_control_camera)
+		{
+			camera->move(camera_relative_position);
+		}
 	}
 
 }

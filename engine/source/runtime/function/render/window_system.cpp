@@ -65,18 +65,6 @@ namespace QYHS
 		return glfwGetMouseButton(m_window, button) == GLFW_PRESS;
 	}
 
-	void WindowSystem::hideCursor(bool is_hidden)
-	{
-		if (is_hidden)
-		{
-			glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-		}
-		else
-		{
-			glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-		}
-	}
-
 	void WindowSystem::disableCursor(bool is_disabled)
 	{
 		if (is_disabled)

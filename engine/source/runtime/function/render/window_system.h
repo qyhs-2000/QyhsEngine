@@ -29,7 +29,6 @@ namespace QYHS
 		void registerOnKeyFunc(onKeyFunc func) { m_onKeyFunc.push_back(func); }
 		void registerOnCursorPos(onCursorFunc func) { m_onCursorPosFunc.push_back(func); }
 		void registerOnMouseButton(onMouseButtonFunc func) { m_onMouseButtonFunc.push_back(func); }
-		void hideCursor(bool is_hidden);
 		void disableCursor(bool is_disabled);
 		void toggleFocusMode() { 
 			m_is_focus = !m_is_focus;

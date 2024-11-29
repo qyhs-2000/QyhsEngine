@@ -45,6 +45,7 @@ namespace QYHS
 		unsigned int k_complement_control_command = 0xFFFFFFFF;
 		bool m_first_initialize_mouse_pos = false;
 		size_t m_selected_axis_by_cursor{ 3 };
+		bool b_control_camera{ false };
 	private:
 
 	};

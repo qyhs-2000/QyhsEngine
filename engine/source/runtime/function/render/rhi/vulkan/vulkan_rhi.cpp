@@ -757,7 +757,7 @@ namespace QYHS
 				vk_descriptor_sets[i] = *pDescriptorSets[i];
 			}
 		}
-		vkCmdBindDescriptorSets(m_current_command_buffer, bind_point, *pipeline_layout, first_set, set_count, vk_descriptor_sets.data(), dynamic_offset_count, p_dynamic_offsets);
+		vkCmdBindDescriptorSets(getCurrentCommandBuffer(), bind_point, *pipeline_layout, first_set, set_count, vk_descriptor_sets.data(), dynamic_offset_count, p_dynamic_offsets);
 	}
 
 	void VulkanRHI::createDescriptorSetLayout(VkDescriptorSetLayoutCreateInfo* create_info,const VkAllocationCallbacks * callbacks , VkDescriptorSetLayout*& p_descriptor_set_layout)
