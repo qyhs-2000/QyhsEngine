@@ -15,7 +15,7 @@ namespace QYHS
 		VkBuffer material_uniform_buffer;
 		VkDeviceMemory material_uniform_buffer_memory;
 		void* uniform_buffer_mapped_data;
-		VkDescriptorSet material_descriptor_set;
+		VkDescriptorSet *material_descriptor_set;
 	};
 
 	//TODO:Destroy buffer
@@ -36,7 +36,13 @@ namespace QYHS
 		VkBuffer mesh_vertex_index_buffer;
 		VkDeviceMemory mesh_vertex_index_buffer_memory;
 
+		VkBuffer mesh_vertex_blending_buffer;
+		VkDeviceMemory mesh_vertex_blending_buffer_memory;
+
 		size_t index_count;
+
+		VkDescriptorSet* p_vertex_blending_descriptor_set{ nullptr };
+
 	};
 
 	struct RenderMeshNode
@@ -45,5 +51,8 @@ namespace QYHS
 		VulkanMesh* p_mesh;
 		VulkanMaterial* p_material;
 		uint32_t node_id;
+		bool enable_vertex_blending{ false };
+		Matrix4x4 *joint_matrices;
+		size_t joint_count{ 0 };
 	};
 }

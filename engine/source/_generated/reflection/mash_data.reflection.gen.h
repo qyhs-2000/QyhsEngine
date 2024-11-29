@@ -4,6 +4,7 @@
 namespace QYHS
 {
 	class Vertex;
+	class SkeletonBind;
 	class MeshData;
 	namespace Reflection
 	{
@@ -258,6 +259,195 @@ namespace QYHS
 		
 		namespace TypeFieldReflectionOperator
 		{
+			class TypeSkeletonBindOperator
+			{
+			public:
+				//class
+				//static void getSkeletonBindBaseClassReflectionInstanceList()
+				static const char* getClassName(){return "SkeletonBind";}
+				static void* constructorWithJson(const Json & json_context)
+				{
+					SkeletonBind * ret_instance = new SkeletonBind;
+					Serializer::read(json_context,*ret_instance);
+					return ret_instance;
+				}
+				static int getSkeletonBindBaseClassReflectionInstanceList(ReflectionInstance* &out_list, void* instance)
+				{
+					int count = 0;
+					
+					return count;	
+				}
+				static Json writeByName(void * instance_ptr)
+				{
+					return Serializer::write(*(SkeletonBind*)instance_ptr);
+				}
+				//field
+				static void set_index0(void * instance,void * field_value)
+				{
+					static_cast<SkeletonBind*>(instance)->index0 = *static_cast<int*>(field_value);
+				}
+				static void* get_index0(void * instance)
+				{
+					return &(static_cast<SkeletonBind*>(instance)->index0);
+				}
+				static const char* getFieldName_index0()
+				{
+					return "index0";
+				}
+				static const char* getFieldTypeName_index0()
+				{
+					return "int";
+				}
+				static bool isArray_index0()
+				{
+					return false;
+				}
+				static void set_index1(void * instance,void * field_value)
+				{
+					static_cast<SkeletonBind*>(instance)->index1 = *static_cast<int*>(field_value);
+				}
+				static void* get_index1(void * instance)
+				{
+					return &(static_cast<SkeletonBind*>(instance)->index1);
+				}
+				static const char* getFieldName_index1()
+				{
+					return "index1";
+				}
+				static const char* getFieldTypeName_index1()
+				{
+					return "int";
+				}
+				static bool isArray_index1()
+				{
+					return false;
+				}
+				static void set_index2(void * instance,void * field_value)
+				{
+					static_cast<SkeletonBind*>(instance)->index2 = *static_cast<int*>(field_value);
+				}
+				static void* get_index2(void * instance)
+				{
+					return &(static_cast<SkeletonBind*>(instance)->index2);
+				}
+				static const char* getFieldName_index2()
+				{
+					return "index2";
+				}
+				static const char* getFieldTypeName_index2()
+				{
+					return "int";
+				}
+				static bool isArray_index2()
+				{
+					return false;
+				}
+				static void set_index3(void * instance,void * field_value)
+				{
+					static_cast<SkeletonBind*>(instance)->index3 = *static_cast<int*>(field_value);
+				}
+				static void* get_index3(void * instance)
+				{
+					return &(static_cast<SkeletonBind*>(instance)->index3);
+				}
+				static const char* getFieldName_index3()
+				{
+					return "index3";
+				}
+				static const char* getFieldTypeName_index3()
+				{
+					return "int";
+				}
+				static bool isArray_index3()
+				{
+					return false;
+				}
+				static void set_weight0(void * instance,void * field_value)
+				{
+					static_cast<SkeletonBind*>(instance)->weight0 = *static_cast<float*>(field_value);
+				}
+				static void* get_weight0(void * instance)
+				{
+					return &(static_cast<SkeletonBind*>(instance)->weight0);
+				}
+				static const char* getFieldName_weight0()
+				{
+					return "weight0";
+				}
+				static const char* getFieldTypeName_weight0()
+				{
+					return "float";
+				}
+				static bool isArray_weight0()
+				{
+					return false;
+				}
+				static void set_weight1(void * instance,void * field_value)
+				{
+					static_cast<SkeletonBind*>(instance)->weight1 = *static_cast<float*>(field_value);
+				}
+				static void* get_weight1(void * instance)
+				{
+					return &(static_cast<SkeletonBind*>(instance)->weight1);
+				}
+				static const char* getFieldName_weight1()
+				{
+					return "weight1";
+				}
+				static const char* getFieldTypeName_weight1()
+				{
+					return "float";
+				}
+				static bool isArray_weight1()
+				{
+					return false;
+				}
+				static void set_weight2(void * instance,void * field_value)
+				{
+					static_cast<SkeletonBind*>(instance)->weight2 = *static_cast<float*>(field_value);
+				}
+				static void* get_weight2(void * instance)
+				{
+					return &(static_cast<SkeletonBind*>(instance)->weight2);
+				}
+				static const char* getFieldName_weight2()
+				{
+					return "weight2";
+				}
+				static const char* getFieldTypeName_weight2()
+				{
+					return "float";
+				}
+				static bool isArray_weight2()
+				{
+					return false;
+				}
+				static void set_weight3(void * instance,void * field_value)
+				{
+					static_cast<SkeletonBind*>(instance)->weight3 = *static_cast<float*>(field_value);
+				}
+				static void* get_weight3(void * instance)
+				{
+					return &(static_cast<SkeletonBind*>(instance)->weight3);
+				}
+				static const char* getFieldName_weight3()
+				{
+					return "weight3";
+				}
+				static const char* getFieldTypeName_weight3()
+				{
+					return "float";
+				}
+				static bool isArray_weight3()
+				{
+					return false;
+				}
+			};
+		}//namespace TypeFieldFunctionOperator
+
+		
+		namespace TypeFieldReflectionOperator
+		{
 			class TypeMeshDataOperator
 			{
 			public:
@@ -321,11 +511,49 @@ namespace QYHS
 				{
 					return true;
 				}
+				static void set_bind(void * instance,void * field_value)
+				{
+					static_cast<MeshData*>(instance)->bind = *static_cast<std::vector<SkeletonBind>*>(field_value);
+				}
+				static void* get_bind(void * instance)
+				{
+					return &(static_cast<MeshData*>(instance)->bind);
+				}
+				static const char* getFieldName_bind()
+				{
+					return "bind";
+				}
+				static const char* getFieldTypeName_bind()
+				{
+					return "std::vector<SkeletonBind>";
+				}
+				static bool isArray_bind()
+				{
+					return true;
+				}
 			};
 		}//namespace TypeFieldFunctionOperator
 
 		namespace ArrayReflectionOperator
 		{
+		#ifndef ArraystdSSvectorLSkeletonBindROperatorMacro
+		#define ArraystdSSvectorLSkeletonBindROperatorMacro
+		class ArraystdSSvectorLSkeletonBindROperator
+		{
+		public:
+			static const char* getArrayTypeName(){return "std::vector<SkeletonBind>";}
+			static const char* getElementTypeName(){return "SkeletonBind";}
+			static int getSize(void * instance){return (static_cast<std::vector<SkeletonBind>*>(instance)->size());}
+			static void* get(int index,void * instance)
+			{
+				return static_cast<void*>(&((*static_cast<std::vector<SkeletonBind>*>(instance))[index]));
+			}
+			static void set(int index,void * instance,void * value)
+			{
+				(*static_cast<std::vector<SkeletonBind>*>(instance))[index] = *(static_cast<SkeletonBind*>(value));
+			}
+		};
+		#endif
 		#ifndef ArraystdSSvectorLVertexROperatorMacro
 		#define ArraystdSSvectorLVertexROperatorMacro
 		class ArraystdSSvectorLVertexROperator
@@ -474,6 +702,89 @@ namespace QYHS
 		);
 		REGISTER_TO_CLASS_MAP("Vertex",f_class_function_tuple_Vertex);
 		}
+		void TypeWrapperRegister_SkeletonBind()
+		{
+			FieldFunctionTuple * f_field_function_tuple_index0 = new FieldFunctionTuple(
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::set_index0,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::get_index0,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::getClassName,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::getFieldName_index0,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::getFieldTypeName_index0,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::isArray_index0
+			);
+			REGISTER_TO_FIELD_MAP("SkeletonBind",f_field_function_tuple_index0);
+			FieldFunctionTuple * f_field_function_tuple_index1 = new FieldFunctionTuple(
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::set_index1,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::get_index1,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::getClassName,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::getFieldName_index1,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::getFieldTypeName_index1,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::isArray_index1
+			);
+			REGISTER_TO_FIELD_MAP("SkeletonBind",f_field_function_tuple_index1);
+			FieldFunctionTuple * f_field_function_tuple_index2 = new FieldFunctionTuple(
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::set_index2,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::get_index2,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::getClassName,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::getFieldName_index2,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::getFieldTypeName_index2,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::isArray_index2
+			);
+			REGISTER_TO_FIELD_MAP("SkeletonBind",f_field_function_tuple_index2);
+			FieldFunctionTuple * f_field_function_tuple_index3 = new FieldFunctionTuple(
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::set_index3,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::get_index3,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::getClassName,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::getFieldName_index3,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::getFieldTypeName_index3,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::isArray_index3
+			);
+			REGISTER_TO_FIELD_MAP("SkeletonBind",f_field_function_tuple_index3);
+			FieldFunctionTuple * f_field_function_tuple_weight0 = new FieldFunctionTuple(
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::set_weight0,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::get_weight0,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::getClassName,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::getFieldName_weight0,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::getFieldTypeName_weight0,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::isArray_weight0
+			);
+			REGISTER_TO_FIELD_MAP("SkeletonBind",f_field_function_tuple_weight0);
+			FieldFunctionTuple * f_field_function_tuple_weight1 = new FieldFunctionTuple(
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::set_weight1,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::get_weight1,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::getClassName,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::getFieldName_weight1,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::getFieldTypeName_weight1,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::isArray_weight1
+			);
+			REGISTER_TO_FIELD_MAP("SkeletonBind",f_field_function_tuple_weight1);
+			FieldFunctionTuple * f_field_function_tuple_weight2 = new FieldFunctionTuple(
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::set_weight2,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::get_weight2,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::getClassName,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::getFieldName_weight2,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::getFieldTypeName_weight2,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::isArray_weight2
+			);
+			REGISTER_TO_FIELD_MAP("SkeletonBind",f_field_function_tuple_weight2);
+			FieldFunctionTuple * f_field_function_tuple_weight3 = new FieldFunctionTuple(
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::set_weight3,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::get_weight3,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::getClassName,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::getFieldName_weight3,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::getFieldTypeName_weight3,
+			&TypeFieldReflectionOperator::TypeSkeletonBindOperator::isArray_weight3
+			);
+			REGISTER_TO_FIELD_MAP("SkeletonBind",f_field_function_tuple_weight3);
+		
+		
+		ClassFunctionTuple * f_class_function_tuple_SkeletonBind = new ClassFunctionTuple(
+            &TypeFieldReflectionOperator::TypeSkeletonBindOperator::constructorWithJson,
+            &TypeFieldReflectionOperator::TypeSkeletonBindOperator::getSkeletonBindBaseClassReflectionInstanceList,
+            &TypeFieldReflectionOperator::TypeSkeletonBindOperator::writeByName
+		);
+		REGISTER_TO_CLASS_MAP("SkeletonBind",f_class_function_tuple_SkeletonBind);
+		}
 		void TypeWrapperRegister_MeshData()
 		{
 			FieldFunctionTuple * f_field_function_tuple_vertex_buffer = new FieldFunctionTuple(
@@ -494,7 +805,24 @@ namespace QYHS
 			&TypeFieldReflectionOperator::TypeMeshDataOperator::isArray_index_buffer
 			);
 			REGISTER_TO_FIELD_MAP("MeshData",f_field_function_tuple_index_buffer);
+			FieldFunctionTuple * f_field_function_tuple_bind = new FieldFunctionTuple(
+			&TypeFieldReflectionOperator::TypeMeshDataOperator::set_bind,
+			&TypeFieldReflectionOperator::TypeMeshDataOperator::get_bind,
+			&TypeFieldReflectionOperator::TypeMeshDataOperator::getClassName,
+			&TypeFieldReflectionOperator::TypeMeshDataOperator::getFieldName_bind,
+			&TypeFieldReflectionOperator::TypeMeshDataOperator::getFieldTypeName_bind,
+			&TypeFieldReflectionOperator::TypeMeshDataOperator::isArray_bind
+			);
+			REGISTER_TO_FIELD_MAP("MeshData",f_field_function_tuple_bind);
 		
+			ArrayFunctionTuple * array_function_tuple_stdSSvectorLSkeletonBindR = new ArrayFunctionTuple(
+			&ArrayReflectionOperator::ArraystdSSvectorLSkeletonBindROperator::set,
+			&ArrayReflectionOperator::ArraystdSSvectorLSkeletonBindROperator::get,
+			&ArrayReflectionOperator::ArraystdSSvectorLSkeletonBindROperator::getSize,
+			&ArrayReflectionOperator::ArraystdSSvectorLSkeletonBindROperator::getArrayTypeName,
+			&ArrayReflectionOperator::ArraystdSSvectorLSkeletonBindROperator::getElementTypeName
+		);
+		REGISTER_TO_ARRAY_MAP("stdSSvectorLSkeletonBindR",array_function_tuple_stdSSvectorLSkeletonBindR);
 			ArrayFunctionTuple * array_function_tuple_stdSSvectorLVertexR = new ArrayFunctionTuple(
 			&ArrayReflectionOperator::ArraystdSSvectorLVertexROperator::set,
 			&ArrayReflectionOperator::ArraystdSSvectorLVertexROperator::get,
@@ -521,6 +849,7 @@ namespace QYHS
 		namespace TypeWrappersRegister
 		{
 			void Vertex(){TypeWrapperRegister_Vertex();}
+			void SkeletonBind(){TypeWrapperRegister_SkeletonBind();}
 			void MeshData(){TypeWrapperRegister_MeshData();}
 		}
 		

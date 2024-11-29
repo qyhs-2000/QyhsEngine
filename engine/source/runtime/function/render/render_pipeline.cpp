@@ -16,16 +16,17 @@ void QYHS::RenderPipeline::initialize(RenderPipelineInitInfo init_info)
 	pass_common_info.rhi = m_rhi;
 	pass_common_info.render_resource = init_info.m_render_resource;
 
+	MainCameraRenderPass* p_main_camera_pass = static_cast<MainCameraRenderPass*>(m_main_camera_pass.get());
 	
 	MainCameraPassInitInfo main_camera_init_info;
 	m_main_camera_pass->setCommonInfo(pass_common_info);
 	m_main_camera_pass->initialize(&main_camera_init_info);
 
-	PickPassInitInfo pack_pass_init_info;
+	PickPassInitInfo pick_pass_init_info;
+	pick_pass_init_info.per_mesh_layout = p_main_camera_pass->getDescriptors()[MainCameraRenderPass::DescriptorSetLayoutType::per_mesh].descriptor_set_layout;
 	m_pick_pass->setCommonInfo(pass_common_info);
-	m_pick_pass->initialize(&pack_pass_init_info);
+	m_pick_pass->initialize(&pick_pass_init_info);
 
-	MainCameraRenderPass* p_main_camera_pass = static_cast<MainCameraRenderPass*>(m_main_camera_pass.get());
 
 	UIPassInitInfo ui_pass_init_info;
 	ui_pass_init_info.render_pass = &(p_main_camera_pass->getRenderPass());

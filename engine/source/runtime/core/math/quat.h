@@ -3,6 +3,12 @@
 #include "runtime/core/meta/reflection/reflection.h"
 namespace QYHS
 {
+    REFLECTION_TYPE(TmpTest)
+        CLASS(TmpTest, Fields)
+    {
+        REFLECTION_BODY(TmpTest);
+    };
+
     class Matrix3x3;
     class Vector3;
     REFLECTION_TYPE(Quaternion)

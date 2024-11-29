@@ -12,6 +12,7 @@
 #include <ostream>
 #include <tiny_obj_loader.h>
 #include <core/base/macro.h>
+#include "vulkan_utils.h"
 
 namespace QYHS
 {
@@ -717,6 +718,54 @@ namespace QYHS
 	void VulkanRHI::destroyFrameBuffer(VkFramebuffer framebuffer)
 	{
 		vkDestroyFramebuffer(m_device, framebuffer, nullptr);
+	}
+
+	void VulkanRHI::updateDescriptorSet(uint32_t write_count,VkWriteDescriptorSet * p_descriptor_write,uint32_t copy_count,const VkCopyDescriptorSet * p_descriptor_copies )
+	{
+		vkUpdateDescriptorSets(m_device, write_count, p_descriptor_write, copy_count, p_descriptor_copies);
+	}
+
+	void VulkanRHI::allocateDescriptorSets(VkDescriptorSetLayout * p_descriptor_set_layout,uint32_t descriptor_set_count,VkDescriptorSet * &p_descriptor_set,VkDescriptorSetAllocateInfo * p_next)
+	{
+		VkDescriptorSetAllocateInfo allocate_info{};
+		allocate_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+		allocate_info.descriptorPool = m_descriptor_pool;
+		allocate_info.pNext = p_next;
+		allocate_info.pSetLayouts = p_descriptor_set_layout;
+		allocate_info.descriptorSetCount = descriptor_set_count;
+
+		auto tmp = new std::vector<VkDescriptorSet>(descriptor_set_count);
+		p_descriptor_set = tmp->data();
+		if (vkAllocateDescriptorSets(m_device,&allocate_info,p_descriptor_set) != VK_SUCCESS)
+		{
+			throw std::runtime_error("failed to allcoate descriptor set");
+		}
+	}
+
+	void VulkanRHI::createStorageBuffer(VkDeviceSize buffer_size,VkBuffer &storage_buffer,VkDeviceMemory &storage_buffer_memory)
+	{
+		VulkanUtils::createBuffer(physical_device, m_device, buffer_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, storage_buffer, storage_buffer_memory);
+	}
+
+	void VulkanRHI::cmdBindDescriptorSets(VkPipelineBindPoint bind_point,VkPipelineLayout * pipeline_layout, int first_set, int set_count, const VkDescriptorSet* const* pDescriptorSets, uint32_t dynamic_offset_count, const uint32_t* p_dynamic_offsets)
+	{
+		std::vector<VkDescriptorSet> vk_descriptor_sets(set_count);
+		for (int i = 0; i < set_count; ++i)
+		{
+			if (pDescriptorSets[i] != nullptr)
+			{
+				vk_descriptor_sets[i] = *pDescriptorSets[i];
+			}
+		}
+		vkCmdBindDescriptorSets(m_current_command_buffer, bind_point, *pipeline_layout, first_set, set_count, vk_descriptor_sets.data(), dynamic_offset_count, p_dynamic_offsets);
+	}
+
+	void VulkanRHI::createDescriptorSetLayout(VkDescriptorSetLayoutCreateInfo* create_info,const VkAllocationCallbacks * callbacks , VkDescriptorSetLayout*& p_descriptor_set_layout)
+	{
+		p_descriptor_set_layout = new VkDescriptorSetLayout();
+		if (vkCreateDescriptorSetLayout(m_device, create_info, nullptr, p_descriptor_set_layout) != VK_SUCCESS) {
+			throw std::runtime_error("failed to create descriptor set layout!");
+		}
 	}
 
 	void VulkanRHI::updateUniformBuffer() {

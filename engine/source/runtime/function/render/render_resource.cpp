@@ -69,6 +69,7 @@ namespace QYHS
 
 			size_t vertex_buffer_size = sizeof(MeshVertexDataDefinition) * bind_data->vertex_buffer.size();
 			ret.m_static_mesh_data.m_vertex_buffer = std::make_shared<BufferData>(vertex_buffer_size);
+			//vertex buffer
 			MeshVertexDataDefinition* vertex = (MeshVertexDataDefinition*)ret.m_static_mesh_data.m_vertex_buffer->m_data;
 			for (size_t i = 0; i < bind_data->vertex_buffer.size(); ++i)
 			{
@@ -84,7 +85,7 @@ namespace QYHS
                 vertex[i].u  = bind_data->vertex_buffer[i].u;
                 vertex[i].v  = bind_data->vertex_buffer[i].v;
 			}
-
+			//index buffer
 			size_t index_buffer_size = sizeof(uint16_t) * bind_data->index_buffer.size();
 			ret.m_static_mesh_data.m_index_buffer = std::make_shared<BufferData>(index_buffer_size);
 			uint16_t *index = (uint16_t*)ret.m_static_mesh_data.m_index_buffer->m_data;
@@ -92,6 +93,23 @@ namespace QYHS
 			{
 				index[i] = static_cast<uint16_t>(bind_data->index_buffer[i]);
 			}
+			//skeleton blending buffer
+			size_t vertex_bindings_buffer_size = sizeof(MeshVertexBindingDataDefinition) * bind_data->bind.size();
+			ret.m_skeleton_binding_buffer = std::make_shared<BufferData>(vertex_bindings_buffer_size);
+			MeshVertexBindingDataDefinition* skeleton_binding = (MeshVertexBindingDataDefinition*)ret.m_skeleton_binding_buffer->m_data;
+			for (size_t i = 0; i < bind_data->bind.size(); ++i)
+			{
+				skeleton_binding[i].index0 = bind_data->bind[i].index0;
+				skeleton_binding[i].index1 = bind_data->bind[i].index1;
+				skeleton_binding[i].index2 = bind_data->bind[i].index2;
+				skeleton_binding[i].index3 = bind_data->bind[i].index3;
+
+				skeleton_binding[i].weight0 = bind_data->bind[i].weight0;
+				skeleton_binding[i].weight1 = bind_data->bind[i].weight1;
+				skeleton_binding[i].weight2 = bind_data->bind[i].weight2;
+				skeleton_binding[i].weight3 = bind_data->bind[i].weight3;
+			}
+			
 		}
 
 		return ret;
@@ -374,6 +392,14 @@ namespace QYHS
 			uint32_t vertex_buffer_size = (uint32_t)mesh_data.m_static_mesh_data.m_vertex_buffer->m_size;
 			MeshVertexDataDefinition* vertex_buffer = reinterpret_cast<MeshVertexDataDefinition*>(mesh_data.m_static_mesh_data.m_vertex_buffer->m_data);
 			updateMeshData(rhi, index_buffer_size, index_buffer, vertex_buffer_size, vertex_buffer, mesh);
+			static_cast<VulkanRHI*>(rhi.get())->allocateDescriptorSets(m_per_mesh_descriptor_set_layout, 1, mesh.p_vertex_blending_descriptor_set);
+			if (mesh_data.m_skeleton_binding_buffer)
+			{
+				uint32_t joint_buffer_size = mesh_data.m_skeleton_binding_buffer->m_size;
+				uint32_t index_count = index_buffer_size / sizeof(uint16_t);
+				MeshVertexBindingDataDefinition* joint_binding_buffer_data = reinterpret_cast<MeshVertexBindingDataDefinition*>(mesh_data.m_skeleton_binding_buffer->m_data);
+				updateVertexBindingData(rhi,joint_buffer_size,joint_binding_buffer_data,index_count,mesh);
+			}
 
 			return mesh;
 		}
@@ -427,15 +453,7 @@ namespace QYHS
 			
 
 			//create descriptor sets
-			VkDescriptorSetAllocateInfo allocInfo{};
-			allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-			allocInfo.descriptorPool = vulkan_rhi->getDescriptorPool();
-			allocInfo.descriptorSetCount = 1;
-			allocInfo.pSetLayouts = m_material_descriptor_set_layout;
-
-			if (vkAllocateDescriptorSets(device, &allocInfo,&material.material_descriptor_set) != VK_SUCCESS) {
-				throw std::runtime_error("failed to allocate descriptor sets!");
-			}
+			vulkan_rhi->allocateDescriptorSets(m_material_descriptor_set_layout, 1, material.material_descriptor_set);
 
 			VkDescriptorImageInfo imageInfo{};
 			imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
@@ -446,7 +464,7 @@ namespace QYHS
 
 			descriptorWrites[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 			descriptorWrites[0].pNext = NULL;
-			descriptorWrites[0].dstSet = material.material_descriptor_set;
+			descriptorWrites[0].dstSet = *material.material_descriptor_set;
 			descriptorWrites[0].dstBinding = 0;
 			descriptorWrites[0].dstArrayElement = 0;
 			descriptorWrites[0].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
@@ -464,7 +482,57 @@ namespace QYHS
 		updateVertexBuffer(rhi, vertex_buffer_size, vertex_buffer, mesh);
 		mesh.index_count = index_buffer_size/sizeof(uint16_t);
 		updateIndexBuffer(rhi, index_buffer_size, index_buffer, mesh);
+		
 	}
+
+	void RenderResource::updateVertexBindingData(std::shared_ptr<RHI> rhi,uint32_t joint_buffer_size, MeshVertexBindingDataDefinition* joint_buffer_data, uint32_t index_count,VulkanMesh & mesh)
+	{
+		VulkanRHI* vulkan_rhi = static_cast<VulkanRHI*>(rhi.get());
+		
+		
+
+		VkBuffer storage_buffer;
+		VkDeviceMemory storage_buffer_memory;
+		size_t vertex_blending_buffer_size = sizeof(MeshVertexBindingDataDefinition) * index_count;
+		vulkan_rhi->createStorageBuffer(vertex_blending_buffer_size,storage_buffer,storage_buffer_memory);
+		void* data;
+		vkMapMemory(vulkan_rhi->m_device, storage_buffer_memory, 0, vertex_blending_buffer_size, 0, &data);
+		MeshVertexBindingDataDefinition* p_vertex_binding = (MeshVertexBindingDataDefinition*)data;
+		for (int i = 0; i < index_count; ++i)
+		{
+			p_vertex_binding[i].index0 = joint_buffer_data[i].index0;
+			p_vertex_binding[i].index1 = joint_buffer_data[i].index1;
+			p_vertex_binding[i].index2 = joint_buffer_data[i].index2;
+			p_vertex_binding[i].index3 = joint_buffer_data[i].index3;
+
+			p_vertex_binding[i].weight0 = joint_buffer_data[i].weight0;
+			p_vertex_binding[i].weight1 = joint_buffer_data[i].weight1;
+			p_vertex_binding[i].weight2 = joint_buffer_data[i].weight2;
+			p_vertex_binding[i].weight3 = joint_buffer_data[i].weight3;
+		}
+		vkUnmapMemory(vulkan_rhi->m_device, storage_buffer_memory);
+		VulkanUtils::createBuffer(vulkan_rhi->physical_device, vulkan_rhi->m_device, vertex_blending_buffer_size,
+			VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, mesh.mesh_vertex_blending_buffer, mesh.mesh_vertex_blending_buffer_memory);
+		VulkanUtils::copyBuffer(rhi.get(), storage_buffer, mesh.mesh_vertex_blending_buffer, 0, 0, vertex_blending_buffer_size);
+
+		VkDescriptorBufferInfo vertex_blending_buffer_info{};
+		vertex_blending_buffer_info.offset = 0;
+		vertex_blending_buffer_info.range = vertex_blending_buffer_size;
+		vertex_blending_buffer_info.buffer = mesh.mesh_vertex_blending_buffer;
+
+		VkWriteDescriptorSet writes_infos[1];
+		writes_infos[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+		writes_infos[0].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+		writes_infos[0].descriptorCount = 1;
+		writes_infos[0].dstArrayElement = 0;
+		writes_infos[0].dstBinding = 0;
+		writes_infos[0].pNext = nullptr;
+		writes_infos[0].dstSet = *mesh.p_vertex_blending_descriptor_set;
+		writes_infos[0].pBufferInfo = &vertex_blending_buffer_info;
+		vulkan_rhi->updateDescriptorSet(sizeof(writes_infos) / sizeof(writes_infos[0]), writes_infos);
+	}
+
 	void RenderResource::updateVertexBuffer(std::shared_ptr<RHI> rhi, uint32_t vertex_buffer_size, MeshVertexDataDefinition const* vertex_buffer, VulkanMesh& mesh)
 	{
 		VulkanRHI* vulkan_rhi = static_cast<VulkanRHI*>(rhi.get());

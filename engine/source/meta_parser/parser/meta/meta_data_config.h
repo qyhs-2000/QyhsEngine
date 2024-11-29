@@ -8,7 +8,7 @@ namespace NativeProperty
 
 	const auto Enable = "Enable";
 	const auto Disable = "Disable";
-
+	const auto Methods = "Methods";
 	const auto WhiteListFields = "WhiteListFields";
 
 } // namespace NativeProperty

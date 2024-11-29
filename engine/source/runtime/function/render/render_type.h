@@ -63,6 +63,18 @@ namespace QYHS
 		}
 	};
 
+	struct MeshVertexBindingDataDefinition
+	{
+		int index0{ 0 };
+		int index1{ 0 };
+		int index2{ 0 };
+		int index3{ 0 };
+		float weight0{ 0.f };
+		float weight1{ 0.f };
+		float weight2{ 0.f };
+		float weight3{ 0.f };
+	};
+
 	struct MeshVertexDataDefinition
 	{
 		float x, y, z;
@@ -80,6 +92,7 @@ namespace QYHS
 	struct RenderMeshData
 	{
 		StaticMeshData		m_static_mesh_data;
+		std::shared_ptr<BufferData> m_skeleton_binding_buffer;
 	};
 
 	struct TextureData

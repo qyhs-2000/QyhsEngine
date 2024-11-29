@@ -21,9 +21,11 @@ namespace  QYHS
 	}
 
 
-	void PickPass::initialize(RenderPassInitInfo * info)
+	void PickPass::initialize(RenderPassInitInfo* info)
 	{
 		RenderPass::initialize(info);
+		const PickPassInitInfo* pick_init_info = static_cast<PickPassInitInfo*>(info);
+		per_mesh_descriptor_set_layout = pick_init_info->per_mesh_layout;
 		setupAttachments();
 		setupRenderPass();
 		setupDescriptorSetLayout();
@@ -133,20 +135,17 @@ namespace  QYHS
 				sizeof(mesh_inefficient_pick_global_layout_bindings[0]));
 		mesh_inefficient_pick_global_layout_create_info.pBindings = mesh_inefficient_pick_global_layout_bindings;
 
-		if (VK_SUCCESS != vkCreateDescriptorSetLayout(m_vulkan_rhi->m_device,
-			&mesh_inefficient_pick_global_layout_create_info,
+		m_vulkan_rhi->createDescriptorSetLayout(&mesh_inefficient_pick_global_layout_create_info,
 			NULL,
-			&m_descriptors[0].descriptor_set_layout))
-		{
-			throw std::runtime_error("create mesh inefficient pick global layout");
-		}
+			m_descriptors[0].descriptor_set_layout);
+		
 	}
 
 	void PickPass::setupPipeline()
 	{
 		m_render_pipelines.resize(1);
 
-		VkDescriptorSetLayout descriptorset_layouts[] = { m_descriptors[0].descriptor_set_layout };
+		VkDescriptorSetLayout descriptorset_layouts[] = { *m_descriptors[0].descriptor_set_layout ,*per_mesh_descriptor_set_layout};
 
 		VkPipelineLayoutCreateInfo pipeline_layout_create_info{};
 		pipeline_layout_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
@@ -298,19 +297,7 @@ namespace  QYHS
 
 	void PickPass::setupDescriptorSet()
 	{
-		VkDescriptorSetAllocateInfo mesh_inefficient_pick_global_descriptor_set_alloc_info;
-		mesh_inefficient_pick_global_descriptor_set_alloc_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-		mesh_inefficient_pick_global_descriptor_set_alloc_info.pNext = NULL;
-		mesh_inefficient_pick_global_descriptor_set_alloc_info.descriptorPool = m_vulkan_rhi->m_descriptor_pool;
-		mesh_inefficient_pick_global_descriptor_set_alloc_info.descriptorSetCount = 1;
-		mesh_inefficient_pick_global_descriptor_set_alloc_info.pSetLayouts = &m_descriptors[0].descriptor_set_layout;
-
-		if (VK_SUCCESS != vkAllocateDescriptorSets(m_vulkan_rhi->m_device,
-			&mesh_inefficient_pick_global_descriptor_set_alloc_info,
-			&m_descriptors[0].descriptor_set))
-		{
-			throw std::runtime_error("allocate mesh inefficient pick global descriptor set");
-		}
+		m_vulkan_rhi->allocateDescriptorSets(m_descriptors[0].descriptor_set_layout, 1, m_descriptors[0].descriptor_set);
 
 		VkDescriptorBufferInfo mesh_inefficient_pick_perframe_storage_buffer_info = {};
 		// this offset plus dynamic_offset should not be greater than the size of
@@ -328,14 +315,14 @@ namespace  QYHS
 			sizeof(MeshInefficientPickPerDrawCallStorageBuffer);
 		mesh_inefficient_pick_perdrawcall_storage_buffer_info.buffer =
 			m_global_render_resource->storage_buffer.global_ringbuffer;
-		
+
 
 
 		VkWriteDescriptorSet mesh_descriptor_writes_info[2];
 
 		mesh_descriptor_writes_info[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 		mesh_descriptor_writes_info[0].pNext = NULL;
-		mesh_descriptor_writes_info[0].dstSet = m_descriptors[0].descriptor_set;
+		mesh_descriptor_writes_info[0].dstSet = *m_descriptors[0].descriptor_set;
 		mesh_descriptor_writes_info[0].dstBinding = 0;
 		mesh_descriptor_writes_info[0].dstArrayElement = 0;
 		mesh_descriptor_writes_info[0].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC;
@@ -344,7 +331,7 @@ namespace  QYHS
 
 		mesh_descriptor_writes_info[1].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 		mesh_descriptor_writes_info[1].pNext = NULL;
-		mesh_descriptor_writes_info[1].dstSet = m_descriptors[0].descriptor_set;
+		mesh_descriptor_writes_info[1].dstSet = *m_descriptors[0].descriptor_set;
 		mesh_descriptor_writes_info[1].dstBinding = 1;
 		mesh_descriptor_writes_info[1].dstArrayElement = 0;
 		mesh_descriptor_writes_info[1].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC;
@@ -484,33 +471,37 @@ namespace  QYHS
 				VulkanMesh& mesh = (*pair2.first);
 				auto& mesh_nodes = pair2.second;
 				uint32_t total_instance_count = mesh_nodes.size();
-
-				VkBuffer vertex_buffers[] = { mesh.mesh_vertex_position_buffer };
-				VkDeviceSize offset[] = { 0 };
-				vkCmdBindVertexBuffers(m_vulkan_rhi->m_command_buffers[m_vulkan_rhi->m_current_frame_index], 0, 1, vertex_buffers, offset);
-				vkCmdBindIndexBuffer(m_vulkan_rhi->m_command_buffers[m_vulkan_rhi->m_current_frame_index], mesh.mesh_vertex_index_buffer, 0, VK_INDEX_TYPE_UINT16);
-
-				uint32_t drawcall_max_instance_count = (sizeof(MeshInefficientPickPerDrawCallStorageBuffer::model_matrices) / sizeof(MeshInefficientPickPerDrawCallStorageBuffer::model_matrices[0]));
-				uint32_t draw_call_count = roundUp(total_instance_count, drawcall_max_instance_count) / drawcall_max_instance_count;
-
-				for (size_t drawcall_index = 0; drawcall_index < draw_call_count; ++drawcall_index)
+				if (total_instance_count > 0)
 				{
-					uint32_t current_draw_call_count = ((total_instance_count - drawcall_max_instance_count * drawcall_index) < drawcall_max_instance_count) ? (total_instance_count - drawcall_max_instance_count * drawcall_index) : drawcall_max_instance_count;
+					m_vulkan_rhi->cmdBindDescriptorSets(VK_PIPELINE_BIND_POINT_GRAPHICS, &m_render_pipelines[0].pipeline_layout, 
+						1, 1, &mesh.p_vertex_blending_descriptor_set, 0, nullptr);
+					VkBuffer vertex_buffers[] = { mesh.mesh_vertex_position_buffer };
+					VkDeviceSize offset[] = { 0 };
+					vkCmdBindVertexBuffers(m_vulkan_rhi->m_command_buffers[m_vulkan_rhi->m_current_frame_index], 0, 1, vertex_buffers, offset);
+					vkCmdBindIndexBuffer(m_vulkan_rhi->m_command_buffers[m_vulkan_rhi->m_current_frame_index], mesh.mesh_vertex_index_buffer, 0, VK_INDEX_TYPE_UINT16);
 
-					uint32_t perdrawcall_dynamic_offset = roundUp(m_global_render_resource->storage_buffer.ringbuffer_end[m_vulkan_rhi->m_current_frame_index], m_global_render_resource->storage_buffer.min_storage_buffer_offset_alignment);
-					m_global_render_resource->storage_buffer.ringbuffer_end[m_vulkan_rhi->m_current_frame_index] = perdrawcall_dynamic_offset + sizeof(MeshInefficientPickPerDrawCallStorageBuffer);
-					assert(m_global_render_resource->storage_buffer.ringbuffer_end[m_vulkan_rhi->m_current_frame_index] <= m_global_render_resource->storage_buffer.ringbuffer_begin[m_vulkan_rhi->m_current_frame_index] + m_global_render_resource->storage_buffer.ringbuffer_size[m_vulkan_rhi->m_current_frame_index]);
+					uint32_t drawcall_max_instance_count = (sizeof(MeshInefficientPickPerDrawCallStorageBuffer::model_matrices) / sizeof(MeshInefficientPickPerDrawCallStorageBuffer::model_matrices[0]));
+					uint32_t draw_call_count = roundUp(total_instance_count, drawcall_max_instance_count) / drawcall_max_instance_count;
 
-					MeshInefficientPickPerDrawCallStorageBuffer& per_draw_call_storage_buffer = *reinterpret_cast<MeshInefficientPickPerDrawCallStorageBuffer*>(reinterpret_cast<uintptr_t>(m_global_render_resource->storage_buffer.global_ringbuffer_memory_pointer) + perdrawcall_dynamic_offset);
-					for (size_t i = 0; i < current_draw_call_count; ++i)
+					for (size_t drawcall_index = 0; drawcall_index < draw_call_count; ++drawcall_index)
 					{
-						per_draw_call_storage_buffer.model_matrices[i] = mesh_nodes[drawcall_max_instance_count * drawcall_index + i].model_matrix;
-						per_draw_call_storage_buffer.node_ids[i] = mesh_nodes[drawcall_max_instance_count * drawcall_index + i].node_id;
-					}
+						uint32_t current_draw_call_count = ((total_instance_count - drawcall_max_instance_count * drawcall_index) < drawcall_max_instance_count) ? (total_instance_count - drawcall_max_instance_count * drawcall_index) : drawcall_max_instance_count;
 
-					uint32_t dynamic_offset[2] = { perframe_dynamic_offset,perdrawcall_dynamic_offset };
-					vkCmdBindDescriptorSets(m_vulkan_rhi->m_command_buffers[m_vulkan_rhi->m_current_frame_index], VK_PIPELINE_BIND_POINT_GRAPHICS, m_render_pipelines[0].pipeline_layout, 0, 1, &m_descriptors[0].descriptor_set, (sizeof(dynamic_offset) / sizeof(dynamic_offset[0])), dynamic_offset);
-					vkCmdDrawIndexed(m_vulkan_rhi->m_command_buffers[m_vulkan_rhi->m_current_frame_index], mesh.index_count, current_draw_call_count, 0, 0, 0);
+						uint32_t perdrawcall_dynamic_offset = roundUp(m_global_render_resource->storage_buffer.ringbuffer_end[m_vulkan_rhi->m_current_frame_index], m_global_render_resource->storage_buffer.min_storage_buffer_offset_alignment);
+						m_global_render_resource->storage_buffer.ringbuffer_end[m_vulkan_rhi->m_current_frame_index] = perdrawcall_dynamic_offset + sizeof(MeshInefficientPickPerDrawCallStorageBuffer);
+						assert(m_global_render_resource->storage_buffer.ringbuffer_end[m_vulkan_rhi->m_current_frame_index] <= m_global_render_resource->storage_buffer.ringbuffer_begin[m_vulkan_rhi->m_current_frame_index] + m_global_render_resource->storage_buffer.ringbuffer_size[m_vulkan_rhi->m_current_frame_index]);
+
+						MeshInefficientPickPerDrawCallStorageBuffer& per_draw_call_storage_buffer = *reinterpret_cast<MeshInefficientPickPerDrawCallStorageBuffer*>(reinterpret_cast<uintptr_t>(m_global_render_resource->storage_buffer.global_ringbuffer_memory_pointer) + perdrawcall_dynamic_offset);
+						for (size_t i = 0; i < current_draw_call_count; ++i)
+						{
+							per_draw_call_storage_buffer.model_matrices[i] = mesh_nodes[drawcall_max_instance_count * drawcall_index + i].model_matrix;
+							per_draw_call_storage_buffer.node_ids[i] = mesh_nodes[drawcall_max_instance_count * drawcall_index + i].node_id;
+						}
+
+						uint32_t dynamic_offset[2] = { perframe_dynamic_offset,perdrawcall_dynamic_offset };
+						vkCmdBindDescriptorSets(m_vulkan_rhi->m_command_buffers[m_vulkan_rhi->m_current_frame_index], VK_PIPELINE_BIND_POINT_GRAPHICS, m_render_pipelines[0].pipeline_layout, 0, 1, m_descriptors[0].descriptor_set, (sizeof(dynamic_offset) / sizeof(dynamic_offset[0])), dynamic_offset);
+						vkCmdDrawIndexed(m_vulkan_rhi->m_command_buffers[m_vulkan_rhi->m_current_frame_index], mesh.index_count, current_draw_call_count, 0, 0, 0);
+					}
 				}
 
 			}
@@ -624,7 +615,7 @@ namespace  QYHS
 				}*/
 			}
 			//std::cout << std::endl;
-		}
+	}
 		stbi_write_png("pick_color_attachment.png", w, h, 4, image_data.data(), w * 4);
 #endif
 
@@ -637,5 +628,5 @@ namespace  QYHS
 
 		return node_id;
 
-	}
+}
 }

@@ -69,6 +69,7 @@ namespace QYHS
 	enum DescriptorSetLayoutType
 	{
 		global_mesh=0,
+        per_mesh,
 		mesh_per_material,
 		skybox,
 		axis,

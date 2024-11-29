@@ -17,7 +17,6 @@ namespace QYHS
 		void tick();
 		void initialize();
 		void swapLogicRenderData();
-		void processRenderEntity();
 		void processSwapData();
 		void changeRenderCameraType(RenderCameraType camera_type) { m_render_camera->changeType(camera_type); }
 		size_t getGObjectIDByMeshID(size_t mesh_id);

@@ -1,0 +1,6 @@
+// Hint files help the Visual Studio IDE interpret Visual C++ identifiers
+// such as names of functions and macros.
+// For more information see https://go.microsoft.com/fwlink/?linkid=865984
+#define CLASS(class_name, __VA_ARGS__) class __attribute__((annotate(#__VA_ARGS__))) class_name
+#define CLASS(class_name, __VA_ARGS__)
+#define REFLECTION_TYPE(class_name) namespace Reflection { namespace TypeFieldReflectionOparator { class Type##class_name##Operator; } };

@@ -4,6 +4,24 @@
 #include "core/math/matrix4.h"
 namespace QYHS
 {
+	class SkeletonAnimationResultTransform
+	{
+	public:
+		Matrix4x4 m_matrix;
+	};
+
+	class SkeletonBindingDesc
+	{
+	public:
+		std::string m_skeleton_binding_file;
+	};
+
+	class SkeletonAnimationResult
+	{
+	public:
+		std::vector<SkeletonAnimationResultTransform> m_transforms;
+	};
+
 	class GameObjectMeshDesc
 	{
 	public:
@@ -41,6 +59,8 @@ namespace QYHS
 		GameObjectMeshDesc  m_mesh_desc;
 		GameObjectMaterialDesc m_material_desc;
 		GameObjectTransformDesc m_transform_desc;
+		SkeletonAnimationResult m_skeleton_animation_result;
+		SkeletonBindingDesc m_skeleton_binding_desc;
 	private:
 		GameObjectPartId m_part_id;
 	};

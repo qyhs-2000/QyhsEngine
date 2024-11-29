@@ -3,9 +3,40 @@
 
 namespace QYHS
 {
+	class TmpTest;
 	class Quaternion;
 	namespace Reflection
 	{
+		namespace TypeFieldReflectionOperator
+		{
+			class TypeTmpTestOperator
+			{
+			public:
+				//class
+				//static void getTmpTestBaseClassReflectionInstanceList()
+				static const char* getClassName(){return "TmpTest";}
+				static void* constructorWithJson(const Json & json_context)
+				{
+					TmpTest * ret_instance = new TmpTest;
+					Serializer::read(json_context,*ret_instance);
+					return ret_instance;
+				}
+				static int getTmpTestBaseClassReflectionInstanceList(ReflectionInstance* &out_list, void* instance)
+				{
+					int count = 0;
+					
+					return count;	
+				}
+				static Json writeByName(void * instance_ptr)
+				{
+					return Serializer::write(*(TmpTest*)instance_ptr);
+				}
+				//field
+				
+			};
+		}//namespace TypeFieldFunctionOperator
+
+		
 		namespace TypeFieldReflectionOperator
 		{
 			class TypeQuaternionOperator
@@ -116,6 +147,18 @@ namespace QYHS
 
 		
 
+		void TypeWrapperRegister_TmpTest()
+		{
+		
+		
+		
+		ClassFunctionTuple * f_class_function_tuple_TmpTest = new ClassFunctionTuple(
+            &TypeFieldReflectionOperator::TypeTmpTestOperator::constructorWithJson,
+            &TypeFieldReflectionOperator::TypeTmpTestOperator::getTmpTestBaseClassReflectionInstanceList,
+            &TypeFieldReflectionOperator::TypeTmpTestOperator::writeByName
+		);
+		REGISTER_TO_CLASS_MAP("TmpTest",f_class_function_tuple_TmpTest);
+		}
 		void TypeWrapperRegister_Quaternion()
 		{
 			FieldFunctionTuple * f_field_function_tuple_w = new FieldFunctionTuple(
@@ -165,6 +208,7 @@ namespace QYHS
 		}
 		namespace TypeWrappersRegister
 		{
+			void TmpTest(){TypeWrapperRegister_TmpTest();}
 			void Quaternion(){TypeWrapperRegister_Quaternion();}
 		}
 		

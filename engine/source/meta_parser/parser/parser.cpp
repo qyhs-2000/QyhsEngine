@@ -192,6 +192,18 @@ void MetaParser::buildClassAST(const Cursor& cursor, Namespace current_namespace
 	for (auto& child : cursor.getChildren())
 	{
 		auto kind = child.getKind();
+		auto class_ptr_test = std::make_shared<Class>(child, current_namespace);
+		if (class_ptr_test->getClassName() == "Matrix4x4_")
+		{
+			int a;
+			a = 10;
+		}
+
+		if (class_ptr_test->getClassName() == "TmpTestClass")
+		{
+			int a;
+			a = 10;
+		}
 		if (child.isDefinition() && (kind == CXCursor_ClassDecl || kind == CXCursor_FieldDecl))
 		{
 			auto class_ptr = std::make_shared<Class>(child, current_namespace);

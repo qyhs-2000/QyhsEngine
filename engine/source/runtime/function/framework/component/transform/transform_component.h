@@ -9,7 +9,6 @@ namespace QYHS
         CLASS(TransformComponent : public Component, WhiteListFields)
     {
         REFLECTION_BODY(TransformComponent)
-
     public:
         TransformComponent() = default;
         virtual void postLoadResource(std::weak_ptr<GameObject> parent_object) override;

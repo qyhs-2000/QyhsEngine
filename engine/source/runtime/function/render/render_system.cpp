@@ -27,15 +27,6 @@ namespace QYHS
 
 	}
 
-	void RenderSystem::processRenderEntity()
-	{
-		m_render_scene->m_render_entities.resize(0);
-		RenderEntity entity;
-
-
-		m_render_scene->m_render_entities.push_back(entity);
-	}
-
 	void RenderSystem::processSwapData()
 	{
 		SwapData& swap_data = m_swap_context.getRenderSwapData();
@@ -56,6 +47,12 @@ namespace QYHS
 					RenderEntity render_entity;
 					render_entity.m_instance_id = m_render_scene->getInstanceIdAllocator().allocateGUId(part_id);
 					render_entity.model_matrix = game_object_part.m_transform_desc.m_transform_matrix;
+					render_entity.m_joint_matrices.resize(game_object_part.m_skeleton_animation_result.m_transforms.size());
+					for (size_t i = 0; i < render_entity.m_joint_matrices.size(); ++i)
+					{
+						render_entity.m_joint_matrices[i] = game_object_part.m_skeleton_animation_result.m_transforms[i].m_matrix;
+					}
+					render_entity.enable_vertex_blending = game_object_part.m_skeleton_animation_result.m_transforms.size() > 1;
 					m_render_scene->addInstancedIdToGameObjectIdMap(render_entity.m_instance_id, gobject.getId());
 
 					//mesh
@@ -165,8 +162,8 @@ namespace QYHS
 		m_render_camera->m_znear = global_render_config.camera_config.m_z_near;
 		m_render_camera->setAspect(global_render_config.camera_config.m_aspect.x / global_render_config.camera_config.m_aspect.y);
 
-		m_render_resource->m_material_descriptor_set_layout = &static_cast<RenderPass*>(m_render_pipeline->m_main_camera_pass.get())->m_descriptors[MainCameraRenderPass::DescriptorSetLayoutType::mesh_per_material].descriptor_set_layout;
-
+		m_render_resource->m_material_descriptor_set_layout = static_cast<RenderPass*>(m_render_pipeline->m_main_camera_pass.get())->m_descriptors[MainCameraRenderPass::DescriptorSetLayoutType::mesh_per_material].descriptor_set_layout;
+		m_render_resource->m_per_mesh_descriptor_set_layout = static_cast<RenderPass*>(m_render_pipeline->m_main_camera_pass.get())->m_descriptors[MainCameraRenderPass::DescriptorSetLayoutType::per_mesh].descriptor_set_layout;
 
 	}
 

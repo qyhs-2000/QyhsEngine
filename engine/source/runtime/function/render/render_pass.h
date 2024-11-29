@@ -38,8 +38,8 @@ namespace QYHS
 
 	struct Descriptor
 	{
-		VkDescriptorSet descriptor_set;
-		VkDescriptorSetLayout descriptor_set_layout;
+		VkDescriptorSet *descriptor_set;
+		VkDescriptorSetLayout *descriptor_set_layout;
 	};
 
 	class RenderPass :public RenderPassBase
@@ -77,6 +77,7 @@ namespace QYHS
 	public:
 		virtual void initialize(RenderPassInitInfo * info) override;
 		VkRenderPass* getRenderPass() { return &m_framebuffer.render_pass; };
+		std::vector<Descriptor>& getDescriptors() { return m_descriptors; }
 		const std::vector<VkImageView*>  getFrameBufferImageViews();
 	protected:
 		std::shared_ptr<VulkanRHI>		m_vulkan_rhi{ nullptr };

@@ -451,4 +451,4 @@ namespace QYHS
         static const Vector3 NEGATIVE_UNIT_Z;
         static const Vector3 UNIT_SCALE;
     };
-} // namespace Piccolo
+} 

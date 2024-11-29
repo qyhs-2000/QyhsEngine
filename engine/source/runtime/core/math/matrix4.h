@@ -1,11 +1,20 @@
 #pragma once
 
 #include "core/math/matrix3.h"
+#include "runtime/core/math/quaternion.h"
 #include "core/math/vector3.h"
 #include "core/math/vector4.h"
-#include "runtime/core/math/quaternion.h"
+#include "core/math/math.h"
+#include "matrix4x4.h"
+#include "runtime/core/meta/reflection/reflection.h"
 namespace QYHS
 {
+    REFLECTION_TYPE(TmpTestClass)
+        CLASS(TmpTestClass, Fields)
+    {
+        REFLECTION_BODY(TmpTestClass);
+    };
+
     REFLECTION_TYPE(Matrix4x4_)
         CLASS(Matrix4x4_, Fields)
     {
@@ -30,6 +39,7 @@ namespace QYHS
         float v14{ 0 };
         float v15{ 1.f };
     };
+
     class Matrix4x4
     {
     public:
@@ -65,16 +75,16 @@ namespace QYHS
         {
             Matrix4x4_ res;
 
-            res.v0 = m_mat[0][0];
-            res.v1 = m_mat[0][1];
-            res.v2 = m_mat[0][2];
-            res.v3 = m_mat[0][3];
-            res.v4 = m_mat[1][0];
-            res.v5 = m_mat[1][1];
-            res.v6 = m_mat[1][2];
-            res.v7 = m_mat[1][3];
-            res.v8 = m_mat[2][0];
-            res.v9 = m_mat[2][1];
+            res.v0  = m_mat[0][0];
+            res.v1  = m_mat[0][1];
+            res.v2  = m_mat[0][2];
+            res.v3  = m_mat[0][3];
+            res.v4  = m_mat[1][0];
+            res.v5  = m_mat[1][1];
+            res.v6  = m_mat[1][2];
+            res.v7  = m_mat[1][3];
+            res.v8  = m_mat[2][0];
+            res.v9  = m_mat[2][1];
             res.v10 = m_mat[2][2];
             res.v11 = m_mat[2][3];
             res.v12 = m_mat[3][0];
@@ -86,7 +96,7 @@ namespace QYHS
 
         Matrix4x4() { operator=(IDENTITY); }
 
-        Matrix4x4(const float(&float_array)[16])
+        Matrix4x4(const float (&float_array)[16])
         {
             m_mat[0][0] = float_array[0];
             m_mat[0][1] = float_array[1];
@@ -166,7 +176,7 @@ namespace QYHS
             makeTransform(position, scale, rotation);
         }
 
-        void fromData(const float(&float_array)[16])
+        void fromData(const float (&float_array)[16])
         {
             m_mat[0][0] = float_array[0];
             m_mat[0][1] = float_array[1];
@@ -186,18 +196,18 @@ namespace QYHS
             m_mat[3][3] = float_array[15];
         }
 
-        void toData(float(&float_array)[16]) const
+        void toData(float (&float_array)[16]) const
         {
-            float_array[0] = m_mat[0][0];
-            float_array[1] = m_mat[0][1];
-            float_array[2] = m_mat[0][2];
-            float_array[3] = m_mat[0][3];
-            float_array[4] = m_mat[1][0];
-            float_array[5] = m_mat[1][1];
-            float_array[6] = m_mat[1][2];
-            float_array[7] = m_mat[1][3];
-            float_array[8] = m_mat[2][0];
-            float_array[9] = m_mat[2][1];
+            float_array[0]  = m_mat[0][0];
+            float_array[1]  = m_mat[0][1];
+            float_array[2]  = m_mat[0][2];
+            float_array[3]  = m_mat[0][3];
+            float_array[4]  = m_mat[1][0];
+            float_array[5]  = m_mat[1][1];
+            float_array[6]  = m_mat[1][2];
+            float_array[7]  = m_mat[1][3];
+            float_array[8]  = m_mat[2][0];
+            float_array[9]  = m_mat[2][1];
             float_array[10] = m_mat[2][2];
             float_array[11] = m_mat[2][3];
             float_array[12] = m_mat[3][0];
@@ -207,8 +217,8 @@ namespace QYHS
         }
 
         /** Creates a standard 4x4 transformation matrix with a zero translation part from a rotation/scaling 3x3
-         * matrix.
-         */
+        * matrix.
+        */
         void setMatrix3x3(const Matrix3x3& mat3)
         {
             m_mat[0][0] = mat3.m_mat[0][0];
@@ -230,8 +240,8 @@ namespace QYHS
         }
 
         /** Creates a standard 4x4 transformation matrix with a zero translation part from a rotation/scaling
-         * Quaternion.
-         */
+        * Quaternion.
+        */
         Matrix4x4(const Quaternion& rot)
         {
             Matrix3x3 m3x3;
@@ -295,7 +305,7 @@ namespace QYHS
         }
 
         /** Matrix concatenation using '*'.
-         */
+        */
         Matrix4x4 operator*(const Matrix4x4& m2) const { return concatenate(m2); }
 
         /** Vector transformation using '*'.
@@ -329,7 +339,7 @@ namespace QYHS
         }
 
         /** Matrix addition.
-         */
+        */
         Matrix4x4 operator+(const Matrix4x4& m2) const
         {
             Matrix4x4 r;
@@ -358,7 +368,7 @@ namespace QYHS
         }
 
         /** Matrix subtraction.
-         */
+        */
         Matrix4x4 operator-(const Matrix4x4& m2) const
         {
             Matrix4x4 r;
@@ -406,7 +416,7 @@ namespace QYHS
         }
 
         /** Tests 2 matrices for equality.
-         */
+        */
         bool operator==(const Matrix4x4& m2) const
         {
             return !(m_mat[0][0] != m2.m_mat[0][0] || m_mat[0][1] != m2.m_mat[0][1] || m_mat[0][2] != m2.m_mat[0][2] ||
@@ -418,7 +428,7 @@ namespace QYHS
         }
 
         /** Tests 2 matrices for inequality.
-         */
+        */
         bool operator!=(const Matrix4x4& m2) const
         {
             return m_mat[0][0] != m2.m_mat[0][0] || m_mat[0][1] != m2.m_mat[0][1] || m_mat[0][2] != m2.m_mat[0][2] ||
@@ -463,7 +473,7 @@ namespace QYHS
         -----------------------------------------------------------------------
         */
         /** Sets the translation transformation part of the matrix.
-         */
+        */
         void setTrans(const Vector3& v)
         {
             m_mat[0][3] = v.x;
@@ -472,7 +482,7 @@ namespace QYHS
         }
 
         /** Extracts the translation transformation part of the matrix.
-         */
+        */
         Vector3 getTrans() const { return Vector3(m_mat[0][3], m_mat[1][3], m_mat[2][3]); }
 
         Matrix4x4 buildViewportMatrix(uint32_t width, uint32_t height)
@@ -530,7 +540,7 @@ namespace QYHS
             }
 
             Vector3 left = up.crossProduct(normal);
-            up = normal.crossProduct(left);
+            up           = normal.crossProduct(left);
 
             left.normalise();
             up.normalise();
@@ -542,7 +552,7 @@ namespace QYHS
         }
 
         /** Builds a translation matrix
-         */
+        */
         void makeTrans(const Vector3& v)
         {
             m_mat[0][0] = 1.0;
@@ -584,7 +594,7 @@ namespace QYHS
         }
 
         /** Gets a translation matrix.
-         */
+        */
         static Matrix4x4 getTrans(const Vector3& v)
         {
             Matrix4x4 r;
@@ -610,7 +620,7 @@ namespace QYHS
         }
 
         /** Gets a translation matrix - variation for not using a vector.
-         */
+        */
         static Matrix4x4 getTrans(float t_x, float t_y, float t_z)
         {
             Matrix4x4 r;
@@ -641,7 +651,7 @@ namespace QYHS
         -----------------------------------------------------------------------
         */
         /** Sets the scale part of the matrix.
-         */
+        */
         void setScale(const Vector3& v)
         {
             m_mat[0][0] = v.x;
@@ -650,7 +660,7 @@ namespace QYHS
         }
 
         /** Gets a scale matrix.
-         */
+        */
         static Matrix4x4 getScale(const Vector3& v)
         {
             Matrix4x4 r;
@@ -675,7 +685,7 @@ namespace QYHS
         }
 
         /** Gets a scale matrix - variation for not using a vector.
-         */
+        */
         static Matrix4x4 buildScaleMatrix(float s_x, float s_y, float s_z)
         {
             Matrix4x4 r;
@@ -743,7 +753,7 @@ namespace QYHS
         bool hasNegativeScale() const { return determinant() < 0; }
 
         /** Extracts the rotation / scaling part as a quaternion from the Matrix.
-         */
+        */
         Quaternion extractQuaternion() const
         {
             Matrix3x3 m3x3;
@@ -775,7 +785,7 @@ namespace QYHS
         void makeInverseTransform(const Vector3& position, const Vector3& scale, const Quaternion& orientation);
 
         /** Decompose a Matrix4 to orientation / scale / position.
-         */
+        */
         void decomposition(Vector3& position, Vector3& scale, Quaternion& orientation) const;
 
         void decompositionWithoutScale(Vector3& position, Quaternion& rotation) const;

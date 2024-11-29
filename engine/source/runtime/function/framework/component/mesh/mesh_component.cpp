@@ -6,6 +6,7 @@
 #include "function/framework/component/transform/transform_component.h"
 #include "resource/asset_manager/asset_manager.h"
 #include "resource/type/data/material.h"
+#include "function/framework/component/animation/animation.h"
 #include <iostream>
 namespace QYHS
 {
@@ -16,9 +17,25 @@ namespace QYHS
 		if (transform_component->isDirty())
 		{
 			std::vector<GameObjectPartDesc>	dirty_mesh_parts;
-
+			SkeletonAnimationResult animation_result;
+			animation_result.m_transforms.push_back({ Matrix4x4::IDENTITY });
+			AnimationComponent* animation_component = m_parent_object.lock()->TryGetComponent(AnimationComponent);
+			if (animation_component)
+			{
+				std::vector<AnimationResultElement> nodes = animation_component->getResult().node;
+				for (auto& node : nodes)
+				{
+					animation_result.m_transforms.push_back({ Matrix4x4(node.transform) });
+				}
+			}
 			for (GameObjectPartDesc& part : m_raw_meshes)
 			{
+				if (animation_component)
+				{
+					
+					part.m_skeleton_animation_result = animation_result;
+					part.m_skeleton_binding_desc.m_skeleton_binding_file = part.m_mesh_desc.m_mesh_file;
+				}
 				Matrix4x4 local_transform_matrix = part.m_transform_desc.m_transform_matrix;
 				part.m_transform_desc.m_transform_matrix = transform_component->getMatrix() * local_transform_matrix;
 				Vector3 translate = part.m_transform_desc.m_transform_matrix.getTrans();

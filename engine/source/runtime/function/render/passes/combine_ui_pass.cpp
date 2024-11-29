@@ -38,16 +38,13 @@ namespace QYHS
 		layout_create_info.pBindings = layout_bindings;
 		layout_create_info.pNext = nullptr;
 
-		if (vkCreateDescriptorSetLayout(m_vulkan_rhi->m_device, &layout_create_info, nullptr, &m_descriptors[0].descriptor_set_layout) != VK_SUCCESS)
-		{
-			throw std::runtime_error("failed to create combine ui pass descriptor set layout");
-		}
+		m_vulkan_rhi->createDescriptorSetLayout(&layout_create_info, nullptr, m_descriptors[0].descriptor_set_layout);
 	}
 
 	void CombineUIPass::setupPipelines()
 	{
 		m_render_pipelines.resize(1);
-		VkDescriptorSetLayout  descriptorSetLayout[1] = { m_descriptors[0].descriptor_set_layout };
+		VkDescriptorSetLayout  descriptorSetLayout[1] = { *m_descriptors[0].descriptor_set_layout };
 		VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
 		pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
 		uint32_t descriptorset_layout_count = static_cast<uint32_t>(sizeof(descriptorSetLayout) / sizeof(descriptorSetLayout[0]));
@@ -177,16 +174,7 @@ namespace QYHS
 
 	void CombineUIPass::setupDescriptorSet()
 	{
-		VkDescriptorSetAllocateInfo allocate_info{};
-		allocate_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-		allocate_info.descriptorPool = m_vulkan_rhi->getDescriptorPool();
-		allocate_info.descriptorSetCount = 1;
-		allocate_info.pSetLayouts = &m_descriptors[0].descriptor_set_layout;
-		allocate_info.pNext = nullptr;
-		if (vkAllocateDescriptorSets(m_vulkan_rhi->m_device, &allocate_info, &m_descriptors[0].descriptor_set) != VK_SUCCESS)
-		{
-			throw std::runtime_error("failed to allocate combine ui descriptor set");
-		}
+		m_vulkan_rhi->allocateDescriptorSets(m_descriptors[0].descriptor_set_layout, 1, m_descriptors[0].descriptor_set);
 
 		VkDescriptorImageInfo per_frame_scene_input_attachment_info = {};
 		per_frame_scene_input_attachment_info.sampler = VulkanUtils::getOrCreateNearestSampler(m_vulkan_rhi->getPhysicalDevice(),m_vulkan_rhi->getDevice());
@@ -203,7 +191,7 @@ namespace QYHS
 		VkWriteDescriptorSet& per_frame_scene_input_attachment_write_info = post_process_descriptor_writes_info[0];
 		per_frame_scene_input_attachment_write_info.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 		per_frame_scene_input_attachment_write_info.pNext                 = NULL;
-		per_frame_scene_input_attachment_write_info.dstSet                = m_descriptors[0].descriptor_set;
+		per_frame_scene_input_attachment_write_info.dstSet                = *m_descriptors[0].descriptor_set;
 		per_frame_scene_input_attachment_write_info.dstBinding            = 0;
 		per_frame_scene_input_attachment_write_info.dstArrayElement       = 0;
 		per_frame_scene_input_attachment_write_info.descriptorType        = VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT;
@@ -213,7 +201,7 @@ namespace QYHS
 		VkWriteDescriptorSet& per_frame_ui_input_attachment_write_info = post_process_descriptor_writes_info[1];
 		per_frame_ui_input_attachment_write_info.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 		per_frame_ui_input_attachment_write_info.pNext                 = NULL;
-		per_frame_ui_input_attachment_write_info.dstSet                = m_descriptors[0].descriptor_set;
+		per_frame_ui_input_attachment_write_info.dstSet                = *m_descriptors[0].descriptor_set;
 		per_frame_ui_input_attachment_write_info.dstBinding            = 1;
 		per_frame_ui_input_attachment_write_info.dstArrayElement       = 0;
 		per_frame_ui_input_attachment_write_info.descriptorType        = VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT;
@@ -241,7 +229,7 @@ namespace QYHS
 		
 		vkCmdBindDescriptorSets(m_vulkan_rhi->getCurrentCommandBuffer(), VK_PIPELINE_BIND_POINT_GRAPHICS,
 			m_render_pipelines[0].pipeline_layout, 0, 1,
-			&m_descriptors[0].descriptor_set, 0, nullptr);
+			m_descriptors[0].descriptor_set, 0, nullptr);
 
 		vkCmdDraw(m_vulkan_rhi->getCurrentCommandBuffer(), 3, 1, 0, 0);
 	}
@@ -263,7 +251,7 @@ namespace QYHS
 		VkWriteDescriptorSet& per_frame_scene_input_attachment_write_info = post_process_descriptor_writes_info[0];
 		per_frame_scene_input_attachment_write_info.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 		per_frame_scene_input_attachment_write_info.pNext                 = NULL;
-		per_frame_scene_input_attachment_write_info.dstSet                = m_descriptors[0].descriptor_set;
+		per_frame_scene_input_attachment_write_info.dstSet                = *m_descriptors[0].descriptor_set;
 		per_frame_scene_input_attachment_write_info.dstBinding            = 0;
 		per_frame_scene_input_attachment_write_info.dstArrayElement       = 0;
 		per_frame_scene_input_attachment_write_info.descriptorType        = VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT;
@@ -273,7 +261,7 @@ namespace QYHS
 		VkWriteDescriptorSet& per_frame_ui_input_attachment_write_info = post_process_descriptor_writes_info[1];
 		per_frame_ui_input_attachment_write_info.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 		per_frame_ui_input_attachment_write_info.pNext                 = NULL;
-		per_frame_ui_input_attachment_write_info.dstSet                = m_descriptors[0].descriptor_set;
+		per_frame_ui_input_attachment_write_info.dstSet                = *m_descriptors[0].descriptor_set;
 		per_frame_ui_input_attachment_write_info.dstBinding            = 1;
 		per_frame_ui_input_attachment_write_info.dstArrayElement       = 0;
 		per_frame_ui_input_attachment_write_info.descriptorType        = VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT;

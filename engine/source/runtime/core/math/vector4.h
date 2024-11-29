@@ -194,4 +194,4 @@ namespace QYHS
         static const Vector4 UNIT_SCALE;
     };
 
-} // namespace Piccolo
+}

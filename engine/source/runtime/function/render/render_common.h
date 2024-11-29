@@ -6,9 +6,18 @@ namespace QYHS
 	static uint32_t const s_mesh_vertex_blending_max_joint_count = 1024;
 	static uint32_t const s_max_point_light_count = 15;
 
-	struct VulkanMeshInstance
+	struct  VulkanMeshInstance
 	{
-		Matrix4x4 model_matrix;
+		float enable_vertex_blending;
+		//float     _padding_enable_vertex_blending_1;
+		//float     _padding_enable_vertex_blending_2;
+		//float     _padding_enable_vertex_blending_3;
+		alignas(16)  Matrix4x4 model_matrix;
+	};
+
+	struct MeshPerdrawcallVertexBlendingStorageBufferObject
+	{
+		Matrix4x4 joint_matrices[s_mesh_vertex_blending_max_joint_count * mesh_per_drawcall_max_instance_count];
 	};
 
 	struct MeshPerdrawcallStorageBufferObject

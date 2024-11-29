@@ -4,8 +4,8 @@
 namespace QYHS
 {
 	template<>
-	Json Serializer::write(const AnimationComponet&instance);
+	Json Serializer::write(const AnimationComponent&instance);
 	template<>
-	AnimationComponet & Serializer::read(const Json & json_context,AnimationComponet & instance);
+	AnimationComponent & Serializer::read(const Json & json_context,AnimationComponent & instance);
 }//namespace
 

@@ -19,6 +19,13 @@ namespace QYHS
 				VulkanMesh& mesh = render_resource->getEntityMesh(entity);
 				node.p_mesh = &mesh;
 				node.node_id = entity.m_instance_id;
+				assert(entity.m_joint_matrices.size() <= s_mesh_vertex_blending_max_joint_count);
+				if (!entity.m_joint_matrices.empty())
+				{
+					node.joint_count = entity.m_joint_matrices.size();
+					node.joint_matrices = entity.m_joint_matrices.data();
+					node.enable_vertex_blending = entity.enable_vertex_blending;
+				}
 			}
 		}
 	}

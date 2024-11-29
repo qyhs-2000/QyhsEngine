@@ -167,7 +167,6 @@ namespace QYHS
 		void initialize();
 		void cleanup();
 		VkCommandBuffer beginSingleTimeCommands();
-
 		void endSingleTimeCommands(VkCommandBuffer commandBuffer);
 		void waitForFence();
 		void getNextImage(std::function<void()> update_pass_after_recreate_swap_chain);
@@ -180,6 +179,11 @@ namespace QYHS
 		void destroyImageView(VkImageView image_view);
 		void freeMemory(VkDeviceMemory memory);
 		void destroyFrameBuffer(VkFramebuffer framebuffer);
+		void updateDescriptorSet(uint32_t write_count,VkWriteDescriptorSet * p_descriptor_write,uint32_t copy_count = 0,const VkCopyDescriptorSet * p_descriptor_copies = nullptr);
+		void allocateDescriptorSets(VkDescriptorSetLayout * p_descriptor_set_layout,uint32_t descriptor_set_count,VkDescriptorSet * &p_descriptor_set,VkDescriptorSetAllocateInfo * p_next = NULL);
+		void createStorageBuffer(VkDeviceSize buffer_size,VkBuffer &storage_buffer,VkDeviceMemory &storage_buffer_memory);
+		void cmdBindDescriptorSets(VkPipelineBindPoint bind_point,VkPipelineLayout * pipeline_layout, int first_set, int set_count, const VkDescriptorSet* const* pDescriptorSets, uint32_t dynamic_offset_count, const uint32_t* p_dynamic_offsets);
+		void createDescriptorSetLayout(VkDescriptorSetLayoutCreateInfo* create_info, const VkAllocationCallbacks * callbacks,VkDescriptorSetLayout*& p_descriptor_set_layout);
 		int getMaxFrameInFlight() { return MAX_FRAMES_IN_FLIGHT; }
 		VkDevice getDevice() { return m_device; }
 		VkPhysicalDevice getPhysicalDevice() { return physical_device; }
