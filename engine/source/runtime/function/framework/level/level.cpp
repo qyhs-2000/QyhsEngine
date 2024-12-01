@@ -6,6 +6,8 @@
 #include "resource/common/object.h"
 #include <resource/asset_manager/asset_manager.h>
 #include "engine.h"
+#include "core/utils/utils.h"
+
 namespace QYHS
 {
 	void Level::tick(double delta_time)
@@ -20,7 +22,7 @@ namespace QYHS
 			m_current_active_character->tick(delta_time);
 		}
 	}
-	
+
 	bool Level::load(const std::string& level_url)
 	{
 		if (level_url.empty())return false;
@@ -31,10 +33,10 @@ namespace QYHS
 		{
 			return false;
 		}
-		
+
 		for (auto& instance : level_res.m_objects)
 		{
-			createGameObject(instance);
+			createGameObject(&instance);
 		}
 
 		for (auto& object_pair : m_game_objects)
@@ -53,7 +55,7 @@ namespace QYHS
 
 		return true;
 	}
-	void Level::createGameObject(ObjectInstanceResource & instance_res)
+	std::shared_ptr<GameObject> Level::createGameObject(ObjectInstanceResource * instance_res)
 	{
 		GameObjectID game_object_id = m_go_id_allocator.allocateId();
 		std::shared_ptr<GameObject> game_object;
@@ -67,6 +69,7 @@ namespace QYHS
 		}
 		game_object->load(instance_res);
 		m_game_objects.emplace(game_object_id, game_object);
+		return game_object;
 	}
 	std::unordered_map<GameObjectID, std::shared_ptr<GameObject>>& Level::getObjectsInLevel()
 	{
@@ -80,6 +83,23 @@ namespace QYHS
 			return m_game_objects[gobject_id];
 		}
 		return std::weak_ptr<GameObject>();
+	}
+
+	bool Level::importModel_OBJ(std::string file_path)
+	{
+		ObjectInstanceResource instance_res;
+		//initDefaultInstanceRes(instance_res);
+		std::shared_ptr<GameObject> gobject = createGameObject(nullptr);
+		TransformComponent* transform_component = new TransformComponent();
+		transform_component->postLoadResource(gobject);
+		gobject->tryAddComponent(transform_component);
+		MeshComponent *mesh_component = new MeshComponent();
+		SubMeshRes sub_mesh_res;
+		sub_mesh_res.m_obj_file_ref = file_path;
+		mesh_component->m_mesh_res.m_sub_meshes.push_back(sub_mesh_res);
+		mesh_component->postLoadResource(gobject);
+		gobject->tryAddComponent(mesh_component);
+		return true;
 	}
 
 	bool Level::save()

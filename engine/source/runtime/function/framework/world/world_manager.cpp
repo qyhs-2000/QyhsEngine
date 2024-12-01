@@ -4,8 +4,17 @@
 #include <resource/type/world_resource.h>
 #include <resource/config_manager/config_manager.h>
 #include <resource/asset_manager/asset_manager.h>
+#include "core/utils/utils.h"
+#include <iostream>
 namespace QYHS
 {
+	std::unordered_map<std::string, FileType> WorldManager::file_types =
+	{
+		{"OBJ",FileType::OBJ},
+		{"FBX",FileType::FBX},
+		{"GLTF",FileType::GLTF}
+	};
+
 	void WorldManager::tick(double delta_time)
 	{
 		if (!b_world_load)
@@ -74,6 +83,29 @@ namespace QYHS
 			return;
 		}
 		m_current_active_level.lock()->save();
+	}
+
+	void WorldManager::loadOBJFile(std::string file_path)
+	{
+		std::string extension = Helper::toUpper(Helper::getFileExtension(file_path));
+		auto iter = file_types.find(extension);
+		if (iter == file_types.end())
+		{
+			std::cout << "Cann't load invalid extension file" << std::endl;
+			return;
+		}
+		if (iter->second == FileType::OBJ)
+		{
+			if (m_current_active_level.lock())
+			{
+				std::shared_ptr<Level> current_level = m_current_active_level.lock();
+				if (!current_level->importModel_OBJ(file_path))
+				{
+					throw std::runtime_error("failed to import obj model!");
+				}
+			}
+		}
+		
 	}
 
 }

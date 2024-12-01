@@ -13,11 +13,10 @@ namespace QYHS
 	public:
 		virtual void tick(double time) override;
 		virtual void postLoadResource(std::weak_ptr<GameObject> parent_object) override;
-		float test2;
-	private:
 		std::vector<GameObjectPartDesc> m_raw_meshes;
 		META(Enable)
 		MeshComponentRes m_mesh_res;
+	private:
 		bool is_dirty = true;
 		float test;
 	};

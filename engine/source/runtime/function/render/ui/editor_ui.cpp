@@ -16,6 +16,8 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
 #include <stb_image.h>
+
+#include "core/utils/utils.h"
 namespace QYHS
 {
 	void  drawVecControl(const std::string& label,QYHS::Vector3& values,
@@ -587,7 +589,12 @@ namespace QYHS
 				}
 				if (ImGui::MenuItem("Open File"))
 				{
-					//helper::fileDialog(param,)
+					FileDialogParam param;
+					param.descriptions = ".obj";
+					param.extensions.push_back("obj");
+					Helper::fileDialog(param, [=](std::string file_name) {
+						g_runtime_global_context.m_world_manager->loadOBJFile(file_name);
+						});
 				}
 				if (ImGui::BeginMenu("Debug"))
 				{

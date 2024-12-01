@@ -5,6 +5,8 @@
 #include <core/meta/reflection/reflection.h>
 #include <memory>
 #include <memory.h>
+#include <string>
+#include "core/utils/utils.h"
 namespace QYHS
 {
 	class Component;
@@ -14,7 +16,7 @@ namespace QYHS
 		GameObject(GameObjectID id) :m_id{ id } {}
 		void tick(double delta_time);
 		GameObjectID getObjectId() { return m_id; }
-		bool load(const class ObjectInstanceResource& instance_resource);
+		bool load(const class ObjectInstanceResource *  instance_resource);
 		bool hasComponent(std::string component_type_name);
 		template<typename TComponent>
 		TComponent* tryGetComponent(const std::string& component_type_name)
@@ -28,13 +30,21 @@ namespace QYHS
 			}
 			return nullptr;
 		}
+
+		template<typename TComponent>
+		bool tryAddComponent(TComponent * component)
+		{
+			std::string class_name = Helper::getClassNameExceptNamespace(typeid(TComponent).name());
+			m_components.push_back(Reflection::ReflectionPtr<Component>(class_name,component));
+			return true;
+		}
 		void save(class ObjectInstanceResource& instance_res);
 		std::string m_name;
 		std::vector<Reflection::ReflectionPtr<Component>> &getComponents() { return m_components; }
 		bool shouldComponentTick(std::string component_type_name);
 #define TryGetComponent(component_type) tryGetComponent<component_type>(#component_type);
 	private:
-		std::vector<Reflection::ReflectionPtr<Component>> m_components;
+		std::vector<Reflection::ReflectionPtr<Component>> m_components{};
 		GameObjectID	m_id;
 		std::string m_definition_url;
 	};

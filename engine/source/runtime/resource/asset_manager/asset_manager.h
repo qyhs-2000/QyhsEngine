@@ -57,7 +57,7 @@ namespace QYHS
 			}
 			// write to json object and dump to string
 			Json &&        asset_json      = Serializer::write(output_asset);
-			std::string&& asset_json_text = asset_json.dump();
+			std::string asset_json_text = asset_json.dump();
 
 			// write to file
 			asset_json_file << asset_json_text;

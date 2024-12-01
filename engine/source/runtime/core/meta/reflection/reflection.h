@@ -159,11 +159,12 @@ namespace QYHS
 		private:
 		};
 
-
 		template<typename T>
 		class ReflectionPtr
 		{
 		public:
+			ReflectionPtr(std::string type_name, T* instance) :m_type_name(type_name), m_instance(instance) {};
+			ReflectionPtr() :m_type_name(), m_instance(nullptr) {};
 			void setTypeName(std::string name) { m_type_name = name; }
 			T*& getPtrReference() { return m_instance; }
 			T* operator->() { return m_instance; }
@@ -180,9 +181,5 @@ namespace QYHS
 			std::string m_type_name;
 		};
 
-
-
-
-
-	}
+	};
 }

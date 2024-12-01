@@ -9,9 +9,9 @@
 #include "resource/asset_manager/asset_manager.h"
 #include "resource/type/global_rendering_resource.h"
 #include "render_camera.h"
+#include "core/utils/utils.h"
 namespace QYHS
 {
-
 	void RenderSystem::tick()
 	{
 		MotorComponent motor;
@@ -65,7 +65,15 @@ namespace QYHS
 					}
 					render_entity.mesh_asset_id = m_render_scene->getMeshAssetIdAllocator().allocateGUId(mesh_source);
 					//material
-					MaterialSourceDesc material_source = { game_object_part.m_material_desc.m_base_colour_texture_file };
+					MaterialSourceDesc material_source ;
+					if (game_object_part.m_material_desc.m_with_texture)
+					{
+						material_source = { game_object_part.m_material_desc.m_base_colour_texture_file };
+					}
+					else
+					{
+						material_source = { "E:/VS_Project/QyhsEngine/engine/source/runtime/asset/texture/default/albedo.jpg"};
+					}
 					const bool is_material_loaded = m_render_scene->getMaterialAssetIdAllocator().hasElement(material_source);
 					RenderMaterialData material_data;
 					if (!is_material_loaded)

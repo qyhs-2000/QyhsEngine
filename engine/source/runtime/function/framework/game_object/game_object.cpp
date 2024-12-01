@@ -17,12 +17,15 @@ namespace QYHS
 			}
 		}
 	}
-	bool GameObject::load(const ObjectInstanceResource& instance_resource)
+	bool GameObject::load(const ObjectInstanceResource* instance_resource)
 	{
-		m_name = instance_resource.m_name;
+		if (instance_resource == nullptr)
+			return false;
+
+		m_name = instance_resource->m_name;
 		m_components.clear();
 
-		m_components = instance_resource.m_instanced_components;
+		m_components = instance_resource->m_instanced_components;
 		for (auto& component : m_components)
 		{
 			if (component != nullptr)
@@ -32,10 +35,10 @@ namespace QYHS
 		}
 
 		//load object definition components
-		m_definition_url = instance_resource.m_definition;
+		m_definition_url = instance_resource->m_definition;
 		ObjectDefinitionResource object_definition_resource;
 		const bool load_object_definition_success = g_runtime_global_context.m_asset_manager->loadAsset(m_definition_url, object_definition_resource);
-		assert(load_object_definition_success && "failed to load object definition resource");
+		//assert(load_object_definition_success && "failed to load object definition resource");
 
 		for (auto& component : object_definition_resource.m_components)
 		{

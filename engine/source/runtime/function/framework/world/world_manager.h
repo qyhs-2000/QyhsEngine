@@ -4,6 +4,13 @@
 #include <string>
 namespace QYHS
 {
+	enum class FileType
+	{
+		OBJ,
+		FBX,
+		GLTF
+	};
+
 	class WorldManager
 	{
 	public:
@@ -12,6 +19,7 @@ namespace QYHS
 		bool loadWorld(const std::string& world_url);
 		bool loadLevel(const std::string& level_url);
 		void saveCurrentLevel();
+		void loadOBJFile(std::string file_path);
 		Level		m_current_level;
 		std::weak_ptr<Level> getCurrentActiveLevel() { return m_current_active_level; }
 	private:
@@ -20,5 +28,6 @@ namespace QYHS
 		std::string m_current_world_url;
 		std::unordered_map<std::string, std::shared_ptr<Level>> m_loaded_levels;
 		std::weak_ptr<Level> m_current_active_level;
+		static std::unordered_map<std::string, FileType> file_types;
 	};
 }

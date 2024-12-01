@@ -125,7 +125,7 @@ static void dump(const Json::array &values, string &out) {
 
 static void dump(const Json::object &values, string &out) {
     bool first = true;
-    out += "{";
+    out += "{\n";
     for (const auto &kv : values) {
         if (!first)
             out += ", ";
@@ -134,7 +134,7 @@ static void dump(const Json::object &values, string &out) {
         kv.second.dump(out);
         first = false;
     }
-    out += "}";
+    out += "}\n";
 }
 
 void Json::dump(string &out) const {

@@ -10,6 +10,7 @@
 #include <filesystem>
 #include <fstream>
 #include <ostream>
+
 #include <tiny_obj_loader.h>
 #include <core/base/macro.h>
 #include "vulkan_utils.h"
