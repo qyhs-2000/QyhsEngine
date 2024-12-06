@@ -590,8 +590,9 @@ namespace QYHS
 				if (ImGui::MenuItem("Open File"))
 				{
 					FileDialogParam param;
-					param.descriptions = ".obj";
+					param.descriptions = ".obj,.gltf";
 					param.extensions.push_back("obj");
+					param.extensions.push_back("gltf");
 					Helper::fileDialog(param, [=](std::string file_name) {
 						g_runtime_global_context.m_world_manager->loadOBJFile(file_name);
 						});
@@ -628,8 +629,6 @@ namespace QYHS
 		showEditorMenu(&m_editor_show_menu_ui);
 		showGameInstancesUI(&m_editor_show_game_instances);
 		showEditorGameUI(&m_game_engine_window_open);
-		showComponentDetails(&m_editor_show_component_details);
+		//showComponentDetails(&m_editor_show_component_details);
 	}
-
-
 }

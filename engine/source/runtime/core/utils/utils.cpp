@@ -156,5 +156,11 @@ namespace QYHS
 			}
 			return class_name.substr(index+1);
 		}
+		std::string getNameByFile(std::string file_name)
+		{
+			std::string file = file_name.substr(file_name.rfind('\\') + 1);
+			std::string result = file.substr(0,file.rfind('.'));
+			return result;
+		}
 	}
 }

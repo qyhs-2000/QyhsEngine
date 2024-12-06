@@ -115,6 +115,9 @@ namespace QYHS
 			case GLFW_KEY_Q:
 				m_command &= (k_complement_control_command ^ (unsigned int)EditorCommand::camera_down);
 				break;
+			case GLFW_KEY_DELETE:
+				m_command &= (k_complement_control_command ^ (unsigned int)EditorCommand::delete_object);
+				break;
 			default:
 				break;
 			}
@@ -206,6 +209,10 @@ namespace QYHS
 		if (m_command & (unsigned int)EditorCommand::camera_down)
 		{
 			camera_relative_position += Vector3{ 0.f,0.f,-1.f }*m_camera_speed;
+		}
+		if (m_command & (unsigned int)EditorCommand::delete_object)
+		{
+			
 		}
 		if (b_control_camera)
 		{

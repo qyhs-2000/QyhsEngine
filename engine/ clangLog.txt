@@ -171,7 +171,6 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   GLFW/glfw3.h glm/glm.hpp glm/gtc/matrix_transform.hpp glm/gtx/hash.hpp \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/rhi/rhi.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/model.h \
-  tinygltf/tiny_gltf.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/Texture.h \
   vulkanmemoryallocator/include/vk_mem_alloc.h core/math/vector2.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/animation/animation.h \
@@ -198,6 +197,9 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/motor/motor_component.h \
   core/math/transform.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/transform/transform_component.h \
+  function/framework/component/hierarchy/hierarchy_component.h \
+  function/framework/component/transform/transform_component.h \
+  function/framework/component/mesh/mesh_component.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/game_object/character.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/game_object/game_object.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/game_object/game_object_id_allocator.h \
@@ -205,6 +207,7 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   core/utils/utils.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/level/level.h \
   function/framework/game_object/character.h \
+  function/framework/component/ecs.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/world/world_manager.h \
   function/framework/level/level.h resource/type/world_resource.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/global/global_context.h \

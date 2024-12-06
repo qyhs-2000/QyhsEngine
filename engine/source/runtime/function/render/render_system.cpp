@@ -10,6 +10,7 @@
 #include "resource/type/global_rendering_resource.h"
 #include "render_camera.h"
 #include "core/utils/utils.h"
+#include "core/utils/model_importer_gltf.h"
 namespace QYHS
 {
 	void RenderSystem::tick()
@@ -48,6 +49,8 @@ namespace QYHS
 					render_entity.m_instance_id = m_render_scene->getInstanceIdAllocator().allocateGUId(part_id);
 					render_entity.model_matrix = game_object_part.m_transform_desc.m_transform_matrix;
 					render_entity.m_joint_matrices.resize(game_object_part.m_skeleton_animation_result.m_transforms.size());
+					render_entity.mesh_asset_id = game_object_part.m_mesh_id;
+					render_entity.material_asset_id = game_object_part.m_material_id;
 					for (size_t i = 0; i < render_entity.m_joint_matrices.size(); ++i)
 					{
 						render_entity.m_joint_matrices[i] = game_object_part.m_skeleton_animation_result.m_transforms[i].m_matrix;
@@ -55,42 +58,6 @@ namespace QYHS
 					render_entity.enable_vertex_blending = game_object_part.m_skeleton_animation_result.m_transforms.size() > 1;
 					m_render_scene->addInstancedIdToGameObjectIdMap(render_entity.m_instance_id, gobject.getId());
 
-					//mesh
-					MeshSourceDesc mesh_source = { game_object_part.m_mesh_desc.m_mesh_file };
-					const bool is_mesh_loaded = m_render_scene->getMeshAssetIdAllocator().hasElement(mesh_source);
-					RenderMeshData mesh_data;
-					if (!is_mesh_loaded)
-					{
-						mesh_data = m_render_resource->loadMeshData(mesh_source);
-					}
-					render_entity.mesh_asset_id = m_render_scene->getMeshAssetIdAllocator().allocateGUId(mesh_source);
-					//material
-					MaterialSourceDesc material_source ;
-					if (game_object_part.m_material_desc.m_with_texture)
-					{
-						material_source = { game_object_part.m_material_desc.m_base_colour_texture_file };
-					}
-					else
-					{
-						material_source = { "E:/VS_Project/QyhsEngine/engine/source/runtime/asset/texture/default/albedo.jpg"};
-					}
-					const bool is_material_loaded = m_render_scene->getMaterialAssetIdAllocator().hasElement(material_source);
-					RenderMaterialData material_data;
-					if (!is_material_loaded)
-					{
-						material_data = m_render_resource->loadMaterialData(material_source);
-					}
-
-					render_entity.material_asset_id = m_render_scene->getMaterialAssetIdAllocator().allocateGUId(material_source);
-
-					if (!is_mesh_loaded)
-					{
-						m_render_resource->uploadGameObjectRenderResource(m_rhi, render_entity, mesh_data);
-					}
-					if (!is_material_loaded)
-					{
-						m_render_resource->uploadGameObjectRenderResource(m_rhi, render_entity, material_data);
-					}
 					if (!is_entity_in_scene)
 					{
 						m_render_scene->m_render_entities.push_back(render_entity);
@@ -128,6 +95,11 @@ namespace QYHS
 
 		}
 		m_swap_context.resetCameraSwapData();
+	}
+
+	void RenderSystem::postLoadMeshComponentRes(MeshComponentRes& mesh_res)
+	{
+
 	}
 
 	size_t RenderSystem::getGObjectIDByMeshID(size_t mesh_id)
@@ -220,7 +192,7 @@ namespace QYHS
 
 	void RenderSystem::uploadGameResource(RenderEntity* entity, RenderMeshData mesh_data)
 	{
-		m_render_resource->uploadGameObjectRenderResource(m_rhi, *entity, mesh_data);
+		m_render_resource->uploadGameObjectRenderResource(m_rhi, entity->mesh_asset_id, mesh_data);
 	}
 
 	void RenderSystem::setSelectedAxis(size_t selected_axis)
@@ -231,4 +203,71 @@ namespace QYHS
 	{
 		m_render_pipeline->initializeUIRenderBackend(ui);
 	}
+
+	size_t RenderSystem::createMaterial(RenderMaterialData& material_data)
+	{
+		size_t material_id = m_render_scene->getMaterialAssetIdAllocator().allocateNewGUId();
+		m_render_resource->getOrCreateVulkanMaterial(m_rhi, material_id, material_data);
+		return material_id;
+	}
+
+	size_t RenderSystem::postAndLoadMeshSource(const std::string& file_path)
+	{
+		//mesh
+		MeshSourceDesc mesh_source = { file_path };
+		const bool is_mesh_loaded = m_render_scene->getMeshAssetIdAllocator().hasElement(mesh_source);
+		
+		size_t mesh_asset_id = m_render_scene->getMeshAssetIdAllocator().allocateGUId(mesh_source);
+		if (!is_mesh_loaded)
+		{
+			RenderMeshData mesh_data;
+			
+			mesh_data = m_render_resource->loadMeshData(mesh_source);
+			m_render_resource->uploadGameObjectRenderResource(m_rhi, mesh_asset_id, mesh_data);
+		}
+		return mesh_asset_id;
+		
+	}
+
+	size_t RenderSystem::postAndLoadMaterialSource(MaterialRes & material_res,bool with_texture)
+	{
+		std::shared_ptr<AssetManager> asset_manager = g_runtime_global_context.m_asset_manager;
+		//material
+		MaterialSourceDesc material_source ;
+		if (with_texture)
+		{
+			material_source = { 
+				asset_manager->getFullPath(material_res.m_base_colour_texture_file).generic_string()
+				 };
+		}
+		else
+		{
+			material_source = { "E:/VS_Project/QyhsEngine/engine/source/runtime/asset/texture/default/albedo.jpg"};
+		}
+		const bool is_material_loaded = m_render_scene->getMaterialAssetIdAllocator().hasElement(material_source);
+
+		size_t material_asset_id = m_render_scene->getMaterialAssetIdAllocator().allocateGUId(material_source);
+		if (!is_material_loaded)
+		{
+			RenderMaterialData material_data;
+
+			material_data = m_render_resource->loadMaterialData(material_source);
+			m_render_resource->uploadGameObjectRenderResource(m_rhi, material_asset_id, material_data);
+		}
+		return material_asset_id;
+	}
+
+	size_t RenderSystem::createNewEntity(std::string name)
+	{
+		return size_t();
+	}
+
+	size_t RenderSystem::createMesh(RenderMeshData& mesh_data)
+	{
+		size_t mesh_id = m_render_scene->getMeshAssetIdAllocator().allocateNewGUId();
+		m_render_resource->getOrCreateVulkanMesh(m_rhi, mesh_id, mesh_data);
+		return mesh_id;
+	}
+
+
 }

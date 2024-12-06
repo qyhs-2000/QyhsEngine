@@ -8,8 +8,8 @@ namespace QYHS
 {
 	struct WindowCreateInfo
 	{
-		int width{ 1280 };
-		int height{ 960 };
+		int width { 1920 };
+		int height{ 1080};
 		const char* title{ "Qyhs" };
 		bool is_fullscreen{ false };
 	};

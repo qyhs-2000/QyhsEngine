@@ -39,14 +39,14 @@ namespace QYHS
 			throw std::runtime_error("falied to get entity mesh!");
 		}
 	}
-	void RenderResource::uploadGameObjectRenderResource(std::shared_ptr<RHI> rhi, RenderEntity render_entity, RenderMeshData mesh_data)
+	void RenderResource::uploadGameObjectRenderResource(std::shared_ptr<RHI> rhi, size_t asset_id, RenderMeshData mesh_data)
 	{
-		getOrCreateVulkanMesh(rhi, render_entity, mesh_data);
+		getOrCreateVulkanMesh(rhi, asset_id, mesh_data);
 	}
 
-	void RenderResource::uploadGameObjectRenderResource(std::shared_ptr<RHI> rhi, RenderEntity render_entity, RenderMaterialData material_data)
+	void RenderResource::uploadGameObjectRenderResource(std::shared_ptr<RHI> rhi, size_t material_asset_id, RenderMaterialData material_data)
 	{
-		getOrCreateVulkanMaterial(rhi, render_entity, material_data);
+		getOrCreateVulkanMaterial(rhi, material_asset_id, material_data);
 	}
 	RenderGUIDAllocator<MeshSourceDesc>& RenderResource::getMeshAssetIdAllocator()
 	{
@@ -151,6 +151,12 @@ namespace QYHS
                 break;
         }
 		return texture_data;
+	}
+
+	Material_ID RenderResource::createNewMaterial()
+	{
+
+		return Material_ID();
 	}
 
 	RenderMaterialData RenderResource::loadMaterialData(MaterialSourceDesc& material_source)
@@ -287,9 +293,8 @@ namespace QYHS
 		m_global_render_resource.storage_buffer.ringbuffer_end[current_frame_index] = m_global_render_resource.storage_buffer.ringbuffer_begin[current_frame_index];
 	}
 
-	VulkanMesh& RenderResource::getOrCreateVulkanMesh(std::shared_ptr<RHI> rhi, RenderEntity render_entity, RenderMeshData mesh_data)
+	VulkanMesh& RenderResource::getOrCreateVulkanMesh(std::shared_ptr<RHI> rhi, size_t asset_id, RenderMeshData mesh_data)
 	{
-		size_t asset_id = render_entity.mesh_asset_id;
 		auto iter = m_meshes.find(asset_id);
 		if (iter != m_meshes.end())
 		{
@@ -319,9 +324,9 @@ namespace QYHS
 			return mesh;
 		}
 	}
-	VulkanMaterial& RenderResource::getOrCreateVulkanMaterial(std::shared_ptr<RHI> rhi, RenderEntity render_entity, RenderMaterialData mesh_data)
+	VulkanMaterial& RenderResource::getOrCreateVulkanMaterial(std::shared_ptr<RHI> rhi, 
+								size_t material_asset_id, RenderMaterialData material_data)
 	{
-		size_t material_asset_id = render_entity.material_asset_id;
 		auto iter = m_materials.find(material_asset_id);
 		if (iter != m_materials.end())
 		{
@@ -338,8 +343,8 @@ namespace QYHS
 			VkPhysicalDevice physical_device = vulkan_rhi->getPhysicalDevice();
 			VkDevice device = vulkan_rhi->getDevice();
 
-			VkDeviceSize imageSize = mesh_data.m_base_color_texture->m_width * mesh_data.m_base_color_texture->m_height * 4;
-			unsigned int mip_levels = std::floor(std::log2(std::max(mesh_data.m_base_color_texture->m_width, mesh_data.m_base_color_texture->m_height))) + 1;
+			VkDeviceSize imageSize = material_data.m_base_color_texture->m_width * material_data.m_base_color_texture->m_height * 4;
+			unsigned int mip_levels = std::floor(std::log2(std::max(material_data.m_base_color_texture->m_width, material_data.m_base_color_texture->m_height))) + 1;
 
 			VkBuffer stagingBuffer;
 			VkDeviceMemory stagingBufferMemory;
@@ -347,17 +352,17 @@ namespace QYHS
 
 			void* data;
 			vkMapMemory(device, stagingBufferMemory, 0, imageSize, 0, &data);
-			memcpy(data, mesh_data.m_base_color_texture->m_pixels, static_cast<size_t>(imageSize));
+			memcpy(data, material_data.m_base_color_texture->m_pixels, static_cast<size_t>(imageSize));
 			vkUnmapMemory(device, stagingBufferMemory);
 
-			VulkanUtils::createImage(physical_device, device, mesh_data.m_base_color_texture->m_width, mesh_data.m_base_color_texture->m_height, VK_FORMAT_R8G8B8A8_SRGB, mip_levels, VK_SAMPLE_COUNT_1_BIT, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, material.base_color_texture_image, material.base_color_texture_image_memory);
+			VulkanUtils::createImage(physical_device, device, material_data.m_base_color_texture->m_width, material_data.m_base_color_texture->m_height, VK_FORMAT_R8G8B8A8_SRGB, mip_levels, VK_SAMPLE_COUNT_1_BIT, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, material.base_color_texture_image, material.base_color_texture_image_memory);
 
 			VulkanUtils::transitionImageLayout(vulkan_rhi, material.base_color_texture_image, VK_FORMAT_R8G8B8A8_SRGB, 1,mip_levels, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-			VulkanUtils::copyBufferToImage(vulkan_rhi, stagingBuffer, material.base_color_texture_image, static_cast<uint32_t>(mesh_data.m_base_color_texture->m_width), static_cast<uint32_t>(mesh_data.m_base_color_texture->m_height),1);
+			VulkanUtils::copyBufferToImage(vulkan_rhi, stagingBuffer, material.base_color_texture_image, static_cast<uint32_t>(material_data.m_base_color_texture->m_width), static_cast<uint32_t>(material_data.m_base_color_texture->m_height),1);
 
 			vkDestroyBuffer(device, stagingBuffer, nullptr);
 			vkFreeMemory(device, stagingBufferMemory, nullptr);
-			VulkanUtils::generateMipmaps(vulkan_rhi, material.base_color_texture_image, VK_FORMAT_R8G8B8A8_SRGB, mesh_data.m_base_color_texture->m_width, mesh_data.m_base_color_texture->m_height, mip_levels);
+			VulkanUtils::generateMipmaps(vulkan_rhi, material.base_color_texture_image, VK_FORMAT_R8G8B8A8_SRGB, material_data.m_base_color_texture->m_width, material_data.m_base_color_texture->m_height, mip_levels);
 			VulkanUtils::createTextureImageView(device, material.base_color_texture_image, material.base_color_texture_image_view, mip_levels);
 
 

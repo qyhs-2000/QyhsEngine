@@ -6,6 +6,7 @@
 #include <resource/asset_manager/asset_manager.h>
 #include "core/utils/utils.h"
 #include <iostream>
+#include <core/utils/model_importer_gltf.h>
 namespace QYHS
 {
 	std::unordered_map<std::string, FileType> WorldManager::file_types =
@@ -20,7 +21,7 @@ namespace QYHS
 		if (!b_world_load)
 		{
 			b_world_load = loadWorld(m_current_world_url);
-			
+
 		}
 		std::shared_ptr<Level> active_level = m_current_active_level.lock();
 		if (active_level)
@@ -33,7 +34,7 @@ namespace QYHS
 	{
 		b_world_load = false;
 		m_current_world_url = g_runtime_global_context.m_config_manager->getDefaultWorldUrl();
-		
+
 	}
 
 	bool WorldManager::loadWorld(const std::string& world_url)
@@ -94,18 +95,25 @@ namespace QYHS
 			std::cout << "Cann't load invalid extension file" << std::endl;
 			return;
 		}
-		if (iter->second == FileType::OBJ)
+		if (m_current_active_level.lock())
 		{
-			if (m_current_active_level.lock())
+			std::shared_ptr<Level> current_level = m_current_active_level.lock();
+			if (iter->second == FileType::OBJ)
 			{
-				std::shared_ptr<Level> current_level = m_current_active_level.lock();
 				if (!current_level->importModel_OBJ(file_path))
 				{
 					throw std::runtime_error("failed to import obj model!");
 				}
 			}
+			else if (iter->second == FileType::GLTF)
+			{
+				if (!import_model_gltf(current_level,file_path))
+				{
+					throw std::runtime_error("failed tot import gltf model!");
+				}
+			}
+
 		}
-		
 	}
 
 }

@@ -231,7 +231,6 @@ namespace QYHS
 		void createFramebuffers();
 		void loadModel();
 		void loadAssets();
-		void loadglTFFile(const std::string& path);
 		void createDescriptorPool();
 		void createCommandBuffers();
 		void createSyncObjects();

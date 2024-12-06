@@ -14,7 +14,7 @@ namespace QYHS
 	void MotorComponent::tick(double delta_time)
 	{
 		Component::tick(delta_time);
-		TransformComponent* transform_component = m_parent_object.lock()->TryGetComponent(TransformComponent);
+		TransformComponent* transform_component = m_owner.lock()->TryGetComponent(TransformComponent);
 		if (!transform_component) return;
 		Vector3 m_current_position = transform_component->getPosition();
 		m_target_position = m_current_position;

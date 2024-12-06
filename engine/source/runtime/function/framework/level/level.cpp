@@ -7,9 +7,28 @@
 #include <resource/asset_manager/asset_manager.h>
 #include "engine.h"
 #include "core/utils/utils.h"
+#include <core/utils/model_importer_gltf.h>
+
 
 namespace QYHS
 {
+	std::shared_ptr<GameObject> Level::createGameObject(ObjectInstanceResource * instance_res)
+	{
+		GameObjectID game_object_id = m_go_id_allocator.allocateId();
+		std::shared_ptr<GameObject> game_object;
+		try
+		{
+			game_object = std::make_shared<GameObject>(game_object_id);
+		}
+		catch (const std::exception& e)
+		{
+			std::cout << "can't create game object!" << std::endl;
+		}
+		game_object->load(instance_res);
+		m_game_objects.emplace(game_object_id, game_object);
+		return game_object;
+	}
+
 	void Level::tick(double delta_time)
 	{
 		for (const auto& pair : m_game_objects)
@@ -55,22 +74,7 @@ namespace QYHS
 
 		return true;
 	}
-	std::shared_ptr<GameObject> Level::createGameObject(ObjectInstanceResource * instance_res)
-	{
-		GameObjectID game_object_id = m_go_id_allocator.allocateId();
-		std::shared_ptr<GameObject> game_object;
-		try
-		{
-			game_object = std::make_shared<GameObject>(game_object_id);
-		}
-		catch (const std::exception& e)
-		{
-			std::cout << "can't create game object!" << std::endl;
-		}
-		game_object->load(instance_res);
-		m_game_objects.emplace(game_object_id, game_object);
-		return game_object;
-	}
+	
 	std::unordered_map<GameObjectID, std::shared_ptr<GameObject>>& Level::getObjectsInLevel()
 	{
 		return m_game_objects;
@@ -85,20 +89,63 @@ namespace QYHS
 		return std::weak_ptr<GameObject>();
 	}
 
+	std::shared_ptr<GameObject> Level::createGameObject(std::string name)
+	{
+		GameObjectID game_object_id = m_go_id_allocator.allocateId();
+		std::shared_ptr<GameObject> game_object;
+		try
+		{
+			game_object = std::make_shared<GameObject>(game_object_id);
+		}
+		catch (const std::exception& e)
+		{
+			std::cout << "can't create game object!" << std::endl;
+		}
+		game_object->m_name = name;
+		m_game_objects.emplace(game_object_id, game_object);
+		return game_object;
+	}
+
+	void Level::attachGObject(GameObjectID entity, GameObjectID parent, bool child_already_in_local_space)
+	{
+		assert(entity != parent);
+		if (hierarchy_component_manager.contain(entity))
+		{
+			detach(entity);
+		}
+		HierarchyComponent & parent_component = hierarchy_component_manager.create(entity);
+		parent_component.parent_id = parent;
+		TransformComponent* parent_transform_component = getGameObjectByID(parent).lock()->TryGetComponent(TransformComponent);
+		TransformComponent* transform_component = getGameObjectByID(entity).lock()->TryGetComponent(TransformComponent);
+		if (parent_transform_component != nullptr && transform_component != nullptr)
+		{
+			if (!child_already_in_local_space)
+			{
+				
+				Matrix4x4 inverse_matrix = parent_transform_component->world_matrix.inverse();
+				transform_component->matrixTransform(inverse_matrix);
+				transform_component->updateWorldMatrix();
+			}
+			transform_component->updateWorldMatrix_Parented(*parent_transform_component);
+
+		}
+	}
+
 	bool Level::importModel_OBJ(std::string file_path)
 	{
 		ObjectInstanceResource instance_res;
 		//initDefaultInstanceRes(instance_res);
 		std::shared_ptr<GameObject> gobject = createGameObject(nullptr);
-		TransformComponent* transform_component = new TransformComponent();
+		gobject->m_name = Helper::getNameByFile(file_path) + "_" + std::to_string(gobject->getObjectId());
+		gobject->TryAddComponent(TransformComponent);
+		auto transform_component = gobject->TryGetComponent(TransformComponent);
 		transform_component->postLoadResource(gobject);
-		gobject->tryAddComponent(transform_component);
-		MeshComponent *mesh_component = new MeshComponent();
+		gobject->TryAddComponent(MeshComponent);
+		auto *mesh_component = gobject->TryGetComponent(MeshComponent);
 		SubMeshRes sub_mesh_res;
 		sub_mesh_res.m_obj_file_ref = file_path;
 		mesh_component->m_mesh_res.m_sub_meshes.push_back(sub_mesh_res);
 		mesh_component->postLoadResource(gobject);
-		gobject->tryAddComponent(mesh_component);
 		return true;
 	}
 
@@ -129,5 +176,20 @@ namespace QYHS
 			LOG_ERROR("Failed to save level");
 		}
 		return is_save_success;
+	}
+
+	void Level::detach(GameObjectID gobject)
+	{
+		const HierarchyComponent* hierarchy_component = hierarchy_component_manager.getComponent(gobject);
+		if (hierarchy_component != nullptr)
+		{
+			TransformComponent* transform_component = getGameObjectByID(gobject).lock()->TryGetComponent(TransformComponent);
+			if (transform_component)
+			{
+				transform_component->applyTransform();
+			}
+
+		}
+		hierarchy_component_manager.remove(gobject);
 	}
 }

@@ -8,7 +8,7 @@
 #include <function/render/render_guid_allocator.h>
 namespace QYHS
 {
-	class Entity;
+	typedef size_t Entity;
 	class RenderScene
 	{
 	public:
@@ -19,7 +19,6 @@ namespace QYHS
 		void updateVisibleObjectAxisRenderNode(std::shared_ptr<RenderResource> render_resource);
 		void setVisibleAxisEntity(std::optional<RenderEntity> axis_entity);
 		size_t getGameObjectIDByInstance(size_t instance_id);
-
 		RenderGUIDAllocator<GameObjectPartId>& getInstanceIdAllocator();
 		RenderGUIDAllocator<MeshSourceDesc>& getMeshAssetIdAllocator();
 		RenderGUIDAllocator<MaterialSourceDesc>& getMaterialAssetIdAllocator();

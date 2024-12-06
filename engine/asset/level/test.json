@@ -74,7 +74,7 @@
 "position": {
 "x": 1.9459700584411621, "y": -0.38554000854492188, "z": 0}
 , "rotation": {
-"w": 0.70652997493743896, "x": 0, "y": 0, "z": -0.7076830267906189}
+"w": 0.70653033256530762, "x": 0, "y": 0, "z": -0.70768272876739502}
 , "scale": {
 "x": 0.99999302625656128, "y": 0.99999302625656128, "z": 1}
 }
@@ -847,4 +847,64 @@
 }
 , "$typeName": "MeshComponent"}
 ], "name": "Fence"}
+, {
+"definition": "", "instanced_components": [{
+"$context": {
+"transform": {
+"position": {
+"x": 0, "y": 6.4434542655944824, "z": 2.7716584205627441}
+, "rotation": {
+"w": 1, "x": 0, "y": 0, "z": 0}
+, "scale": {
+"x": 1, "y": 1, "z": 1}
+}
+}
+, "$typeName": "TransformComponent"}
+, {
+"$context": {
+"mesh_res": {
+"sub_meshes": [{
+"material": "", "obj_file_ref": "E:\\GithubClone\\WickedEngine\\Content\\models\\cylinder.obj", "transform": {
+"position": {
+"x": 0, "y": 0, "z": 0}
+, "rotation": {
+"w": 1, "x": 0, "y": 0, "z": 0}
+, "scale": {
+"x": 1, "y": 1, "z": 1}
+}
+}
+]}
+}
+, "$typeName": "MeshComponent"}
+], "name": ""}
+, {
+"definition": "", "instanced_components": [{
+"$context": {
+"transform": {
+"position": {
+"x": 0, "y": 2.8452649116516113, "z": 1.8140324354171753}
+, "rotation": {
+"w": 1, "x": 0, "y": 0, "z": 0}
+, "scale": {
+"x": 1, "y": 1, "z": 1}
+}
+}
+, "$typeName": "TransformComponent"}
+, {
+"$context": {
+"mesh_res": {
+"sub_meshes": [{
+"material": "", "obj_file_ref": "E:\\GithubClone\\WickedEngine\\Content\\models\\suzanne.obj", "transform": {
+"position": {
+"x": 0, "y": 0, "z": 0}
+, "rotation": {
+"w": 1, "x": 0, "y": 0, "z": 0}
+, "scale": {
+"x": 1, "y": 1, "z": 1}
+}
+}
+]}
+}
+, "$typeName": "MeshComponent"}
+], "name": "suzanne_28"}
 ]}

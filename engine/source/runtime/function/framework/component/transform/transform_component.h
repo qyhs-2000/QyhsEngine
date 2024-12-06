@@ -1,5 +1,8 @@
 #pragma once
 #include "function/framework/component/component.h"
+#include "function/framework/component/hierarchy/hierarchy_component.h"
+#include "function/framework/component/transform/transform_component.h"
+#include "function/framework/component/mesh/mesh_component.h"
 #include "core/math/transform.h"
 namespace QYHS
 {
@@ -15,14 +18,20 @@ namespace QYHS
         bool isDirty() { return m_is_dirty; }
         void setDirty(bool is_dirty) { m_is_dirty = is_dirty; }
         void setPosition(Vector3 position);
+        void setScale(Vector3 scale);
         const Vector3 getPosition() { return m_transform.m_position; }
         const Quaternion& getRotation() { return m_transform.m_rotation; }
         void setRotation(Quaternion new_quaternion) { m_transform.m_rotation = new_quaternion; }
+        void matrixTransform(const Matrix4x4& matrix);
+        void updateWorldMatrix();
+        void updateWorldMatrix_Parented(const TransformComponent & parent_transform_comp);
+        void applyTransform();
         Matrix4x4 getMatrix() { return m_transform.getMatrix(); }
         const Transform& getTransformConst() { return m_transform; }
+        Matrix4x4 world_matrix;
     protected:
         META(Enable)
-            Transform m_transform;
+            Transform m_transform;          //local transform
     private:
         bool m_is_dirty{ false };
     };

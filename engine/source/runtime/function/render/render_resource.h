@@ -12,6 +12,8 @@
 
 namespace QYHS
 {
+	typedef size_t Material_ID;
+	typedef size_t Mesh_ID;
 	struct StorageBuffer
 	{
 		VkBuffer global_ringbuffer;
@@ -51,12 +53,12 @@ namespace QYHS
 	public:
 		VulkanMaterial& getEntityMaterial(RenderEntity& entity);
 		VulkanMesh& getEntityMesh(RenderEntity& entity);
-		void uploadGameObjectRenderResource(std::shared_ptr<RHI> rhi,RenderEntity render_entity, RenderMeshData mesh_data);
-		void uploadGameObjectRenderResource(std::shared_ptr<RHI> rhi, RenderEntity render_entity, RenderMaterialData material_data);
+		void uploadGameObjectRenderResource(std::shared_ptr<RHI> rhi,size_t asset_id, RenderMeshData mesh_data);
+		void uploadGameObjectRenderResource(std::shared_ptr<RHI> rhi, size_t material_asset_id, RenderMaterialData material_data);
 		RenderGUIDAllocator<MeshSourceDesc>& getMeshAssetIdAllocator();
 		RenderMeshData loadMeshData(MeshSourceDesc& mesh_source);
-		VulkanMaterial& getOrCreateVulkanMaterial(std::shared_ptr<RHI> rhi, RenderEntity render_entity, RenderMaterialData material_data);
-		VulkanMesh& getOrCreateVulkanMesh(std::shared_ptr<RHI> rhi, RenderEntity render_entity, RenderMeshData mesh_data);
+		VulkanMaterial& getOrCreateVulkanMaterial(std::shared_ptr<RHI> rhi, size_t material_asset_id, RenderMaterialData material_data);
+		VulkanMesh& getOrCreateVulkanMesh(std::shared_ptr<RHI> rhi, size_t asset_id, RenderMeshData mesh_data);
 		void updateMeshData(std::shared_ptr<RHI> rhi, uint32_t index_buffer_size, void* index_buffer, uint32_t vertex_buffer_size, MeshVertexDataDefinition* vertex_buffer, VulkanMesh& mesh);
 		void updateVertexBindingData(std::shared_ptr<RHI> rhi,uint32_t joint_buffer_size, MeshVertexBindingDataDefinition* joint_buffer_data, uint32_t index_count,VulkanMesh & mesh);
 		void updateVertexBuffer(std::shared_ptr<RHI> rhi, uint32_t vertex_buffer_size, MeshVertexDataDefinition const * vertex_buffer, VulkanMesh& mesh);
@@ -76,6 +78,7 @@ namespace QYHS
 		GlobalRenderResource m_global_render_resource;
 		MeshPerFrameStorageBufferObject m_mesh_per_frame_storage_buffer_object;
 		MeshInefficientPickPerFrameStorageBuffer m_mesh_inefficient_pick_perframe_storage_buffer_object;
+		Material_ID createNewMaterial();
 		
 	private:
 		std::unordered_map<size_t, VulkanMaterial> m_materials;

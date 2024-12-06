@@ -9,7 +9,7 @@ namespace QYHS
 	void CameraComponent::tick(double delta_time)
 	{
 		Component::tick(delta_time);
-		if (!m_parent_object.lock())
+		if (!m_owner.lock())
 			return;
 
 		std::shared_ptr<Level> current_level = g_runtime_global_context.m_world_manager->getCurrentActiveLevel().lock();
@@ -17,7 +17,7 @@ namespace QYHS
 		if (current_character == nullptr)
 			return;
 
-		if (current_character->getObjectID() != m_parent_object.lock()->getObjectId())
+		if (current_character->getObjectID() != m_owner.lock()->getObjectId())
 			return;
 		switch (m_camera_mode)
 		{

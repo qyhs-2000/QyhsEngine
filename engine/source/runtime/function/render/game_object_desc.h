@@ -4,6 +4,9 @@
 #include "core/math/matrix4.h"
 namespace QYHS
 {
+	typedef size_t Mesh_ID;
+	typedef size_t Material_ID;
+	
 	class SkeletonAnimationResultTransform
 	{
 	public:
@@ -26,6 +29,7 @@ namespace QYHS
 	{
 	public:
 		std::string m_mesh_file;
+		Mesh_ID     mesh_asset_id;
 	private:
 	};
 
@@ -33,6 +37,7 @@ namespace QYHS
 	{
 	public:
 		std::string m_base_colour_texture_file;
+		Material_ID m_base_color_texture_asset_id;
 		bool m_with_texture{ false };
 	private:
 	};
@@ -56,8 +61,8 @@ namespace QYHS
 	class GameObjectPartDesc
 	{
 	public:
-		GameObjectMeshDesc  m_mesh_desc;
-		GameObjectMaterialDesc m_material_desc;
+		Mesh_ID  m_mesh_id;
+		Material_ID m_material_id;
 		GameObjectTransformDesc m_transform_desc;
 		SkeletonAnimationResult m_skeleton_animation_result;
 		SkeletonBindingDesc m_skeleton_binding_desc;
