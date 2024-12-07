@@ -115,6 +115,8 @@ namespace QYHS
 		}
 		HierarchyComponent & parent_component = hierarchy_component_manager.create(entity);
 		parent_component.parent_id = parent;
+		getGameObjectByID(entity).lock()->setParent(getGameObjectByID(parent).lock().get());
+		getGameObjectByID(parent).lock()->addChild(getGameObjectByID(entity).lock().get());
 		TransformComponent* parent_transform_component = getGameObjectByID(parent).lock()->TryGetComponent(TransformComponent);
 		TransformComponent* transform_component = getGameObjectByID(entity).lock()->TryGetComponent(TransformComponent);
 		if (parent_transform_component != nullptr && transform_component != nullptr)

@@ -162,5 +162,14 @@ namespace QYHS
 			std::string result = file.substr(0,file.rfind('.'));
 			return result;
 		}
+		std::string getBaseDir(std::string file_path)
+		{
+			auto iter = file_path.find_last_of("/\\");
+			if (iter != std::string::npos)
+			{
+				return file_path.substr(0, iter);
+			}
+			return "";
+		}
 	}
 }

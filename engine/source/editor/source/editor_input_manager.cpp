@@ -165,10 +165,14 @@ namespace QYHS
 		}
 		else
 		{
-			Vector2 cursor_uv = Vector2((m_mouse_x / m_engine_window_size.x), (m_mouse_y / m_engine_window_size.y));
-			m_selected_axis_by_cursor = g_editor_global_context.m_scene_manager->updateCursorOnAxis(cursor_uv,m_engine_window_size);
-			b_control_camera = false;
-			g_runtime_global_context.m_window_system->disableCursor(b_control_camera);
+			if (isCursorInRect(m_engine_window_pos, m_engine_window_size))
+			{
+				Vector2 cursor_uv = Vector2(((m_mouse_x - m_engine_window_pos.x) / m_engine_window_size.x), ((m_mouse_y -m_engine_window_pos.y)/ m_engine_window_size.y));
+				std::cout << cursor_uv.x << "   " << cursor_uv.y << std::endl;
+				m_selected_axis_by_cursor = g_editor_global_context.m_scene_manager->updateCursorOnAxis(cursor_uv,m_engine_window_size);
+				b_control_camera = false;
+				g_runtime_global_context.m_window_system->disableCursor(b_control_camera);
+			}
 		}
 		m_mouse_x = x_pos;
 		m_mouse_y = y_pos;

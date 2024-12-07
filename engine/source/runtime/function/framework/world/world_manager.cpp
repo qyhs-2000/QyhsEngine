@@ -13,7 +13,8 @@ namespace QYHS
 	{
 		{"OBJ",FileType::OBJ},
 		{"FBX",FileType::FBX},
-		{"GLTF",FileType::GLTF}
+		{"GLTF",FileType::GLTF},
+		{"GLB",FileType::GLB}
 	};
 
 	void WorldManager::tick(double delta_time)
@@ -105,7 +106,7 @@ namespace QYHS
 					throw std::runtime_error("failed to import obj model!");
 				}
 			}
-			else if (iter->second == FileType::GLTF)
+			else if (iter->second == FileType::GLTF || iter->second == FileType::GLB)
 			{
 				if (!import_model_gltf(current_level,file_path))
 				{

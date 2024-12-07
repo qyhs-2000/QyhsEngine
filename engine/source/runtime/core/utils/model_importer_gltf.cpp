@@ -151,22 +151,48 @@ namespace QYHS
 		tinygltf::TinyGLTF loader;
 		std::string err;
 		std::string warn;
-
 		LoaderState loader_state;
+		std::string extension = Helper::toUpper(Helper::getFileExtension(file_path));
+		std::vector<uint8_t> file_data;
+		bool ret = Helper::fileRead(file_path, file_data);
+		if (ret)
+		{
+			std::string basedir = tinygltf::GetBaseDir(file_path);
+
+			if (!extension.compare("GLTF"))
+			{
+				ret = loader.LoadASCIIFromString(
+					&loader_state.model,
+					&err,
+					&warn, 
+					reinterpret_cast<const char*>(file_data.data()),
+					static_cast<unsigned int>(file_data.size()),
+					basedir
+				);
+			}
+			else
+			{
+				ret = loader.LoadBinaryFromMemory(
+					&loader_state.model,
+					&err,
+					&warn,
+					file_data.data(),
+					static_cast<unsigned int>(file_data.size()),
+					basedir
+				);
+			}
+		}
+		else
+		{
+			err = "Failed to read file: " + file_path;
+		}
+		
 		auto root_object = level->createGameObject(Helper::getNameByFile(file_path));
 		root_object->TryAddComponent(TransformComponent);
 		loader_state.root_gobject = root_object->getObjectId();
 		loader_state.level = level;
-		bool file_loaded = loader.LoadASCIIFromFile(&loader_state.model, &err, &warn, file_path);
-		if (!file_loaded)
-		{
-			LOG_ERROR("failed to load file : {}", file_path);
-			if (!err.empty())
-			{
-				LOG_ERROR(err.c_str());
-			}
-			return false;
-		}
+		
+		
 		std::shared_ptr<RenderSystem> p_render_system = g_runtime_global_context.m_render_system;
 		std::shared_ptr<RenderScene> editor_render_scene = p_render_system->getRenderScene();
 

@@ -8,7 +8,8 @@ namespace QYHS
 	{
 		OBJ,
 		FBX,
-		GLTF
+		GLTF,
+		GLB
 	};
 
 	class WorldManager

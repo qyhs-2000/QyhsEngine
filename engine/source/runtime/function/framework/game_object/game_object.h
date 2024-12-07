@@ -17,6 +17,7 @@ namespace QYHS
 		void tick(double delta_time);
 		void setParent(GameObject* p_parent) { m_parent = p_parent; }
 		GameObjectID getObjectId() { return m_id; }
+		void addChild(GameObject* child) { children.push_back(child); }
 		bool load(const class ObjectInstanceResource *  instance_resource);
 		bool hasComponent(std::string component_type_name);
 		template<typename TComponent>
@@ -49,6 +50,7 @@ namespace QYHS
 				return true;
 			}
 		}
+		std::vector<GameObject*> getChildren() { return children; }
 		GameObject* getParent()const { return m_parent; }
 		void save(class ObjectInstanceResource& instance_res);
 		std::string m_name;
@@ -61,7 +63,7 @@ namespace QYHS
 		std::vector<Reflection::ReflectionPtr<Component>> m_components{};
 		GameObjectID	m_id;
 		std::string m_definition_url;
-		std::vector<GameObject* > childerens;
+		std::vector<GameObject* > children;
 		GameObject* m_parent{ nullptr };
 	};
 }

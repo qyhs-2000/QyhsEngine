@@ -45,5 +45,6 @@ namespace QYHS
 		bool fileRead(std::string file,std::vector<uint8_t> & file_data);
 		std::string getClassNameExceptNamespace(std::string class_name);
 		std::string getNameByFile(std::string file_name);
+		std::string getBaseDir(std::string file_path);
 	}
 }

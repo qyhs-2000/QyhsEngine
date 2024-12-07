@@ -241,24 +241,29 @@ namespace QYHS
 
 		for (auto& gobject_pair : game_objects)
 		{
+
 			GameObjectID id = gobject_pair.first;
 			std::shared_ptr<GameObject> gobject = gobject_pair.second;
 			std::string object_name = gobject->m_name;
 			if (object_name.size() > 0)
 			{
-				if (ImGui::Selectable(object_name.c_str(),
-					g_editor_global_context.m_scene_manager->m_selected_game_object_id == id))
+				if (gobject_pair.second->getChildren().size() <= 0)
 				{
-					if (g_editor_global_context.m_scene_manager->m_selected_game_object_id != id)
+					if (ImGui::Selectable(object_name.c_str(),
+						g_editor_global_context.m_scene_manager->m_selected_game_object_id == id))
 					{
-						g_editor_global_context.m_scene_manager->GObjectSelected(id);
+						if (g_editor_global_context.m_scene_manager->m_selected_game_object_id != id)
+						{
+							g_editor_global_context.m_scene_manager->GObjectSelected(id);
+						}
+						else
+						{
+							g_editor_global_context.m_scene_manager->GObjectSelected(k_invalid_gobject_id);
+						}
+						break;
 					}
-					else
-					{
-						g_editor_global_context.m_scene_manager->GObjectSelected(k_invalid_gobject_id);
-					}
-					break;
 				}
+				
 			}
 		}
 		ImGui::End();
@@ -593,6 +598,7 @@ namespace QYHS
 					param.descriptions = ".obj,.gltf";
 					param.extensions.push_back("obj");
 					param.extensions.push_back("gltf");
+					param.extensions.push_back("glb");
 					Helper::fileDialog(param, [=](std::string file_name) {
 						g_runtime_global_context.m_world_manager->loadOBJFile(file_name);
 						});
@@ -629,6 +635,6 @@ namespace QYHS
 		showEditorMenu(&m_editor_show_menu_ui);
 		showGameInstancesUI(&m_editor_show_game_instances);
 		showEditorGameUI(&m_game_engine_window_open);
-		//showComponentDetails(&m_editor_show_component_details);
+		showComponentDetails(&m_editor_show_component_details);
 	}
 }
