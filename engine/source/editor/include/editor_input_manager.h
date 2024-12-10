@@ -21,8 +21,6 @@ namespace QYHS
 	class EditorInputManager
 	{
 	public:
-		//EditorInputManager();
-		void onKeyInEditorMode(int key, int scancode, int action, int mods);
 		void registerInput();
 		void initialize();
 		const Vector2 getEngineWindowSize() { return m_engine_window_size; }

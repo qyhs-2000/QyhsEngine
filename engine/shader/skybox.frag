@@ -4,12 +4,6 @@ layout(location = 0) in highp vec3 frag_UVW;
 
 layout(location = 0) out highp vec4 out_color;
 
-layout(set = 0,binding = 1) readonly buffer perframe_buffer
-{
-	highp mat4 proj_view_matrix;
-	highp vec3 camera_position;
-};
-
 layout(set = 1,binding = 0) uniform samplerCube skybox_cube_map;
 layout(input_attachment_index = 0,set = 1,binding = 1) uniform highp subpassInput in_base_color;
 layout(input_attachment_index = 1,set = 1,binding = 2) uniform highp subpassInput in_scene_depth;

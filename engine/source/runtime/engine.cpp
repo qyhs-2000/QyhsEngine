@@ -17,10 +17,52 @@ namespace QYHS
 		g_runtime_global_context.startSystem(config_file_path);
 	}
 
+	void QyhsEngine::createWindow()
+	{
+		g_runtime_global_context.createWindow();
+	}
+
+	bool QyhsEngine::shouldWindowClose()
+	{
+		return g_runtime_global_context.m_window_system->shouldCloseWindow();
+	}
+
 	void QyhsEngine::initialize()
 	{
+		if (initialized)
+		{
+			return;
+		}
+		initialized = true;
+		startEngine(engine_config_file);
 		current_time = glfwGetTime();
 		//m_model = new GLTFModel();
+	}
+
+	void QyhsEngine::run()
+	{
+		createWindow();
+		float delta_time;
+
+		while (!shouldWindowClose())
+		{
+			if (!initialized)
+			{
+				initialize();
+				initialized = true;
+			}
+			delta_time = caculateDeltaTime();
+			update(delta_time);
+			if (!tick(delta_time))
+			{
+				return;
+			}
+		}
+	}
+
+	void QyhsEngine::update(float delta_time)
+	{
+
 	}
 
 	double QyhsEngine::caculateDeltaTime()

@@ -25,8 +25,15 @@ namespace QYHS
 		void renderTick();
 		void loadAssets();
 		void loadglTFFile(const std::string& path);
+		void createWindow();
+		virtual void update(float delta_time);
+		bool shouldWindowClose();
+		void startEngine(const std::string& config_file_path);
+		virtual void initialize();
+		double caculateDeltaTime();
+		void setConfigFile(std::string file_path) { engine_config_file = file_path; }
+		void run();
 	private:
-		GLFWwindow* window;
 
 		VkInstance instance;
 		VkDebugUtilsMessengerEXT debugMessenger;
@@ -50,10 +57,11 @@ namespace QYHS
 		}
 		
 	public:
-		void startEngine(const std::string& config_file_path);
-		void initialize();
-		double caculateDeltaTime();
+		
+	protected:
+		std::string engine_config_file;
 	private:
 		double current_time;
+		bool initialized{ false };
 	};
 }

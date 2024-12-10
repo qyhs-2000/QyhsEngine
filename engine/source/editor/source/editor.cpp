@@ -5,10 +5,10 @@
 namespace QYHS
 {
 	std::unordered_set<std::string> g_editor_tick_component_types{};
-	void QyhsEditor::initialize(QyhsEngine* engine)
+	void QyhsEditor::initialize()
 	{
-		assert(engine);
-		m_engine = engine;
+		QyhsEngine::initialize();
+		
 		EditorGlobalContextInitInfo init_info = { g_runtime_global_context.m_window_system.get(),g_runtime_global_context.m_render_system.get() };
 		g_editor_global_context.initialize(init_info);
 
@@ -23,24 +23,15 @@ namespace QYHS
 		registerEditorTickComponent("MeshComponent");
 	}
 
-	void QyhsEditor::run()
-	{
-		float delta_time;
-		while (true)
-		{
-			delta_time = m_engine->caculateDeltaTime();
-			g_editor_global_context.m_input_manager->tick(delta_time);
-			g_editor_global_context.m_scene_manager->tick(delta_time);
-			if (!m_engine->tick(delta_time))
-			{
-				return;
-			}
-		}
-	}
-
 	void QyhsEditor::clear()
 	{
 		g_editor_global_context.clear();
+	}
+
+	void QyhsEditor::update(float delta_time)
+	{
+		g_editor_global_context.m_input_manager->tick(delta_time);
+		g_editor_global_context.m_scene_manager->tick(delta_time);
 	}
 
 	void QyhsEditor::registerEditorTickComponent(const std::string& component_name)

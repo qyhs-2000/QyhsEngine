@@ -47,7 +47,7 @@ namespace QYHS
 					//part.m_skeleton_binding_desc.m_skeleton_binding_file = part.m_mesh_desc.m_mesh_file;
 				}
 				Matrix4x4 local_transform_matrix = part.m_transform_desc.m_transform_matrix;
-				part.m_transform_desc.m_transform_matrix = local_transform_matrix * owner_transform_comp->getMatrix() * parent_world_matrix ;
+				part.m_transform_desc.m_transform_matrix = local_transform_matrix * owner_transform_comp->getMatrix();
 				Vector3 translate = part.m_transform_desc.m_transform_matrix.getTrans();
 				dirty_mesh_parts.emplace_back(part);
 				part.m_transform_desc.m_transform_matrix = local_transform_matrix;

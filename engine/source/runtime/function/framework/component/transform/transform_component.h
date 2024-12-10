@@ -33,6 +33,6 @@ namespace QYHS
         META(Enable)
             Transform m_transform;          //local transform
     private:
-        bool m_is_dirty{ false };
+        bool m_is_dirty{ true };
     };
 }

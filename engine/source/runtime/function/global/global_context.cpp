@@ -16,16 +16,22 @@ namespace QYHS
 
 		m_asset_manager = std::make_shared<AssetManager>();
 		m_asset_manager->initialize();
+
 		m_logger_system = std::make_shared<LogSystem>();
+
 		m_world_manager = std::make_shared<WorldManager>();
 		m_world_manager->initialize();
-		m_window_system = std::make_shared<WindowSystem>();
+		
 		m_render_system = std::make_shared<RenderSystem>();
-		WindowCreateInfo info;
-		m_window_system->initialize(&info);
 		m_render_system->initialize();
 
 		m_input_system = std::make_shared<InputSystem>();
 		m_input_system->initialize();
+	}
+	void RuntimeGlobalContext::createWindow()
+	{
+		m_window_system = std::make_shared<WindowSystem>();
+		WindowCreateInfo info;
+		m_window_system->initialize(&info);
 	}
 }

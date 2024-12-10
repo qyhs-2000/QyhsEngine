@@ -93,7 +93,7 @@ namespace QYHS
 	{
 		if(m_instance_to_gameobject_map.find(instance_id) ==m_instance_to_gameobject_map.end())
 		{
-			return 0;
+			return k_invalid_gobject_id;
 		}
 		else
 		{

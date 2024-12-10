@@ -28,6 +28,7 @@ namespace QYHS
 		static bool m_is_game_mode;
 	public:
 		void startSystem(const std::string& config_file_path);
+		void createWindow();
 	private:
 		
 	};

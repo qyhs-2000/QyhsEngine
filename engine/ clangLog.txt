@@ -338,7 +338,7 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   E:/VS_Project/QyhsEngine/engine/source/editor/include/editor.h \
   engine.h \
   E:/VS_Project/QyhsEngine/engine/source\editor/include/editor_global_context.h \
-  function/render/ui/editor_ui.h \
+  function/render/ui/editor_ui.h application/application.h \
   E:/VS_Project/QyhsEngine/engine/source/editor/include/editor_axis.h \
   E:/VS_Project/QyhsEngine/engine/source/editor/include/editor_global_context.h \
   E:/VS_Project/QyhsEngine/engine/source/editor/include/editor_input_manager.h

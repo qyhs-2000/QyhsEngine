@@ -1,6 +1,5 @@
 #version 310 es
 
-layout(location = 0) in vec3 position;
 layout(location = 0) out vec3 frag_UVW;
 
 #define CHAOS_LAYOUT_MAJOR row_major

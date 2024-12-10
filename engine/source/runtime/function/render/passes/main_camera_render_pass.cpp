@@ -839,10 +839,10 @@ namespace QYHS
 
 			VkPipelineVertexInputStateCreateInfo vertex_input_state_info{};
 			vertex_input_state_info.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-			vertex_input_state_info.vertexBindingDescriptionCount = 1;
-			vertex_input_state_info.pVertexBindingDescriptions = &binding_description;
-			vertex_input_state_info.vertexAttributeDescriptionCount = 1;
-			vertex_input_state_info.pVertexAttributeDescriptions = &attrib_description;
+			vertex_input_state_info.vertexBindingDescriptionCount = 0;
+			vertex_input_state_info.pVertexBindingDescriptions = nullptr;
+			vertex_input_state_info.vertexAttributeDescriptionCount = 0;
+			vertex_input_state_info.pVertexAttributeDescriptions = nullptr;
 
 			VkPipelineInputAssemblyStateCreateInfo input_assembly{};
 			input_assembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
@@ -1327,7 +1327,7 @@ namespace QYHS
 			descriptor_sets.data(), (sizeof(dynamic_offset) / sizeof(dynamic_offset[0])), dynamic_offset);
 
 		VkDeviceSize offset[1] = { 0 };
-		//vkCmdBindVertexBuffers(m_vulkan_rhi->getCurrentCommandBuffer(), 0, 1, &skybox_cube_vertex_buffer, offset);
+		//vkCmdBindVertexBuffers(m_vulkan_rhi->getCurrentCommandBuffer(), 0, 1, VK_NULL_HANDLE, offset);
 		vkCmdDraw(m_vulkan_rhi->getCurrentCommandBuffer(), 36, 1, 0, 0);
 	}
 

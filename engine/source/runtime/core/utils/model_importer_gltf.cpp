@@ -82,55 +82,48 @@ namespace QYHS
 		loader_state.level->getGameObjectByID(entity).lock()->TryAddComponent(TransformComponent);
 		
 		TransformComponent* transform_component = loader_state.level->getGameObjectByID(entity).lock()->TryGetComponent(TransformComponent);
+		if (!node.scale.empty())
+		{
+			for (int i = 0; i < 3; ++i)
+			{
+				if (std::abs(node.scale[i]) <= 0.0001)
+				{
+					const double sign = node.scale[i] < 0 ? -1 : 1;
+					node.scale[i] = 0.0001001 * sign;
+				}
+
+			}
+			transform_component->setScale(Vector3(node.scale[0], node.scale[1], node.scale[2]));
+		}
+		if (!node.rotation.empty())
+		{
+			Quaternion rotation;
+			rotation.x = node.rotation[0];
+			rotation.y = node.rotation[1];
+			rotation.z = node.rotation[2];
+			rotation.w = node.rotation[3];
+			transform_component->setRotation(rotation);
+		}
+		if (!node.translation.empty())
+		{
+			Vector3 position;
+			position.x = node.translation[0];
+			position.y = node.translation[1];
+			position.z = node.translation[2];
+			transform_component->setPosition(position);
+		}
 		if (!node.matrix.empty())
 		{
-			Matrix4x4 matrix(node.matrix[0],node.matrix[1],node.matrix[2],node.matrix[3],
+			transform_component->world_matrix = Matrix4x4 (node.matrix[0],node.matrix[1],node.matrix[2],node.matrix[3],
 				node.matrix[4],node.matrix[5],node.matrix[6],node.matrix[7],
 				node.matrix[8],node.matrix[9],node.matrix[10],node.matrix[11],
 				node.matrix[12],node.matrix[13],node.matrix[14],node.matrix[15]);
-			Vector3 position;
-			Quaternion rotation;
-			Vector3 scale;
-			matrix.decomposition(position, scale, rotation);
-			transform_component->setPosition(position);
-			transform_component->setRotation(rotation);
-			transform_component->setScale(scale);
+			transform_component->applyTransform();
 
 		}
-		else
-		{
-			if (!node.scale.empty())
-			{
-				for (int i = 0; i < 3; ++i)
-				{
-					if (std::abs(node.scale[i]) <= 0.0001)
-					{
-						const double sign = node.scale[i] < 0 ? -1 : 1;
-						node.scale[i] = 0.0001001 * sign;
-					}
+		
+		transform_component->updateWorldMatrix();
 
-				}
-				transform_component->setScale(Vector3(node.scale[0], node.scale[1], node.scale[2]));
-			}
-			if (!node.rotation.empty())
-			{
-				Quaternion rotation;
-				rotation.x = node.rotation[0];
-				rotation.y = node.rotation[1];
-				rotation.z = node.rotation[2];
-				rotation.w = node.rotation[3];
-				transform_component->setRotation(rotation);
-			}
-			if (!node.translation.empty())
-			{
-				Vector3 position;
-				position.x = node.translation[0];
-				position.y = node.translation[1];
-				position.z = node.translation[2];
-				transform_component->setPosition(position);
-			}
-
-		}
 		if (parent != k_invalid_gobject_id)
 		{
 			loader_state.level->attachGObject(entity, parent, true);

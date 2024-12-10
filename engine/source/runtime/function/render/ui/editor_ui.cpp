@@ -247,21 +247,19 @@ namespace QYHS
 			std::string object_name = gobject->m_name;
 			if (object_name.size() > 0)
 			{
-				if (gobject_pair.second->getChildren().size() <= 0)
+
+				if (ImGui::Selectable(object_name.c_str(),
+					g_editor_global_context.m_scene_manager->m_selected_game_object_id == id))
 				{
-					if (ImGui::Selectable(object_name.c_str(),
-						g_editor_global_context.m_scene_manager->m_selected_game_object_id == id))
+					if (g_editor_global_context.m_scene_manager->m_selected_game_object_id != id)
 					{
-						if (g_editor_global_context.m_scene_manager->m_selected_game_object_id != id)
-						{
-							g_editor_global_context.m_scene_manager->GObjectSelected(id);
-						}
-						else
-						{
-							g_editor_global_context.m_scene_manager->GObjectSelected(k_invalid_gobject_id);
-						}
-						break;
+						g_editor_global_context.m_scene_manager->GObjectSelected(id);
 					}
+					else
+					{
+						g_editor_global_context.m_scene_manager->GObjectSelected(k_invalid_gobject_id);
+					}
+					break;
 				}
 				
 			}
