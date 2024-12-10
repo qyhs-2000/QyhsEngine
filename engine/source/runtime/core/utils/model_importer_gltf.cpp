@@ -215,7 +215,7 @@ namespace QYHS
 			for (auto& primitive : mesh.primitives)
 			{
 				const size_t index_remap[] = {
-					0,2,1
+					0,1,2
 				};
 				RenderMeshData mesh_data;
 				if (primitive.indices >= 0)
