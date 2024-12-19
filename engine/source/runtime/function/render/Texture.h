@@ -1,7 +1,7 @@
 #pragma once
-#include <vulkan/vulkan.h>
 #include <stdlib.h>
-#include <vulkan/vulkan.h>
+#include "function/render/rhi/vulkan/vulkan_rhi.h"
+
 namespace QYHS
 {
 	

@@ -9,7 +9,10 @@ namespace QYHS
 		OBJ,
 		FBX,
 		GLTF,
-		GLB
+		GLB,
+		QSCENE,
+		INVALID
+		
 	};
 
 	class WorldManager
@@ -21,6 +24,7 @@ namespace QYHS
 		bool loadLevel(const std::string& level_url);
 		void saveCurrentLevel();
 		void loadOBJFile(std::string file_path);
+		void save(std::string file_name);
 		Level		m_current_level;
 		std::weak_ptr<Level> getCurrentActiveLevel() { return m_current_active_level; }
 	private:

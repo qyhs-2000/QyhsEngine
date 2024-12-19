@@ -284,6 +284,7 @@ namespace QYHS
 		Matrix4x4 model_translate_matrix;
 		model_translate_matrix.makeTrans(gobject_translation);
 		Vector2 delta_mouse_uv = Vector2(new_mouse_x - old_mouse_x, new_mouse_y - old_mouse_y);
+		//float max = engine_window_size.x > engine_window_size.y ? engine_window_size.x : engine_window_size.y;
 		float angularVelocity = 18.f / std::max(engine_window_size.x, engine_window_size.y);
 
 		

@@ -3,7 +3,7 @@
 #include "render_pass_base.h"
 #include "function/render/rhi/vulkan/vulkan_rhi.h"
 #include <function/render/render_pipeline_base.h>
-#include <function/render/render_structure.h>
+//#include <function/render/render_structure.h>
 #include "render_resource.h"
 namespace QYHS
 {

@@ -14,6 +14,7 @@
 #include "_generated\serializer\animation_mask.serializer.gen.h"
 #include "_generated\serializer\component.serializer.gen.h"
 #include "_generated\serializer\camera_component.serializer.gen.h"
+#include "_generated\serializer\hierarchy_component.serializer.gen.h"
 #include "_generated\serializer\mesh_component.serializer.gen.h"
 #include "_generated\serializer\transform_component.serializer.gen.h"
 #include "_generated\serializer\camera_config.serializer.gen.h"

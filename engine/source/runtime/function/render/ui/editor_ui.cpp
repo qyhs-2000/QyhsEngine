@@ -241,28 +241,22 @@ namespace QYHS
 
 		for (auto& gobject_pair : game_objects)
 		{
-
-			GameObjectID id = gobject_pair.first;
-			std::shared_ptr<GameObject> gobject = gobject_pair.second;
-			std::string object_name = gobject->m_name;
-			if (object_name.size() > 0)
+			if (gobject_pair.second->getParent() != nullptr) continue;
+			if (gobject_pair.second->getChildren().size() > 0)
 			{
-
-				if (ImGui::Selectable(object_name.c_str(),
-					g_editor_global_context.m_scene_manager->m_selected_game_object_id == id))
+				m_editor_ui_creators["TreeNodePush"](gobject_pair.second->m_name, nullptr);
+				for (auto child : gobject_pair.second->getChildren())
 				{
-					if (g_editor_global_context.m_scene_manager->m_selected_game_object_id != id)
-					{
-						g_editor_global_context.m_scene_manager->GObjectSelected(id);
-					}
-					else
-					{
-						g_editor_global_context.m_scene_manager->GObjectSelected(k_invalid_gobject_id);
-					}
-					break;
+					createChildInstanceUI(child);
 				}
-				
+				m_editor_ui_creators["TreeNodePop"](gobject_pair.second->m_name, nullptr);
 			}
+			else
+			{
+				auto gobject = gobject_pair.second;
+				createInstanceUI(gobject.get());
+			}
+			
 		}
 		ImGui::End();
 	}
@@ -433,6 +427,29 @@ namespace QYHS
 		}
 	}
 
+	void EditorUI::createInstanceLeafNode(GameObject* gobject)
+	{
+		GameObjectID id = gobject->getObjectId();
+		std::string object_name = gobject->m_name;
+		if (object_name.size() > 0)
+		{
+
+			if (ImGui::Selectable(object_name.c_str(),
+				g_editor_global_context.m_scene_manager->m_selected_game_object_id == id))
+			{
+				if (g_editor_global_context.m_scene_manager->m_selected_game_object_id != id)
+				{
+					g_editor_global_context.m_scene_manager->GObjectSelected(id);
+				}
+				else
+				{
+					g_editor_global_context.m_scene_manager->GObjectSelected(k_invalid_gobject_id);
+				}
+			}
+
+		}
+	}
+
 	void EditorUI::createClassUI(Reflection::ReflectionInstance& object_instance)
 	{
 		Reflection::ReflectionInstance* reflection_instance_list = nullptr;
@@ -501,6 +518,42 @@ namespace QYHS
 			}
 		}
 		delete[]fields;
+	}
+
+	void EditorUI::createChildInstanceUI(GameObject *  gobject)
+	{
+		int count = gobject->getChildren().size();
+		if (count > 0)
+		{
+			m_editor_ui_creators["TreeNodePush"](gobject->m_name, nullptr);
+			for (int i = 0; i < count; ++i)
+			{
+				createChildInstanceUI(gobject->getChildren()[i]);
+			}
+			m_editor_ui_creators["TreeNodePop"](gobject->m_name, nullptr);
+		}
+		else
+		{
+			createInstanceLeafNode(gobject);
+		}
+	}
+
+	void EditorUI::createInstanceUI(GameObject * gobject)
+	{
+		int count = gobject->getChildren().size();
+		if (count > 0)
+		{
+			for (int i = 0; i < count; ++i)
+			{
+				m_editor_ui_creators["TreeNodePush"](gobject->m_name, nullptr);
+				createInstanceUI(gobject->getChildren()[i]);
+				m_editor_ui_creators["TreeNodePop"](gobject->m_name, nullptr);
+			}
+		}
+		else
+		{
+			createInstanceLeafNode(gobject);
+		}
 	}
 
 	void drawVecControl(const std::string& name, QYHS::Vector3& vec, float reset_value, float column_width)
@@ -599,6 +652,18 @@ namespace QYHS
 					param.extensions.push_back("glb");
 					Helper::fileDialog(param, [=](std::string file_name) {
 						g_runtime_global_context.m_world_manager->loadOBJFile(file_name);
+						});
+				}
+				if (ImGui::MenuItem("Save As"))
+				{
+					FileDialogParam param;
+					param.descriptions = ".qyscene";
+					param.extensions.push_back("qyscene");
+					param.extensions.push_back("obj");
+					param.extensions.push_back("gltf");
+					param.extensions.push_back("glb");
+					Helper::fileDialog(param, [=](std::string file_name) {
+						g_runtime_global_context.m_world_manager->save(file_name);
 						});
 				}
 				if (ImGui::BeginMenu("Debug"))

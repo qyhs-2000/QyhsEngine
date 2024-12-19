@@ -12,6 +12,7 @@
 #include "_generated\reflection\animation_mask.reflection.gen.h"
 #include "_generated\reflection\component.reflection.gen.h"
 #include "_generated\reflection\camera_component.reflection.gen.h"
+#include "_generated\reflection\hierarchy_component.reflection.gen.h"
 #include "_generated\reflection\mesh_component.reflection.gen.h"
 #include "_generated\reflection\transform_component.reflection.gen.h"
 #include "_generated\reflection\camera_config.reflection.gen.h"
@@ -54,6 +55,7 @@ namespace QYHS
 			TypeWrapperRegister_CameraComponentResource();
 			TypeWrapperRegister_CameraParamter();
 			TypeWrapperRegister_ThirdPersonCameraParameter();
+			TypeWrapperRegister_HierarchyComponent();
 			TypeWrapperRegister_MeshComponent();
 			TypeWrapperRegister_TransformComponent();
 			TypeWrapperRegister_CameraConfig();

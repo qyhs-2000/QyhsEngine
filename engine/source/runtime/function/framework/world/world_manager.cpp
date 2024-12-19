@@ -7,6 +7,7 @@
 #include "core/utils/utils.h"
 #include <iostream>
 #include <core/utils/model_importer_gltf.h>
+#include <core/file/archive.h>
 namespace QYHS
 {
 	std::unordered_map<std::string, FileType> WorldManager::file_types =
@@ -14,7 +15,8 @@ namespace QYHS
 		{"OBJ",FileType::OBJ},
 		{"FBX",FileType::FBX},
 		{"GLTF",FileType::GLTF},
-		{"GLB",FileType::GLB}
+		{"GLB",FileType::GLB},
+		{"QSCENE",FileType::QSCENE}
 	};
 
 	void WorldManager::tick(double delta_time)
@@ -114,6 +116,25 @@ namespace QYHS
 				}
 			}
 
+		}
+	}
+
+	void WorldManager::save(std::string file_name)
+	{
+		std::string extension = Helper::getFileExtension(file_name);
+		auto iter = file_types.find(extension);
+		FileType type = FileType::INVALID;
+		if (iter != file_types.end())
+		{
+			type = iter->second;
+		}
+		if (type == FileType::INVALID)
+		{
+			return;
+		}
+		if (type == FileType::QSCENE)
+		{
+			Archive archive = Archive(file_name, false);
 		}
 	}
 

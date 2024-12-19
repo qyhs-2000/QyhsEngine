@@ -5,6 +5,7 @@
 #include "core/meta/reflection/reflection.h"
 namespace QYHS
 {
+	class GameObject;
 	class EditorUI :public WindowUI
 	{
 	public:
@@ -18,8 +19,11 @@ namespace QYHS
 		virtual void preRender() override final;
 		void createClassUI(Reflection::ReflectionInstance &object_instance);
 		void createLeafNodeUI(Reflection::ReflectionInstance &object_instance);
+		void createChildInstanceUI(GameObject *  gobject);
+		void createInstanceUI(GameObject * gobject);
 		void showEditorGameUI(bool *p_show_game_engine_window);
 		void drawAxisToggleButton(std::string name, bool button_checked, EditorSceneManager::EditorAxisType axis_type);
+		void createInstanceLeafNode(GameObject* gobject);
 	private:
 		bool m_editor_show_menu_ui{ true };
 		bool m_editor_show_game_instances{ true };

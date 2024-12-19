@@ -13,6 +13,7 @@
 #include "_generated\serializer\animation_mask.serializer.gen.h"
 #include "_generated\serializer\component.serializer.gen.h"
 #include "_generated\serializer\camera_component.serializer.gen.h"
+#include "_generated\serializer\hierarchy_component.serializer.gen.h"
 #include "_generated\serializer\mesh_component.serializer.gen.h"
 #include "_generated\serializer\transform_component.serializer.gen.h"
 #include "_generated\serializer\camera_config.serializer.gen.h"
@@ -899,6 +900,27 @@ namespace QYHS
         auto&& json_context_map_0 = json_context_0.object_items();
         ret_context.insert(json_context_map_0.begin() , json_context_map_0.end());
         ret_context.insert_or_assign("camera_res", Serializer::write(instance.m_camera_res));
+        return  Json(ret_context);
+    }
+
+
+	template<>
+	HierarchyComponent & Serializer::read(const Json & json_context,HierarchyComponent & instance)
+	{
+		assert(json_context.is_object());
+		Serializer::read(json_context,*(QYHS::Component*)&instance);
+		
+		return instance;
+	}
+
+	template<>
+    Json Serializer::write(const HierarchyComponent& instance){
+        Json::object  ret_context;
+        auto&&  json_context_0 = Serializer::write(*(QYHS::Component*)&instance);
+        assert(json_context_0.is_object());
+        auto&& json_context_map_0 = json_context_0.object_items();
+        ret_context.insert(json_context_map_0.begin() , json_context_map_0.end());
+        
         return  Json(ret_context);
     }
 

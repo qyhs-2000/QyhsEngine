@@ -11,19 +11,30 @@
 #include <set>
 #include <unordered_map>
 #include <memory>
+#include <mutex>
+#include <Windows.h>
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #define GLM_ENABLE_EXPERIMENTAL
+
+#ifdef _WIN32
+#define VK_USE_PLATFORM_WIN32_KHR
+#endif // _WIN32
+
+#define VK_NO_PROTOTYPES
 #include <vulkan/vulkan.h>
+#include <vulkan/volk.h>
+#include "vulkanmemoryallocator/include/vk_mem_alloc.h"
+
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/hash.hpp>
 #include "function/render/rhi/rhi.h"
 #include "function/render/model.h"
-#include "vulkanmemoryallocator/include/vk_mem_alloc.h"
 #include <core/math/vector2.h>
 #include <core/math/vector3.h>
+#include <core/utils/spin_locker.h>
 
 struct MeshVertex {
 	glm::vec3 pos;
@@ -133,7 +144,7 @@ const bool enable_debug_utils_label = true;
 struct QueueFamilyIndices {
 	std::optional<uint32_t> graphicsFamily;
 	std::optional<uint32_t> presentFamily;
-
+	std::optional<uint32_t> computeFamily;
 	bool isComplete() {
 		return graphicsFamily.has_value() && presentFamily.has_value();
 	}
@@ -160,11 +171,78 @@ struct UniformBufferObject {
 };
 namespace QYHS
 {
+	struct SwapChain_Vulkan
+	{
+		SwapChainDesc desc;
+		VkSurfaceKHR surface{ VK_NULL_HANDLE };
+		VkSwapchainKHR swapchain{ VK_NULL_HANDLE };
+		VkExtent2D swapchain_extent;
+		ColorSpace color_space{ ColorSpace::SRGB};
+		std::vector<VkImage> swapchain_images;
+		std::vector<VkImageView> swapchain_image_views;
+		uint32_t swapchainAcquireSemphoreIndex{ 0 };
+		std::vector<VkSemaphore> swapchain_acquire_semphores;
+		VkFormat swapchain_image_format;
+		uint32_t swapchain_image_index{ 0 };
+		std::mutex locker;
+	};
+
 	class VulkanRHI final :public RHI
 	{
+	protected:
+
+		struct DescriptorBinderPool
+		{
+			void init(VulkanRHI* rhi)
+			{
+
+			}
+		};
+
+		struct CommandQueue
+		{
+			VkQueue queue;
+			std::vector<VkSwapchainKHR> submit_swapchains;
+			std::vector<uint32_t> submit_swapchain_image_indices;
+			std::vector<VkSemaphore> submit_signal_semaphores;
+			std::vector<VkCommandBufferSubmitInfo> submit_commandbuffers;
+			std::vector<VkSemaphoreSubmitInfo> submit_wait_semaphore_infos;
+			std::vector<VkSemaphoreSubmitInfo> submit_signal_semaphore_infos;
+			std::vector<VkSemaphore> present_wait_semaphores;
+			void submit(VkFence fence);
+		} queues[QUEUE_COUNT];
+
+		struct DescriptorBinder
+		{
+			void init(VulkanRHI* rhi)
+			{
+
+			}
+		};
+
+		class CommandList_Vulkan 
+		{
+		public:
+			QueueType queue;
+			uint32_t id;
+			uint32_t buffer_index;
+			void reset(uint32_t bufferIndex)
+			{
+				this->buffer_index = bufferIndex;
+			}
+			VkCommandBuffer	getCommandBuffer()const
+			{
+				return command_buffers[buffer_index][queue];
+			}
+			VkCommandPool getCommandPool()const { return command_pools[buffer_index][queue]; }
+			VkCommandBuffer				command_buffers[buffer_count][QUEUE_COUNT];
+			VkCommandPool				command_pools[buffer_count][QUEUE_COUNT];
+			DescriptorBinderPool		descriptor_pools[buffer_count];
+			DescriptorBinder			descriptor_binder;
+		private:
+		};
 	public:
-		virtual ~VulkanRHI() override final;
-		void initialize();
+
 		void cleanup();
 		VkCommandBuffer beginSingleTimeCommands();
 		void endSingleTimeCommands(VkCommandBuffer commandBuffer);
@@ -184,6 +262,15 @@ namespace QYHS
 		void createStorageBuffer(VkDeviceSize buffer_size,VkBuffer &storage_buffer,VkDeviceMemory &storage_buffer_memory);
 		void cmdBindDescriptorSets(VkPipelineBindPoint bind_point,VkPipelineLayout * pipeline_layout, int first_set, int set_count, const VkDescriptorSet* const* pDescriptorSets, uint32_t dynamic_offset_count, const uint32_t* p_dynamic_offsets);
 		void createDescriptorSetLayout(VkDescriptorSetLayoutCreateInfo* create_info, const VkAllocationCallbacks * callbacks,VkDescriptorSetLayout*& p_descriptor_set_layout);
+		virtual ~VulkanRHI() override final;
+		void initialize() override;
+		virtual CommandList beginCommandList(QueueType queue) override;
+		virtual void bindViewport(CommandList commandlist, uint32_t bind_count, Viewport* viewport) override;
+		virtual void beginRenderPass(SwapChain* swpa_chain, CommandList cmd) override;
+		virtual void endRenderPass(CommandList command_list) override;
+		virtual void prepareContext() override;
+		virtual void submitCommandLists();
+		inline CommandList_Vulkan& getCommandList(CommandList commandlist) { return *static_cast<CommandList_Vulkan*>(commandlist.internal_command_list); }
 		int getMaxFrameInFlight() { return MAX_FRAMES_IN_FLIGHT; }
 		VkDevice getDevice() { return m_device; }
 		VkPhysicalDevice getPhysicalDevice() { return physical_device; }
@@ -207,7 +294,6 @@ namespace QYHS
 		void prepareBeforeRender(std::function<void()> update_pass_after_recreate_swap_chain);
 		void beginEvent(VkCommandBuffer command_buffer,std::string event_name, std::array<float,4> color = {1.0f,1.0f,1.0f,1.0f});
 		void endEvent(VkCommandBuffer command_buffer);
-		virtual void prepareContext() override;
 		QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
 		VkQueue getGraphicsQueue() { return graphics_queue; }
 		VkResult allocatecommandbuffers(VkCommandBufferAllocateInfo* allocate_info, VkCommandBuffer* command_buffer);
@@ -216,6 +302,9 @@ namespace QYHS
 		VkResult queueSubmit(VkQueue queue, uint32_t submit_count, VkSubmitInfo* submit_info, VkFence fence);
 		VkResult queueWaitIdle(VkQueue queue);
 		void freeCommandBuffers(VkCommandPool command_pool, size_t free_count, VkCommandBuffer* p_command_buffer);
+		
+		VkFormat convertFormat(const Format& format)const;
+		VkFence frame_fence[buffer_count][QUEUE_COUNT] = {};
 	private:
 		void initVulkan();
 		
@@ -225,6 +314,7 @@ namespace QYHS
 		void pickPhysicalDevice();
 		void createLogicalDevice();
 		void createSwapChain();
+		virtual bool createSwapChain(const SwapChainDesc * desc,SwapChain & swap_chain,HWND hwnd) const override;
 		void createImageViews();
 		void createCommandPool();
 		void createDepthResources();
@@ -238,14 +328,14 @@ namespace QYHS
 		VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger);
 		void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator);
 		void initInstanceFunction();
-
+		bool createSwapChainInternal(SwapChain_Vulkan* internal_state)const;
 		
 		bool isDeviceSuitable(VkPhysicalDevice device);
 		bool checkDeviceExtensionSupport(VkPhysicalDevice device);
-		SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
+		SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device) const;
 		VkSampleCountFlagBits getMaxAvailableSamplerCount();
 		VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
-		VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
+		VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes)const;
 		VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
 
 		void createImage(uint32_t width, uint32_t height, VkFormat format, uint32_t mip_levels, VkSampleCountFlagBits num_samples, VkImageTiling tiling,
@@ -266,6 +356,9 @@ namespace QYHS
 		void createViewport();
 		PFN_vkCmdBeginDebugUtilsLabelEXT _vkCmdBeginDebugUtilsLabelEXT;
 		PFN_vkCmdEndDebugUtilsLabelEXT _vkCmdEndDebugUtilsLabelEXT;
+
+		SpinLock cmd_locker;
+		std::vector<std::unique_ptr<CommandList_Vulkan>> commandlists;
 	public:
 		VmaAllocator m_assets_allocator;
 		VkRect2D m_scissor;
@@ -291,7 +384,7 @@ namespace QYHS
 
 		VkSampleCountFlagBits msaa_samples = VK_SAMPLE_COUNT_1_BIT;
 
-		VkSwapchainKHR swap_chain;
+		VkSwapchainKHR swapchain;
 		std::vector<VkImage> swapChainImages;
 		VkFormat swapChainImageFormat;
 		VkFormat m_depth_image_format;
@@ -347,8 +440,8 @@ namespace QYHS
 		float delta_time;
 		float current_time;
 
-		GLTFModel m_model;
 		uint32_t                       m_vulkan_api_version {VK_API_VERSION_1_0};
 		bool m_enable_debug_util{ true };
+
 	};
 }
