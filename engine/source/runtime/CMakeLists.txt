@@ -20,10 +20,9 @@ set_target_properties(${TARGET_NAME} PROPERTIES FOLDER "Engine")
 target_compile_options(${TARGET_NAME} PUBLIC "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/permissive->")
 target_compile_options(${TARGET_NAME} PUBLIC "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/WX->")
 
-
-
-
-
+if(MSVC)
+add_definitions(-DUNICODE -D_UNICODE)
+endif()
 
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${HEADER_FILES} ${SOURCE_FILES})
 
