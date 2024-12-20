@@ -1,5 +1,6 @@
 #ifndef__PARSER_HEADER_H__
 #ifdef__PARSER_HEADER_H__
+#include "E:/VS_Project/QyhsEngine/engine/source/runtime/application/application.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/core/base/macro.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/core/base/vulkan_base.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/core/log/log_system.h"
@@ -18,7 +19,9 @@
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/core/meta/reflection/reflection.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/core/meta/reflection/reflection_register.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/core/meta/serializer/serializer.h"
-#include "E:/VS_Project/QyhsEngine/engine/source/runtime/core/utils/util.h"
+#include "E:/VS_Project/QyhsEngine/engine/source/runtime/core/utils/model_importer_gltf.h"
+#include "E:/VS_Project/QyhsEngine/engine/source/runtime/core/utils/model_importer_obj.h"
+#include "E:/VS_Project/QyhsEngine/engine/source/runtime/core/utils/utils.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/engine.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/animation/animation.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/animation/animation_clip.h"
@@ -32,6 +35,8 @@
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/animation/skeleton.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/camera/camera_component.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/component.h"
+#include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/ecs.h"
+#include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/hierarchy/hierarchy_component.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/mesh/mesh_component.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/motor/motor_component.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/transform/transform_component.h"
