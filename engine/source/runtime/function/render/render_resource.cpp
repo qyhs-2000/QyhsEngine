@@ -10,7 +10,6 @@
 #include <stb_image.h>
 
 #include "core/utils/model_importer_obj.h"
-#include "rhi/vulkan/vulkan_utils.h"
 #include "render_camera.h"
 #include <iostream>
 namespace QYHS
@@ -180,7 +179,7 @@ namespace QYHS
 		VulkanRHI* m_rhi = static_cast<VulkanRHI*>(rhi.get());
 		StorageBuffer& global_storage_buffer = m_global_render_resource.storage_buffer;
 		uint32_t global_storage_buffer_size = 1024 * 1024 * 128;
-		VulkanUtils::createBuffer(m_rhi->getPhysicalDevice(),m_rhi->getDevice(),global_storage_buffer_size,
+		m_rhi->createBuffer(m_rhi->getPhysicalDevice(),m_rhi->getDevice(),global_storage_buffer_size,
 			VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
 			global_storage_buffer.global_ringbuffer,global_storage_buffer.global_ringbuffer_memory);
 		
@@ -205,7 +204,7 @@ namespace QYHS
 		vkMapMemory(m_rhi->getDevice(), global_storage_buffer.global_ringbuffer_memory, 0, VK_WHOLE_SIZE, 0, &global_storage_buffer.global_ringbuffer_memory_pointer);
 
 		//axis storage buffer
-		VulkanUtils::createBuffer(m_rhi->physical_device,m_rhi->m_device,sizeof(AxisStorageBufferObject),VK_BUFFER_USAGE_STORAGE_BUFFER_BIT,
+		m_rhi->createBuffer(m_rhi->physical_device,m_rhi->m_device,sizeof(AxisStorageBufferObject),VK_BUFFER_USAGE_STORAGE_BUFFER_BIT,
 			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,m_global_render_resource.storage_buffer.axis_storage_buffer,m_global_render_resource.storage_buffer.axis_storage_buffer_memory);
 
 		vkMapMemory(m_rhi->m_device,global_storage_buffer.axis_storage_buffer_memory,0,VK_WHOLE_SIZE,0,&global_storage_buffer.axis_storage_buffer_memory_pointer);
@@ -239,8 +238,8 @@ namespace QYHS
 	void RenderResource::createIBLTexture(std::shared_ptr<RHI> rhi,std::array<std::shared_ptr<TextureData>, 6 > &specular_maps)
 	{
 		uint32_t specular_cubemaps_miplevels = static_cast<uint32_t>(std::log2(std::max(specular_maps[0]->m_width, specular_maps[0]->m_height)) + 1);
-		
-		VulkanUtils::createCubeMap(rhi.get(), m_global_render_resource.ibl_resource.specular_texture_image,
+		VulkanRHI* vulkan_rhi = static_cast<VulkanRHI*>(rhi.get());
+		vulkan_rhi->createCubeMap(rhi.get(), m_global_render_resource.ibl_resource.specular_texture_image,
 			m_global_render_resource.ibl_resource.specular_texture_image_view,
 			m_global_render_resource.ibl_resource.specular_texture_image_allocation,
 			specular_maps[0]->m_width, specular_maps[0]->m_height,
@@ -348,27 +347,27 @@ namespace QYHS
 
 			VkBuffer stagingBuffer;
 			VkDeviceMemory stagingBufferMemory;
-			VulkanUtils::createBuffer(physical_device, device, imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
+			vulkan_rhi->createBuffer(physical_device, device, imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
 
 			void* data;
 			vkMapMemory(device, stagingBufferMemory, 0, imageSize, 0, &data);
 			memcpy(data, material_data.m_base_color_texture->m_pixels, static_cast<size_t>(imageSize));
 			vkUnmapMemory(device, stagingBufferMemory);
 
-			VulkanUtils::createImage(physical_device, device, material_data.m_base_color_texture->m_width, material_data.m_base_color_texture->m_height, VK_FORMAT_R8G8B8A8_SRGB, mip_levels, VK_SAMPLE_COUNT_1_BIT, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, material.base_color_texture_image, material.base_color_texture_image_memory);
+			vulkan_rhi->createImage(physical_device, device, material_data.m_base_color_texture->m_width, material_data.m_base_color_texture->m_height, VK_FORMAT_R8G8B8A8_SRGB, mip_levels, VK_SAMPLE_COUNT_1_BIT, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, material.base_color_texture_image, material.base_color_texture_image_memory);
 
-			VulkanUtils::transitionImageLayout(vulkan_rhi, material.base_color_texture_image, VK_FORMAT_R8G8B8A8_SRGB, 1,mip_levels, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-			VulkanUtils::copyBufferToImage(vulkan_rhi, stagingBuffer, material.base_color_texture_image, static_cast<uint32_t>(material_data.m_base_color_texture->m_width), static_cast<uint32_t>(material_data.m_base_color_texture->m_height),1);
+			vulkan_rhi->transitionImageLayout(vulkan_rhi, material.base_color_texture_image, VK_FORMAT_R8G8B8A8_SRGB, 1,mip_levels, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+			vulkan_rhi->copyBufferToImage(vulkan_rhi, stagingBuffer, material.base_color_texture_image, static_cast<uint32_t>(material_data.m_base_color_texture->m_width), static_cast<uint32_t>(material_data.m_base_color_texture->m_height),1);
 
 			vkDestroyBuffer(device, stagingBuffer, nullptr);
 			vkFreeMemory(device, stagingBufferMemory, nullptr);
-			VulkanUtils::generateMipmaps(vulkan_rhi, material.base_color_texture_image, VK_FORMAT_R8G8B8A8_SRGB, material_data.m_base_color_texture->m_width, material_data.m_base_color_texture->m_height, mip_levels);
-			VulkanUtils::createTextureImageView(device, material.base_color_texture_image, material.base_color_texture_image_view, mip_levels);
+			vulkan_rhi->generateMipmaps(vulkan_rhi, material.base_color_texture_image, VK_FORMAT_R8G8B8A8_SRGB, material_data.m_base_color_texture->m_width, material_data.m_base_color_texture->m_height, mip_levels);
+			vulkan_rhi->createTextureImageView(device, material.base_color_texture_image, material.base_color_texture_image_view, mip_levels);
 
 
 			//create unofirm buffer
 			VkDeviceSize uniform_buffer_size = sizeof(UniformBufferObject);
-			VulkanUtils::createBuffer(physical_device,device,uniform_buffer_size, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, material.material_uniform_buffer, material.material_uniform_buffer_memory);
+			vulkan_rhi->createBuffer(physical_device,device,uniform_buffer_size, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, material.material_uniform_buffer, material.material_uniform_buffer_memory);
 			vkMapMemory(device, material.material_uniform_buffer_memory, 0, uniform_buffer_size, 0, &material.uniform_buffer_mapped_data);
 			
 
@@ -378,7 +377,7 @@ namespace QYHS
 			VkDescriptorImageInfo imageInfo{};
 			imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 			imageInfo.imageView = material.base_color_texture_image_view;
-			imageInfo.sampler = VulkanUtils::getOrCreateMipMapSampler(physical_device,device,mip_levels);
+			imageInfo.sampler = vulkan_rhi->getOrCreateMipMapSampler(physical_device,device,mip_levels);
 
 			std::array<VkWriteDescriptorSet, 1> descriptorWrites{};
 
@@ -431,10 +430,10 @@ namespace QYHS
 			p_vertex_binding[i].weight3 = joint_buffer_data[i].weight3;
 		}
 		vkUnmapMemory(vulkan_rhi->m_device, storage_buffer_memory);
-		VulkanUtils::createBuffer(vulkan_rhi->physical_device, vulkan_rhi->m_device, vertex_blending_buffer_size,
+		vulkan_rhi->createBuffer(vulkan_rhi->physical_device, vulkan_rhi->m_device, vertex_blending_buffer_size,
 			VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
 			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, mesh.mesh_vertex_blending_buffer, mesh.mesh_vertex_blending_buffer_memory);
-		VulkanUtils::copyBuffer(rhi.get(), storage_buffer, mesh.mesh_vertex_blending_buffer, 0, 0, vertex_blending_buffer_size);
+		vulkan_rhi->copyBuffer(rhi.get(), storage_buffer, mesh.mesh_vertex_blending_buffer, 0, 0, vertex_blending_buffer_size);
 
 		VkDescriptorBufferInfo vertex_blending_buffer_info{};
 		vertex_blending_buffer_info.offset = 0;
@@ -466,7 +465,7 @@ namespace QYHS
 		VkDeviceSize stage_buffer_size = vertex_buffer_size;
 		VkBuffer stage_buffer;
 		VkDeviceMemory stage_buffer_memory;
-		VulkanUtils::createBuffer(vulkan_rhi->getPhysicalDevice(), vulkan_rhi->getDevice(), stage_buffer_size,
+		vulkan_rhi->createBuffer(vulkan_rhi->getPhysicalDevice(), vulkan_rhi->getDevice(), stage_buffer_size,
 			VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
 			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, 
 			stage_buffer, 
@@ -493,38 +492,38 @@ namespace QYHS
 		}
 		vkUnmapMemory(vulkan_rhi->getDevice(), stage_buffer_memory);
 		
-		VulkanUtils::createBuffer(vulkan_rhi->getPhysicalDevice(), vulkan_rhi->getDevice(), 
+		vulkan_rhi->createBuffer(vulkan_rhi->getPhysicalDevice(), vulkan_rhi->getDevice(), 
 			vertex_position_buffer_size, 
 			VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
 			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
 			mesh.mesh_vertex_position_buffer, 
 			mesh.mesh_vertex_position_buffer_memory);
 
-		VulkanUtils::createBuffer(vulkan_rhi->getPhysicalDevice(), vulkan_rhi->getDevice(), 
+		vulkan_rhi->createBuffer(vulkan_rhi->getPhysicalDevice(), vulkan_rhi->getDevice(), 
 			vertex_normal_buffer_size, 
 			VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
 			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
 			mesh.mesh_vertex_normal_buffer, 
 			mesh.mesh_vertex_normal_buffer_memory);
 		
-		VulkanUtils::createBuffer(vulkan_rhi->getPhysicalDevice(), vulkan_rhi->getDevice(), 
+		vulkan_rhi->createBuffer(vulkan_rhi->getPhysicalDevice(), vulkan_rhi->getDevice(), 
 			vertex_tangent_buffer_size, 
 			VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
 			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
 			mesh.mesh_vertex_tangent_buffer, 
 			mesh.mesh_vertex_tangent_buffer_memory);
 		
-		VulkanUtils::createBuffer(vulkan_rhi->getPhysicalDevice(), vulkan_rhi->getDevice(), 
+		vulkan_rhi->createBuffer(vulkan_rhi->getPhysicalDevice(), vulkan_rhi->getDevice(), 
 			vertex_uv_buffer_size, 
 			VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
 			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
 			mesh.mesh_vertex_uv_buffer, 
 			mesh.mesh_vertex_uv_buffer_memory);
 
-		VulkanUtils::copyBuffer(vulkan_rhi, stage_buffer, mesh.mesh_vertex_position_buffer,vertex_position_buffer_offset,0, vertex_position_buffer_size);
-		VulkanUtils::copyBuffer(vulkan_rhi, stage_buffer, mesh.mesh_vertex_normal_buffer,vertex_normal_buffer_offset,0, vertex_normal_buffer_size);
-		VulkanUtils::copyBuffer(vulkan_rhi, stage_buffer, mesh.mesh_vertex_tangent_buffer,vertex_tangent_buffer_offset,0, vertex_tangent_buffer_size);
-		VulkanUtils::copyBuffer(vulkan_rhi, stage_buffer, mesh.mesh_vertex_uv_buffer,vertex_uv_buffer_offset,0, vertex_uv_buffer_size);
+		vulkan_rhi->copyBuffer(vulkan_rhi, stage_buffer, mesh.mesh_vertex_position_buffer,vertex_position_buffer_offset,0, vertex_position_buffer_size);
+		vulkan_rhi->copyBuffer(vulkan_rhi, stage_buffer, mesh.mesh_vertex_normal_buffer,vertex_normal_buffer_offset,0, vertex_normal_buffer_size);
+		vulkan_rhi->copyBuffer(vulkan_rhi, stage_buffer, mesh.mesh_vertex_tangent_buffer,vertex_tangent_buffer_offset,0, vertex_tangent_buffer_size);
+		vulkan_rhi->copyBuffer(vulkan_rhi, stage_buffer, mesh.mesh_vertex_uv_buffer,vertex_uv_buffer_offset,0, vertex_uv_buffer_size);
 		
 		vkDestroyBuffer(vulkan_rhi->getDevice(), stage_buffer, nullptr);
 		vkFreeMemory(vulkan_rhi->getDevice(), stage_buffer_memory, nullptr);
@@ -536,17 +535,17 @@ namespace QYHS
 		VkDeviceSize bufferSize = index_buffer_size;
 		VkBuffer stagingBuffer;
 		VkDeviceMemory stagingBufferMemory;
-		VulkanUtils::createBuffer(vulkan_rhi->getPhysicalDevice(), vulkan_rhi->getDevice(), bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
+		vulkan_rhi->createBuffer(vulkan_rhi->getPhysicalDevice(), vulkan_rhi->getDevice(), bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
 
 		void* data;
 		vkMapMemory(vulkan_rhi->getDevice(), stagingBufferMemory, 0, bufferSize, 0, &data);
 		memcpy(data, index_buffer, (size_t)bufferSize);
 		vkUnmapMemory(vulkan_rhi->getDevice(), stagingBufferMemory);
 
-		VulkanUtils::createBuffer(vulkan_rhi->getPhysicalDevice(), vulkan_rhi->getDevice(), bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+		vulkan_rhi->createBuffer(vulkan_rhi->getPhysicalDevice(), vulkan_rhi->getDevice(), bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
 			mesh.mesh_vertex_index_buffer, mesh.mesh_vertex_index_buffer_memory);
 
-		VulkanUtils::copyBuffer(vulkan_rhi, stagingBuffer, mesh.mesh_vertex_index_buffer,0,0, bufferSize);
+		vulkan_rhi->copyBuffer(vulkan_rhi, stagingBuffer, mesh.mesh_vertex_index_buffer,0,0, bufferSize);
 
 		vkDestroyBuffer(vulkan_rhi->getDevice(), stagingBuffer, nullptr);
 		vkFreeMemory(vulkan_rhi->getDevice(), stagingBufferMemory, nullptr);

@@ -1,5 +1,4 @@
 #include "main_camera_render_pass.h"
-#include "function/render/rhi/vulkan/vulkan_utils.h"
 #include "core/utils/utils.h"
 #include <function/render/render_common.h>
 #include <function/render/render_helper.h>
@@ -37,13 +36,13 @@ namespace QYHS
 		{
 			if (i == main_camera_pass_base_color_attachment || i == main_camera_pass_backup_odd_color_attachment || i == main_camera_pass_backup_even_color_attachment)
 			{
-				VulkanUtils::createImage(m_vulkan_rhi->getPhysicalDevice(), m_vulkan_rhi->getDevice(), extent.width, extent.height,
+				m_vulkan_rhi->createImage(m_vulkan_rhi->getPhysicalDevice(), m_vulkan_rhi->getDevice(), extent.width, extent.height,
 					m_framebuffer.attachments[i].format,
 					1, m_vulkan_rhi->getMSAASamples(), VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT,
 					VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_framebuffer.attachments[i].image,
 					m_framebuffer.attachments[i].memory);
 				m_framebuffer.attachments[i].image_view
-					= VulkanUtils::createImageView(m_vulkan_rhi->getDevice(),
+					= m_vulkan_rhi->createImageView(m_vulkan_rhi->getDevice(),
 						m_framebuffer.attachments[i].image,
 						m_framebuffer.attachments[i].format, VK_IMAGE_VIEW_TYPE_2D, 1,
 						1, VK_IMAGE_ASPECT_COLOR_BIT);
@@ -52,11 +51,11 @@ namespace QYHS
 			else if (i == main_camera_pass_depth_attachment)
 			{
 				//create depth attachment
-				VulkanUtils::createImage(m_vulkan_rhi->getPhysicalDevice(), m_vulkan_rhi->getDevice(),
+				m_vulkan_rhi->createImage(m_vulkan_rhi->getPhysicalDevice(), m_vulkan_rhi->getDevice(),
 					extent.width, extent.height, m_vulkan_rhi->getDepthImageFormat(), 1, m_vulkan_rhi->getMSAASamples(), VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
 					m_framebuffer.attachments[main_camera_pass_depth_attachment].image, m_framebuffer.attachments[main_camera_pass_depth_attachment].memory);
 				m_framebuffer.attachments[main_camera_pass_depth_attachment].image_view
-					= VulkanUtils::createImageView(m_vulkan_rhi->getDevice(),
+					= m_vulkan_rhi->createImageView(m_vulkan_rhi->getDevice(),
 						m_framebuffer.attachments[main_camera_pass_depth_attachment].image,
 						m_framebuffer.attachments[main_camera_pass_depth_attachment].format, VK_IMAGE_VIEW_TYPE_2D, 1,
 						1, VK_IMAGE_ASPECT_DEPTH_BIT);
@@ -142,7 +141,7 @@ namespace QYHS
 
 		VkDescriptorImageInfo backup_color_attachment = {};
 		backup_color_attachment.imageView = m_framebuffer.attachments[main_camera_pass_backup_odd_color_attachment].image_view;
-		backup_color_attachment.sampler = VulkanUtils::getOrCreateNearestSampler(m_vulkan_rhi->getPhysicalDevice(), m_vulkan_rhi->getDevice());
+		backup_color_attachment.sampler = m_vulkan_rhi->getOrCreateNearestSampler(m_vulkan_rhi->getPhysicalDevice(), m_vulkan_rhi->getDevice());
 		backup_color_attachment.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
 		VkWriteDescriptorSet descriptorWrites[2];
@@ -188,11 +187,12 @@ namespace QYHS
 		VkDescriptorImageInfo	base_color_input_attachment{};
 		base_color_input_attachment.imageView = m_framebuffer.attachments[main_camera_pass_base_color_attachment].image_view;
 		base_color_input_attachment.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-		base_color_input_attachment.sampler = VulkanUtils::getOrCreateNearestSampler(m_vulkan_rhi->getPhysicalDevice(), m_vulkan_rhi->getDevice());
+		base_color_input_attachment.sampler = m_vulkan_rhi->getOrCreateNearestSampler(m_vulkan_rhi->getPhysicalDevice(), m_vulkan_rhi->getDevice());
 
 		VkDescriptorImageInfo	depth_input_attachment{};
 		depth_input_attachment.imageView = m_framebuffer.attachments[main_camera_pass_depth_attachment].image_view;
-		depth_input_attachment.sampler = VulkanUtils::getOrCreateNearestSampler(m_vulkan_rhi->getPhysicalDevice(), m_vulkan_rhi->getDevice());
+		depth_input_attachment.sampler = 		base_color_input_attachment.sampler = m_vulkan_rhi->getOrCreateNearestSampler(m_vulkan_rhi->getPhysicalDevice(), m_vulkan_rhi->getDevice());
+		m_vulkan_rhi->getOrCreateNearestSampler(m_vulkan_rhi->getPhysicalDevice(), m_vulkan_rhi->getDevice());
 		depth_input_attachment.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
 		VkWriteDescriptorSet write_descriptor_set[3];
@@ -676,8 +676,8 @@ namespace QYHS
 			auto vertShaderCode = Utils::readFile("E://VS_Project//QyhsEngine//engine//shader//common_mesh_vert.spv");
 			auto fragShaderCode = Utils::readFile("E://VS_Project//QyhsEngine//engine//shader//common_mesh_frag.spv");
 
-			VkShaderModule vertShaderModule = VulkanUtils::createShaderModule(m_vulkan_rhi->getDevice(), vertShaderCode);
-			VkShaderModule fragShaderModule = VulkanUtils::createShaderModule(m_vulkan_rhi->getDevice(), fragShaderCode);
+			VkShaderModule vertShaderModule = m_vulkan_rhi->createShaderModule(m_vulkan_rhi->getDevice(), vertShaderCode);
+			VkShaderModule fragShaderModule = m_vulkan_rhi->createShaderModule(m_vulkan_rhi->getDevice(), fragShaderCode);
 
 			VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
 			vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -808,8 +808,8 @@ namespace QYHS
 			auto vertShaderCode = Utils::readFile("E://VS_Project//QyhsEngine//engine//shader//skybox_vert.spv");
 			auto fragShaderCode = Utils::readFile("E://VS_Project//QyhsEngine//engine//shader//skybox_frag.spv");
 
-			VkShaderModule vertex_shader_module = VulkanUtils::createShaderModule(m_vulkan_rhi->getDevice(), vertShaderCode);
-			VkShaderModule fragment_shader_module = VulkanUtils::createShaderModule(m_vulkan_rhi->getDevice(), fragShaderCode);
+			VkShaderModule vertex_shader_module = m_vulkan_rhi->createShaderModule(m_vulkan_rhi->getDevice(), vertShaderCode);
+			VkShaderModule fragment_shader_module = m_vulkan_rhi->createShaderModule(m_vulkan_rhi->getDevice(), fragShaderCode);
 
 			VkPipelineShaderStageCreateInfo vertex_shader_shtage_info = {};
 			vertex_shader_shtage_info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -943,8 +943,8 @@ namespace QYHS
 			auto vertShaderCode = Utils::readFile("E://VS_Project//QyhsEngine//engine//shader//axis_vert.spv");
 			auto fragShaderCode = Utils::readFile("E://VS_Project//QyhsEngine//engine//shader//axis_frag.spv");
 
-			VkShaderModule vertShaderModule = VulkanUtils::createShaderModule(m_vulkan_rhi->getDevice(), vertShaderCode);
-			VkShaderModule fragShaderModule = VulkanUtils::createShaderModule(m_vulkan_rhi->getDevice(), fragShaderCode);
+			VkShaderModule vertShaderModule = m_vulkan_rhi->createShaderModule(m_vulkan_rhi->getDevice(), vertShaderCode);
+			VkShaderModule fragShaderModule = m_vulkan_rhi->createShaderModule(m_vulkan_rhi->getDevice(), fragShaderCode);
 
 			VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
 			vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;

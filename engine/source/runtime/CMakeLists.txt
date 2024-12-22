@@ -24,6 +24,9 @@ if(MSVC)
 add_definitions(-DUNICODE -D_UNICODE)
 endif()
 
+#if you want to use volk for development
+add_definitions(-DUSE_VOLK)
+
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${HEADER_FILES} ${SOURCE_FILES})
 
 target_link_libraries(${TARGET_NAME} PUBLIC glfw)

@@ -1,7 +1,5 @@
 #include "engine.h"
 
-//#include <function/render/model.h>
-
 #include "core/meta/reflection/reflection_register.h"
 
 #include "function/global/global_context.h"
@@ -11,6 +9,7 @@
 namespace QYHS
 {
 	bool g_is_editor_mode = true;
+	std::unordered_set<std::string> g_editor_tick_component_types{};
 	void QyhsEngine::startEngine(const std::string& config_file_path)
 	{
 		Reflection::TypeMetaRegister::Register();
@@ -36,7 +35,18 @@ namespace QYHS
 		initialized = true;
 		startEngine(engine_config_file);
 		current_time = glfwGetTime();
-		//m_model = new GLTFModel();
+		m_rhi = g_runtime_global_context.m_render_system->getRHI();
+	}
+
+	void QyhsEngine::initialize2()
+	{
+		if (initialized)
+		{
+			return;
+		}
+		initialized = true;
+		m_rhi = std::make_shared<VulkanRHI>();
+		m_rhi->initialize2();
 	}
 
 	void QyhsEngine::run()
@@ -58,6 +68,38 @@ namespace QYHS
 				return;
 			}
 		}
+	}
+
+	void QyhsEngine::run2()
+	{
+		
+		if (!initialized)
+		{
+			initialize2();
+			initialized = true;
+		}
+		float delta_time = float(timer.record_elapsed_time());
+		const float target_frame_time = 1.0f / target_frame_rate;
+		if (frame_rate_lock && delta_time < target_frame_time)
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds((int)((target_frame_time - delta_time) * 1000)));
+			delta_time = float(timer.record_elapsed_time());
+		}
+
+		CommandList cmd_list = m_rhi->beginCommandList();
+		Viewport viewport;
+		viewport.width = (float)swapchain.desc.width;
+		viewport.height = (float)swapchain.desc.height;
+		//m_rhi->bindViewports(cmd_list,1, &viewport);
+		//m_rhi->beginRenderPass(&swapchain, cmd_list);
+		//compose(cmd);
+		//m_rhi->endRenderPass(cmd_list);
+		//m_rhi->submitCommandLists(cmd_list);
+	}
+
+	void QyhsEngine::setWindow(HWND hwnd)
+	{
+		this->m_hwnd = hwnd;
 	}
 
 	void QyhsEngine::update(float delta_time)

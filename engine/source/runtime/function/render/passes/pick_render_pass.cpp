@@ -2,7 +2,6 @@
 
 #include "core/utils/utils.h"
 #include "function/render/render_helper.h"
-#include "function/render/rhi/vulkan/vulkan_utils.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
@@ -39,11 +38,11 @@ namespace  QYHS
 		// just need one attachment to store node_ids
 		m_framebuffer.attachments.resize(1);
 		m_framebuffer.attachments[0].format = VK_FORMAT_R32_UINT;
-		VulkanUtils::createImage(m_vulkan_rhi->getPhysicalDevice(), m_vulkan_rhi->getDevice(), m_vulkan_rhi->getSwapChainExtent().width,
+		m_vulkan_rhi->createImage(m_vulkan_rhi->getPhysicalDevice(), m_vulkan_rhi->getDevice(), m_vulkan_rhi->getSwapChainExtent().width,
 			m_vulkan_rhi->getSwapChainExtent().height, m_framebuffer.attachments[0].format,
 			1, VK_SAMPLE_COUNT_1_BIT, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
 			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_framebuffer.attachments[0].image, m_framebuffer.attachments[0].memory);
-		m_framebuffer.attachments[0].image_view = VulkanUtils::createImageView(m_vulkan_rhi->getDevice(), m_framebuffer.attachments[0].image, m_framebuffer.attachments[0].format,
+		m_framebuffer.attachments[0].image_view = m_vulkan_rhi->createImageView(m_vulkan_rhi->getDevice(), m_framebuffer.attachments[0].image, m_framebuffer.attachments[0].format,
 			VK_IMAGE_VIEW_TYPE_2D, 1, 1, VK_IMAGE_ASPECT_COLOR_BIT);
 
 	}
@@ -160,9 +159,9 @@ namespace  QYHS
 		}
 
 		VkShaderModule vert_shader_module =
-			VulkanUtils::createShaderModule(m_vulkan_rhi->m_device, Utils::readFile("E://VS_Project//QyhsEngine//engine//shader//mesh_inefficient_axis_vert.spv"));
+			m_vulkan_rhi->createShaderModule(m_vulkan_rhi->m_device, Utils::readFile("E://VS_Project//QyhsEngine//engine//shader//mesh_inefficient_axis_vert.spv"));
 		VkShaderModule frag_shader_module =
-			VulkanUtils::createShaderModule(m_vulkan_rhi->m_device, Utils::readFile("E://VS_Project//QyhsEngine//engine//shader//mesh_inefficient_axis_frag.spv"));
+			m_vulkan_rhi->createShaderModule(m_vulkan_rhi->m_device, Utils::readFile("E://VS_Project//QyhsEngine//engine//shader//mesh_inefficient_axis_frag.spv"));
 
 		VkPipelineShaderStageCreateInfo vert_pipeline_shader_stage_create_info{};
 		vert_pipeline_shader_stage_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -555,7 +554,7 @@ namespace  QYHS
 		uint32_t buffer_size = m_vulkan_rhi->m_swapchain_extent.width * m_vulkan_rhi->m_swapchain_extent.height * 4;
 		VkBuffer inefficient_staging_buffer;
 		VkDeviceMemory inefficient_staging_buffer_memory;
-		VulkanUtils::createBuffer(m_vulkan_rhi->physical_device,
+		m_vulkan_rhi->createBuffer(m_vulkan_rhi->physical_device,
 			m_vulkan_rhi->m_device,
 			buffer_size,
 			VK_BUFFER_USAGE_TRANSFER_DST_BIT,

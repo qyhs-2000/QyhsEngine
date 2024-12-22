@@ -21,4 +21,10 @@ set(QYHS_ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 set(CMAKE_INSTALL_PREFIX "${QYHS_ROOT_DIR}/bin")
 set(BINARY_ROOT_DIR ${CMAKE_INSTALL_PREFIX})
 
+#Samples
+set(TEMPLATE_WINDOW "Template_Window")
+
+
+
 add_subdirectory(engine)
+add_subdirectory(samples/template_windows)

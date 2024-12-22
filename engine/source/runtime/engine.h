@@ -4,18 +4,25 @@
 
 #include <fstream>
 #include <stdexcept>
+//make max and min function in windows.h unvalid
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif // !NOMINMAX
 
+#include <Windows.h>
 
 #ifdef VK_USE_PLATFORM_ANDROID_KHR
 #	define TINYGLTF_ANDROID_LOAD_FROM_ASSETS
 #endif
 
 #include "function/render/rhi/vulkan/vulkan_rhi.h"
-
+#include "function/timer/timer.h"
 
 namespace QYHS
 {
+	extern std::unordered_set<std::string> g_editor_tick_component_types;
 	extern bool g_is_editor_mode;
+	
 	class QyhsEngine
 	{
 	public:
@@ -23,8 +30,6 @@ namespace QYHS
 		bool tick(double delta_time);
 		void logicTick(double delta_time);
 		void renderTick();
-		void loadAssets();
-		void loadglTFFile(const std::string& path);
 		void createWindow();
 		virtual void update(float delta_time);
 		bool shouldWindowClose();
@@ -33,8 +38,12 @@ namespace QYHS
 		double caculateDeltaTime();
 		void setConfigFile(std::string file_path) { engine_config_file = file_path; }
 		void run();
+		void run2();
+		bool is_window_active{ true };
+		void setWindow(HWND hwnd);
+		void initialize2();
 	private:
-
+		HWND m_hwnd;
 		VkInstance instance;
 		VkDebugUtilsMessengerEXT debugMessenger;
 		VkSurfaceKHR surface;
@@ -57,11 +66,33 @@ namespace QYHS
 		}
 		
 	public:
-		
+		struct InfoDisplayer
+		{
+			bool active = false;
+			bool watermark = true;
+			bool fpsinfo = false;
+			bool device_name = false;
+			bool resolution = false;
+			bool logical_size = false;
+			bool colorspace = false;
+			bool heap_allocation_counter = false;
+			bool pipeline_count = false;
+			bool pipeline_creation = false;
+			bool vram_usage = false;
+			int size = 16;
+			bool colorgrading_helper = false;
+			
+		} info_display;
+
+		Timer timer;
+		float target_frame_rate{ 60.0f };
 	protected:
 		std::string engine_config_file;
 	private:
 		double current_time;
 		bool initialized{ false };
+		bool frame_rate_lock{ false };
+		std::shared_ptr<RHI> m_rhi;
+		SwapChain swapchain;
 	};
 }

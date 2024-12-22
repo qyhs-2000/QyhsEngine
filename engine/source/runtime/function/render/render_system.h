@@ -40,6 +40,7 @@ namespace QYHS
 		size_t postAndLoadMaterialSource(MaterialRes & material_res,bool with_texture);
 		size_t createNewEntity(std::string name);
 		size_t createMesh(RenderMeshData& mesh_data);
+		std::shared_ptr<RHI> getRHI() { return m_rhi; }
 	private:
 		std::shared_ptr<RenderCamera>			m_render_camera;
 		std::shared_ptr<RHI> m_rhi;

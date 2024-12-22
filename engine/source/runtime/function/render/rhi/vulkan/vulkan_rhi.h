@@ -14,17 +14,26 @@
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #define GLM_ENABLE_EXPERIMENTAL
-#include <vulkan/vulkan.h>
+
+#ifdef USE_VOLK
+#define VK_NO_PROTOTYPES
+#include "vulkan/vulkan.h"
+#include <vulkan/volk.h>
+#else
+#include "vulkan/vulkan.h"
+#endif // USE_VOLK
+#include <vulkan/vk_mem_alloc.h>
+
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/hash.hpp>
 #include "function/render/rhi/rhi.h"
-#include "function/render/model.h"
-#include "vulkanmemoryallocator/include/vk_mem_alloc.h"
 #include <core/math/vector2.h>
 #include <core/math/vector3.h>
-
+#include <core/math/matrix4.h>
+#include "function/render/render_type.h"
+#include "core/utils/spin_lock.h"
 struct MeshVertex {
 	glm::vec3 pos;
 	//glm::vec3 color;
@@ -160,11 +169,83 @@ struct UniformBufferObject {
 };
 namespace QYHS
 {
+	class Texture
+	{
+
+	};
+
+	class Texture2D :public Texture
+	{
+
+
+	public:
+		void fromBuffer(unsigned char * buffer,unsigned int buffer_size,VkFormat format,unsigned int width,unsigned int weight, VkDevice device = VK_NULL_HANDLE);
+	};
+
+	//TODO:Destroy buffer  when application is destroyed
+	struct VulkanMaterial
+	{
+		//common base texture image
+		VkImage	base_color_texture_image;
+		VkImageView	base_color_texture_image_view;
+		VkDeviceMemory base_color_texture_image_memory;
+
+		VkBuffer material_uniform_buffer;
+		VkDeviceMemory material_uniform_buffer_memory;
+		void* uniform_buffer_mapped_data;
+		VkDescriptorSet *material_descriptor_set;
+	};
+
+	//TODO:Destroy buffer
+	struct VulkanMesh
+	{
+		VkBuffer mesh_vertex_position_buffer;
+		VkDeviceMemory mesh_vertex_position_buffer_memory;
+
+		VkBuffer mesh_vertex_normal_buffer;
+		VkDeviceMemory mesh_vertex_normal_buffer_memory;
+
+		VkBuffer mesh_vertex_tangent_buffer;
+		VkDeviceMemory mesh_vertex_tangent_buffer_memory;
+
+		VkBuffer mesh_vertex_uv_buffer;
+		VkDeviceMemory mesh_vertex_uv_buffer_memory;
+
+		VkBuffer mesh_vertex_index_buffer;
+		VkDeviceMemory mesh_vertex_index_buffer_memory;
+
+		VkBuffer mesh_vertex_blending_buffer;
+		VkDeviceMemory mesh_vertex_blending_buffer_memory;
+
+		size_t index_count;
+
+		VkDescriptorSet* p_vertex_blending_descriptor_set{ nullptr };
+
+	};
+
+	struct RenderMeshNode
+	{
+		Matrix4x4 model_matrix;
+		VulkanMesh* p_mesh;
+		VulkanMaterial* p_material;
+		uint32_t node_id;
+		bool enable_vertex_blending{ false };
+		Matrix4x4 *joint_matrices;
+		size_t joint_count{ 0 };
+	};
+
+	struct CommandList_Vulkan
+	{
+
+	};
+	
 	class VulkanRHI final :public RHI
 	{
 	public:
+		VulkanRHI();
 		virtual ~VulkanRHI() override final;
 		void initialize();
+		void initialize2() override;
 		void cleanup();
 		VkCommandBuffer beginSingleTimeCommands();
 		void endSingleTimeCommands(VkCommandBuffer commandBuffer);
@@ -184,6 +265,7 @@ namespace QYHS
 		void createStorageBuffer(VkDeviceSize buffer_size,VkBuffer &storage_buffer,VkDeviceMemory &storage_buffer_memory);
 		void cmdBindDescriptorSets(VkPipelineBindPoint bind_point,VkPipelineLayout * pipeline_layout, int first_set, int set_count, const VkDescriptorSet* const* pDescriptorSets, uint32_t dynamic_offset_count, const uint32_t* p_dynamic_offsets);
 		void createDescriptorSetLayout(VkDescriptorSetLayoutCreateInfo* create_info, const VkAllocationCallbacks * callbacks,VkDescriptorSetLayout*& p_descriptor_set_layout);
+		CommandList beginCommandList() override;
 		int getMaxFrameInFlight() { return MAX_FRAMES_IN_FLIGHT; }
 		VkDevice getDevice() { return m_device; }
 		VkPhysicalDevice getPhysicalDevice() { return physical_device; }
@@ -216,9 +298,24 @@ namespace QYHS
 		VkResult queueSubmit(VkQueue queue, uint32_t submit_count, VkSubmitInfo* submit_info, VkFence fence);
 		VkResult queueWaitIdle(VkQueue queue);
 		void freeCommandBuffers(VkCommandPool command_pool, size_t free_count, VkCommandBuffer* p_command_buffer);
+
+		VkShaderModule createShaderModule(VkDevice device,const std::vector<char>& code);
+		void createImage(VkPhysicalDevice physical_device, VkDevice device,uint32_t width, uint32_t height, VkFormat format, uint32_t mip_levels, VkSampleCountFlagBits num_samples, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
+		VkImageView createImageView(VkDevice device, VkImage image, VkFormat format,VkImageViewType image_view_type,uint32_t layer_count, uint32_t mip_levels, VkImageAspectFlags aspectFlags);
+		uint32_t findMemoryType(VkPhysicalDevice physical_device,uint32_t typeFilter, VkMemoryPropertyFlags properties);
+		void createBuffer(VkPhysicalDevice physical_device, VkDevice device, VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
+		void transitionImageLayout(RHI* vulkan_rhi, VkImage image, VkFormat format, uint32_t layer_count,uint32_t mip_levels, VkImageLayout oldLayout, VkImageLayout newLayout);
+		void copyBufferToImage(RHI* vulkan_rhi, VkBuffer buffer, VkImage image, uint32_t width, uint32_t height,uint32_t layer_count);
+		void generateMipmaps(RHI* vulkan_rhi, VkImage image, VkFormat format, uint32_t tex_width, uint32_t tex_height, uint32_t mip_levels);
+		void createTextureImageView(VkDevice device, VkImage image, VkImageView &image_view, uint32_t mip_levels);
+		void copyBuffer(RHI* rhi, VkBuffer srcBuffer, VkBuffer dstBuffer,VkDeviceSize src_offset,VkDeviceSize dst_offset, VkDeviceSize size);
+		VkSampler& getOrCreateMipMapSampler(VkPhysicalDevice physical_device, VkDevice device, uint32_t mip_levels);
+		std::unordered_map<uint32_t, VkSampler> m_mipmap_sampler_map;
+		void createCubeMap(RHI* rhi, VkImage& image, VkImageView& image_view, VmaAllocation& allocation, uint32_t width, uint32_t height, std::array<void*, 6> pixels, PIXEL_FORMAT texture_image_format, uint32_t miplevels);
+		VkSampler getOrCreateNearestSampler(VkPhysicalDevice physical_device, VkDevice device);
 	private:
 		void initVulkan();
-		
+		void initVolk();
 		void createInstance();
 		void setupDebugMessenger();
 		void createSurface();
@@ -230,7 +327,6 @@ namespace QYHS
 		void createDepthResources();
 		void createFramebuffers();
 		void loadModel();
-		void loadAssets();
 		void createDescriptorPool();
 		void createCommandBuffers();
 		void createSyncObjects();
@@ -247,7 +343,7 @@ namespace QYHS
 		VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
 		VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
 		VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
-
+		CommandList_Vulkan& getCommandList(CommandList cmd);
 		void createImage(uint32_t width, uint32_t height, VkFormat format, uint32_t mip_levels, VkSampleCountFlagBits num_samples, VkImageTiling tiling,
 			VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
 		void transitionImageLayout(VkImage image, VkFormat format, uint32_t mip_levels, VkImageLayout oldLayout, VkImageLayout newLayout);
@@ -338,6 +434,7 @@ namespace QYHS
 		std::vector<VkSemaphore> imageAvailableSemaphores;
 		std::vector<VkSemaphore> renderFinishedSemaphores;
 		std::vector<VkFence> m_is_frame_in_flight_fences;
+		std::vector<std::unique_ptr<CommandList_Vulkan>> commandlists;
 		uint8_t m_current_frame_index = 0;
 
 		bool framebufferResized = false;
@@ -347,8 +444,10 @@ namespace QYHS
 		float delta_time;
 		float current_time;
 
-		GLTFModel m_model;
 		uint32_t                       m_vulkan_api_version {VK_API_VERSION_1_0};
+		uint32_t cmd_count{ 0 };
 		bool m_enable_debug_util{ true };
+		static VkSampler m_nearest_sampler;
+		SpinLock cmd_locker;
 	};
 }

@@ -5,7 +5,7 @@
 #include <stdexcept>
 #include "render_guid_allocator.h"
 #include "render_type.h"
-#include "rhi/rhi.h"
+#include "rhi/vulkan/vulkan_rhi.h"
 #include "render_resource_base.h"
 #include "render_common.h"
 #include "vulkanmemoryallocator/include/vk_mem_alloc.h"
