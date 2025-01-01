@@ -1,5 +1,4 @@
 #pragma once
-#include "function/render/rhi/rhi.h"
 #include "render_resource_base.h"
 #include "render_pass_base.h"
 #include <memory>

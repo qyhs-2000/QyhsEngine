@@ -11,9 +11,14 @@
 #include <set>
 #include <unordered_map>
 #include <memory>
+#include <mutex>
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #define GLM_ENABLE_EXPERIMENTAL
+
+#ifdef _WIN32 
+#define VK_USE_PLATFORM_WIN32_KHR
+#endif
 
 #ifdef USE_VOLK
 #define VK_NO_PROTOTYPES
@@ -23,6 +28,7 @@
 #include "vulkan/vulkan.h"
 #endif // USE_VOLK
 #include <vulkan/vk_mem_alloc.h>
+
 
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -125,9 +131,6 @@ const std::vector<const char*> validationLayers = {
 	"VK_LAYER_KHRONOS_validation"
 };
 
-const std::vector<const char*> deviceExtensions = {
-	VK_KHR_SWAPCHAIN_EXTENSION_NAME
-};
 
 #ifdef NDEBUG
 const bool enableValidationLayers = false;
@@ -140,18 +143,19 @@ const bool enable_debug_utils_label = true;
 
 
 struct QueueFamilyIndices {
-	std::optional<uint32_t> graphicsFamily;
-	std::optional<uint32_t> presentFamily;
+	std::optional<uint32_t> graphics_family;
+	std::optional<uint32_t> present_family;
+	std::optional<uint32_t> compute_family;
 
 	bool isComplete() {
-		return graphicsFamily.has_value() && presentFamily.has_value();
+		return graphics_family.has_value() && compute_family.has_value();
 	}
 };
 
 struct SwapChainSupportDetails {
 	VkSurfaceCapabilitiesKHR capabilities;
 	std::vector<VkSurfaceFormatKHR> formats;
-	std::vector<VkPresentModeKHR> presentModes;
+	std::vector<VkPresentModeKHR> present_modes;
 };
 
 namespace std {
@@ -234,14 +238,59 @@ namespace QYHS
 		size_t joint_count{ 0 };
 	};
 
-	struct CommandList_Vulkan
-	{
-
-	};
+	
 	
 	class VulkanRHI final :public RHI
 	{
 	public:
+		struct CommandList_Vulkan
+		{
+			VkCommandPool command_pools[BUFFER_COUNT][QUEUE_COUNT];
+			VkCommandBuffer command_buffers[BUFFER_COUNT][QUEUE_COUNT];
+			const VkCommandBuffer getCommandBuffer() const { return command_buffers[buffer_index][queue]; }
+			VkCommandPool getCommandPool() const { return command_pools[buffer_index][queue]; }
+			QueueType queue{};
+			std::vector<VkSemaphore> signals;		//signal that after submit command list
+			std::vector<VkSemaphore> waits;			//wait for signal
+			std::vector<std::pair<QueueType, VkSemaphore>> wait_queues;	//wait for queue
+			std::vector<SwapChain> prev_swapchains;
+			uint32_t index{ 0 };
+			uint32_t buffer_index{ 0 };
+		};
+
+		struct CommandQueue
+		{
+			VkQueue queue{ VK_NULL_HANDLE };
+			std::shared_ptr<std::mutex> locker;
+			std::vector<VkCommandBufferSubmitInfo> submit_cmds;
+			std::vector<VkSemaphoreSubmitInfo> submit_waitSemaphoreInfos;
+			std::vector<VkSemaphoreSubmitInfo> submit_signalSemaphoreInfos;
+			std::vector<VkSwapchainKHR> submit_swapchains;
+			std::vector<VkSemaphore> submit_signalSemaphores;
+			std::vector<SwapChain> swapchain_updates;
+			std::vector<uint32_t> submit_swapchain_image_indices;
+			void submit(VulkanRHI* rhi, VkFence fence);
+			void signal(VkSemaphore& semaphore);
+			void wait(VkSemaphore& semaphore);
+		} queues[QUEUE_COUNT];
+
+		struct SwapChain_Vulkan
+		{
+			VkSurfaceKHR surface{ VK_NULL_HANDLE };
+			SwapChainDesc desc;
+			VkSwapchainKHR swapchain{ VK_NULL_HANDLE };
+			ColorSpace color_space{ ColorSpace::SRGB };
+			VkExtent2D swapChainExtent;
+			VkFormat swapchainImageFormat;
+			std::vector<VkImage> swapchain_images;
+			std::vector<VkImageView> swapchain_image_views;
+			uint32_t swapchain_image_index{ 0 };
+			std::vector<VkSemaphore> swapchainAcquireSemaphores;
+			VkSemaphore swapchain_release_semaphore = VK_NULL_HANDLE;
+			uint32_t swapchain_acquire_semaphore_index{ 0 };
+			std::mutex locker;
+		};
+
 		VulkanRHI();
 		virtual ~VulkanRHI() override final;
 		void initialize();
@@ -265,7 +314,7 @@ namespace QYHS
 		void createStorageBuffer(VkDeviceSize buffer_size,VkBuffer &storage_buffer,VkDeviceMemory &storage_buffer_memory);
 		void cmdBindDescriptorSets(VkPipelineBindPoint bind_point,VkPipelineLayout * pipeline_layout, int first_set, int set_count, const VkDescriptorSet* const* pDescriptorSets, uint32_t dynamic_offset_count, const uint32_t* p_dynamic_offsets);
 		void createDescriptorSetLayout(VkDescriptorSetLayoutCreateInfo* create_info, const VkAllocationCallbacks * callbacks,VkDescriptorSetLayout*& p_descriptor_set_layout);
-		CommandList beginCommandList() override;
+		CommandList beginCommandList(QueueType queue ) override;
 		int getMaxFrameInFlight() { return MAX_FRAMES_IN_FLIGHT; }
 		VkDevice getDevice() { return m_device; }
 		VkPhysicalDevice getPhysicalDevice() { return physical_device; }
@@ -278,6 +327,7 @@ namespace QYHS
 		VkBuffer getUniformBuffer(uint32_t index) {
 			return uniformBuffers[index];
 		}
+		virtual void submitCommandLists(CommandList& cmd) override;
 		VkImageView& getTextureImageView() { return textureImageView; }
 		VkSampler& getTextureSampler() { return textureSampler; }
 		uint32_t getCurrentFrameIndex() { return m_current_frame_index; }
@@ -313,12 +363,17 @@ namespace QYHS
 		std::unordered_map<uint32_t, VkSampler> m_mipmap_sampler_map;
 		void createCubeMap(RHI* rhi, VkImage& image, VkImageView& image_view, VmaAllocation& allocation, uint32_t width, uint32_t height, std::array<void*, 6> pixels, PIXEL_FORMAT texture_image_format, uint32_t miplevels);
 		VkSampler getOrCreateNearestSampler(VkPhysicalDevice physical_device, VkDevice device);
+		virtual bool createSwapChain(platform::WindowType window,SwapChain* swapchain,SwapChainDesc desc)override;
+		void createSurface(SwapChain * swapchain=nullptr,HWND hwnd=NULL);
+		//bool createInternalSwapChain(SwapChain_Vulkan* internal_state);
+		constexpr VkFormat convertFormat(Format value);
 	private:
 		void initVulkan();
+		void initVulkan2();
 		void initVolk();
 		void createInstance();
 		void setupDebugMessenger();
-		void createSurface();
+		//void createSurface();
 		void pickPhysicalDevice();
 		void createLogicalDevice();
 		void createSwapChain();
@@ -338,9 +393,9 @@ namespace QYHS
 		
 		bool isDeviceSuitable(VkPhysicalDevice device);
 		bool checkDeviceExtensionSupport(VkPhysicalDevice device);
-		SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
+		//SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device,VkSurfaceKHR & surface);
 		VkSampleCountFlagBits getMaxAvailableSamplerCount();
-		VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
+		//VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
 		VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
 		VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
 		CommandList_Vulkan& getCommandList(CommandList cmd);
@@ -362,7 +417,12 @@ namespace QYHS
 		void createViewport();
 		PFN_vkCmdBeginDebugUtilsLabelEXT _vkCmdBeginDebugUtilsLabelEXT;
 		PFN_vkCmdEndDebugUtilsLabelEXT _vkCmdEndDebugUtilsLabelEXT;
+		virtual void bindViewports(CommandList& cmd_list, uint32_t viewport_count, Viewport* viewport) override;
+		virtual void beginRenderPass(SwapChain* swapchain, CommandList& cmd_list) override;
+		virtual void endRenderPass(CommandList& cmd_list) override;
+		int getBufferIndex() const { return frame_count % BUFFER_COUNT; }
 	public:
+		uint64_t frame_count{ 0 };
 		VmaAllocator m_assets_allocator;
 		VkRect2D m_scissor;
 		
@@ -374,13 +434,16 @@ namespace QYHS
 		VkCommandPool* m_p_command_pools{ nullptr };
 		VkCommandBuffer* m_p_command_buffers{ nullptr };
 		VkCommandBuffer  m_current_command_buffer;
+		VkFence frame_fences[BUFFER_COUNT][QUEUE_COUNT];
+		std::unordered_map<uint32_t, std::shared_ptr<std::mutex>> queue_lockers;
 	public:
 		VkQueue graphics_queue;
 		VkQueue present_queue;
+		VkQueue compute_queue;
 		VkDevice m_device;
 		VkInstance instance;
 		VkDebugUtilsMessengerEXT debugMessenger;
-		GLFWwindow* m_window;
+		GLFWwindow* m_window{ nullptr };
 		VkSurfaceKHR surface;
 		VkPhysicalDevice physical_device;
 		VkViewport m_viewport;
@@ -408,6 +471,15 @@ namespace QYHS
 		VkImage colorImage;
 		VkDeviceMemory colorImageMemory;
 		VkImageView colorImageView;
+		VkPhysicalDeviceProperties2 m_physical_device_properties_2{};
+		VkPhysicalDeviceVulkan11Properties m_physical_device_properties_1_1 = {};
+		VkPhysicalDeviceVulkan12Properties m_physical_device_properties_1_2 = {};
+		VkPhysicalDeviceVulkan13Properties m_physical_device_properties_1_3 = {};
+
+		VkPhysicalDeviceFeatures2 m_physical_device_features_2{};
+		VkPhysicalDeviceVulkan11Features  m_physical_device_features_1_1{};
+		VkPhysicalDeviceVulkan12Features  m_physical_device_features_1_2{};
+		VkPhysicalDeviceVulkan13Features  m_physical_device_features_1_3{};
 
 		QueueFamilyIndices queue_family_indices;
 		VkImage textureImage;
@@ -449,5 +521,9 @@ namespace QYHS
 		bool m_enable_debug_util{ true };
 		static VkSampler m_nearest_sampler;
 		SpinLock cmd_locker;
+		std::vector<const char*> deviceExtensions= {
+			VK_KHR_SWAPCHAIN_EXTENSION_NAME
+		};
+		
 	};
 }

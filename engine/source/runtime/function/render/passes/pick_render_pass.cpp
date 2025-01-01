@@ -420,8 +420,8 @@ namespace  QYHS
 			transfer_to_render_barrier.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
 			transfer_to_render_barrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 			transfer_to_render_barrier.newLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-			transfer_to_render_barrier.srcQueueFamilyIndex = m_vulkan_rhi->queue_family_indices.graphicsFamily.value();
-			transfer_to_render_barrier.dstQueueFamilyIndex = m_vulkan_rhi->queue_family_indices.graphicsFamily.value();
+			transfer_to_render_barrier.srcQueueFamilyIndex = m_vulkan_rhi->queue_family_indices.graphics_family.value();
+			transfer_to_render_barrier.dstQueueFamilyIndex = m_vulkan_rhi->queue_family_indices.graphics_family.value();
 			transfer_to_render_barrier.image = m_framebuffer.attachments[0].image;
 			transfer_to_render_barrier.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
 			vkCmdPipelineBarrier(m_vulkan_rhi->m_command_buffers[m_vulkan_rhi->m_current_frame_index],
@@ -569,8 +569,8 @@ namespace  QYHS
 		copy_to_buffer_barrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
 		copy_to_buffer_barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
 		copy_to_buffer_barrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
-		copy_to_buffer_barrier.srcQueueFamilyIndex = m_vulkan_rhi->queue_family_indices.graphicsFamily.value();
-		copy_to_buffer_barrier.dstQueueFamilyIndex = m_vulkan_rhi->queue_family_indices.graphicsFamily.value();
+		copy_to_buffer_barrier.srcQueueFamilyIndex = m_vulkan_rhi->queue_family_indices.graphics_family.value();
+		copy_to_buffer_barrier.dstQueueFamilyIndex = m_vulkan_rhi->queue_family_indices.graphics_family.value();
 		copy_to_buffer_barrier.image = m_framebuffer.attachments[0].image;
 		copy_to_buffer_barrier.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
 		vkCmdPipelineBarrier(command_buffer,

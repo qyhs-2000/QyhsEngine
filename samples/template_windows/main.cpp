@@ -181,6 +181,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             break;
         case VK_RETURN:
             break;
+
         default:
             {
             const wchar_t c = (const wchar_t)wParam;

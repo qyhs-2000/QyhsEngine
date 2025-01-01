@@ -37,7 +37,7 @@ namespace QYHS
         init_info.Instance                  = std::static_pointer_cast<VulkanRHI>(m_rhi)->instance;
         init_info.PhysicalDevice            = std::static_pointer_cast<VulkanRHI>(m_rhi)->physical_device;
         init_info.Device                    = std::static_pointer_cast<VulkanRHI>(m_rhi)->m_device;
-        init_info.QueueFamily               = m_vulkan_rhi->findQueueFamilies(m_vulkan_rhi->getPhysicalDevice()).graphicsFamily.value();
+        init_info.QueueFamily               = m_vulkan_rhi->findQueueFamilies(m_vulkan_rhi->getPhysicalDevice()).graphics_family.value();
         init_info.Queue                     = m_vulkan_rhi->getGraphicsQueue();
         init_info.DescriptorPool            = std::static_pointer_cast<VulkanRHI>(m_rhi)->m_descriptor_pool;
         init_info.Subpass                   = main_camera_subpass_ui;

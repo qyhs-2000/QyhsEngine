@@ -5,11 +5,7 @@
 #include <fstream>
 #include <stdexcept>
 //make max and min function in windows.h unvalid
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif // !NOMINMAX
 
-#include <Windows.h>
 
 #ifdef VK_USE_PLATFORM_ANDROID_KHR
 #	define TINYGLTF_ANDROID_LOAD_FROM_ASSETS
@@ -17,7 +13,7 @@
 
 #include "function/render/rhi/vulkan/vulkan_rhi.h"
 #include "function/timer/timer.h"
-
+#include "function/ui/canvas.h"
 namespace QYHS
 {
 	extern std::unordered_set<std::string> g_editor_tick_component_types;
@@ -26,7 +22,9 @@ namespace QYHS
 	class QyhsEngine
 	{
 	public:
-		
+		Canvas canvas;
+	public:
+		QyhsEngine();
 		bool tick(double delta_time);
 		void logicTick(double delta_time);
 		void renderTick();
@@ -40,10 +38,10 @@ namespace QYHS
 		void run();
 		void run2();
 		bool is_window_active{ true };
-		void setWindow(HWND hwnd);
+		void setWindow(platform::WindowType hwnd);
 		void initialize2();
 	private:
-		HWND m_hwnd;
+		platform::WindowType window;
 		VkInstance instance;
 		VkDebugUtilsMessengerEXT debugMessenger;
 		VkSurfaceKHR surface;
@@ -88,11 +86,11 @@ namespace QYHS
 		float target_frame_rate{ 60.0f };
 	protected:
 		std::string engine_config_file;
+		SwapChain swapchain;
 	private:
 		double current_time;
 		bool initialized{ false };
 		bool frame_rate_lock{ false };
-		std::shared_ptr<RHI> m_rhi;
-		SwapChain swapchain;
+		std::shared_ptr<RHI> m_rhi = std::make_shared<VulkanRHI>();
 	};
 }

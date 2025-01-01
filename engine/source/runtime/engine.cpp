@@ -6,6 +6,8 @@
 #include <function/render/render_system.h>
 #include<function/render/window_system.h>
 #include <function/framework/world/world_manager.h>
+
+
 namespace QYHS
 {
 	bool g_is_editor_mode = true;
@@ -45,8 +47,7 @@ namespace QYHS
 			return;
 		}
 		initialized = true;
-		m_rhi = std::make_shared<VulkanRHI>();
-		m_rhi->initialize2();
+		
 	}
 
 	void QyhsEngine::run()
@@ -90,16 +91,31 @@ namespace QYHS
 		Viewport viewport;
 		viewport.width = (float)swapchain.desc.width;
 		viewport.height = (float)swapchain.desc.height;
-		//m_rhi->bindViewports(cmd_list,1, &viewport);
-		//m_rhi->beginRenderPass(&swapchain, cmd_list);
+
+		m_rhi->bindViewports(cmd_list,1, &viewport);
+		m_rhi->beginRenderPass(&swapchain, cmd_list);
 		//compose(cmd);
-		//m_rhi->endRenderPass(cmd_list);
-		//m_rhi->submitCommandLists(cmd_list);
+		m_rhi->endRenderPass(cmd_list);
+		m_rhi->submitCommandLists(cmd_list);
+
 	}
 
-	void QyhsEngine::setWindow(HWND hwnd)
+	void QyhsEngine::setWindow(platform::WindowType window)
 	{
-		this->m_hwnd = hwnd;
+		this->window = window;
+		
+		canvas.init(window);
+		SwapChainDesc desc;
+		if (swapchain.isValid())
+		{
+			desc = swapchain.desc;
+		}
+		else
+		{
+			desc.format = Format::R10G10B10A2_UNORM;
+		}
+		bool success = m_rhi->createSwapChain(window,&swapchain, desc);
+		assert(success);
 	}
 
 	void QyhsEngine::update(float delta_time)
@@ -113,6 +129,12 @@ namespace QYHS
 		double delta_time = time - current_time;
 		current_time = time;
 		return delta_time;
+	}
+
+	QyhsEngine::QyhsEngine()
+	{
+
+		
 	}
 
 	bool QyhsEngine::tick(double delta_time)
