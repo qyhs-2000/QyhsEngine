@@ -8,16 +8,16 @@
 #include <function/framework/component/ecs.h>
 #include <memory>
 #include<string>
-namespace QYHS
+namespace qyhs
 {
 	class ObjectInstanceResource;
 	class Level
 	{
 	public:
-		ComponentLibrary component_library;
-		ComponentManager<TransformComponent>& transform_componentmanager = component_library.Register<TransformComponent>("TransformComponent");
-		ComponentManager<MeshComponent>& transform_component_manager = component_library.Register<MeshComponent>("TransformComponent");
-		ComponentManager<HierarchyComponent>& hierarchy_component_manager = component_library.Register<HierarchyComponent>("HierarchyComponent");
+		ecs::ComponentLibrary component_library;
+		ecs::ComponentManager<TransformComponent>& transform_componentmanager = component_library.Register<TransformComponent>("TransformComponent");
+		ecs::ComponentManager<MeshComponent>& transform_component_manager = component_library.Register<MeshComponent>("TransformComponent");
+		ecs::ComponentManager<HierarchyComponent>& hierarchy_component_manager = component_library.Register<HierarchyComponent>("HierarchyComponent");
 		
 		void tick(double delta_time);
 		bool load(const std::string & level_url);

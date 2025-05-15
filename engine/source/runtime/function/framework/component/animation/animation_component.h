@@ -4,7 +4,7 @@
 #include "animation.h"
 #include "blend_state.h"
 #include "skeleton.h"
-namespace QYHS
+namespace qyhs
 {
 
 	REFLECTION_TYPE(AnimationComponent)

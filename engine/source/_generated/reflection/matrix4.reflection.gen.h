@@ -1,7 +1,7 @@
 #pragma once
 #include "runtime\core\math\matrix4.h"
 
-namespace QYHS
+namespace qyhs
 {
 	class TmpTestClass;
 	class Matrix4x4_;

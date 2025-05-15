@@ -1,7 +1,7 @@
 #pragma once
 #include "core/math/math.h"
 #include "runtime/core/meta/reflection/reflection.h"
-namespace QYHS
+namespace qyhs
 {
     REFLECTION_TYPE(TmpTest)
         CLASS(TmpTest, Fields)
@@ -146,7 +146,7 @@ namespace QYHS
             }
             else
             {
-                // return an invalid result to flag the error
+                // return an invalid result to flags the error
                 return ZERO;
             }
         }

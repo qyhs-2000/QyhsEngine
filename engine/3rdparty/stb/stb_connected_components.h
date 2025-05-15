@@ -1002,7 +1002,7 @@ static void stbcc__build_clumps_for_cluster(stbcc_grid *g, int cx, int cy)
       c->clump[i].global_label = gc;
    }
 
-   c->rebuild_adjacency = 1; // flag that it has no valid adjacency data
+   c->rebuild_adjacency = 1; // flags that it has no valid adjacency data
 }
 
 #endif // STB_CONNECTED_COMPONENTS_IMPLEMENTATION

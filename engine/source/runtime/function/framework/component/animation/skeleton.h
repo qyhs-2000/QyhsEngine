@@ -2,7 +2,7 @@
 #include "blend_state.h"
 #include "node.h"
 #include "animation.h"
-namespace QYHS
+namespace qyhs
 {
 	
 

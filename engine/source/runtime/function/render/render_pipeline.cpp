@@ -4,7 +4,7 @@
 #include "passes/pick_render_pass.h"
 #include "passes/combine_ui_pass.h"
 
-void QYHS::RenderPipeline::initialize(RenderPipelineInitInfo init_info)
+void qyhs::RenderPipeline::initialize(RenderPipelineInitInfo init_info)
 {
 
 	m_main_camera_pass = std::make_shared<MainCameraRenderPass>();
@@ -41,7 +41,7 @@ void QYHS::RenderPipeline::initialize(RenderPipelineInitInfo init_info)
 	m_combine_ui_pass->initialize(&combine_ui_pass_init_info);
 }
 
-void QYHS::RenderPipeline::render(std::shared_ptr<RenderResourceBase> render_resource)
+void qyhs::RenderPipeline::render(std::shared_ptr<RenderResourceBase> render_resource)
 {
 
 	VulkanRHI * vulkan_rhi = static_cast<VulkanRHI*>(m_rhi.get());
@@ -54,13 +54,13 @@ void QYHS::RenderPipeline::render(std::shared_ptr<RenderResourceBase> render_res
 	
 }
 
-uint32_t QYHS::RenderPipeline::getGUIDOfPickedMesh(const Vector2& picked_uv)
+uint32_t qyhs::RenderPipeline::getGUIDOfPickedMesh(const Vector2& picked_uv)
 {
 	PickPass * pick_pass = static_cast<PickPass*>(m_pick_pass.get());
 	return pick_pass->pick(picked_uv);
 }
 
-void QYHS::RenderPipeline::updatePassAfterRecreatePipeline()
+void qyhs::RenderPipeline::updatePassAfterRecreatePipeline()
 {
 	MainCameraRenderPass* main_camera_pass = static_cast<MainCameraRenderPass*>(m_main_camera_pass.get());
 	CombineUIPass* combine_ui_pass = static_cast<CombineUIPass*>(m_combine_ui_pass.get());
@@ -71,13 +71,13 @@ void QYHS::RenderPipeline::updatePassAfterRecreatePipeline()
 	pick_pass->recreateFrameBuffer();
 }
 
-void QYHS::RenderPipeline::setVisibleAxis(bool state)
+void qyhs::RenderPipeline::setVisibleAxis(bool state)
 {
 	MainCameraRenderPass* main_camera_pass = static_cast<MainCameraRenderPass*>(m_main_camera_pass.get());
 	main_camera_pass->setVisibleAxis(state);
 }
 
-void QYHS::RenderPipeline::setSelectedAxis(size_t selected_axis)
+void qyhs::RenderPipeline::setSelectedAxis(size_t selected_axis)
 {
 	static_cast<MainCameraRenderPass*>(m_main_camera_pass.get())->m_selected_axis = selected_axis;
 }

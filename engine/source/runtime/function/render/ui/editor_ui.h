@@ -3,7 +3,7 @@
 #include "window_ui.h"
 #include "editor/include/editor_scene_manager.h"
 #include "core/meta/reflection/reflection.h"
-namespace QYHS
+namespace qyhs
 {
 	class EditorUI :public WindowUI
 	{

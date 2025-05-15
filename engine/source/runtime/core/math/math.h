@@ -2,7 +2,7 @@
 #include <cmath>
 #include <algorithm>
 
-namespace QYHS
+namespace qyhs
 {
     static const float Math_POS_INFINITY = std::numeric_limits<float>::infinity();
     static const float Math_NEG_INFINITY = -std::numeric_limits<float>::infinity();
@@ -14,7 +14,6 @@ namespace QYHS
     static const float Math_fRad2Deg = 180.0f / Math_PI;
     static const float Math_LOG2 = log(2.0f);
     static const float Math_EPSILON = 1e-6f;
-
     static const float Float_EPSILON = FLT_EPSILON;
     static const float Double_EPSILON = DBL_EPSILON;
 
@@ -205,7 +204,19 @@ namespace QYHS
         static float invSqrt(float value) { return 1.f / sqrt(value); }
         static bool  realEqual(float a, float b, float tolerance = std::numeric_limits<float>::epsilon());
         static float clamp(float v, float min, float max) { return std::clamp(v, min, max); }
-        static float getMaxElement(float x, float y, float z) { return std::max({ x, y, z }); }
+        static float getMaxElement(float x, float y, float z) 
+        { 
+            float tmp;
+            if (x > y)
+            {
+                tmp = x;
+            }
+            else
+            {
+                tmp = y;
+            }
+            return tmp > z ? tmp : z;
+        }
 
         static float degreesToRadians(float degrees);
         static float radiansToDegrees(float radians);
@@ -225,29 +236,29 @@ namespace QYHS
         static Radian atan(float value) { return Radian(std::atan(value)); }
         static Radian atan2(float y_v, float x_v) { return Radian(std::atan2(y_v, x_v)); }
 
-        template<class T>
+      /*  template<class T>
         static constexpr T max(const T A, const T B)
         {
             return std::max(A, B);
-        }
+        }*/
 
-        template<class T>
-        static constexpr T min(const T A, const T B)
-        {
-            return std::min(A, B);
-        }
+        //template<class T>
+        //static constexpr T min(const T A, const T B)
+        //{
+        //    return std::min(A, B);
+        //}
 
-        template<class T>
+        /*template<class T>
         static constexpr T max3(const T A, const T B, const T C)
         {
             return std::max({ A, B, C });
-        }
+        }*/
 
-        template<class T>
+        /*template<class T>
         static constexpr T min3(const T A, const T B, const T C)
         {
             return std::min({ A, B, C });
-        }
+        }*/
 
         static Matrix4x4
             makeViewMatrix(const Vector3& position, const Quaternion& orientation, const Matrix4x4* reflect_matrix = nullptr);

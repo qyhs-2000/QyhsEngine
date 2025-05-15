@@ -4,7 +4,7 @@
 #include <core/math/vector3.h>
 #include <core/math/matrix4.h>
 #include <mutex>
-namespace QYHS
+namespace qyhs
 {
 	enum class RenderCameraType
 	{

@@ -2,7 +2,7 @@
 #include "editor_input_manager.h"
 #include "editor_scene_manager.h"
 #include "function/global/global_context.h"
-namespace QYHS
+namespace qyhs
 {
 	void QyhsEditor::initialize()
 	{

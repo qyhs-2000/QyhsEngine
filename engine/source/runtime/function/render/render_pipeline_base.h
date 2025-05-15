@@ -6,7 +6,7 @@
 #include "core/math/vector2.h"
 #include "ui/editor_ui.h"
 
-namespace QYHS
+namespace qyhs
 {
 	struct RenderPipelineInitInfo
 	{

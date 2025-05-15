@@ -1,6 +1,6 @@
 #pragma once
 #include "core/math/math.h"
-namespace QYHS
+namespace qyhs
 {
 	enum class GameCommand:unsigned int 
 	{

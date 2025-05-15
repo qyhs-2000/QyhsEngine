@@ -913,7 +913,7 @@ enum CXDiagnosticDisplayOptions {
    * test.c:28: warning: extra tokens at end of #endif directive
    * \endcode
    *
-   * This option corresponds to the clang flag \c -fshow-source-location.
+   * This option corresponds to the clang flags \c -fshow-source-location.
    */
   CXDiagnostic_DisplaySourceLocation = 0x01,
 
@@ -921,7 +921,7 @@ enum CXDiagnosticDisplayOptions {
    * If displaying the source-location information of the
    * diagnostic, also include the column number.
    *
-   * This option corresponds to the clang flag \c -fshow-column.
+   * This option corresponds to the clang flags \c -fshow-column.
    */
   CXDiagnostic_DisplayColumn = 0x02,
 
@@ -930,7 +930,7 @@ enum CXDiagnosticDisplayOptions {
    * diagnostic, also include information about source ranges in a
    * machine-parsable format.
    *
-   * This option corresponds to the clang flag
+   * This option corresponds to the clang flags
    * \c -fdiagnostics-print-source-range-info.
    */
   CXDiagnostic_DisplaySourceRanges = 0x04,
@@ -939,7 +939,7 @@ enum CXDiagnosticDisplayOptions {
    * Display the option name associated with this diagnostic, if any.
    *
    * The option name displayed (e.g., -Wconversion) will be placed in brackets
-   * after the diagnostic text. This option corresponds to the clang flag
+   * after the diagnostic text. This option corresponds to the clang flags
    * \c -fdiagnostics-show-option.
    */
   CXDiagnostic_DisplayOption = 0x08,
@@ -948,7 +948,7 @@ enum CXDiagnosticDisplayOptions {
    * Display the category number associated with this diagnostic, if any.
    *
    * The category number is displayed within brackets after the diagnostic text.
-   * This option corresponds to the clang flag
+   * This option corresponds to the clang flags
    * \c -fdiagnostics-show-category=id.
    */
   CXDiagnostic_DisplayCategoryId = 0x10,
@@ -957,7 +957,7 @@ enum CXDiagnosticDisplayOptions {
    * Display the category name associated with this diagnostic, if any.
    *
    * The category name is displayed within brackets after the diagnostic text.
-   * This option corresponds to the clang flag
+   * This option corresponds to the clang flags
    * \c -fdiagnostics-show-category=name.
    */
   CXDiagnostic_DisplayCategoryName = 0x20
@@ -1028,7 +1028,7 @@ CINDEX_LINKAGE CXString clang_getDiagnosticOption(CXDiagnostic Diag,
  * Retrieve the category number for this diagnostic.
  *
  * Diagnostics can be categorized into groups along with other, related
- * diagnostics (e.g., diagnostics under the same warning flag). This routine
+ * diagnostics (e.g., diagnostics under the same warning flags). This routine
  * retrieves the category number for the given diagnostic.
  *
  * \returns The number of the category that contains this diagnostic, or zero
@@ -1317,7 +1317,7 @@ enum CXTranslationUnit_Flags {
    * semantic analysis is typically stopped early when compiling code. A common
    * source for fatal errors are unresolvable include files. For the
    * purposes of an IDE, this is undesirable behavior and as much information
-   * as possible should be reported. Use this flag to enable this behavior.
+   * as possible should be reported. Use this flags to enable this behavior.
    */
   CXTranslationUnit_KeepGoing = 0x200,
 
@@ -1342,7 +1342,7 @@ enum CXTranslationUnit_Flags {
  * The set of flags returned provide options for \c clang_parseTranslationUnit()
  * to indicate that the translation unit is likely to be reparsed many times,
  * either explicitly (via \c clang_reparseTranslationUnit()) or implicitly
- * (e.g., by code completion (\c clang_codeCompletionAt())). The returned flag
+ * (e.g., by code completion (\c clang_codeCompletionAt())). The returned flags
  * set contains an unspecified set of optimizations (e.g., the precompiled
  * preamble) geared toward improving the performance of these routines. The
  * set of optimizations enabled may change from one version to the next.
@@ -1448,7 +1448,7 @@ enum CXSaveTranslationUnit_Flags {
  * unit.
  *
  * The set of flags returned provide options for
- * \c clang_saveTranslationUnit() by default. The returned flag
+ * \c clang_saveTranslationUnit() by default. The returned flags
  * set contains an unspecified set of options that save translation units with
  * the most commonly-requested data.
  */
@@ -1549,7 +1549,7 @@ enum CXReparse_Flags {
  * unit.
  *
  * The set of flags returned provide options for
- * \c clang_reparseTranslationUnit() by default. The returned flag
+ * \c clang_reparseTranslationUnit() by default. The returned flags
  * set contains an unspecified set of optimizations geared toward common uses
  * of reparsing. The set of optimizations enabled may change from one version
  * to the next.
@@ -4662,9 +4662,9 @@ CINDEX_LINKAGE CXCursor clang_getSpecializedCursorTemplate(CXCursor C);
  * \param NameFlags A bitset with three independent flags:
  * CXNameRange_WantQualifier, CXNameRange_WantTemplateArgs, and
  * CXNameRange_WantSinglePiece.
- * \param PieceIndex For contiguous names or when passing the flag
+ * \param PieceIndex For contiguous names or when passing the flags
  * CXNameRange_WantSinglePiece, only one piece with index 0 is
- * available. When the CXNameRange_WantSinglePiece flag is not passed for a
+ * available. When the CXNameRange_WantSinglePiece flags is not passed for a
  * non-contiguous names, this index can be used to retrieve the individual
  * pieces of the name. See also CXNameRange_WantSinglePiece.
  *

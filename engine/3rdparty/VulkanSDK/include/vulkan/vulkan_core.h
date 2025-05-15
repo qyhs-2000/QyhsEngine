@@ -3752,7 +3752,7 @@ typedef struct VkDescriptorSetAllocateInfo {
 typedef struct VkDescriptorSetLayoutBinding {
     uint32_t              binding;
     VkDescriptorType      descriptorType;
-    uint32_t              descriptorCount;
+    uint32_t              descriptor_count;
     VkShaderStageFlags    stageFlags;
     const VkSampler*      pImmutableSamplers;
 } VkDescriptorSetLayoutBinding;

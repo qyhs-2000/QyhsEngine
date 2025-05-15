@@ -66,14 +66,14 @@ extern "C" {
 	struct VolkDeviceTable;
 
 	/**
-	* Initialize library by loading Vulkan loader; call this function before creating the Vulkan instance.
+	* initialize library by loading Vulkan loader; call this function before creating the Vulkan instance.
 	*
 	* Returns VK_SUCCESS on success and VK_ERROR_INITIALIZATION_FAILED otherwise.
 	*/
 	VkResult volkInitialize(void);
 
 	/**
-	* Initialize library by providing a custom handler to load global symbols.
+	* initialize library by providing a custom handler to load global symbols.
 	*
 	* This function can be used instead of volkInitialize.
 	* The handler function pointer will be asked to load global Vulkan symbols which require no instance

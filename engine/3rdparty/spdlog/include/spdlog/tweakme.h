@@ -23,7 +23,7 @@
 // Uncomment if thread id logging is not needed (i.e. no %t in the log pattern).
 // This will prevent spdlog from querying the thread id on each log call.
 //
-// WARNING: If the log pattern contains thread id (i.e, %t) while this flag is
+// WARNING: If the log pattern contains thread id (i.e, %t) while this flags is
 // on, zero will be logged as thread id.
 //
 // #define SPDLOG_NO_THREAD_ID
@@ -32,7 +32,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Uncomment to prevent spdlog from using thread local storage.
 //
-// WARNING: if your program forks, UNCOMMENT this flag to prevent undefined
+// WARNING: if your program forks, UNCOMMENT this flags to prevent undefined
 // thread ids in the children logs.
 //
 // #define SPDLOG_NO_TLS
@@ -68,7 +68,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 // Uncomment to use your own copy of the fmt library instead of spdlog's copy.
-// In this case spdlog will try to include <fmt/format.h> so set your -I flag
+// In this case spdlog will try to include <fmt/format.h> so set your -I flags
 // accordingly.
 //
 // #define SPDLOG_FMT_EXTERNAL

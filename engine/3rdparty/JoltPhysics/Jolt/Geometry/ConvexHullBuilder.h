@@ -53,7 +53,7 @@ public:
 		/// Destructor
 						~Face();
 
-		/// Initialize a face with three indices
+		/// initialize a face with three indices
 		void			Initialize(int inIdx0, int inIdx1, int inIdx2, const Vec3 *inPositions);
 
 		/// Calculates the centroid and normal for this face
@@ -174,7 +174,7 @@ private:
 	static void			sUnlinkFace(Face *inFace);
 
 	/// Given one face that faces inVertex, find the edges of the faces that are not facing inVertex.
-	/// Will flag all those faces for removal.
+	/// Will flags all those faces for removal.
 	void				FindEdge(Face *inFacingFace, Vec3Arg inVertex, FullEdges &outEdges) const;
 
 	/// Merges the two faces that share inEdge into the face inEdge->mFace

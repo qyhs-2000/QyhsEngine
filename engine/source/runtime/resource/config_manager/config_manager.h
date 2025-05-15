@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <filesystem>
-namespace QYHS
+namespace qyhs
 {
 	class ConfigManager
 	{

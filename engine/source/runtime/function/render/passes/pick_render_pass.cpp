@@ -7,7 +7,7 @@
 #include "stb_image_write.h"
 #include <iostream>
 
-namespace  QYHS
+namespace  qyhs
 {
 	void PickPass::prepareData(std::shared_ptr<RenderResourceBase> resource)
 	{
@@ -112,7 +112,7 @@ namespace  QYHS
 		mesh_inefficient_pick_global_layout_perframe_storage_buffer_binding.binding = 0;
 		mesh_inefficient_pick_global_layout_perframe_storage_buffer_binding.descriptorType =
 			VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC;
-		mesh_inefficient_pick_global_layout_perframe_storage_buffer_binding.descriptorCount = 1;
+		mesh_inefficient_pick_global_layout_perframe_storage_buffer_binding.descriptor_count = 1;
 		mesh_inefficient_pick_global_layout_perframe_storage_buffer_binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 		mesh_inefficient_pick_global_layout_perframe_storage_buffer_binding.pImmutableSamplers = NULL;
 
@@ -121,7 +121,7 @@ namespace  QYHS
 		mesh_inefficient_pick_global_layout_perdrawcall_storage_buffer_binding.binding = 1;
 		mesh_inefficient_pick_global_layout_perdrawcall_storage_buffer_binding.descriptorType =
 			VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC;
-		mesh_inefficient_pick_global_layout_perdrawcall_storage_buffer_binding.descriptorCount = 1;
+		mesh_inefficient_pick_global_layout_perdrawcall_storage_buffer_binding.descriptor_count = 1;
 		mesh_inefficient_pick_global_layout_perdrawcall_storage_buffer_binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 		mesh_inefficient_pick_global_layout_perdrawcall_storage_buffer_binding.pImmutableSamplers = NULL;
 

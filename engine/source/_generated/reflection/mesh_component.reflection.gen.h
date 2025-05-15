@@ -1,7 +1,7 @@
 #pragma once
 #include "runtime\function\framework\component\mesh\mesh_component.h"
 
-namespace QYHS
+namespace qyhs
 {
 	class MeshComponent;
 	namespace Reflection
@@ -25,7 +25,7 @@ namespace QYHS
 					int count = 1;
 					out_list = new ReflectionInstance[count];
 					for(int i = 0;i<count;++i){
-						out_list[i] = TYPE_META_DEF(QYHS::Component,static_cast<MeshComponent*>(instance));
+						out_list[i] = TYPE_META_DEF(qyhs::Component,static_cast<MeshComponent*>(instance));
 					}
 					return count;	
 				}

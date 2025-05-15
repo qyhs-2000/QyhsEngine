@@ -2,7 +2,7 @@
 
 #include "core/meta/reflection/reflection.h"
 #include "data/camera_config.h"
-namespace QYHS
+namespace qyhs
 {
 	REFLECTION_TYPE(SkyBoxSpecularMap)
 		CLASS(SkyBoxSpecularMap, Fields)

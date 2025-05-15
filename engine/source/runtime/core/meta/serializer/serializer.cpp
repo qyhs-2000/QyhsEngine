@@ -2,7 +2,7 @@
 
 #include "serializer.h"
 
-namespace QYHS
+namespace qyhs
 {
     template<>
     Json Serializer::write(const char& instance)

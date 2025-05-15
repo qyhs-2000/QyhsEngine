@@ -2,7 +2,7 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader.h>
 
-namespace QYHS
+namespace qyhs
 {
 	StaticMeshData loadStaticMesh(const std::string& mesh_file)
 	{

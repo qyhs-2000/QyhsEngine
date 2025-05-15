@@ -674,7 +674,7 @@ extern "C" {
  *  This occurs if a GLFW function was called that must not be called unless the
  *  library is [initialized](@ref intro_init).
  *
- *  @analysis Application programmer error.  Initialize GLFW before calling any
+ *  @analysis Application programmer error.  initialize GLFW before calling any
  *  function that requires initialization.
  */
 #define GLFW_NOT_INITIALIZED        0x00010001
@@ -2720,12 +2720,12 @@ GLFWAPI GLFWwindow* glfwCreateWindow(int width, int height, const char* title, G
  */
 GLFWAPI void glfwDestroyWindow(GLFWwindow* window);
 
-/*! @brief Checks the close flag of the specified window.
+/*! @brief Checks the close flags of the specified window.
  *
- *  This function returns the value of the close flag of the specified window.
+ *  This function returns the value of the close flags of the specified window.
  *
  *  @param[in] window The window to query.
- *  @return The value of the close flag.
+ *  @return The value of the close flags.
  *
  *  @errors Possible errors include @ref GLFW_NOT_INITIALIZED.
  *
@@ -2740,13 +2740,13 @@ GLFWAPI void glfwDestroyWindow(GLFWwindow* window);
  */
 GLFWAPI int glfwWindowShouldClose(GLFWwindow* window);
 
-/*! @brief Sets the close flag of the specified window.
+/*! @brief Sets the close flags of the specified window.
  *
- *  This function sets the value of the close flag of the specified window.
+ *  This function sets the value of the close flags of the specified window.
  *  This can be used to override the user's attempt to close the window, or
  *  to signal that it should be closed.
  *
- *  @param[in] window The window whose flag to change.
+ *  @param[in] window The window whose flags to change.
  *  @param[in] value The new value.
  *
  *  @errors Possible errors include @ref GLFW_NOT_INITIALIZED.
@@ -3680,7 +3680,7 @@ GLFWAPI GLFWwindowsizefun glfwSetWindowSizeCallback(GLFWwindow* window, GLFWwind
  *  called when the user attempts to close the window, for example by clicking
  *  the close widget in the title bar.
  *
- *  The close flag is set before this callback is called, but you can modify it
+ *  The close flags is set before this callback is called, but you can modify it
  *  at any time with @ref glfwSetWindowShouldClose.
  *
  *  The close callback is not triggered by @ref glfwDestroyWindow.

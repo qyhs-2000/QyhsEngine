@@ -32,7 +32,7 @@ public:
 	template <class T, class A>
 	void				Read(vector<T, A> &outT)
 	{
-		typename vector<T>::size_type len = outT.size(); // Initialize to previous array size, this is used for validation in the StateRecorder class
+		typename vector<T>::size_type len = outT.size(); // initialize to previous array size, this is used for validation in the StateRecorder class
 		Read(len);
 		if (!IsEOF() && !IsFailed())
 		{

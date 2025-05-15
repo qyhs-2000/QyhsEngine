@@ -5,7 +5,7 @@
 #include <cassert>
 #include <array>
 #include <stdexcept>
-namespace QYHS
+namespace qyhs
 {
 	void MainCameraRenderPass::initialize(RenderPassInitInfo* info)
 	{
@@ -499,21 +499,21 @@ namespace QYHS
 
 			VkDescriptorSetLayoutBinding& mesh_global_layout_mesh_perframe_storage_buffer_binding = mesh_global_layout_bindings[0];
 			mesh_global_layout_mesh_perframe_storage_buffer_binding.binding = 1;
-			mesh_global_layout_mesh_perframe_storage_buffer_binding.descriptorCount = 1;
+			mesh_global_layout_mesh_perframe_storage_buffer_binding.descriptor_count = 1;
 			mesh_global_layout_mesh_perframe_storage_buffer_binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC;
 			mesh_global_layout_mesh_perframe_storage_buffer_binding.pImmutableSamplers = nullptr;
 			mesh_global_layout_mesh_perframe_storage_buffer_binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
 
 			VkDescriptorSetLayoutBinding& mesh_global_layout_mesh_perdrawcall_storage_buffer_binding = mesh_global_layout_bindings[1];
 			mesh_global_layout_mesh_perdrawcall_storage_buffer_binding.binding = 2;
-			mesh_global_layout_mesh_perdrawcall_storage_buffer_binding.descriptorCount = 1;
+			mesh_global_layout_mesh_perdrawcall_storage_buffer_binding.descriptor_count = 1;
 			mesh_global_layout_mesh_perdrawcall_storage_buffer_binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC;
 			mesh_global_layout_mesh_perdrawcall_storage_buffer_binding.pImmutableSamplers = nullptr;
 			mesh_global_layout_mesh_perdrawcall_storage_buffer_binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 
 			VkDescriptorSetLayoutBinding& mesh_global_layout_mesh_vertex_joint_blending_binding = mesh_global_layout_bindings[2];
 			mesh_global_layout_mesh_vertex_joint_blending_binding.binding = 3;
-			mesh_global_layout_mesh_vertex_joint_blending_binding.descriptorCount = 1;
+			mesh_global_layout_mesh_vertex_joint_blending_binding.descriptor_count = 1;
 			mesh_global_layout_mesh_vertex_joint_blending_binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC;
 			mesh_global_layout_mesh_vertex_joint_blending_binding.pImmutableSamplers = nullptr;
 			mesh_global_layout_mesh_vertex_joint_blending_binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
@@ -532,7 +532,7 @@ namespace QYHS
 			VkDescriptorSetLayoutBinding& per_mesh_vertex_blending_binding = per_mesh_layout_binding[0];
 			per_mesh_vertex_blending_binding.binding = 0;
 			per_mesh_vertex_blending_binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-			per_mesh_vertex_blending_binding.descriptorCount = 1;
+			per_mesh_vertex_blending_binding.descriptor_count = 1;
 			per_mesh_vertex_blending_binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 			per_mesh_vertex_blending_binding.pImmutableSamplers = nullptr;
 
@@ -552,7 +552,7 @@ namespace QYHS
 			VkDescriptorSetLayoutBinding& mesh_per_material_layout_base_color_sampler_binding = mesh_per_material_layout_binding[0];
 			mesh_per_material_layout_base_color_sampler_binding.binding = 0;
 			mesh_per_material_layout_base_color_sampler_binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-			mesh_per_material_layout_base_color_sampler_binding.descriptorCount = 1;
+			mesh_per_material_layout_base_color_sampler_binding.descriptor_count = 1;
 			mesh_per_material_layout_base_color_sampler_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 			mesh_per_material_layout_base_color_sampler_binding.pImmutableSamplers = nullptr;
 
@@ -574,20 +574,20 @@ namespace QYHS
 			VkDescriptorSetLayoutBinding& skybox_descriptor_set_layout_cube_sampler_binding = skybox_descriptor_set_layout_bindings[0];
 			skybox_descriptor_set_layout_cube_sampler_binding.binding = 0;
 			skybox_descriptor_set_layout_cube_sampler_binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-			skybox_descriptor_set_layout_cube_sampler_binding.descriptorCount = 1;
+			skybox_descriptor_set_layout_cube_sampler_binding.descriptor_count = 1;
 			skybox_descriptor_set_layout_cube_sampler_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 			skybox_descriptor_set_layout_cube_sampler_binding.pImmutableSamplers = nullptr;
 
 			VkDescriptorSetLayoutBinding& base_color_input_attachment = skybox_descriptor_set_layout_bindings[1];
 			base_color_input_attachment.binding = 1;
-			base_color_input_attachment.descriptorCount = 1;
+			base_color_input_attachment.descriptor_count = 1;
 			base_color_input_attachment.descriptorType = VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT;
 			base_color_input_attachment.pImmutableSamplers = nullptr;
 			base_color_input_attachment.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 
 			VkDescriptorSetLayoutBinding& depth_input_attachment = skybox_descriptor_set_layout_bindings[2];
 			depth_input_attachment.binding = 2;
-			depth_input_attachment.descriptorCount = 1;
+			depth_input_attachment.descriptor_count = 1;
 			depth_input_attachment.descriptorType = VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT;
 			depth_input_attachment.pImmutableSamplers = nullptr;
 			depth_input_attachment.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
@@ -607,14 +607,14 @@ namespace QYHS
 			VkDescriptorSetLayoutBinding& perframe_storage_buffer_binding = axis_descriptor_set_layout_bindings[0];
 			perframe_storage_buffer_binding.binding = 0;
 			perframe_storage_buffer_binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC;
-			perframe_storage_buffer_binding.descriptorCount = 1;
+			perframe_storage_buffer_binding.descriptor_count = 1;
 			perframe_storage_buffer_binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 			perframe_storage_buffer_binding.pImmutableSamplers = nullptr;
 
 			VkDescriptorSetLayoutBinding& axis_storage_buffer_binding = axis_descriptor_set_layout_bindings[1];
 			axis_storage_buffer_binding.binding = 1;
 			axis_storage_buffer_binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-			axis_storage_buffer_binding.descriptorCount = 1;
+			axis_storage_buffer_binding.descriptor_count = 1;
 			axis_storage_buffer_binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 			axis_storage_buffer_binding.pImmutableSamplers = nullptr;
 
@@ -633,14 +633,14 @@ namespace QYHS
 			VkDescriptorSetLayoutBinding& perframe_storage_buffer_binding = axis_descriptor_set_layout_bindings[0];
 			perframe_storage_buffer_binding.binding = 0;
 			perframe_storage_buffer_binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC;
-			perframe_storage_buffer_binding.descriptorCount = 1;
+			perframe_storage_buffer_binding.descriptor_count = 1;
 			perframe_storage_buffer_binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 			perframe_storage_buffer_binding.pImmutableSamplers = nullptr;
 
 			VkDescriptorSetLayoutBinding& axis_storage_buffer_binding = axis_descriptor_set_layout_bindings[1];
 			axis_storage_buffer_binding.binding = 1;
 			axis_storage_buffer_binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-			axis_storage_buffer_binding.descriptorCount = 1;
+			axis_storage_buffer_binding.descriptor_count = 1;
 			axis_storage_buffer_binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 			axis_storage_buffer_binding.pImmutableSamplers = nullptr;
 

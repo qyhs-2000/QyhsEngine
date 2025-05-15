@@ -99,7 +99,7 @@ void Body::SetPositionAndRotationInternal(Vec3Arg inPosition, QuatArg inRotation
 	mPosition = inPosition + inRotation * mShape->GetCenterOfMass();
 	mRotation = inRotation; 
 
-	// Initialize bounding box
+	// initialize bounding box
 	CalculateWorldSpaceBoundsInternal();
 
 	// Reset sleeping test
@@ -287,7 +287,7 @@ void Body::RestoreState(StateRecorder &inStream)
 		JPH_IF_ENABLE_ASSERTS(mMotionProperties->mCachedMotionType = mMotionType);
 	}
 
-	// Initialize bounding box
+	// initialize bounding box
 	CalculateWorldSpaceBoundsInternal();
 }
 

@@ -4,6 +4,7 @@
 
 #include <fstream>
 #include <stdexcept>
+#include <function/ui/render_path.h>
 //make max and min function in windows.h unvalid
 
 
@@ -14,7 +15,7 @@
 #include "function/render/rhi/vulkan/vulkan_rhi.h"
 #include "function/timer/timer.h"
 #include "function/ui/canvas.h"
-namespace QYHS
+namespace qyhs
 {
 	extern std::unordered_set<std::string> g_editor_tick_component_types;
 	extern bool g_is_editor_mode;
@@ -36,10 +37,17 @@ namespace QYHS
 		double caculateDeltaTime();
 		void setConfigFile(std::string file_path) { engine_config_file = file_path; }
 		void run();
-		void run2();
+		virtual void run2();
+		virtual void render();
 		bool is_window_active{ true };
 		void setWindow(platform::WindowType hwnd);
-		void initialize2();
+		void compose(CommandList& cmd_list);
+		void showInformation();
+		virtual void initialize2();
+		virtual void activatePath(RenderPath * render_path);
+		inline RenderPath* getActivePath() { return active_path; }
+	protected:
+		RenderPath* active_path;
 	private:
 		platform::WindowType window;
 		VkInstance instance;

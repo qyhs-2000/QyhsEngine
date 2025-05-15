@@ -8,7 +8,7 @@
 #include <vector>
 #include <tuple>
 
-namespace QYHS
+namespace qyhs
 {
 
 #ifdef __REFLECTION_PARSER__
@@ -36,7 +36,7 @@ namespace QYHS
     };
 
 #define TYPE_META_DEF(class_name,ptr)\
-	QYHS::Reflection::ReflectionInstance(QYHS::Reflection::TypeMeta::newMetaFromName(#class_name),(class_name*)ptr)
+	qyhs::Reflection::ReflectionInstance(qyhs::Reflection::TypeMeta::newMetaFromName(#class_name),(class_name*)ptr)
 
 #define REFLECTION_BODY(class_name)\
 	friend class Reflection::TypeFieldReflectionOperator::Type##class_name##Operator;\

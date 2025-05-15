@@ -1,6 +1,6 @@
 #pragma once
 #include <stdlib.h>
-namespace QYHS
+namespace qyhs
 {
 	
 	

@@ -1,7 +1,7 @@
 #pragma once
 #include "runtime\function\framework\component\animation\animation_component.h"
 
-namespace QYHS
+namespace qyhs
 {
 	template<>
 	Json Serializer::write(const AnimationComponent&instance);

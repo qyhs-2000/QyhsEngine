@@ -2,7 +2,7 @@
 #include "core/math/math.h"
 #include "core/math/vector3.h"
 #include "function/framework/game_object/game_object.h"
-namespace QYHS
+namespace qyhs
 {
 	class Character
 	{

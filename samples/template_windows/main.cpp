@@ -9,7 +9,7 @@ HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 
-QYHS::QyhsEngine engine;
+qyhs::QyhsEngine tests;
 
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -51,7 +51,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
     BOOL dpi_success = SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
     assert(dpi_success);
 
-    // Initialize global strings
+    // initialize global strings
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
     LoadStringW(hInstance, IDC_TEMPLATEWINDOWS, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(hInstance);
@@ -65,10 +65,10 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_TEMPLATEWINDOWS));
 
     // just show some basic info:
-    engine.info_display.active = true;
-    engine.info_display.watermark = true;
-    engine.info_display.resolution = true;
-    engine.info_display.fpsinfo = true;
+    tests.info_display.active = true;
+    tests.info_display.watermark = true;
+    tests.info_display.resolution = true;
+    tests.info_display.fpsinfo = true;
 
     MSG msg = { 0 };
     while (msg.message != WM_QUIT)
@@ -79,7 +79,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
         }
         else {
 
-            engine.run2(); // run the update - render loop (mandatory)
+            tests.run2(); // run the update - render loop (mandatory)
 
         }
     }
@@ -141,7 +141,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     UpdateWindow(hWnd);
 
 
-    engine.setWindow(hWnd); // assign window handle (mandatory)
+    tests.setWindow(hWnd); // assign window handle (mandatory)
 
 
     return TRUE;
@@ -170,14 +170,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     break;
     case WM_SIZE:
     case WM_DPICHANGED:
-        if (engine.is_window_active)
-            engine.setWindow(hWnd);
+        if (tests.is_window_active)
+            tests.setWindow(hWnd);
         break;
     case WM_CHAR:
         switch (wParam)
         {
         case VK_BACK:
-            //QYHS::gui::TextInputField::DeleteFromInput();
+            //qyhs::gui::TextInputField::DeleteFromInput();
             break;
         case VK_RETURN:
             break;
@@ -185,19 +185,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         default:
             {
             const wchar_t c = (const wchar_t)wParam;
-            //QYHS::gui::TextInputField::AddInput(c);
+            //qyhs::gui::TextInputField::AddInput(c);
         }
             break;
         }
         break;
     case WM_INPUT:
-        //QYHS::input::rawinput::ParseMessage((void*)lParam);
+        //qyhs::input::rawinput::ParseMessage((void*)lParam);
         break;
     case WM_KILLFOCUS:
-        engine.is_window_active = false;
+        //tests.is_window_active = false;
         break;
     case WM_SETFOCUS:
-        engine.is_window_active = true;
+        //tests.is_window_active = true;
         break;
     case WM_PAINT:
         {

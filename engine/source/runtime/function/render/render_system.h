@@ -6,7 +6,7 @@
 #include "render_camera.h"
 #include "ui/editor_ui.h"
 
-namespace QYHS
+namespace qyhs
 {
 	
 	class RenderCamera;

@@ -222,7 +222,7 @@ public:
 	virtual void						DrawText3D(Vec3Arg inPosition, const string_view &inString, ColorArg inColor = Color::sWhite, float inHeight = 0.5f)	= 0;
 
 protected:
-	/// Initialize the system, must be called from the constructor of the DebugRenderer implementation
+	/// initialize the system, must be called from the constructor of the DebugRenderer implementation
 	void								Initialize();
 
 private:

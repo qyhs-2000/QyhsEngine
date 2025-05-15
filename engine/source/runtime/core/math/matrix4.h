@@ -6,7 +6,7 @@
 #include "core/math/vector4.h"
 #include "core/math/math.h"
 #include "runtime/core/meta/reflection/reflection.h"
-namespace QYHS
+namespace qyhs
 {
     REFLECTION_TYPE(TmpTestClass)
         CLASS(TmpTestClass, Fields)

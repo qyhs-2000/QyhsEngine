@@ -25,7 +25,7 @@
 #include "_generated\serializer\world_resource.serializer.gen.h"
 #include "_generated\serializer\global_rendering_resource.serializer.gen.h"
 #include "_generated\serializer\skeleton_data.serializer.gen.h"
-namespace QYHS
+namespace qyhs
 {
 	template<>
 	Vector2 & Serializer::read(const Json & json_context,Vector2 & instance)
@@ -518,7 +518,7 @@ namespace QYHS
 	MotorComponent & Serializer::read(const Json & json_context,MotorComponent & instance)
 	{
 		assert(json_context.is_object());
-		Serializer::read(json_context,*(QYHS::Component*)&instance);
+		Serializer::read(json_context,*(qyhs::Component*)&instance);
 		if(!json_context["transform"].is_null())
 		{
 			Serializer::read(json_context["transform"],instance.m_transform);
@@ -533,7 +533,7 @@ namespace QYHS
 	template<>
     Json Serializer::write(const MotorComponent& instance){
         Json::object  ret_context;
-        auto&&  json_context_0 = Serializer::write(*(QYHS::Component*)&instance);
+        auto&&  json_context_0 = Serializer::write(*(qyhs::Component*)&instance);
         assert(json_context_0.is_object());
         auto&& json_context_map_0 = json_context_0.object_items();
         ret_context.insert(json_context_map_0.begin() , json_context_map_0.end());
@@ -824,7 +824,7 @@ namespace QYHS
 	ThirdPersonCameraParameter & Serializer::read(const Json & json_context,ThirdPersonCameraParameter & instance)
 	{
 		assert(json_context.is_object());
-		Serializer::read(json_context,*(QYHS::CameraParamter*)&instance);
+		Serializer::read(json_context,*(qyhs::CameraParamter*)&instance);
 		if(!json_context["horizontal_offset"].is_null())
 		{
 			Serializer::read(json_context["horizontal_offset"],instance.m_horizontal_offset);
@@ -847,7 +847,7 @@ namespace QYHS
 	template<>
     Json Serializer::write(const ThirdPersonCameraParameter& instance){
         Json::object  ret_context;
-        auto&&  json_context_0 = Serializer::write(*(QYHS::CameraParamter*)&instance);
+        auto&&  json_context_0 = Serializer::write(*(qyhs::CameraParamter*)&instance);
         assert(json_context_0.is_object());
         auto&& json_context_map_0 = json_context_0.object_items();
         ret_context.insert(json_context_map_0.begin() , json_context_map_0.end());
@@ -884,7 +884,7 @@ namespace QYHS
 	CameraComponent & Serializer::read(const Json & json_context,CameraComponent & instance)
 	{
 		assert(json_context.is_object());
-		Serializer::read(json_context,*(QYHS::Component*)&instance);
+		Serializer::read(json_context,*(qyhs::Component*)&instance);
 		if(!json_context["camera_res"].is_null())
 		{
 			Serializer::read(json_context["camera_res"],instance.m_camera_res);
@@ -895,7 +895,7 @@ namespace QYHS
 	template<>
     Json Serializer::write(const CameraComponent& instance){
         Json::object  ret_context;
-        auto&&  json_context_0 = Serializer::write(*(QYHS::Component*)&instance);
+        auto&&  json_context_0 = Serializer::write(*(qyhs::Component*)&instance);
         assert(json_context_0.is_object());
         auto&& json_context_map_0 = json_context_0.object_items();
         ret_context.insert(json_context_map_0.begin() , json_context_map_0.end());
@@ -908,7 +908,7 @@ namespace QYHS
 	HierarchyComponent & Serializer::read(const Json & json_context,HierarchyComponent & instance)
 	{
 		assert(json_context.is_object());
-		Serializer::read(json_context,*(QYHS::Component*)&instance);
+		Serializer::read(json_context,*(qyhs::Component*)&instance);
 		
 		return instance;
 	}
@@ -916,7 +916,7 @@ namespace QYHS
 	template<>
     Json Serializer::write(const HierarchyComponent& instance){
         Json::object  ret_context;
-        auto&&  json_context_0 = Serializer::write(*(QYHS::Component*)&instance);
+        auto&&  json_context_0 = Serializer::write(*(qyhs::Component*)&instance);
         assert(json_context_0.is_object());
         auto&& json_context_map_0 = json_context_0.object_items();
         ret_context.insert(json_context_map_0.begin() , json_context_map_0.end());
@@ -929,7 +929,7 @@ namespace QYHS
 	MeshComponent & Serializer::read(const Json & json_context,MeshComponent & instance)
 	{
 		assert(json_context.is_object());
-		Serializer::read(json_context,*(QYHS::Component*)&instance);
+		Serializer::read(json_context,*(qyhs::Component*)&instance);
 		if(!json_context["mesh_res"].is_null())
 		{
 			Serializer::read(json_context["mesh_res"],instance.m_mesh_res);
@@ -940,7 +940,7 @@ namespace QYHS
 	template<>
     Json Serializer::write(const MeshComponent& instance){
         Json::object  ret_context;
-        auto&&  json_context_0 = Serializer::write(*(QYHS::Component*)&instance);
+        auto&&  json_context_0 = Serializer::write(*(qyhs::Component*)&instance);
         assert(json_context_0.is_object());
         auto&& json_context_map_0 = json_context_0.object_items();
         ret_context.insert(json_context_map_0.begin() , json_context_map_0.end());
@@ -953,7 +953,7 @@ namespace QYHS
 	TransformComponent & Serializer::read(const Json & json_context,TransformComponent & instance)
 	{
 		assert(json_context.is_object());
-		Serializer::read(json_context,*(QYHS::Component*)&instance);
+		Serializer::read(json_context,*(qyhs::Component*)&instance);
 		if(!json_context["transform"].is_null())
 		{
 			Serializer::read(json_context["transform"],instance.m_transform);
@@ -964,7 +964,7 @@ namespace QYHS
 	template<>
     Json Serializer::write(const TransformComponent& instance){
         Json::object  ret_context;
-        auto&&  json_context_0 = Serializer::write(*(QYHS::Component*)&instance);
+        auto&&  json_context_0 = Serializer::write(*(qyhs::Component*)&instance);
         assert(json_context_0.is_object());
         auto&& json_context_map_0 = json_context_0.object_items();
         ret_context.insert(json_context_map_0.begin() , json_context_map_0.end());

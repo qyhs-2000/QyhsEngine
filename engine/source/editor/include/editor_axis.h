@@ -2,7 +2,7 @@
 #include "function/render/render_entity.h"
 #include "function/render/render_type.h"
 
-namespace  QYHS
+namespace  qyhs
 {
     class EditorTranslateAxis:public RenderEntity
     {

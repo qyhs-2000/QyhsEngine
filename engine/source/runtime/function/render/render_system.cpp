@@ -11,7 +11,7 @@
 #include "render_camera.h"
 #include "core/utils/utils.h"
 #include "core/utils/model_importer_gltf.h"
-namespace QYHS
+namespace qyhs
 {
 	void RenderSystem::tick()
 	{

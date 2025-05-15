@@ -1,7 +1,7 @@
 #pragma once
 #include "core/math/matrix4.h"
 #include <vector>
-namespace QYHS
+namespace qyhs
 {
 	class RenderEntity
 	{

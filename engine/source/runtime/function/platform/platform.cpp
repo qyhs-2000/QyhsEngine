@@ -1,6 +1,6 @@
 #include "platform.h"
 
-namespace QYHS::platform
+namespace qyhs::platform
 {
 	void getWindowProperties(WindowType window, WindowProperties* window_properties)
 	{

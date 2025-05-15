@@ -253,8 +253,8 @@ class printf_arg_formatter : public arg_formatter<Char> {
         return (*this)(static_cast<int>(value));
       fmt_specs.sign = sign::none;
       fmt_specs.alt = false;
-      fmt_specs.fill[0] = ' ';  // Ignore '0' flag for char types.
-      // align::numeric needs to be overwritten here since the '0' flag is
+      fmt_specs.fill[0] = ' ';  // Ignore '0' flags for char types.
+      // align::numeric needs to be overwritten here since the '0' flags is
       // ignored for non-numeric types
       if (fmt_specs.align == align::none || fmt_specs.align == align::numeric)
         fmt_specs.align = align::right;
@@ -333,7 +333,7 @@ int parse_header(const Char*& it, const Char* end,
   Char c = *it;
   if (c >= '0' && c <= '9') {
     // Parse an argument index (if followed by '$') or a width possibly
-    // preceded with '0' flag(s).
+    // preceded with '0' flags(s).
     int value = parse_nonnegative_int(it, end, -1);
     if (it != end && *it == '$') {  // value is an argument index
       ++it;
@@ -424,10 +424,10 @@ void vprintf(buffer<Char>& buf, basic_string_view<Char> format,
 
     auto arg = get_arg(arg_index);
     // For d, i, o, u, x, and X conversion specifiers, if a precision is
-    // specified, the '0' flag is ignored
+    // specified, the '0' flags is ignored
     if (specs.precision >= 0 && arg.is_integral())
       specs.fill[0] =
-          ' ';  // Ignore '0' flag for non-numeric types or if '-' present.
+          ' ';  // Ignore '0' flags for non-numeric types or if '-' present.
     if (specs.precision >= 0 && arg.type() == detail::type::cstring_type) {
       auto str = visit_format_arg(detail::get_cstring<Char>(), arg);
       auto str_end = str + specs.precision;
@@ -443,8 +443,8 @@ void vprintf(buffer<Char>& buf, basic_string_view<Char> format,
       if (arg.is_arithmetic() && specs.align != align::left)
         specs.align = align::numeric;
       else
-        specs.fill[0] = ' ';  // Ignore '0' flag for non-numeric types or if '-'
-                              // flag is also present.
+        specs.fill[0] = ' ';  // Ignore '0' flags for non-numeric types or if '-'
+                              // flags is also present.
     }
 
     // Parse length and convert the argument to the required type.

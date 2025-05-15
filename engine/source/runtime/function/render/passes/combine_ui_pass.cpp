@@ -1,6 +1,6 @@
 #include "combine_ui_pass.h"
 #include "core/utils/utils.h"
-namespace QYHS
+namespace qyhs
 {
 	void CombineUIPass::initialize(RenderPassInitInfo * info)
 	{
@@ -22,13 +22,13 @@ namespace QYHS
 		VkDescriptorSetLayoutBinding& scene_input_attachment_binding = layout_bindings[0];
 		scene_input_attachment_binding.binding = 0;
 		scene_input_attachment_binding.descriptorType = VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT;
-		scene_input_attachment_binding.descriptorCount = 1;
+		scene_input_attachment_binding.descriptor_count = 1;
 		scene_input_attachment_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 
 		VkDescriptorSetLayoutBinding& ui_input_attachment_binding = layout_bindings[1];
 		ui_input_attachment_binding.binding = 1;
 		ui_input_attachment_binding.descriptorType = VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT;
-		ui_input_attachment_binding.descriptorCount = 1;
+		ui_input_attachment_binding.descriptor_count = 1;
 		ui_input_attachment_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 
 		VkDescriptorSetLayoutCreateInfo layout_create_info{};

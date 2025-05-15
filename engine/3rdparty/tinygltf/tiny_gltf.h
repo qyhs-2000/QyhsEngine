@@ -652,7 +652,7 @@ namespace tinygltf {
         std::string extras_json_string;
         std::string extensions_json_string;
 
-        // When this flag is true, data is stored to `image` in as-is format(e.g. jpeg
+        // When this flags is true, data is stored to `image` in as-is format(e.g. jpeg
         // compressed for "image/jpeg" mime) This feature is good if you use custom
         // image loader function. (e.g. delayed decoding of images for faster glTF
         // parsing) Default parser for Image does not provide as-is loading feature at

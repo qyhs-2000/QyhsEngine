@@ -1,6 +1,6 @@
 #include "timer.h"
 
-namespace QYHS
+namespace qyhs
 {
 	
 }

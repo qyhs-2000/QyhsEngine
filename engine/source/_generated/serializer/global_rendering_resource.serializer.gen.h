@@ -1,7 +1,7 @@
 #pragma once
 #include "runtime\resource\type\global_rendering_resource.h"
 
-namespace QYHS
+namespace qyhs
 {
 	template<>
 	Json Serializer::write(const SkyBoxSpecularMap&instance);

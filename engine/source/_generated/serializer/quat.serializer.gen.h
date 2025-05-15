@@ -1,7 +1,7 @@
 #pragma once
 #include "runtime\core\math\quat.h"
 
-namespace QYHS
+namespace qyhs
 {
 	template<>
 	Json Serializer::write(const TmpTest&instance);

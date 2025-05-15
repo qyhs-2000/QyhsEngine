@@ -4,7 +4,7 @@
 #include <function/render/ui/editor_ui.h>
 #include "application/application.h"
 //#include "function/global/global_context.h"
-namespace QYHS
+namespace qyhs
 {
 	
 	class QyhsEditor:public QyhsEngine

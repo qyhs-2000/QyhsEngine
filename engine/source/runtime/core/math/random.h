@@ -4,7 +4,7 @@
 #include <cfloat>
 #include <random>
 
-namespace QYHS
+namespace qyhs
 {
     template<typename NumericType>
     using uniform_distribution = typename std::conditional<std::is_integral<NumericType>::value,

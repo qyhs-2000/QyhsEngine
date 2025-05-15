@@ -1,7 +1,7 @@
 #pragma once
 #include "runtime\core\math\transform.h"
 
-namespace QYHS
+namespace qyhs
 {
 	class Transform;
 	namespace Reflection

@@ -8,7 +8,7 @@
 #include "function/render/render_system.h"
 #include <editor.h>
 
-namespace QYHS
+namespace qyhs
 {
 	void EditorSceneManager::initialize()
 	{

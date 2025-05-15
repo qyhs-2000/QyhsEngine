@@ -1,6 +1,6 @@
 #include "math.h"
 #include "core/math/matrix4.h"
-namespace QYHS
+namespace qyhs
 {
     Math::AngleUnit Math::k_AngleUnit;
 
@@ -189,4 +189,5 @@ namespace QYHS
 
         return proj_matrix;
     }
+
 }

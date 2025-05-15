@@ -6,7 +6,7 @@
 #include "math.h"
 #include "runtime/core/math/quat.h"
 
-namespace QYHS
+namespace qyhs
 {
     
     REFLECTION_TYPE(Vector3)

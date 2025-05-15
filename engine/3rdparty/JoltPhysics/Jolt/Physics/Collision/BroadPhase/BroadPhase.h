@@ -24,7 +24,7 @@ using BodyPairCollector = CollisionCollector<BodyPair, CollisionCollectorTraitsC
 class BroadPhase : public BroadPhaseQuery
 {
 public:
-	/// Initialize the broadphase.
+	/// initialize the broadphase.
 	/// @param inBodyManager The body manager singleton
 	/// @param inLayerInterface Interface that maps object layers to broadphase layers.
 	/// Note that the broadphase takes a pointer to the data inside inObjectToBroadPhaseLayer so this object should remain static.

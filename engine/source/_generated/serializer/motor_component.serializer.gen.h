@@ -2,7 +2,7 @@
 #include "runtime\function\framework\component\motor\motor_component.h"
 #include "_generated\serializer\component.serializer.gen.h"
 
-namespace QYHS
+namespace qyhs
 {
 	template<>
 	Json Serializer::write(const MotorComponentRes&instance);

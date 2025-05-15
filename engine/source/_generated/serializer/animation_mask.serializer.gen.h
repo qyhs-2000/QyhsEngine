@@ -1,7 +1,7 @@
 #pragma once
 #include "runtime\function\framework\component\animation\animation_mask.h"
 
-namespace QYHS
+namespace qyhs
 {
 	template<>
 	Json Serializer::write(const BoneBlendMask&instance);

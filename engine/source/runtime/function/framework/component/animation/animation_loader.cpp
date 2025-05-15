@@ -2,9 +2,9 @@
 #include "function/global/global_context.h"
 #include "resource/asset_manager/asset_manager.h"
 
-namespace QYHS
+namespace qyhs
 {
-	std::shared_ptr<AnimationClip> QYHS::AnimationLoader::loadAnimationClipData(std::string clip_data_path)
+	std::shared_ptr<AnimationClip> qyhs::AnimationLoader::loadAnimationClipData(std::string clip_data_path)
 	{
 		AnimationAsset animation_clip;
 		g_runtime_global_context.m_asset_manager->loadAsset(clip_data_path, animation_clip);

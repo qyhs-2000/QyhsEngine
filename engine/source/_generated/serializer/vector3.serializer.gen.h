@@ -1,7 +1,7 @@
 #pragma once
 #include "runtime\core\math\vector3.h"
 
-namespace QYHS
+namespace qyhs
 {
 	template<>
 	Json Serializer::write(const Vector3&instance);

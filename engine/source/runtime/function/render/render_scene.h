@@ -6,7 +6,7 @@
 #include <function/render/game_object_desc.h>
 #include <function/render/render_resource.h>
 #include <function/render/render_guid_allocator.h>
-namespace QYHS
+namespace qyhs
 {
 	typedef size_t Entity;
 	class RenderScene

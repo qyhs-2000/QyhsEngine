@@ -20,7 +20,7 @@ class RayCastResult;
 class NarrowPhaseQuery : public NonCopyable
 {
 public:
-	/// Initialize the interface (should only be called by PhysicsSystem)
+	/// initialize the interface (should only be called by PhysicsSystem)
 	void						Init(BodyLockInterface &inBodyLockInterface, BroadPhase &inBroadPhase) { mBodyLockInterface = &inBodyLockInterface; mBroadPhase = &inBroadPhase; }
 
 	/// Cast a ray and find the closest hit. Returns true if it finds a hit. Hits further than ioHit.mFraction will not be considered and in this case ioHit will remain unmodified (and the function will return false).

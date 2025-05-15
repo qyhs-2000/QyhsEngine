@@ -22,7 +22,7 @@ void TriangleGrouperMorton::Group(const VertexList &inVertices, const IndexedTri
 		// Store centroid
 		centroids[t] = inTriangles[t].GetCentroid(inVertices);
 
-		// Initialize sort table
+		// initialize sort table
 		outGroupedTriangleIndices[t] = t;
 	}
 

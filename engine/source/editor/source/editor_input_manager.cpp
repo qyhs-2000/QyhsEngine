@@ -9,7 +9,7 @@
 #include "core/math/vector2.h"
 #include <iostream>
 #include "function/render/render_system.h"
-namespace QYHS
+namespace qyhs
 {
 
 	void EditorInputManager::registerInput()

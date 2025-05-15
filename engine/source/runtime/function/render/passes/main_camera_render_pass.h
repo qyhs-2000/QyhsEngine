@@ -3,7 +3,7 @@
 #include "function/render/render_common.h"
 #include "ui_pass.h"
 #include "combine_ui_pass.h"
-namespace QYHS
+namespace qyhs
 {
 	static float cubeVertices[] = {
         // positions          // normals

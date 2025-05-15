@@ -3,7 +3,7 @@
 #include "function/global/global_context.h"
 #include "resource/type/component/mesh/mesh.h"
 #include <function/render/game_object_desc.h>
-namespace QYHS
+namespace qyhs
 {
 	class MeshComponentRes;
 	REFLECTION_TYPE(MeshComponent)

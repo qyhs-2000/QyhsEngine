@@ -7,8 +7,10 @@
 #define PLATFORM_DESKTOP_WINDOWS
 #endif // _WIN32
 
+#define LoadLibrary(library) LoadLibraryA(library)
+#define myGetProcAddress(handle,name)  GetProcAddress(handle,name)
 
-namespace QYHS
+namespace qyhs
 {
 	namespace platform
 	{

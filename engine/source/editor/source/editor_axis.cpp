@@ -1,6 +1,6 @@
 ﻿#include "editor_axis.h"
 
-namespace QYHS
+namespace qyhs
 {
     EditorTranslateAxis::EditorTranslateAxis()
     {

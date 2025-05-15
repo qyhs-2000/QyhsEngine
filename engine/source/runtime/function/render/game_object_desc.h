@@ -2,7 +2,7 @@
 #include <vector>
 #include "function/framework/game_object/game_object_id_allocator.h"
 #include "core/math/matrix4.h"
-namespace QYHS
+namespace qyhs
 {
 	typedef size_t Mesh_ID;
 	typedef size_t Material_ID;
@@ -87,9 +87,9 @@ namespace QYHS
 }
 
 template<>
-struct std::hash<QYHS::GameObjectPartId>
+struct std::hash<qyhs::GameObjectPartId>
 {
-	size_t operator()(const QYHS::GameObjectPartId& rhs) const noexcept { return rhs.getHashValue(); }
+	size_t operator()(const qyhs::GameObjectPartId& rhs) const noexcept { return rhs.getHashValue(); }
 };
 
 

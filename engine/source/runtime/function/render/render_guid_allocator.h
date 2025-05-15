@@ -1,6 +1,6 @@
 #pragma once
 #include <unordered_map>
-namespace QYHS
+namespace qyhs
 {
 	static const size_t invalid_value = 0;
 

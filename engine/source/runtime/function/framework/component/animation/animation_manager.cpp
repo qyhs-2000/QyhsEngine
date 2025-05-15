@@ -1,7 +1,7 @@
 #include "animation_manager.h"
 #include "animation_component.h"
 #include "animation_loader.h"
-namespace QYHS
+namespace qyhs
 {
 	std::map<std::string, std::shared_ptr<AnimationClip>> AnimationManager::m_animation_clip_cache;
 	std::map<std::string, std::shared_ptr<AnimationSkeletonMap>> AnimationManager::m_animation_skeleton_map_cache;

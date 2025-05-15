@@ -1,8 +1,8 @@
 #include "game_object_desc.h"
 
-namespace QYHS
+namespace qyhs
 {
-	int QYHS::GameObjectDesc::getObjectPartSize()
+	int qyhs::GameObjectDesc::getObjectPartSize()
 	{
 		return m_object_parts.size();
 	}

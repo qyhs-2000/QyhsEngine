@@ -437,7 +437,7 @@ struct JsonParser final {
     /* get_next_token()
      *
      * Return the next non-whitespace character. If the end of the input is reached,
-     * flag an error and return 0.
+     * flags an error and return 0.
      */
     char get_next_token() {
         consume_garbage();
@@ -624,7 +624,7 @@ struct JsonParser final {
     /* expect(str, res)
      *
      * Expect that 'str' starts at the character that was just read. If it does, advance
-     * the input and return res. If not, flag an error.
+     * the input and return res. If not, flags an error.
      */
     Json expect(const string &expected, Json res) {
         assert(i != 0);

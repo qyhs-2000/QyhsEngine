@@ -2,7 +2,7 @@
 #include <function/render/render_pass.h>
 #include <function/render/render_entity.h>
 
-namespace QYHS
+namespace qyhs
 {
 	void RenderScene::updateVisibleObjectsOfMainCamera(std::shared_ptr<RenderResource> render_resource)
 	{

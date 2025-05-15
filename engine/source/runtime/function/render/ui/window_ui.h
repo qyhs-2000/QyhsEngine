@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include <memory>
-namespace  QYHS
+namespace  qyhs
 {
     class WindowSystem;
     class RenderSystem;

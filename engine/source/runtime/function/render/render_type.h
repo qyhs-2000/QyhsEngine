@@ -6,7 +6,7 @@
 #include <memory>
 #include <string>
 #include <resource/type/global_rendering_resource.h>
-namespace QYHS
+namespace qyhs
 {
 	enum PIXEL_FORMAT
 	{
@@ -111,12 +111,12 @@ namespace QYHS
 }
 
 template<>
-struct std::hash<QYHS::MeshSourceDesc>
+struct std::hash<qyhs::MeshSourceDesc>
 {
-	size_t operator()(const QYHS::MeshSourceDesc& rhs) const noexcept { return rhs.getHashValue(); }
+	size_t operator()(const qyhs::MeshSourceDesc& rhs) const noexcept { return rhs.getHashValue(); }
 };
 template<>
-struct std::hash<QYHS::MaterialSourceDesc>
+struct std::hash<qyhs::MaterialSourceDesc>
 {
-	size_t operator()(const QYHS::MaterialSourceDesc& rhs) const noexcept { return rhs.getHashValue(); }
+	size_t operator()(const qyhs::MaterialSourceDesc& rhs) const noexcept { return rhs.getHashValue(); }
 };

@@ -1,6 +1,6 @@
 #include "game_object_id_allocator.h"
 #include "core/base/macro.h"
-namespace QYHS
+namespace qyhs
 {
 	std::atomic<GameObjectID> GameObjectIdAllocator::m_next_id{ 0 };
 	GameObjectID GameObjectIdAllocator::allocateId()

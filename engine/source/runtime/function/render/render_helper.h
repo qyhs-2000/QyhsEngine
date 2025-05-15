@@ -1,6 +1,6 @@
 #pragma once
 #include <cstdint>
-namespace QYHS
+namespace qyhs
 {
 	static inline uint32_t roundUp(uint32_t value,uint32_t alignment)
 	{

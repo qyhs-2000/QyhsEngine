@@ -3,7 +3,7 @@
 #include <thread>
 #include <emmintrin.h> // _mm_pause()
 
-namespace QYHS
+namespace qyhs
 {
 
 	class SpinLock

@@ -2,7 +2,7 @@
 #include "function/render/rhi/rhi.h"
 #include <memory>
 #include "render_resource_base.h"
-namespace QYHS
+namespace qyhs
 {
 	struct RenderPassInitInfo
 	{

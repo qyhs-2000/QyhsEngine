@@ -18,9 +18,9 @@
 #include <stb_image.h>
 
 #include "core/utils/utils.h"
-namespace QYHS
+namespace qyhs
 {
-	void  drawVecControl(const std::string& label,QYHS::Vector3& values,
+	void  drawVecControl(const std::string& label,qyhs::Vector3& values,
 		float resetValue = 0.0f,float columnWidth = 100.0f);
 	std::vector<std::pair<std::string, bool>> tree_node_state;			//the state of node in each depth
 	int tree_node_depth = -1;
@@ -503,7 +503,7 @@ namespace QYHS
 		delete[]fields;
 	}
 
-	void drawVecControl(const std::string& name, QYHS::Vector3& vec, float reset_value, float column_width)
+	void drawVecControl(const std::string& name, qyhs::Vector3& vec, float reset_value, float column_width)
 	{
 		ImGui::PushID(name.c_str());
 		ImGui::Columns(2);

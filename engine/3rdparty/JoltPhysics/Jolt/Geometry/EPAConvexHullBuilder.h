@@ -228,7 +228,7 @@ public:
 #endif
 	}
 
-	/// Initialize the hull with 3 points
+	/// initialize the hull with 3 points
 	void				Initialize(int inIdx1, int inIdx2, int inIdx3)
 	{
 		// Release triangles
@@ -452,7 +452,7 @@ private:
 	}
 
 	/// Given one triangle that faces inVertex, find the edges of the triangles that are not facing inVertex.
-	/// Will flag all those triangles for removal.
+	/// Will flags all those triangles for removal.
 	bool				FindEdge(Triangle *inFacingTriangle, Vec3Arg inVertex, Edges &outEdges)
 	{
 		// Assert that we were given an empty array

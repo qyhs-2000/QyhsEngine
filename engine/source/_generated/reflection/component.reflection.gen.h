@@ -1,7 +1,7 @@
 #pragma once
 #include "runtime\function\framework\component\component.h"
 
-namespace QYHS
+namespace qyhs
 {
 	class Component;
 	namespace Reflection

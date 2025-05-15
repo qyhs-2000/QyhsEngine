@@ -12,7 +12,7 @@ CharacterBase::CharacterBase(const CharacterBaseSettings *inSettings, PhysicsSys
 	mSystem(inSystem),
 	mShape(inSettings->mShape)
 {
-	// Initialize max slope angle
+	// initialize max slope angle
 	SetMaxSlopeAngle(inSettings->mMaxSlopeAngle);
 }
 

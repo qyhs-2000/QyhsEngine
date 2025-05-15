@@ -1,7 +1,7 @@
 #include "skeleton.h"
 #include <core/math/vector3.h>
 
-namespace QYHS
+namespace qyhs
 {
 	void Skeleton::applyAnimation(const BlendStateWithClipData& blend_state)
 	{

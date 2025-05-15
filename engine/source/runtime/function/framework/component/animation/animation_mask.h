@@ -1,6 +1,6 @@
 #pragma once
 #include "core/meta/reflection/reflection.h"
-namespace QYHS
+namespace qyhs
 {
 	REFLECTION_TYPE(BoneBlendMask)
 		CLASS(BoneBlendMask, Fields)

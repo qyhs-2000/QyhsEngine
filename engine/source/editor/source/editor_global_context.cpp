@@ -4,7 +4,7 @@
 #include "editor_scene_manager.h"
 
 #include "function/render/window_system.h"
-namespace QYHS
+namespace qyhs
 {
 	EditorGlobalContext g_editor_global_context;
 

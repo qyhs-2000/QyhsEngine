@@ -4,8 +4,15 @@
 #include <memory>
 #include <function/framework/game_object/game_object_id_allocator.h>
 #include <cassert>
-namespace QYHS
+namespace qyhs::ecs
 {
+	using Entity = uint32_t;
+	inline const Entity INVALID_ENTITY = 0;
+	inline Entity createEntity()
+	{
+		static std::atomic<Entity> next{ INVALID_ENTITY + 1 };
+		return next.fetch_add(1);
+	}
 
 	class ComponentManager_Interface
 	{
@@ -28,6 +35,25 @@ namespace QYHS
 				}
 			}
 			return false;
+		}
+
+		uint32_t getIndex(Entity entity)const
+		{
+			if (lookup_map.empty())
+			{
+				return ~0u;
+			}
+			auto it = lookup_map.find(entity);
+			if (it != lookup_map.end())
+			{
+				return it->second;
+			}
+			return ~0u;
+		}
+
+		uint32_t getCount()const
+		{
+			return m_components.size();
 		}
 
 		void remove(GameObjectID gobject)
@@ -62,7 +88,7 @@ namespace QYHS
 			return m_components.back();
 		}
 
-		inline TComponent* getComponent(GameObjectID gobject)
+		inline TComponent* getComponent(GameObjectID gobject) 
 		{
 			auto iter = lookup_map.find(gobject);
 			if (iter == lookup_map.end())
@@ -72,10 +98,14 @@ namespace QYHS
 			return &m_components[iter->second];
 		}
 
+		inline TComponent& operator[](size_t index) { return m_components[index]; }
+		inline const TComponent& operator[](size_t index)const { return m_components[index]; }
+		//get entity by index
+		ecs::Entity getEntity(int index)const { return m_entities[index]; }
 	private:
 		std::vector<GameObjectID> m_entities;
 		std::vector<TComponent>   m_components;
-		std::unordered_map<GameObjectID, size_t> lookup_map;
+		std::unordered_map<ecs::Entity, size_t> lookup_map;
 	};
 
 	class ComponentLibrary

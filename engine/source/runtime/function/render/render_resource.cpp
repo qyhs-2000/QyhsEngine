@@ -12,7 +12,7 @@
 #include "core/utils/model_importer_obj.h"
 #include "render_camera.h"
 #include <iostream>
-namespace QYHS
+namespace qyhs
 {
 	VulkanMaterial& RenderResource::getEntityMaterial(RenderEntity& entity)
 	{

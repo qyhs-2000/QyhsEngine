@@ -86,7 +86,7 @@ public:
 	/// Destructor
 	inline					~FixedSizeFreeList();
 
-	/// Initialize the free list, up to inMaxObjects can be allocated
+	/// initialize the free list, up to inMaxObjects can be allocated
 	inline void				Init(uint inMaxObjects, uint inPageSize);
 
 	/// Lockless construct a new object, inParameters are passed on to the constructor

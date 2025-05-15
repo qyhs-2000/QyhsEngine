@@ -1,7 +1,7 @@
 #pragma once
 #include "runtime\function\framework\component\camera\camera_component.h"
 
-namespace QYHS
+namespace qyhs
 {
 	class CameraParamter;
 	class ThirdPersonCameraParameter;
@@ -77,7 +77,7 @@ namespace QYHS
 					int count = 1;
 					out_list = new ReflectionInstance[count];
 					for(int i = 0;i<count;++i){
-						out_list[i] = TYPE_META_DEF(QYHS::CameraParamter,static_cast<ThirdPersonCameraParameter*>(instance));
+						out_list[i] = TYPE_META_DEF(qyhs::CameraParamter,static_cast<ThirdPersonCameraParameter*>(instance));
 					}
 					return count;	
 				}
@@ -238,7 +238,7 @@ namespace QYHS
 					int count = 1;
 					out_list = new ReflectionInstance[count];
 					for(int i = 0;i<count;++i){
-						out_list[i] = TYPE_META_DEF(QYHS::Component,static_cast<CameraComponent*>(instance));
+						out_list[i] = TYPE_META_DEF(qyhs::Component,static_cast<CameraComponent*>(instance));
 					}
 					return count;	
 				}

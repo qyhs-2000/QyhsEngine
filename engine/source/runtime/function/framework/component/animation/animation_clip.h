@@ -2,7 +2,7 @@
 #include "core/meta/reflection/reflection.h"
 #include "core/math/vector3.h"
 #include <vector>
-namespace QYHS
+namespace qyhs
 {
 	REFLECTION_TYPE(AnimationNodeMap)
 		CLASS(AnimationNodeMap,Fields)

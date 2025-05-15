@@ -20,7 +20,7 @@
 #endif // 
 #include <functional>
 
-namespace QYHS
+namespace qyhs
 {
 	namespace Helper
 	{

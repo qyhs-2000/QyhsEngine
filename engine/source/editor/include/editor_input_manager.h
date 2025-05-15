@@ -1,6 +1,6 @@
 #pragma once
 #include  "core/math/vector2.h"
-namespace QYHS
+namespace qyhs
 {
 	
 	enum class EditorCommand:unsigned int 

@@ -1266,7 +1266,7 @@ SPDLOG_INLINE void pattern_formatter::handle_flag_(char flag, details::padding_i
         formatters_.push_back(details::make_unique<details::elapsed_formatter<Padder, std::chrono::seconds>>(padding));
         break;
 
-    default: // Unknown flag appears as is
+    default: // Unknown flags appears as is
         auto unknown_flag = details::make_unique<details::aggregate_formatter>();
 
         if (!padding.truncate_)
@@ -1275,7 +1275,7 @@ SPDLOG_INLINE void pattern_formatter::handle_flag_(char flag, details::padding_i
             unknown_flag->add_ch(flag);
             formatters_.push_back((std::move(unknown_flag)));
         }
-        // fix issue #1617 (prev char was '!' and should have been treated as funcname flag instead of truncating flag)
+        // fix issue #1617 (prev char was '!' and should have been treated as funcname flags instead of truncating flags)
         // spdlog::set_pattern("[%10!] %v") => "[      main] some message"
         // spdlog::set_pattern("[%3!!] %v") => "[mai] some message"
         else

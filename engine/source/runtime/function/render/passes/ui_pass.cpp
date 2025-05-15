@@ -5,7 +5,7 @@
 #include "imgui/backends/imgui_impl_glfw.h"
 #include "imgui/backends/imgui_impl_vulkan.h"
 
-namespace QYHS
+namespace qyhs
 {
     void UIPass::initialize(RenderPassInitInfo* info)
     {

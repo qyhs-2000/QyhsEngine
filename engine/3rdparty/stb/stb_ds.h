@@ -25,18 +25,18 @@ COMPILE-TIME OPTIONS
 
   #define STBDS_NO_SHORT_NAMES
 
-     This flag needs to be set globally.
+     This flags needs to be set globally.
 
      By default stb_ds exposes shorter function names that are not qualified
      with the "stbds_" prefix. If these names conflict with the names in your
-     code, define this flag.
+     code, define this flags.
 
   #define STBDS_SIPHASH_2_4
 
-     This flag only needs to be set in the file containing #define STB_DS_IMPLEMENTATION.
+     This flags only needs to be set in the file containing #define STB_DS_IMPLEMENTATION.
 
      By default stb_ds.h hashes using a weaker variant of SipHash and a custom hash for
-     4- and 8-byte keys. On 64-bit platforms, you can define the above flag to force
+     4- and 8-byte keys. On 64-bit platforms, you can define the above flags to force
      stb_ds.h to use specification-compliant SipHash-2-4 for all keys. Doing so makes
      hash table insertion about 20% slower on 4- and 8-byte keys, 5% slower on
      64-byte keys, and 10% slower on 256-byte keys on my test computer.
@@ -349,7 +349,7 @@ NOTES - HASH MAP
     attempt to serialize the internal hash table, as the hash is not consistent
     between different platforms, and may change with future versions of the library.
 
-  * Use sh_new_arena() for string hashmaps that you never delete from. Initialize
+  * Use sh_new_arena() for string hashmaps that you never delete from. initialize
     with NULL if you're managing the memory for your strings, or your strings are
     never freed (at least until the hashmap is freed). Otherwise, use sh_new_strdup().
     @TODO: make an arena variant that garbage collects the strings with a trivial

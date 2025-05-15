@@ -2313,7 +2313,7 @@ FMT_CONSTEXPR FMT_INLINE auto parse_format_specs(const Char* begin,
     if (++begin == end) return begin;
   }
 
-  // Parse zero flag.
+  // Parse zero flags.
   if (*begin == '0') {
     handler.on_zero();
     if (++begin == end) return begin;

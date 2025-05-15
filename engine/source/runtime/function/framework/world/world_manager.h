@@ -2,7 +2,7 @@
 #include <function/framework/level/level.h>
 #include "resource/type/world_resource.h"
 #include <string>
-namespace QYHS
+namespace qyhs
 {
 	enum class FileType
 	{

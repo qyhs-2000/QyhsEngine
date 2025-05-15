@@ -1288,7 +1288,7 @@ bool ParseTextureNameAndOption(std::string *texname, texture_option_t *texopt,
       token += strspn(token, " \t");  // skip space
 #else
       // Read filename until line end to parse filename containing whitespace
-      // TODO(syoyo): Support parsing texture option flag after the filename.
+      // TODO(syoyo): Support parsing texture option flags after the filename.
       texture_name = std::string(token);
       token += texture_name.length();
 #endif

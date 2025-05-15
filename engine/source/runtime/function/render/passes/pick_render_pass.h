@@ -2,7 +2,7 @@
 #include "function/render/render_pass.h"
 
 
-namespace  QYHS
+namespace  qyhs
 {
     struct PickPassInitInfo:public RenderPassInitInfo
     {

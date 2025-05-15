@@ -28,7 +28,7 @@ class TwoBodyConstraint;
 class BodyInterface : public NonCopyable
 {
 public:
-	/// Initialize the interface (should only be called by PhysicsSystem)
+	/// initialize the interface (should only be called by PhysicsSystem)
 	void						Init(BodyLockInterface &inBodyLockInterface, BodyManager &inBodyManager, BroadPhase &inBroadPhase) { mBodyLockInterface = &inBodyLockInterface; mBodyManager = &inBodyManager; mBroadPhase = &inBroadPhase; }
 	
 	/// Create a body
@@ -192,7 +192,7 @@ public:
 	/// Get the material for a particular sub shape
 	const PhysicsMaterial *		GetMaterial(const BodyID &inBodyID, const SubShapeID &inSubShapeID) const;
 
-	/// Set the Body::EFlags::InvalidateContactCache flag for the specified body. This means that the collision cache is invalid for any body pair involving that body until the next physics step.
+	/// Set the Body::EFlags::InvalidateContactCache flags for the specified body. This means that the collision cache is invalid for any body pair involving that body until the next physics step.
 	void						InvalidateContactCache(const BodyID &inBodyID);
 
 private:
