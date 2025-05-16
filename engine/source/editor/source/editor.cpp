@@ -17,6 +17,7 @@ namespace qyhs
 			m_editor_ui = std::make_shared<EditorUI>();
 			WindowUIInitInfo ui_init_info = {g_runtime_global_context.m_window_system,
 				g_runtime_global_context.m_render_system};
+			//VkDevice device = g_runtime_global_context.m_render_system->getRHI();
 			m_editor_ui->initialize(&ui_init_info);
 
 		}

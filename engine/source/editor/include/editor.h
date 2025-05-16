@@ -14,7 +14,7 @@ namespace qyhs
 		void clear();
 		virtual void update(float delta_time) override;
 		void registerEditorTickComponent(const std::string &component_name);
-		bool show_ui{ false };
+		bool show_ui{ true };
 	private:
 		std::shared_ptr<EditorUI>  m_editor_ui;
 	};

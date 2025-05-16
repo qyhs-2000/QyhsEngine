@@ -27,7 +27,6 @@ namespace qyhs::initializer
 		qyhs::jobsystem::execute(context, [](qyhs::jobsystem::JobArgs args) {qyhs::image::initialize(), systems_initialized[INITIALIZED_SYSTEM_IMAGE].store(true); });
 		qyhs::jobsystem::execute(context, [](qyhs::jobsystem::JobArgs args) {qyhs::font::initialize(), systems_initialized[INITIALIZED_SYSTEM_FONT].store(true); });
 		qyhs::jobsystem::execute(context, [](qyhs::jobsystem::JobArgs args) {qyhs::input::initialize(), systems_initialized[INITIALIZED_SYSTEM_INPUT].store(true); });
-		qyhs::jobsystem::execute(context, [](qyhs::jobsystem::JobArgs args) {qyhs::triangle::initialize(), systems_initialized[INITIALIZED_SYSTEM_TRIANGLE].store(true); });
 		qyhs::jobsystem::execute(context, [](qyhs::jobsystem::JobArgs args) {qyhs::renderer::initialize(), systems_initialized[INITIALIZED_SYSTEM_RENDERER].store(true); });
 	}
 }

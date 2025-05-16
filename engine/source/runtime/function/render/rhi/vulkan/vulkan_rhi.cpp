@@ -1884,6 +1884,7 @@ namespace qyhs
 		vkGetDeviceQueue(m_device, queue_family_indices.compute_family.value(), 0, &compute_queue);
 		vkGetDeviceQueue(m_device, queue_family_indices.copy_family.value(), 0, &copy_queue);
 		vkGetDeviceQueue(m_device, queue_family_indices.video_family.value(), 0, &video_queue);
+		vkGetDeviceQueue(m_device, queue_family_indices.present_family.value(), 0, &present_queue);
 		queues[QUEUE_GRAPHICS].queue = graphics_queue;
 		queues[QUEUE_GRAPHICS].locker = queue_lockers[queue_family_indices.graphics_family.value()];
 
@@ -1995,6 +1996,7 @@ namespace qyhs
 				&& queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)
 			{
 				indices.graphics_family = i;
+				indices.present_family = i;
 			}
 
 			if (!indices.compute_family.has_value() && queueFamily.queueCount > 0

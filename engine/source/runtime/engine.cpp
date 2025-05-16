@@ -39,9 +39,9 @@ namespace qyhs
 		initialized = true;
 		startEngine(engine_config_file);
 		current_time = glfwGetTime();
-		m_rhi = g_runtime_global_context.m_render_system->getRHI();
-		auto rhi = qyhs::rhi::getRHI();
-		rhi = m_rhi.get();
+		//m_rhi = g_runtime_global_context.m_render_system->getRHI();
+		//auto rhi = qyhs::rhi::getRHI();
+		//rhi = m_rhi.get();
 	}
 
 	void QyhsEngine::initialize2()
