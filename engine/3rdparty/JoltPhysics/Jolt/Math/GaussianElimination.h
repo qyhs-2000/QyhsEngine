@@ -31,7 +31,7 @@ bool GaussianElimination(MatrixA &ioA, MatrixB &ioB, float inTolerance = 1.0e-16
 
 	for (uint i = 0; i < n; ++i)
 	{
-		// Initialize pivot element as the diagonal
+		// initialize pivot element as the diagonal
 		uint pivot_row = i, pivot_col = i;
 
 		// Determine pivot element 

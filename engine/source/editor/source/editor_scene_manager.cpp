@@ -8,7 +8,7 @@
 #include "function/render/render_system.h"
 #include <editor.h>
 
-namespace QYHS
+namespace qyhs
 {
 	void EditorSceneManager::initialize()
 	{
@@ -286,7 +286,6 @@ namespace QYHS
 		Vector2 delta_mouse_uv = Vector2(new_mouse_x - old_mouse_x, new_mouse_y - old_mouse_y);
 		float angularVelocity = 18.f / std::max(engine_window_size.x, engine_window_size.y);
 
-		
 		std::shared_ptr<GameObject> selected_game_object = getSelectedGameObject().lock();
 		TransformComponent* transform_component = selected_game_object->TryGetComponent(TransformComponent);
 		Matrix4x4 model_matrix = transform_component->getMatrix();

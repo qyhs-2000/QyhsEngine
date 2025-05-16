@@ -1,7 +1,7 @@
 #include "render_camera.h"
 
 
-namespace QYHS
+namespace qyhs
 {
 	RenderCamera::RenderCamera()
 	{
@@ -41,7 +41,7 @@ namespace QYHS
 		m_current_camera_type = camera_type;
 	}
 
-	Matrix4x4 QYHS::RenderCamera::getViewMatrix() 
+	Matrix4x4 qyhs::RenderCamera::getViewMatrix() 
 	{
 		std::lock_guard< std::mutex> lock_guard(m_view_matrix_mutex);
 		Matrix4x4 view_matrix;

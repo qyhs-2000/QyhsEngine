@@ -1,6 +1,6 @@
 #include "application.h"
 
-namespace QYHS
+namespace qyhs
 {
 
 }

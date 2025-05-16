@@ -28,7 +28,7 @@ public:
 							JobSystemThreadPool() = default;
 	virtual					~JobSystemThreadPool() override;
 
-	/// Initialize the thread pool
+	/// initialize the thread pool
 	/// @param inMaxJobs Max number of jobs that can be allocated at any time
 	/// @param inMaxBarriers Max number of barriers that can be allocated at any time
 	/// @param inNumThreads Number of threads to start (the number of concurrent jobs is 1 more because the main thread will also run jobs while waiting for a barrier to complete). Use -1 to autodetect the amount of CPU's.

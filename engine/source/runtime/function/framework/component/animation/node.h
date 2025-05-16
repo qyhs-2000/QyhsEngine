@@ -3,7 +3,7 @@
 #include "core/math/vector3.h"
 #include "core/math/matrix4.h"
 #include "resource/type/data/skeleton_data.h"
-namespace QYHS
+namespace qyhs
 {
 	class Node
 	{

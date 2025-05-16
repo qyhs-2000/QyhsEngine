@@ -1,6 +1,6 @@
 #pragma once
 
-namespace QYHS
+namespace qyhs
 {
 	namespace Reflection
 	{

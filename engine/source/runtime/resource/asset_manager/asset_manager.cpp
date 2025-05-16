@@ -1,7 +1,7 @@
 #include "asset_manager.h"
 #include "function/global/global_context.h"
 #include <resource/config_manager/config_manager.h>
-namespace QYHS
+namespace qyhs
 {
 	void AssetManager::initialize()
 	{

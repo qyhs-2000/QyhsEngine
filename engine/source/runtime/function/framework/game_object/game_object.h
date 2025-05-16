@@ -7,7 +7,7 @@
 #include <memory.h>
 #include <string>
 #include "core/utils/utils.h"
-namespace QYHS
+namespace qyhs
 {
 	class Component;
 	class GameObject :public std::enable_shared_from_this<GameObject>

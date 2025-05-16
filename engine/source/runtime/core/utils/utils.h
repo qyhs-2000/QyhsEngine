@@ -2,7 +2,7 @@
 #include <vector>
 #include <fstream>
 #include <functional>
-namespace QYHS
+namespace qyhs
 {
 	class Utils
 	{

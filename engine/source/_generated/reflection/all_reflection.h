@@ -25,7 +25,7 @@
 #include "_generated\reflection\global_rendering_resource.reflection.gen.h"
 #include "_generated\reflection\skeleton_data.reflection.gen.h"
 
-namespace QYHS
+namespace qyhs
 {
 	namespace Reflection
 	{

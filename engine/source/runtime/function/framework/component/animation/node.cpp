@@ -1,6 +1,6 @@
 #include "node.h"
 
-namespace QYHS
+namespace qyhs
 {
 	void Bone::initialize(std::shared_ptr<RawBone> definition, Bone* parent_bone)
 	{
@@ -72,10 +72,10 @@ namespace QYHS
 		q.normalise();
 		switch (relative_to)
 		{
-		case QYHS::Node::TransformSpace::LOCAL:
+		case qyhs::Node::TransformSpace::LOCAL:
 			m_rotation = m_rotation * q;
 			break;
-		case QYHS::Node::TransformSpace::AREN:
+		case qyhs::Node::TransformSpace::AREN:
 			m_rotation = q * m_rotation;
 			break;
 		default:
@@ -88,10 +88,10 @@ namespace QYHS
 	{
 		switch (relative_to)
 		{
-		case QYHS::Node::TransformSpace::LOCAL:
+		case qyhs::Node::TransformSpace::LOCAL:
 			m_position = m_position + m_rotation*translation;
 			break;
-		case QYHS::Node::TransformSpace::AREN:
+		case qyhs::Node::TransformSpace::AREN:
 			m_position = m_position + translation;
 			break;
 		default:

@@ -1735,7 +1735,7 @@ int HeightFieldShape::GetTrianglesNext(GetTrianglesContext &ioContext, int inMax
 	context.mMaxTrianglesRequested = inMaxTrianglesRequested;
 	context.mTriangleVertices = outTriangleVertices;
 	context.mMaterials = outMaterials;
-	context.mShouldAbort = false; // Reset the abort flag
+	context.mShouldAbort = false; // Reset the abort flags
 	context.mNumTrianglesFound = 0;
 	
 	// Continue (or start) walking the height field

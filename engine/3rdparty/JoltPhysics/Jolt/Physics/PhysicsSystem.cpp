@@ -64,7 +64,7 @@ void PhysicsSystem::Init(uint inMaxBodies, uint inNumBodyMutexes, uint inMaxBody
 	mObjectVsBroadPhaseLayerFilter = inObjectVsBroadPhaseLayerFilter;
 	mObjectLayerPairFilter = inObjectLayerPairFilter;
 
-	// Initialize body manager
+	// initialize body manager
 	mBodyManager.Init(inMaxBodies, inNumBodyMutexes, inBroadPhaseLayerInterface); 
 
 	// Create broadphase
@@ -77,11 +77,11 @@ void PhysicsSystem::Init(uint inMaxBodies, uint inNumBodyMutexes, uint inMaxBody
 	// Init islands builder
 	mIslandBuilder.Init(inMaxBodies);
 
-	// Initialize body interface
+	// initialize body interface
 	mBodyInterfaceLocking.Init(mBodyLockInterfaceLocking, mBodyManager, *mBroadPhase);
 	mBodyInterfaceNoLock.Init(mBodyLockInterfaceNoLock, mBodyManager, *mBroadPhase);
 
-	// Initialize narrow phase query
+	// initialize narrow phase query
 	mNarrowPhaseQueryLocking.Init(mBodyLockInterfaceLocking, *mBroadPhase);
 	mNarrowPhaseQueryNoLock.Init(mBodyLockInterfaceNoLock, *mBroadPhase);
 }
@@ -1339,7 +1339,7 @@ void PhysicsSystem::JobPreIntegrateVelocity(PhysicsUpdateContext *ioContext, Phy
 	ioSubStep->mCCDBodiesCapacity = mBodyManager.GetNumActiveCCDBodies();
 	ioSubStep->mCCDBodies = (CCDBody *)temp_allocator->Allocate(ioSubStep->mCCDBodiesCapacity * sizeof(CCDBody));
 
-	// Initialize the mapping table between active body and CCD body
+	// initialize the mapping table between active body and CCD body
 	JPH_ASSERT(ioSubStep->mActiveBodyToCCDBody == nullptr);
 	ioSubStep->mNumActiveBodyToCCDBody = mBodyManager.GetNumActiveBodies();
 	ioSubStep->mActiveBodyToCCDBody = (int *)temp_allocator->Allocate(ioSubStep->mNumActiveBodyToCCDBody * sizeof(int));
@@ -2029,7 +2029,7 @@ void PhysicsSystem::JobContactRemovedCallbacks(const PhysicsUpdateContext::Step 
 	BodyAccess::Grant grant(BodyAccess::EAccess::None, BodyAccess::EAccess::None);
 #endif
 
-	// Reset the Body::EFlags::InvalidateContactCache flag for all bodies
+	// Reset the Body::EFlags::InvalidateContactCache flags for all bodies
 	mBodyManager.ValidateContactCacheForAllBodies();
 
 	// Trigger all contact removed callbacks by looking at last step contact points that have not been flagged as reused

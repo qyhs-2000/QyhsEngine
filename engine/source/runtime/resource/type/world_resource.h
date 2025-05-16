@@ -4,7 +4,7 @@
 #include "resource/common/object.h"
 #include <string>
 #include<vector>
-namespace QYHS
+namespace qyhs
 {
 	REFLECTION_TYPE(WorldResource)
 		CLASS(WorldResource, Fields)

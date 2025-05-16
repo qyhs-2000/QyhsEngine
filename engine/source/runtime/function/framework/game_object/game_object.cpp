@@ -5,7 +5,7 @@
 #include <memory>
 #include <editor/include/editor.h>
 
-namespace QYHS
+namespace qyhs
 {
 	void GameObject::tick(double delta_time)
 	{

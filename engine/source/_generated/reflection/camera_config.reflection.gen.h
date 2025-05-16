@@ -1,7 +1,7 @@
 #pragma once
 #include "runtime\resource\type\data\camera_config.h"
 
-namespace QYHS
+namespace qyhs
 {
 	class CameraPose;
 	class CameraConfig;

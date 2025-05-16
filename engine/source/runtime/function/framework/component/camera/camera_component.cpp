@@ -4,7 +4,7 @@
 #include "function/framework/world/world_manager.h"
 
 #include <core/base/macro.h>
-namespace QYHS
+namespace qyhs
 {
 	void CameraComponent::tick(double delta_time)
 	{

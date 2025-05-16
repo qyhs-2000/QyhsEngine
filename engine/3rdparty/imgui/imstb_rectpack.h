@@ -92,11 +92,11 @@ STBRP_DEF int stbrp_pack_rects (stbrp_context *context, stbrp_rect *rects, int n
 // 'stbrp_rect' defined below, stored in the array 'rects', and there
 // are 'num_rects' many of them.
 //
-// Rectangles which are successfully packed have the 'was_packed' flag
+// Rectangles which are successfully packed have the 'was_packed' flags
 // set to a non-zero value and 'x' and 'y' store the minimum location
 // on each axis (i.e. bottom-left in cartesian coordinates, top-left
 // if you imagine y increasing downwards). Rectangles which do not fit
-// have the 'was_packed' flag set to 0.
+// have the 'was_packed' flags set to 0.
 //
 // You should not try to access the 'rects' array from another thread
 // while this function is running, as the function temporarily reorders
@@ -128,7 +128,7 @@ struct stbrp_rect
 
 
 STBRP_DEF void stbrp_init_target (stbrp_context *context, int width, int height, stbrp_node *nodes, int num_nodes);
-// Initialize a rectangle packer to:
+// initialize a rectangle packer to:
 //    pack a rectangle that is 'width' by 'height' in dimensions
 //    using temporary storage provided by the array 'nodes', which is 'num_nodes' long
 //

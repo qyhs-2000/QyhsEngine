@@ -1,6 +1,6 @@
 #pragma once
 #include "function/framework/component/component.h"
-namespace QYHS
+namespace qyhs
 {
 	REFLECTION_TYPE(HierarchyComponent)
 	CLASS(HierarchyComponent:public Component,WhiteListFields)

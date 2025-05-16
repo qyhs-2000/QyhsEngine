@@ -10,7 +10,7 @@
 #include <core/utils/model_importer_gltf.h>
 
 
-namespace QYHS
+namespace qyhs
 {
 	std::shared_ptr<GameObject> Level::createGameObject(ObjectInstanceResource * instance_res)
 	{

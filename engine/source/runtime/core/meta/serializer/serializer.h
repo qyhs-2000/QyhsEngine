@@ -3,7 +3,7 @@
 #include "core/meta/reflection/reflection.h"
 #include <cassert>
 
-namespace QYHS
+namespace qyhs
 {
 	template<typename...>
 	inline constexpr bool always_false = false;

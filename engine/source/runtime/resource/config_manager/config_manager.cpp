@@ -1,6 +1,6 @@
 #include "config_manager.h"
 #include <fstream>
-namespace QYHS
+namespace qyhs
 {
 	void ConfigManager::initialize(const std::filesystem::path& config_file_path)
 	{

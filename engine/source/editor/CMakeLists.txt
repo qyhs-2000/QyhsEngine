@@ -18,6 +18,11 @@ target_compile_options(${TARGET_NAME} PUBLIC "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:
 target_link_libraries(${TARGET_NAME} QyhsRuntime)
 target_link_libraries(${TARGET_NAME} imgui)
 
+if(MSVC)
+add_definitions(-DUNICODE -D_UNICODE)
+endif()
+
+
 set(POST_BUILD_COMMANDS
 	COMMAND ${CMAKE_COMMAND} -E make_directory "${BINARY_ROOT_DIR}"
 	COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/resource" "${BINARY_ROOT_DIR}/resource"

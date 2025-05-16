@@ -4,9 +4,9 @@
 #include <function/render/ui/editor_ui.h>
 #include "application/application.h"
 //#include "function/global/global_context.h"
-namespace QYHS
+namespace qyhs
 {
-	extern std::unordered_set<std::string> g_editor_tick_component_types;
+	
 	class QyhsEditor:public QyhsEngine
 	{
 	public:
@@ -14,7 +14,7 @@ namespace QYHS
 		void clear();
 		virtual void update(float delta_time) override;
 		void registerEditorTickComponent(const std::string &component_name);
-		
+		bool show_ui{ true };
 	private:
 		std::shared_ptr<EditorUI>  m_editor_ui;
 	};

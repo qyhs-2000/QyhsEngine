@@ -226,7 +226,7 @@ public:
 	/// Invalidate the contact cache (should only be called by the BodyManager), will be reset the next simulation step. Returns true if the contact cache was still valid.
 	inline bool				InvalidateContactCacheInternal()								{ return (mFlags.fetch_or(uint8(EFlags::InvalidateContactCache), memory_order_relaxed) & uint8(EFlags::InvalidateContactCache)) == 0; }
 
-	/// Reset the collision cache invalid flag (should only be called by the BodyManager).
+	/// Reset the collision cache invalid flags (should only be called by the BodyManager).
 	inline void				ValidateContactCacheInternal()									{ JPH_IF_ENABLE_ASSERTS(uint8 old_val = ) mFlags.fetch_and(uint8(~uint8(EFlags::InvalidateContactCache)), memory_order_relaxed); JPH_ASSERT((old_val & uint8(EFlags::InvalidateContactCache)) != 0); }
 
 	/// Updates world space bounding box (should only be called by the PhysicsSystem)

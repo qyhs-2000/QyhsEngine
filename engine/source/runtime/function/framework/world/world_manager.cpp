@@ -7,7 +7,7 @@
 #include "core/utils/utils.h"
 #include <iostream>
 #include <core/utils/model_importer_gltf.h>
-namespace QYHS
+namespace qyhs
 {
 	std::unordered_map<std::string, FileType> WorldManager::file_types =
 	{

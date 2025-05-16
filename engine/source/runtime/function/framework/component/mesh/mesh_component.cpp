@@ -8,7 +8,7 @@
 #include "resource/type/data/material.h"
 #include "function/framework/component/animation/animation.h"
 #include <iostream>
-namespace QYHS
+namespace qyhs
 {
 	void MeshComponent::tick(double time)
 	{

@@ -332,7 +332,7 @@ void IslandBuilder::SortIslands(TempAllocator *inTempAllocator)
 		JPH_ASSERT(mIslandsSorted == nullptr);
 		mIslandsSorted = (uint32 *)inTempAllocator->Allocate(mNumIslands * sizeof(uint32));
 
-		// Initialize index
+		// initialize index
 		for (uint32 island = 0; island < mNumIslands; ++island)
 			mIslandsSorted[island] = island;
 

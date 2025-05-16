@@ -1,6 +1,6 @@
 #include "matrix3.h"
 
-namespace QYHS
+namespace qyhs
 {
     const Matrix3x3 Matrix3x3::ZERO(0, 0, 0, 0, 0, 0, 0, 0, 0);
     const Matrix3x3 Matrix3x3::IDENTITY(1, 0, 0, 0, 1, 0, 0, 0, 1);

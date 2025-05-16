@@ -4,7 +4,7 @@
 #include "function/framework/component/transform/transform_component.h"
 #include "function/framework/component/mesh/mesh_component.h"
 #include "core/math/transform.h"
-namespace QYHS
+namespace qyhs
 {
     //TODO:if don't add 'class Transform',it will fail in {{class_name}}.reflection.gen.h file, i don't know the reason
     class Transform;
@@ -26,12 +26,15 @@ namespace QYHS
         void updateWorldMatrix();
         void updateWorldMatrix_Parented(const TransformComponent & parent_transform_comp);
         void applyTransform();
+        void updateTransToWorld();
         Matrix4x4 getMatrix() { return m_transform.getMatrix(); }
         const Transform& getTransformConst() { return m_transform; }
         Matrix4x4 world_matrix;
     protected:
         META(Enable)
-            Transform m_transform;          //local transform
+            Transform m_transform;            //local transform
+		Vector3 scale{ 1,1,1 };               //world scale
+		Vector3 translation{ 0.0,0.0,0.0 };   //world translation
     private:
         bool m_is_dirty{ true };
     };

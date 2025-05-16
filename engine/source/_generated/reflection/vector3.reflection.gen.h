@@ -1,7 +1,7 @@
 #pragma once
 #include "runtime\core\math\vector3.h"
 
-namespace QYHS
+namespace qyhs
 {
 	class Vector3;
 	namespace Reflection

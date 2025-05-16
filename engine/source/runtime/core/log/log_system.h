@@ -5,7 +5,7 @@
 template<typename ... Arguments>
 class className;
 
-namespace QYHS
+namespace qyhs
 {
 
     class LogSystem final

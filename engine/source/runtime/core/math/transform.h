@@ -4,7 +4,7 @@
 #include "runtime/core/math/quaternion.h"
 #include "matrix4.h"
 
-namespace QYHS
+namespace qyhs
 {
     class Vector3;
     REFLECTION_TYPE(Transform)

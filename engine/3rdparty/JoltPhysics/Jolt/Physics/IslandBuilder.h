@@ -23,7 +23,7 @@ public:
 	/// Destructor
 							~IslandBuilder();
 
-	/// Initialize the island builder with the maximum amount of bodies that could be active						
+	/// initialize the island builder with the maximum amount of bodies that could be active						
 	void					Init(uint32 inMaxActiveBodies);
 
 	/// Prepare for simulation step by allocating space for the contact constraints

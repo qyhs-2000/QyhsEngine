@@ -1,6 +1,6 @@
 #pragma once
 
-namespace QYHS
+namespace qyhs
 {
 	static uint32_t const mesh_per_drawcall_max_instance_count = 64;
 	static uint32_t const s_mesh_vertex_blending_max_joint_count = 1024;

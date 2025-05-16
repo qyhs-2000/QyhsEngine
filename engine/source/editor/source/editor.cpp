@@ -2,9 +2,8 @@
 #include "editor_input_manager.h"
 #include "editor_scene_manager.h"
 #include "function/global/global_context.h"
-namespace QYHS
+namespace qyhs
 {
-	std::unordered_set<std::string> g_editor_tick_component_types{};
 	void QyhsEditor::initialize()
 	{
 		QyhsEngine::initialize();
@@ -13,11 +12,15 @@ namespace QYHS
 		g_editor_global_context.initialize(init_info);
 
 		g_editor_global_context.m_scene_manager->uploadAxisResource();
+		if (show_ui)
+		{
+			m_editor_ui = std::make_shared<EditorUI>();
+			WindowUIInitInfo ui_init_info = {g_runtime_global_context.m_window_system,
+				g_runtime_global_context.m_render_system};
+			//VkDevice device = g_runtime_global_context.m_render_system->getRHI();
+			m_editor_ui->initialize(&ui_init_info);
 
-		m_editor_ui = std::make_shared<EditorUI>();
-		WindowUIInitInfo ui_init_info = {g_runtime_global_context.m_window_system,
-			g_runtime_global_context.m_render_system};
-		m_editor_ui->initialize(&ui_init_info);
+		}
 
 		registerEditorTickComponent("TransformComponent");
 		registerEditorTickComponent("MeshComponent");

@@ -8,7 +8,7 @@
 #include <map>
 #include <memory>
 #include <string>
-namespace QYHS
+namespace qyhs
 {
 	class BlendState;
 	class AnimationManager

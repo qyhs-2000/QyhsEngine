@@ -3,7 +3,7 @@
 #include <deque>
 #include "game_object_desc.h"
 #include "function/render/render_camera.h"
-namespace QYHS
+namespace qyhs
 {
 	struct GameObjectResource
 	{

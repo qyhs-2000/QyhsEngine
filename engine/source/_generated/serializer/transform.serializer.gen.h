@@ -1,7 +1,7 @@
 #pragma once
 #include "runtime\core\math\transform.h"
 
-namespace QYHS
+namespace qyhs
 {
 	template<>
 	Json Serializer::write(const Transform&instance);

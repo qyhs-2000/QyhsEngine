@@ -1,7 +1,7 @@
 #pragma once
 #include "runtime\core\math\vector2.h"
 
-namespace QYHS
+namespace qyhs
 {
 	class Vector2;
 	namespace Reflection

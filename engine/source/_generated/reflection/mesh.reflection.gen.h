@@ -1,7 +1,7 @@
 #pragma once
 #include "runtime\resource\type\component\mesh\mesh.h"
 
-namespace QYHS
+namespace qyhs
 {
 	class SubMeshRes;
 	class MeshComponentRes;

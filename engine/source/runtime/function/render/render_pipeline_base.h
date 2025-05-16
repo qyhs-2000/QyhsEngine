@@ -1,5 +1,4 @@
 #pragma once
-#include "function/render/rhi/rhi.h"
 #include "render_resource_base.h"
 #include "render_pass_base.h"
 #include <memory>
@@ -7,7 +6,7 @@
 #include "core/math/vector2.h"
 #include "ui/editor_ui.h"
 
-namespace QYHS
+namespace qyhs
 {
 	struct RenderPipelineInitInfo
 	{

@@ -30,7 +30,7 @@ public:
 	{
 	public:
 		Float3						mOffset;			///< Offset of all vertices
-		Float3						mScale;				///< Scale of all vertices, vertex_position = mOffset + mScale * compressed_vertex_position
+		Float3						mScale;				///< Scale of all vertices, vertex_positions = mOffset + mScale * compressed_vertex_position
 	};
 
 	/// Size of the header (an empty struct is always > 0 bytes so this needs a separate variable)

@@ -2,13 +2,12 @@
 
 #include "core/utils/utils.h"
 #include "function/render/render_helper.h"
-#include "function/render/rhi/vulkan/vulkan_utils.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 #include <iostream>
 
-namespace  QYHS
+namespace  qyhs
 {
 	void PickPass::prepareData(std::shared_ptr<RenderResourceBase> resource)
 	{
@@ -39,11 +38,11 @@ namespace  QYHS
 		// just need one attachment to store node_ids
 		m_framebuffer.attachments.resize(1);
 		m_framebuffer.attachments[0].format = VK_FORMAT_R32_UINT;
-		VulkanUtils::createImage(m_vulkan_rhi->getPhysicalDevice(), m_vulkan_rhi->getDevice(), m_vulkan_rhi->getSwapChainExtent().width,
+		m_vulkan_rhi->createImage(m_vulkan_rhi->getPhysicalDevice(), m_vulkan_rhi->getDevice(), m_vulkan_rhi->getSwapChainExtent().width,
 			m_vulkan_rhi->getSwapChainExtent().height, m_framebuffer.attachments[0].format,
 			1, VK_SAMPLE_COUNT_1_BIT, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
 			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_framebuffer.attachments[0].image, m_framebuffer.attachments[0].memory);
-		m_framebuffer.attachments[0].image_view = VulkanUtils::createImageView(m_vulkan_rhi->getDevice(), m_framebuffer.attachments[0].image, m_framebuffer.attachments[0].format,
+		m_framebuffer.attachments[0].image_view = m_vulkan_rhi->createImageView(m_vulkan_rhi->getDevice(), m_framebuffer.attachments[0].image, m_framebuffer.attachments[0].format,
 			VK_IMAGE_VIEW_TYPE_2D, 1, 1, VK_IMAGE_ASPECT_COLOR_BIT);
 
 	}
@@ -113,7 +112,7 @@ namespace  QYHS
 		mesh_inefficient_pick_global_layout_perframe_storage_buffer_binding.binding = 0;
 		mesh_inefficient_pick_global_layout_perframe_storage_buffer_binding.descriptorType =
 			VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC;
-		mesh_inefficient_pick_global_layout_perframe_storage_buffer_binding.descriptorCount = 1;
+		mesh_inefficient_pick_global_layout_perframe_storage_buffer_binding.descriptor_count = 1;
 		mesh_inefficient_pick_global_layout_perframe_storage_buffer_binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 		mesh_inefficient_pick_global_layout_perframe_storage_buffer_binding.pImmutableSamplers = NULL;
 
@@ -122,7 +121,7 @@ namespace  QYHS
 		mesh_inefficient_pick_global_layout_perdrawcall_storage_buffer_binding.binding = 1;
 		mesh_inefficient_pick_global_layout_perdrawcall_storage_buffer_binding.descriptorType =
 			VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC;
-		mesh_inefficient_pick_global_layout_perdrawcall_storage_buffer_binding.descriptorCount = 1;
+		mesh_inefficient_pick_global_layout_perdrawcall_storage_buffer_binding.descriptor_count = 1;
 		mesh_inefficient_pick_global_layout_perdrawcall_storage_buffer_binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 		mesh_inefficient_pick_global_layout_perdrawcall_storage_buffer_binding.pImmutableSamplers = NULL;
 
@@ -160,9 +159,9 @@ namespace  QYHS
 		}
 
 		VkShaderModule vert_shader_module =
-			VulkanUtils::createShaderModule(m_vulkan_rhi->m_device, Utils::readFile("E://VS_Project//QyhsEngine//engine//shader//mesh_inefficient_axis_vert.spv"));
+			m_vulkan_rhi->createShaderModule(m_vulkan_rhi->m_device, Utils::readFile("E://VS_Project//QyhsEngine//engine//shader//mesh_inefficient_axis_vert.spv"));
 		VkShaderModule frag_shader_module =
-			VulkanUtils::createShaderModule(m_vulkan_rhi->m_device, Utils::readFile("E://VS_Project//QyhsEngine//engine//shader//mesh_inefficient_axis_frag.spv"));
+			m_vulkan_rhi->createShaderModule(m_vulkan_rhi->m_device, Utils::readFile("E://VS_Project//QyhsEngine//engine//shader//mesh_inefficient_axis_frag.spv"));
 
 		VkPipelineShaderStageCreateInfo vert_pipeline_shader_stage_create_info{};
 		vert_pipeline_shader_stage_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -421,8 +420,8 @@ namespace  QYHS
 			transfer_to_render_barrier.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
 			transfer_to_render_barrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 			transfer_to_render_barrier.newLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-			transfer_to_render_barrier.srcQueueFamilyIndex = m_vulkan_rhi->queue_family_indices.graphicsFamily.value();
-			transfer_to_render_barrier.dstQueueFamilyIndex = m_vulkan_rhi->queue_family_indices.graphicsFamily.value();
+			transfer_to_render_barrier.srcQueueFamilyIndex = m_vulkan_rhi->queue_family_indices.graphics_family.value();
+			transfer_to_render_barrier.dstQueueFamilyIndex = m_vulkan_rhi->queue_family_indices.graphics_family.value();
 			transfer_to_render_barrier.image = m_framebuffer.attachments[0].image;
 			transfer_to_render_barrier.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
 			vkCmdPipelineBarrier(m_vulkan_rhi->m_command_buffers[m_vulkan_rhi->m_current_frame_index],
@@ -555,7 +554,7 @@ namespace  QYHS
 		uint32_t buffer_size = m_vulkan_rhi->m_swapchain_extent.width * m_vulkan_rhi->m_swapchain_extent.height * 4;
 		VkBuffer inefficient_staging_buffer;
 		VkDeviceMemory inefficient_staging_buffer_memory;
-		VulkanUtils::createBuffer(m_vulkan_rhi->physical_device,
+		m_vulkan_rhi->createBuffer(m_vulkan_rhi->physical_device,
 			m_vulkan_rhi->m_device,
 			buffer_size,
 			VK_BUFFER_USAGE_TRANSFER_DST_BIT,
@@ -570,8 +569,8 @@ namespace  QYHS
 		copy_to_buffer_barrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
 		copy_to_buffer_barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
 		copy_to_buffer_barrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
-		copy_to_buffer_barrier.srcQueueFamilyIndex = m_vulkan_rhi->queue_family_indices.graphicsFamily.value();
-		copy_to_buffer_barrier.dstQueueFamilyIndex = m_vulkan_rhi->queue_family_indices.graphicsFamily.value();
+		copy_to_buffer_barrier.srcQueueFamilyIndex = m_vulkan_rhi->queue_family_indices.graphics_family.value();
+		copy_to_buffer_barrier.dstQueueFamilyIndex = m_vulkan_rhi->queue_family_indices.graphics_family.value();
 		copy_to_buffer_barrier.image = m_framebuffer.attachments[0].image;
 		copy_to_buffer_barrier.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
 		vkCmdPipelineBarrier(command_buffer,

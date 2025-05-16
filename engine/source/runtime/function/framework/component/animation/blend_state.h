@@ -2,7 +2,7 @@
 #include <vector>
 #include "animation_clip.h"
 #include "animation_skeleton_map.h"
-namespace QYHS
+namespace qyhs
 {
 	class BoneBlendWeight
 	{

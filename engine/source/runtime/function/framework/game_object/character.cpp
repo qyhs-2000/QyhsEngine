@@ -1,7 +1,7 @@
 #include "character.h"
 #include "function/framework/component/transform/transform_component.h"
 #include "function/framework/component/motor/motor_component.h"
-namespace QYHS
+namespace qyhs
 {
 	Character::Character(std::shared_ptr<GameObject> gobject)
 	{

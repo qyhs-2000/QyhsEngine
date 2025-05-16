@@ -1,7 +1,7 @@
 #pragma once
 #include "runtime\function\framework\component\motor\motor_component.h"
 
-namespace QYHS
+namespace qyhs
 {
 	class MotorComponentRes;
 	class MotorComponent;
@@ -75,7 +75,7 @@ namespace QYHS
 					int count = 1;
 					out_list = new ReflectionInstance[count];
 					for(int i = 0;i<count;++i){
-						out_list[i] = TYPE_META_DEF(QYHS::Component,static_cast<MotorComponent*>(instance));
+						out_list[i] = TYPE_META_DEF(qyhs::Component,static_cast<MotorComponent*>(instance));
 					}
 					return count;	
 				}

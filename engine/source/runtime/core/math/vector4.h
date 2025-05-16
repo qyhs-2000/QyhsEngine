@@ -3,7 +3,7 @@
 #include "runtime/core/math/vector3.h"
 #include "runtime/core/meta/reflection/reflection.h"
 
-namespace QYHS
+namespace qyhs
 {
     class Vector3;
     REFLECTION_TYPE(Vector4)

@@ -13,7 +13,7 @@ static void framebufferResizeCallback(GLFWwindow* window, int width, int height)
 	engine->framebufferResized = true;*/
 }
 
-namespace QYHS
+namespace qyhs
 {
 	WindowSystem::~WindowSystem()
 	{

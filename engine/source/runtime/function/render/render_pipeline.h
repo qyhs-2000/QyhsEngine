@@ -2,7 +2,7 @@
 #include "render_pipeline_base.h"
 #include <function/render/render_pass_base.h>
 
-namespace QYHS
+namespace qyhs
 {
 	class RenderPipeline :public RenderPipelineBase
 	{

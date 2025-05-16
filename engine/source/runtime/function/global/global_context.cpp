@@ -5,7 +5,7 @@
 #include <function/framework/world/world_manager.h>
 #include <resource/config_manager/config_manager.h>
 #include <resource/asset_manager/asset_manager.h>
-namespace QYHS
+namespace qyhs
 {
 	RuntimeGlobalContext g_runtime_global_context;
 	bool RuntimeGlobalContext::m_is_game_mode = false;

@@ -491,7 +491,7 @@ static BOOL CALLBACK deviceCallback(const DIDEVICEINSTANCE* di, void* user)
 //////                       GLFW internal API                      //////
 //////////////////////////////////////////////////////////////////////////
 
-// Initialize joystick interface
+// initialize joystick interface
 //
 void _glfwInitJoysticksWin32(void)
 {

@@ -11,7 +11,7 @@
 #include <function/framework/level/level.h>
 
 #include "_generated/serializer/all_serializer.h"
-namespace QYHS
+namespace qyhs
 {
 	class AssetManager
 	{

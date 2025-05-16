@@ -1,7 +1,7 @@
 #pragma once
 #include "runtime\function\framework\component\animation\animation_clip.h"
 
-namespace QYHS
+namespace qyhs
 {
 	class AnimationNodeMap;
 	class AnimationChannel;

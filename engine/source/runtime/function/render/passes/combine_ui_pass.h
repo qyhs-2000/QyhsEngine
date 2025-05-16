@@ -1,6 +1,6 @@
 #pragma once
 #include "function/render/render_pass.h"
-namespace QYHS
+namespace qyhs
 {
 	struct CombineUIPassInitInfo:public RenderPassInitInfo
 	{

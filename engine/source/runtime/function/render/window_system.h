@@ -4,7 +4,7 @@
 #include <vector>
 #include <functional>
 #include "core//math/vector2.h"
-namespace QYHS
+namespace qyhs
 {
 	struct WindowCreateInfo
 	{

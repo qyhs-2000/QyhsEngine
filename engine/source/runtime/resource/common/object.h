@@ -1,7 +1,7 @@
 #pragma once
 #include "core/meta/reflection/reflection.h"
 #include "runtime/function/framework/component/component.h"
-namespace QYHS
+namespace qyhs
 {
 	REFLECTION_TYPE(ObjectDefinitionResource)
 		CLASS(ObjectDefinitionResource, Fields)

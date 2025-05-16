@@ -30,7 +30,7 @@ public:
 	/// Destructor
 									~BodyManager();
 
-	/// Initialize the manager
+	/// initialize the manager
 	void							Init(uint inMaxBodies, uint inNumBodyMutexes, const BroadPhaseLayerInterface &inLayerInterface);
 
 	/// Gets the current amount of bodies that are in the body manager
@@ -138,10 +138,10 @@ public:
 	/// Function to update body's layer (should only be called by the BodyInterface since it also requires updating the broadphase)
 	inline void						SetBodyObjectLayerInternal(Body &ioBody, ObjectLayer inLayer) const { ioBody.mObjectLayer = inLayer; ioBody.mBroadPhaseLayer = mBroadPhaseLayerInterface->GetBroadPhaseLayer(inLayer); }
 
-	/// Set the Body::EFlags::InvalidateContactCache flag for the specified body. This means that the collision cache is invalid for any body pair involving that body until the next physics step.
+	/// Set the Body::EFlags::InvalidateContactCache flags for the specified body. This means that the collision cache is invalid for any body pair involving that body until the next physics step.
 	void							InvalidateContactCacheForBody(Body &ioBody);
 
-	/// Reset the Body::EFlags::InvalidateContactCache flag for all bodies. All contact pairs in the contact cache will now by valid again.
+	/// Reset the Body::EFlags::InvalidateContactCache flags for all bodies. All contact pairs in the contact cache will now by valid again.
 	void							ValidateContactCacheForAllBodies();
 
 	/// Saving state for replay

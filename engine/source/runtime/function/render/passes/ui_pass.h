@@ -2,7 +2,7 @@
 #include "function/render/render_pass.h"
 #include "function/render/ui/window_ui.h"
 
-namespace QYHS
+namespace qyhs
 {
 	struct UIPassInitInfo :public RenderPassInitInfo
 	{

@@ -9,7 +9,7 @@ m_name(cursor.getDisplayName()), m_qualified_name(Utils::getTypeNameWithoutNames
 {
 	m_display_name = Utils::getNameWithoutFirstM(m_qualified_name);
 	Utils::replaceAll(m_name, " ", "");
-	Utils::replaceAll(m_name, "QYHS::", "");
+	Utils::replaceAll(m_name, "qyhs::", "");
 
 	for (auto& child : cursor.getChildren())
 	{

@@ -3,7 +3,7 @@
 #include <string>
 #include <function/input/input_system.h>
 
-namespace QYHS
+namespace qyhs
 {
 	class AssetManager;
 	class ConfigManager;

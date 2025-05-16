@@ -1,7 +1,7 @@
 #pragma once
 #include "runtime\function\framework\component\animation\animation_skeleton_map.h"
 
-namespace QYHS
+namespace qyhs
 {
 	class AnimationSkeletonMap;
 	namespace Reflection

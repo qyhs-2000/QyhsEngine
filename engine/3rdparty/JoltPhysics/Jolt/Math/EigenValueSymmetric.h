@@ -51,10 +51,10 @@ bool EigenValueSymmetric(const Matrix &inMatrix, Matrix &outEigVec, Vector &outE
 	
 	for (uint ip = 0; ip < n; ++ip)
 	{
-		// Initialize b to diagonal of a
+		// initialize b to diagonal of a
 		b[ip] = a(ip, ip);
 
-		// Initialize output to diagonal of a
+		// initialize output to diagonal of a
 		outEigVal[ip] = a(ip, ip);
 
 		// Reset z

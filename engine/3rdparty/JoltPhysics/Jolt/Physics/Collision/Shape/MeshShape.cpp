@@ -177,7 +177,7 @@ MeshShape::MeshShape(const MeshShapeSettings &inSettings, ShapeResult &outResult
 	}
 
 	// Fill in active edge bits
-	IndexedTriangleList indexed_triangles = inSettings.mIndexedTriangles; // Copy indices since we're adding the 'active edge' flag
+	IndexedTriangleList indexed_triangles = inSettings.mIndexedTriangles; // Copy indices since we're adding the 'active edge' flags
 	sFindActiveEdges(inSettings.mTriangleVertices, indexed_triangles);
 
 	// Create triangle splitter
@@ -1010,7 +1010,7 @@ int MeshShape::GetTrianglesNext(GetTrianglesContext &ioContext, int inMaxTriangl
 	context.mMaxTrianglesRequested = inMaxTrianglesRequested;
 	context.mTriangleVertices = outTriangleVertices;
 	context.mMaterials = outMaterials;
-	context.mShouldAbort = false; // Reset the abort flag
+	context.mShouldAbort = false; // Reset the abort flags
 	context.mNumTrianglesFound = 0;
 	
 	// Continue (or start) walking the tree

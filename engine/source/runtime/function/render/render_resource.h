@@ -5,12 +5,12 @@
 #include <stdexcept>
 #include "render_guid_allocator.h"
 #include "render_type.h"
-#include "rhi/rhi.h"
+#include "rhi/vulkan/vulkan_rhi.h"
 #include "render_resource_base.h"
 #include "render_common.h"
-#include "vulkanmemoryallocator/include/vk_mem_alloc.h"
+//#include "vulkanmemoryallocator/include/vk_mem_alloc.h"
 
-namespace QYHS
+namespace qyhs
 {
 	typedef size_t Material_ID;
 	typedef size_t Mesh_ID;

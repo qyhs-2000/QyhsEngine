@@ -13,7 +13,7 @@ struct ImFontBuilderIO;
 // - By default, hinting is enabled and the font's native hinter is preferred over the auto-hinter.
 // - When disabled, FreeType generates blurrier glyphs, more or less matches the stb_truetype.h
 // - The Default hinting mode usually looks good, but may distort glyphs in an unusual way.
-// - The Light hinting mode generates fuzzier glyphs but better matches Microsoft's rasterizer.
+// - The Light hinting mode generates fuzzier glyphs but better matches Microsoft's rasterizer_state.
 // You can set those flags globaly in ImFontAtlas::FontBuilderFlags
 // You can set those flags on a per font basis in ImFontConfig::FontBuilderFlags
 enum ImGuiFreeTypeBuilderFlags

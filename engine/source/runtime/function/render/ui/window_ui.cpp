@@ -1,6 +1,6 @@
 ﻿#include "window_ui.h"
 
-namespace QYHS
+namespace qyhs
 {
     void WindowUI::initialize(WindowUIInitInfo* info)
     {

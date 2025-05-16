@@ -11,7 +11,7 @@
 #include "render_camera.h"
 #include "core/utils/utils.h"
 #include "core/utils/model_importer_gltf.h"
-namespace QYHS
+namespace qyhs
 {
 	void RenderSystem::tick()
 	{
@@ -111,7 +111,6 @@ namespace QYHS
 	{
 		m_rhi = std::make_shared<VulkanRHI>();
 		m_rhi->initialize();
-
 		GlobalRenderConfig global_render_config;
 		const std::string& config_url = g_runtime_global_context.m_config_manager->getGlobalRenderingResUrl();
 		g_runtime_global_context.m_asset_manager->loadAsset(config_url, global_render_config);

@@ -122,7 +122,7 @@ Index of this file:
 // Widths are specified _without_ CellPadding. If you specify a width of 100.0f, the column will be cover (100.0f + Padding * 2.0f)
 // and you can fit a 100.0f wide item in it without clipping and with full padding.
 //-----------------------------------------------------------------------------
-// About default sizing policy (if you don't specify a ImGuiTableColumnFlags_WidthXXXX flag)
+// About default sizing policy (if you don't specify a ImGuiTableColumnFlags_WidthXXXX flags)
 //   - with Table policy ImGuiTableFlags_SizingFixedFit      --> default Column policy is ImGuiTableColumnFlags_WidthFixed, default Width is equal to contents width
 //   - with Table policy ImGuiTableFlags_SizingFixedSame     --> default Column policy is ImGuiTableColumnFlags_WidthFixed, default Width is max of all contents width
 //   - with Table policy ImGuiTableFlags_SizingStretchSame   --> default Column policy is ImGuiTableColumnFlags_WidthStretch, default Weight is 1.0f
@@ -165,7 +165,7 @@ Index of this file:
 //   In many situations, you may skip submitting contents for every column but one (e.g. the first one).
 // - Case A: column is not hidden by user, and at least partially in sight (most common case).
 // - Case B: column is clipped / out of sight (because of scrolling or parent ClipRect): TableNextColumn() return false as a hint but we still allow layout output.
-// - Case C: column is hidden explicitly by the user (e.g. via the context menu, or _DefaultHide column flag, etc.).
+// - Case C: column is hidden explicitly by the user (e.g. via the context menu, or _DefaultHide column flags, etc.).
 //
 //                        [A]         [B]          [C]
 //  TableNextColumn():    true        false        false       -> [userland] when TableNextColumn() / TableSetColumnIndex() return false, user can skip submitting items but only if the column doesn't contribute to row height.
@@ -351,7 +351,7 @@ bool    ImGui::BeginTableEx(const char* name, ImGuiID id, int columns_count, ImG
     table->IsDefaultSizingPolicy = (flags & ImGuiTableFlags_SizingMask_) == 0;
     flags = TableFixFlags(flags, outer_window);
 
-    // Initialize
+    // initialize
     table->ID = id;
     table->Flags = flags;
     table->InstanceCurrent = (ImS16)instance_no;
@@ -365,7 +365,7 @@ bool    ImGui::BeginTableEx(const char* name, ImGuiID id, int columns_count, ImG
     // When not using a child window, WorkRect.Max will grow as we append contents.
     if (use_child_window)
     {
-        // Ensure no vertical scrollbar appears if we only want horizontal one, to make flag consistent
+        // Ensure no vertical scrollbar appears if we only want horizontal one, to make flags consistent
         // (we have no other way to disable vertical scrollbar of a window while keeping the horizontal one showing)
         ImVec2 override_content_size(FLT_MAX, FLT_MAX);
         if ((flags & ImGuiTableFlags_ScrollX) && !(flags & ImGuiTableFlags_ScrollY))
@@ -494,7 +494,7 @@ bool    ImGui::BeginTableEx(const char* name, ImGuiID id, int columns_count, ImG
         TableResetSettings(table);
     if (table->IsInitializing)
     {
-        // Initialize
+        // initialize
         table->SettingsOffset = -1;
         table->IsSortSpecsDirty = true;
         table->InstanceInteracted = -1;
@@ -865,7 +865,7 @@ void ImGui::TableUpdateLayout(ImGuiTable* table)
         }
         else
         {
-            // Initialize stretch weight
+            // initialize stretch weight
             if (column->AutoFitQueue != 0x00 || column->StretchWeight < 0.0f || !column_is_resizable)
             {
                 if (column->InitStretchWeightOrWidth > 0.0f)
@@ -1065,7 +1065,7 @@ void ImGui::TableUpdateLayout(ImGuiTable* table)
     }
 
     // [Part 7] Detect/store when we are hovering the unused space after the right-most column (so e.g. context menus can react on it)
-    // Clear Resizable flag if none of our column are actually resizable (either via an explicit _NoResize flag, either
+    // Clear Resizable flags if none of our column are actually resizable (either via an explicit _NoResize flags, either
     // because of using _WidthAuto/_WidthStretch). This will hide the resizing option from the context menu.
     const float unused_x1 = ImMax(table->WorkRect.Min.x, table->Columns[table->RightMostEnabledColumn].ClipRect.Max.x);
     if (is_hovering_table && table->HoveredColumnBody == -1)
@@ -1425,7 +1425,7 @@ void ImGui::TableSetupColumn(const char* label, ImGuiTableColumnFlags flags, flo
     column->UserID = user_id;
     flags = column->Flags;
 
-    // Initialize defaults
+    // initialize defaults
     column->InitStretchWeightOrWidth = init_width_or_weight;
     if (table->IsInitializing)
     {
@@ -1534,10 +1534,10 @@ const char* ImGui::TableGetColumnName(const ImGuiTable* table, int column_n)
 
 // Change user accessible enabled/disabled state of a column (often perceived as "showing/hiding" from users point of view)
 // Note that end-user can use the context menu to change this themselves (right-click in headers, or right-click in columns body with ImGuiTableFlags_ContextMenuInBody)
-// - Require table to have the ImGuiTableFlags_Hideable flag because we are manipulating user accessible state.
+// - Require table to have the ImGuiTableFlags_Hideable flags because we are manipulating user accessible state.
 // - Request will be applied during next layout, which happens on the first call to TableNextRow() after BeginTable().
 // - For the getter you can test (TableGetColumnFlags() & ImGuiTableColumnFlags_IsEnabled) != 0.
-// - Alternative: the ImGuiTableColumnFlags_Disabled is an overriding/master disable flag which will also hide the column from context menu.
+// - Alternative: the ImGuiTableColumnFlags_Disabled is an overriding/master disable flags which will also hide the column from context menu.
 void ImGui::TableSetColumnEnabled(int column_n, bool enabled)
 {
     ImGuiContext& g = *GImGui;
@@ -2093,7 +2093,7 @@ void ImGui::TableSetColumnWidth(int column_n, float width)
     // - One or more fixed + more than one stretch: tricky.
     // Qt when manual resize is enabled only support a single _trailing_ stretch column.
 
-    // When forwarding resize from Wn| to Fn+1| we need to be considerate of the _NoResize flag on Fn+1.
+    // When forwarding resize from Wn| to Fn+1| we need to be considerate of the _NoResize flags on Fn+1.
     // FIXME-TABLE: Find a way to rewrite all of this so interactions feel more consistent for the user.
     // Scenarios:
     // - F1 F2 F3  resize from F1| or F2|   --> ok: alter ->WidthRequested of Fixed column. Subsequent columns will be offset.
@@ -2630,8 +2630,8 @@ void ImGui::TableFixColumnSortDirection(ImGuiTable* table, ImGuiTableColumn* col
 }
 
 // Calculate next sort direction that would be set after clicking the column
-// - If the PreferSortDescending flag is set, we will default to a Descending direction on the first click.
-// - Note that the PreferSortAscending flag is never checked, it is essentially the default and therefore a no-op.
+// - If the PreferSortDescending flags is set, we will default to a Descending direction on the first click.
+// - Note that the PreferSortAscending flags is never checked, it is essentially the default and therefore a no-op.
 IM_STATIC_ASSERT(ImGuiSortDirection_None == 0 && ImGuiSortDirection_Ascending == 1 && ImGuiSortDirection_Descending == 2);
 ImGuiSortDirection ImGui::TableGetColumnNextSortDirection(ImGuiTableColumn* column)
 {
@@ -2729,7 +2729,7 @@ void ImGui::TableSortSpecsSanitize(ImGuiTable* table)
         }
     }
 
-    // Fallback default sort order (if no column had the ImGuiTableColumnFlags_DefaultSort flag)
+    // Fallback default sort order (if no column had the ImGuiTableColumnFlags_DefaultSort flags)
     if (sort_order_count == 0 && !(table->Flags & ImGuiTableFlags_SortTristate))
         for (int column_n = 0; column_n < table->ColumnsCount; column_n++)
         {
@@ -3063,7 +3063,7 @@ void ImGui::TableDrawContextMenu(ImGuiTable* table)
     //    table->IsResetAllRequest = true;
 
     // Sorting
-    // (modify TableOpenContextMenu() to add _Sortable flag if enabling this)
+    // (modify TableOpenContextMenu() to add _Sortable flags if enabling this)
 #if 0
     if ((table->Flags & ImGuiTableFlags_Sortable) && column != NULL && (column->Flags & ImGuiTableColumnFlags_NoSort) == 0)
     {
@@ -3855,7 +3855,7 @@ void ImGui::BeginColumns(const char* str_id, int columns_count, ImGuiOldColumnFl
     if (columns->Columns.Size != 0 && columns->Columns.Size != columns_count + 1)
         columns->Columns.resize(0);
 
-    // Initialize default widths
+    // initialize default widths
     columns->IsFirstFrame = (columns->Columns.Size == 0);
     if (columns->Columns.Size == 0)
     {
@@ -3971,7 +3971,7 @@ void ImGui::EndColumns()
         window->DC.CursorMaxPos.x = columns->HostCursorMaxPosX;  // Restore cursor max pos, as columns don't grow parent
 
     // Draw columns borders and handle resize
-    // The IsBeingResized flag ensure we preserve pre-resize columns width so back-and-forth are not lossy
+    // The IsBeingResized flags ensure we preserve pre-resize columns width so back-and-forth are not lossy
     bool is_being_resized = false;
     if (!(flags & ImGuiOldColumnFlags_NoBorder) && !window->SkipItems)
     {

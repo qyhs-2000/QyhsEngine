@@ -2,7 +2,7 @@
 #include "core/meta/reflection/reflection.h"
 #include "core/math/math.h"
 #include <assert.h>
-namespace QYHS
+namespace qyhs
 {
     REFLECTION_TYPE(Vector2)
         CLASS(Vector2, Fields)

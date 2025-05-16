@@ -1,7 +1,7 @@
 #pragma once
 #include "runtime\resource\type\data\mash_data.h"
 
-namespace QYHS
+namespace qyhs
 {
 	template<>
 	Json Serializer::write(const Vertex&instance);

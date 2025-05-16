@@ -1,7 +1,7 @@
 #include "reflection.h"
 #include <cstring>
 #include <map>
-namespace QYHS
+namespace qyhs
 {
 	namespace Reflection
 	{

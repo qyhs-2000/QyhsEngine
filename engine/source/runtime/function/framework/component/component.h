@@ -2,7 +2,7 @@
 #include <memory>
 #include <function/framework/game_object/game_object.h>
 #include "core/meta/reflection/reflection.h"
-namespace QYHS
+namespace qyhs
 {
 	class GameObject;
 	REFLECTION_TYPE(Component)

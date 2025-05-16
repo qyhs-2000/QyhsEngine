@@ -9,7 +9,7 @@ add_library(json11 ${json_include}/json11.cpp)
 set_target_properties(json11 PROPERTIES FOLDER "ThirdParty/json11")
 
 file(GLOB_RECURSE HEADER_FILES "*.h")
-file(GLOB_RECURSE SOURCE_FILES "*.cpp")
+file(GLOB_RECURSE SOURCE_FILES "*.cpp" "*.c")
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${HEADER_FILES} ${SOURCE_FILES})
 
 add_library(${TARGET_NAME} ${HEADER_FILES} ${SOURCE_FILES})
@@ -20,10 +20,12 @@ set_target_properties(${TARGET_NAME} PROPERTIES FOLDER "Engine")
 target_compile_options(${TARGET_NAME} PUBLIC "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/permissive->")
 target_compile_options(${TARGET_NAME} PUBLIC "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/WX->")
 
+if(MSVC)
+add_definitions(-DUNICODE -D_UNICODE)
+endif()
 
-
-
-
+#if you want to use volk for development
+add_definitions(-DUSE_VOLK)
 
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${HEADER_FILES} ${SOURCE_FILES})
 
@@ -42,5 +44,6 @@ target_include_directories(${TARGET_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(${TARGET_NAME} PUBLIC ${json_include})
 target_include_directories(${TARGET_NAME} PUBLIC ${THIRD_PARTY_DIR})
 target_include_directories(${TARGET_NAME} PUBLIC ${ENGINE_SOURCE_CODE_DIR})
+target_include_directories(${TARGET_NAME} PUBLIC ${ENGINE_ROOT_DIR})
 
 set(QYHS_RUNTIME_HEADS ${HEADER_FILES} PARENT_SCOPE)

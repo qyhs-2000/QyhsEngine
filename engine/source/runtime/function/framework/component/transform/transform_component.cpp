@@ -1,6 +1,6 @@
 #include "transform_component.h"
 #include <iostream>
-namespace QYHS
+namespace qyhs
 {
 	void TransformComponent::postLoadResource(std::weak_ptr<GameObject> parent_object)
 	{

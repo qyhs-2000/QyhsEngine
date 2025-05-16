@@ -5,7 +5,7 @@
 #include <function/render/render_pipeline_base.h>
 #include <function/render/render_structure.h>
 #include "render_resource.h"
-namespace QYHS
+namespace qyhs
 {
 
 	enum

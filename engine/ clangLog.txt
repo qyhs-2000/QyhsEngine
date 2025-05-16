@@ -3,8 +3,8 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/core/base/macro.h \
   function/global/global_context.h core/log/log_system.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/core/base/vulkan_base.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/log/log_system.h \
-  spdlog/spdlog.h E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cstdint \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/core/common_include.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cstdint \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\yvals_core.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vcruntime.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\sal.h \
@@ -12,61 +12,11 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vadefs.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xkeycheck.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\stdint.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\stdexcept \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\exception \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\yvals.h \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\crtdbg.h \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vcruntime_new_debug.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vcruntime_new.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\crtdefs.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\use_ansi.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cstdlib \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\math.h \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_math.h \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\stdlib.h \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_malloc.h \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_search.h \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\stddef.h \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_wstdlib.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\limits.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\type_traits \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cstddef \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\stddef.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xtr1common \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\malloc.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vcruntime_exception.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\eh.h \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_terminate.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xstring \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\__msvc_sanitizer_annotate_container.hpp \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\iosfwd \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cstdio \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\stdio.h \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_wstdio.h \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_stdio_config.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cstring \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\string.h \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_memory.h \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_memcpy_s.h \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\errno.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vcruntime_string.h \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_wstring.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cwchar \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\wchar.h \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_wconio.h \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_wctype.h \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_wdirect.h \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_wio.h \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_share.h \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_wprocess.h \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_wtime.h \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\sys/stat.h \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\sys/types.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xmemory \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\limits \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cfloat \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\float.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\climits \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\intrin.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\intrin0.inl.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\setjmp.h \
@@ -79,37 +29,126 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\emmintrin.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xmmintrin.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\mmintrin.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\malloc.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_malloc.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\zmmintrin.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\ammintrin.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\new \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xatomic.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xutility \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/core/helper.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\filesystem \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/core/initializer.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/core/jobsystem.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\functional \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\exception \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\yvals.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\crtdbg.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vcruntime_new_debug.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vcruntime_new.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\crtdefs.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\use_ansi.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cstdlib \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\math.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_math.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\stdlib.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_search.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_wstdlib.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\limits.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vcruntime_exception.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\eh.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_terminate.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\tuple \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\__msvc_iter_core.hpp \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\utility \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\initializer_list \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\typeinfo \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vcruntime_typeinfo.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xmemory \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\limits \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cfloat \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\float.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\climits \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cwchar \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cstdio \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\stdio.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_wstdio.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_stdio_config.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\wchar.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_memcpy_s.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\errno.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vcruntime_string.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_wconio.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_wctype.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_wdirect.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_wio.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_share.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_wprocess.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_wstring.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_wtime.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\sys/stat.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\sys/types.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\new \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xatomic.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xutility \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cstring \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\string.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_memory.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\thread \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\__msvc_chrono.hpp \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\ctime \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\time.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\ratio \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xtimec.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\memory \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\iosfwd \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\process.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_startup.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vcruntime_startup.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\string \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xstring \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\__msvc_sanitizer_annotate_container.hpp \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cctype \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\ctype.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xthreads.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\atomic \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\deque \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\mutex \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\system_error \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\__msvc_system_error_abi.hpp \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cerrno \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\stdexcept \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xcall_once.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xerrc.h \
+  core/common_include.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cassert \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\assert.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/core/log/log_system.h \
+  spdlog/spdlog.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/directx_math.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\DirectXMath.h \
+  cpuid.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um/DirectXMathConvert.inl \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um/DirectXMathVector.inl \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um/DirectXMathMatrix.inl \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um/DirectXMathMisc.inl \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\DirectXPackedVector.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um/DirectXMath.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um/DirectXPackedVector.inl \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\DirectXCollision.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um/DirectXCollision.inl \
   E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/math.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cmath \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\algorithm \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/math_library.h \
+  function/render/primitive.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/matrix3.h \
   core/meta/reflection/reflection.h core/math/math.h \
   core/math/quaternion.h core/math/vector3.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cassert \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\assert.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/matrix4.h \
   core/math/matrix3.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime/core/math/quaternion.h \
   core/math/vector4.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/matrix4x4.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime/core/meta/reflection/reflection.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime/core/meta/json.h \
-  json11.hpp E:\VS2022\VC\Tools\MSVC\14.38.33130\include\functional \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\tuple \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\typeinfo \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vcruntime_typeinfo.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\string \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cctype \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\ctype.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\unordered_map \
+  json11.hpp E:\VS2022\VC\Tools\MSVC\14.38.33130\include\unordered_map \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xhash \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\list \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vector \
@@ -127,18 +166,7 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\streambuf \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xiosbase \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\share.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\system_error \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\__msvc_system_error_abi.hpp \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cerrno \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xcall_once.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xerrc.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\atomic \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xthreads.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xtimec.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\ctime \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\time.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xlocale \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\memory \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xfacet \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xlocinfo \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\__msvc_xlocinfo_types.hpp \
@@ -155,30 +183,202 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/core/meta/reflection/reflection_register.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/core/meta/serializer/serializer.h \
   core/meta/json.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/core/utils/dxcapi.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/core/utils/enum.h \
+  shader/shader_interop_renderer.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/core/utils/include/spirv/unified1/spirv.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/core/utils/model_importer_gltf.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/core/utils/model_importer_obj.h \
   function/render/render_type.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/core/utils/spin_lock.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/core/utils/spirv_reflect.h \
+  core/utils/include/spirv/unified1/spirv.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/core/utils/utils.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\fstream \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\__msvc_filebuf.hpp \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\istream \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\ostream \
   E:/VS_Project/QyhsEngine/engine/source/runtime/engine.h \
+  function/ui/render_path.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/rhi/vulkan/vulkan_rhi.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\chrono \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\__msvc_chrono.hpp \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\ratio \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\array \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\optional \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\set \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xtree vulkan/vulkan.h \
-  GLFW/glfw3.h glm/glm.hpp glm/gtc/matrix_transform.hpp glm/gtx/hash.hpp \
+  vulkan/vk_mem_alloc.h GLFW/glfw3.h glm/glm.hpp \
+  glm/gtc/matrix_transform.hpp glm/gtx/hash.hpp \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/rhi/rhi.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/model.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/Texture.h \
-  vulkanmemoryallocator/include/vk_mem_alloc.h core/math/vector2.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/rhi/graphics.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/ui/image.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/color.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/ui/canvas.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/platform/platform.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\windows.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\winapifamily.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\winpackagefamily.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\sdkddkver.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\excpt.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\stdarg.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\windef.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\minwindef.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\specstrings.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\specstrings_strict.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\specstrings_undef.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\driverspecs.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared/sdv_driverspecs.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\winnt.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\kernelspecs.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared/DriverSpecs.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\basetsd.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\guiddef.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared/pshpack4.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared/poppack.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\pshpack4.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\poppack.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared/pshpack2.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\pshpack2.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared/pshpack8.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared/pshpack1.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\apiset.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\ktmtypes.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\winbase.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\apisetcconv.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\minwinbase.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\apiquery2.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\processenv.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\fileapifromapp.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\fileapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\debugapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\utilapiset.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\handleapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\errhandlingapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\fibersapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\namedpipeapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\profileapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\heapapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\ioapiset.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\synchapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\interlockedapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\processthreadsapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\sysinfoapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\memoryapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\enclaveapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\threadpoollegacyapiset.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\threadpoolapiset.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\jobapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\jobapi2.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\wow64apiset.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\libloaderapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\securitybaseapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\namespaceapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\systemtopologyapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\processtopologyapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\securityappcontainer.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\realtimeapiset.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\winerror.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\timezoneapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\wingdi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\pshpack1.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\winuser.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\tvout.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\winnls.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\datetimeapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\stringapiset.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\wincon.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\wincontypes.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\consoleapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\consoleapi2.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\consoleapi3.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\winver.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\SpecStrings.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\verrsrc.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\winreg.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\reason.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\winnetwk.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\wnnc.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\cderr.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\dde.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\ddeml.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\dlgs.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\lzexpand.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\mmsystem.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\mmsyscom.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\mciapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\mmiscapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\mmiscapi2.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\playsoundapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\mmeapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\timeapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\joystickapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\nb30.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\rpc.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\pshpack8.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\rpcdce.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\rpcdcep.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\rpcnsi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\rpcnterr.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\rpcasync.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\shellapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\winperf.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\winsock.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\inaddr.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\wincrypt.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\bcrypt.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\ncrypt.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\dpapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\winefs.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\winscard.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\wtypes.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared/rpc.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared/rpcndr.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\rpcnsip.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\rpcsal.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared/wtypesbase.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared/basetsd.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared/guiddef.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\winioctl.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\winsmcrd.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\winspool.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\prsht.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\ole2.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\objbase.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\rpcndr.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\combaseapi.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\wtypesbase.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\unknwnbase.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um/windows.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um/ole2.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\objidlbase.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um/unknwnbase.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\cguid.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\coml2api.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\objidl.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um/unknwn.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\propidlbase.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um/objidl.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um/oaidl.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\urlmon.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um/oleidl.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um/servprov.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um/msxml.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\propidl.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\oleauto.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\oaidl.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\oleidl.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\commdlg.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\stralign.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\winsvc.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\mcx.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\imm.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\ime_cmodes.h \
+  core/math/vector2.h core/math/matrix4.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_type.h \
+  resource/type/global_rendering_resource.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/timer/timer.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/file/archive.h \
+  core/math/directx_math.h function/render/color.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/animation/animation.h \
-  core/math/matrix4.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/animation/animation_clip.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/animation/animation_component.h \
   function/framework/component/component.h \
@@ -219,7 +419,11 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   function/framework/level/level.h resource/type/world_resource.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/global/global_context.h \
   function/input/input_system.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/input/input.h \
+  function/platform/platform.h function/ui/canvas.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/input/input_system.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/input/rawinput.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/Texture.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/game_object_desc.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/passes/combine_ui_pass.h \
   function/render/render_pass.h \
@@ -228,12 +432,8 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/passes/ui_pass.h \
   function/render/ui/window_ui.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/passes/pick_render_pass.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/primitive.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_camera.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\mutex \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\thread \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\process.h \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_startup.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vcruntime_startup.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_common.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_entity.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_guid_allocator.h \
@@ -247,8 +447,6 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   function/render/render_structure.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_resource.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_structure.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_type.h \
-  resource/type/global_rendering_resource.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_pipeline.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_pipeline_base.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/ui/editor_ui.h \
@@ -261,18 +459,35 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   function/render/render_resource.h \
   function/render/render_guid_allocator.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_swap_context.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\deque \
   function/render/render_camera.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_system.h \
   function/render/render_pipeline.h \
   function/render/render_swap_context.h function/render/render_scene.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/renderer.h \
+  function/render/scene_component.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/scene.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/scene_component.h \
+  core/math/math_library.h core/jobsystem.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/rhi/vulkan/common/vulkan_render_type.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/rhi/vulkan/vulkan_utils.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/shader_compiler.h \
+  function/render/rhi/graphics.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\Windows.h \
+  core/utils/dxcapi.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/texture_helper.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/window_system.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\iostream \
   core//math/vector2.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/ui/font.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/ui/gui.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/ui/sprite.h \
+  function/ui/sprite_font.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/ui/rect_packer.h \
+  utility/stb_rect_pack.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/ui/render_path.h \
+  function/render/scene.h function/render/renderer.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/function/ui/sprite_font.h \
+  function/ui/font.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/asset_manager/asset_manager.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\filesystem \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\sstream core/base/macro.h \
   core/meta/serializer/serializer.h \
   E:/VS_Project/QyhsEngine/engine/source\_generated/serializer/all_serializer.h \
@@ -342,6 +557,10 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/global_rendering_resource.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/level_resource.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/world_resource.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/stdafx.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/utility/liberation_sans.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/utility/stb_rect_pack.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/utility/stb_truetype.h \
   E:/VS_Project/QyhsEngine/engine/source/editor/include/editor.h \
   engine.h \
   E:/VS_Project/QyhsEngine/engine/source\editor/include/editor_global_context.h \

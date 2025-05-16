@@ -32,13 +32,16 @@ add_subdirectory(source/runtime)
 add_subdirectory(source/editor)
 add_subdirectory(source/meta_parser)
 
+
 set(CODEGEN_TARGET "QyhsPreCompile")
+
 include(source/precompile/precompile.cmake)
 #set QyhsPrecompile under "Engine" folder
 set_target_properties("${CODEGEN_TARGET}" PROPERTIES FOLDER "Engine")
 
 add_dependencies(QyhsRuntime "${CODEGEN_TARGET}")
 add_dependencies("${CODEGEN_TARGET}" "QyhsParser")
+
 
 
 

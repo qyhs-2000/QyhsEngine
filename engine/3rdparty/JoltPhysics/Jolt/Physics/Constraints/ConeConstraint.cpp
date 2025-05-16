@@ -65,7 +65,7 @@ ConeConstraint::ConeConstraint(Body &inBody1, Body &inBody2, const ConeConstrain
 	// Store limits
 	SetHalfConeAngle(inSettings.mHalfConeAngle);
 
-	// Initialize rotation axis to perpendicular of twist axis in case the angle between the twist axis is 0 in the first frame
+	// initialize rotation axis to perpendicular of twist axis in case the angle between the twist axis is 0 in the first frame
 	mWorldSpaceRotationAxis = inSettings.mTwistAxis1.GetNormalizedPerpendicular();
 
 	if (inSettings.mSpace == EConstraintSpace::WorldSpace)

@@ -5,7 +5,7 @@
 #include <core/math/vector2.h>
 #include "function/render/window_system.h"
 #include "function/render/render_system.h"
-namespace QYHS
+namespace qyhs
 {
 	void InputSystem::initialize()
 	{

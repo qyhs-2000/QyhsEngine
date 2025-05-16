@@ -2,7 +2,7 @@
 
 #include "core/meta/reflection/reflection.h"
 
-namespace QYHS
+namespace qyhs
 {
 	REFLECTION_TYPE(Vertex)
 		CLASS(Vertex, Fields)

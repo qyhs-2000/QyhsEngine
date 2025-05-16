@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include "core/math/matrix4.h"
-namespace QYHS
+namespace qyhs
 {
 	class Matrix4x4;
 	class AnimationResultElement

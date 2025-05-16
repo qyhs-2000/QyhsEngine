@@ -19,7 +19,7 @@ public:
 	/// Destructor
 	inline					~LFHMAllocator();
 
-	/// Initialize the allocator
+	/// initialize the allocator
 	/// @param inObjectStoreSizeBytes Number of bytes to reserve for all key value pairs
 	inline void				Init(uint inObjectStoreSizeBytes);
 

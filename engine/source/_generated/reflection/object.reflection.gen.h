@@ -1,7 +1,7 @@
 #pragma once
 #include "runtime\resource\common\object.h"
 
-namespace QYHS
+namespace qyhs
 {
 	class ObjectDefinitionResource;
 	class ObjectInstanceResource;

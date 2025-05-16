@@ -1,7 +1,7 @@
 #pragma once
 #include "core/meta/reflection/reflection.h"
 #include "core/math/transform.h"
-namespace QYHS
+namespace qyhs
 {
 	REFLECTION_TYPE(SubMeshRes)
 		CLASS(SubMeshRes, Fields)

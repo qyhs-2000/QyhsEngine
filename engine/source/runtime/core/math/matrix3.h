@@ -4,7 +4,7 @@
 #include "core/math/quaternion.h"
 #include "core/math/vector3.h"
 #include <cassert>
-namespace QYHS
+namespace qyhs
 {
     class Vector3;
     class Matrix3x3

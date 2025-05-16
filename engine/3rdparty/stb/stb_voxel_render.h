@@ -314,8 +314,8 @@ extern "C" {
 //    STBVOX_CONFIG_TEX1_EDGE_CLAMP
 //    STBVOX_CONFIG_TEX2_EDGE_CLAMP
 //        If you want to edge clamp the textures, instead of letting them wrap,
-//        set this flag. By default stb_voxel_render relies on texture wrapping
-//        to simplify texture coordinate generation. This flag forces it to do
+//        set this flags. By default stb_voxel_render relies on texture wrapping
+//        to simplify texture coordinate generation. This flags forces it to do
 //        it correctly, although there can still be minor artifacts.
 //
 //    STBVOX_CONFIG_ROTATION_IN_LIGHTING
@@ -731,7 +731,7 @@ struct stbvox_input_description
    // centers that the vertex is facing. This makes smooth lighting
    // consistent across adjacent faces with the same orientation.
    //
-   // Setting this flag to non-zero gives you explicit control
+   // Setting this flags to non-zero gives you explicit control
    // of light at each vertex, but now the lighting/ao will be
    // shared by all vertices at the same point, even if they
    // have different normals.
@@ -3246,7 +3246,7 @@ static void stbvox_make_mesh_for_block_with_geo(stbvox_mesh_maker *mm, stbvox_po
       }
       #endif
 
-      // flag whether any sides go off the top of the block, which means
+      // flags whether any sides go off the top of the block, which means
       // our visible_faces test was wrong
       extreme = (ht[0] == 3 || ht[1] == 3 || ht[2] == 3 || ht[3] == 3);
 

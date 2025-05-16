@@ -1,6 +1,6 @@
 #include "animation_component.h"
 #include "animation_manager.h"
-namespace QYHS
+namespace qyhs
 {
 	void AnimationComponent::postLoadResource(std::weak_ptr<GameObject> parent_object)
 	{

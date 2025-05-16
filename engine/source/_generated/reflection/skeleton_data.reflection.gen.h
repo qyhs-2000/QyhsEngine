@@ -1,7 +1,7 @@
 #pragma once
 #include "runtime\resource\type\data\skeleton_data.h"
 
-namespace QYHS
+namespace qyhs
 {
 	class RawBone;
 	class SkeletonData;

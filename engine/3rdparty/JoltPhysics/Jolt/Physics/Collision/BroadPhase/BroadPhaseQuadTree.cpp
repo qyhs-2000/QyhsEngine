@@ -27,7 +27,7 @@ void BroadPhaseQuadTree::Init(BodyManager *inBodyManager, const BroadPhaseLayerI
 	// Store max bodies
 	mMaxBodies = inBodyManager->GetMaxBodies();
 
-	// Initialize tracking data
+	// initialize tracking data
 	mTracking.resize(mMaxBodies);
 
 	// Init allocator

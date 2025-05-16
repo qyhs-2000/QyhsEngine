@@ -28,7 +28,7 @@ public:
 	explicit					ContactConstraintManager(const PhysicsSettings &inPhysicsSettings);
 								~ContactConstraintManager();
 
-	/// Initialize the system.
+	/// initialize the system.
 	/// @param inMaxBodyPairs Maximum amount of body pairs to process (anything else will fall through the world), this number should generally be much higher than the max amount of contact points as there will be lots of bodies close that are not actually touching
 	/// @param inMaxContactConstraints Maximum amount of contact constraints to process (anything else will fall through the world)
 	void						Init(uint inMaxBodyPairs, uint inMaxContactConstraints);
@@ -336,7 +336,7 @@ private:
 	class ManifoldCache
 	{
 	public:
-		/// Initialize the cache
+		/// initialize the cache
 		void					Init(uint inMaxBodyPairs, uint inMaxContactConstraints, uint inCachedManifoldsSize);
 
 		/// Reset all entries from the cache

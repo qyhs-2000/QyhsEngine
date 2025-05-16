@@ -505,7 +505,7 @@ bool BodyManager::RestoreState(StateRecorder &inStream)
 		for (const Body *b : mBodies)
 			if (sIsValidBodyPointer(b) && b->IsInBroadPhase())
 				++old_num_bodies;
-		size_t num_bodies = old_num_bodies; // Initialize to current value for validation
+		size_t num_bodies = old_num_bodies; // initialize to current value for validation
 		inStream.Read(num_bodies);
 		if (num_bodies != old_num_bodies)
 		{
@@ -517,7 +517,7 @@ bool BodyManager::RestoreState(StateRecorder &inStream)
 		for (Body *b : mBodies)
 			if (sIsValidBodyPointer(b) && b->IsInBroadPhase())
 			{
-				BodyID body_id = b->GetID(); // Initialize to current value for validation
+				BodyID body_id = b->GetID(); // initialize to current value for validation
 				inStream.Read(body_id);
 				if (body_id != b->GetID())
 				{
@@ -733,7 +733,7 @@ void BodyManager::Draw(const DrawSettings &inDrawSettings, const PhysicsSettings
 
 void BodyManager::InvalidateContactCacheForBody(Body &ioBody)
 {
-	// If this is the first time we flip the collision cache invalid flag, we need to add it to an internal list to ensure we reset the flag at the end of the physics update
+	// If this is the first time we flip the collision cache invalid flags, we need to add it to an internal list to ensure we reset the flags at the end of the physics update
 	if (ioBody.InvalidateContactCacheInternal())
 	{
 		lock_guard lock(mBodiesCacheInvalidMutex);

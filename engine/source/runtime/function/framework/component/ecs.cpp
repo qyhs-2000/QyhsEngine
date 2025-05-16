@@ -1,6 +1,6 @@
 #include "ecs.h"
 
-namespace QYHS
+namespace qyhs::ecs
 {	
 
 }

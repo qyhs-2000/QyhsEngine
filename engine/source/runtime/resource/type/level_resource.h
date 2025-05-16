@@ -2,7 +2,7 @@
 
 #include "core/math/vector3.h"
 #include "resource/common/object.h"
-namespace QYHS
+namespace qyhs
 {
 	REFLECTION_TYPE(LevelResource)
 		CLASS(LevelResource, Fields)

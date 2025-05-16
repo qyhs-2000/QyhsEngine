@@ -17,7 +17,7 @@
 #    ifndef FMT_USE_WINDOWS_H
 #        define FMT_USE_WINDOWS_H 0
 #    endif
-// enable the 'n' flag in for backward compatibility with fmt 6.x
+// enable the 'n' flags in for backward compatibility with fmt 6.x
 #    define FMT_DEPRECATED_N_SPECIFIER
 #    include <spdlog/fmt/bundled/core.h>
 #    include <spdlog/fmt/bundled/format.h>

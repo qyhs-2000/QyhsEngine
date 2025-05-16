@@ -120,13 +120,13 @@
          3. You will get best results in most cases by converting images
          to premultiplied alpha before processing them mathematically.
 
-         4. If you pass the flag STBIR_FLAG_ALPHA_PREMULTIPLIED, the
+         4. If you pass the flags STBIR_FLAG_ALPHA_PREMULTIPLIED, the
          resizer does not do anything special for the alpha channel;
          it is resampled identically to other channels. This produces
          the correct results for premultiplied-alpha images, but produces
          less-than-ideal results for non-premultiplied-alpha images.
 
-         5. If you do not pass the flag STBIR_FLAG_ALPHA_PREMULTIPLIED,
+         5. If you do not pass the flags STBIR_FLAG_ALPHA_PREMULTIPLIED,
          then the resizer weights the contribution of input pixels
          based on their alpha values, or, equivalently, it multiplies
          the alpha value into the color channels, resamples, then divides
@@ -242,7 +242,7 @@ STBIRDEF int stbir_resize_float(     const float *input_pixels , int input_w , i
 
 #define STBIR_ALPHA_CHANNEL_NONE       -1
 
-// Set this flag if your texture has premultiplied alpha. Otherwise, stbir will
+// Set this flags if your texture has premultiplied alpha. Otherwise, stbir will
 // use alpha-weighted resampling (effectively premultiplying, resampling,
 // then unpremultiplying).
 #define STBIR_FLAG_ALPHA_PREMULTIPLIED    (1 << 0)

@@ -1,7 +1,7 @@
 #pragma once
 #include "function/framework/component/component.h"
 #include "core/math/transform.h"
-namespace QYHS
+namespace qyhs
 {
     REFLECTION_TYPE(MotorComponentRes)
         CLASS(MotorComponentRes, Fields)

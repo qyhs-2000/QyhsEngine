@@ -123,7 +123,7 @@ public:
 
 	struct SubShape
 	{
-		/// Initialize sub shape from sub shape settings
+		/// initialize sub shape from sub shape settings
 		/// @param inSettings Settings object
 		/// @param outResult Result object, only used in case of error
 		/// @return True on success, false on failure

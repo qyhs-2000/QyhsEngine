@@ -1,7 +1,7 @@
 #pragma once
 #include "runtime\resource\type\world_resource.h"
 
-namespace QYHS
+namespace qyhs
 {
 	class WorldResource;
 	namespace Reflection

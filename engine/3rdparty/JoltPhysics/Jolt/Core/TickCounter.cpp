@@ -49,7 +49,7 @@ static const uint64 sProcessorTicksPerSecond = []() {
 	// Close key
 	RegCloseKey(hkey);
 
-	// Initialize amount of cycles per second
+	// initialize amount of cycles per second
 	return uint64(mhz) * 1000000UL;
 #elif defined(JPH_PLATFORM_BLUE)
 	return JPH_PLATFORM_BLUE_GET_TICK_FREQUENCY();

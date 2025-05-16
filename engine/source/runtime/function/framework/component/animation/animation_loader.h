@@ -5,7 +5,7 @@
 #include "animation_skeleton_map.h"
 #include "animation_mask.h"
 #include "resource/type/data/skeleton_data.h"
-namespace QYHS
+namespace qyhs
 {
 	class AnimationLoader
 	{

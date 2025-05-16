@@ -1,7 +1,7 @@
 #pragma once
 #include "runtime\resource\type\data\material.h"
 
-namespace QYHS
+namespace qyhs
 {
 	class MaterialRes;
 	namespace Reflection

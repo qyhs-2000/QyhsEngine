@@ -3,7 +3,7 @@
 
 #include "editor_axis.h"
 #include "function/framework/game_object/game_object_id_allocator.h"
-namespace QYHS
+namespace qyhs
 {
 	class RenderEntity;
 	class RenderCamera;

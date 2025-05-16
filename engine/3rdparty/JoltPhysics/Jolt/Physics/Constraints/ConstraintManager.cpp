@@ -212,7 +212,7 @@ bool ConstraintManager::RestoreState(StateRecorder &inStream)
 	UniqueLock lock(mConstraintsMutex, EPhysicsLockTypes::ConstraintsList);
 
 	// Read state of constraints
-	size_t num_constraints = mConstraints.size(); // Initialize to current value for validation
+	size_t num_constraints = mConstraints.size(); // initialize to current value for validation
 	inStream.Read(num_constraints);
 	if (num_constraints != mConstraints.size())
 	{

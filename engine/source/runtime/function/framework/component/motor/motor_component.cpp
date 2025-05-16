@@ -1,7 +1,7 @@
 #include "motor_component.h"
 #include "function/framework/component/transform/transform_component.h"
 #include "function/global/global_context.h"
-namespace QYHS
+namespace qyhs
 {
 	void MotorComponent::postLoadResource(std::weak_ptr<GameObject> parent_object)
 	{

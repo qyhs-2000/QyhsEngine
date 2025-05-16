@@ -81,7 +81,7 @@ void MutableCompoundShape::CalculateLocalBounds()
 	uint num_blocks = GetNumBlocks();
 	if (num_blocks > 0)
 	{
-		// Initialize min/max for first block
+		// initialize min/max for first block
 		const Bounds *bounds = mSubShapeBounds.data();
 		Vec4 min_x = bounds->mMinX;
 		Vec4 min_y = bounds->mMinY;

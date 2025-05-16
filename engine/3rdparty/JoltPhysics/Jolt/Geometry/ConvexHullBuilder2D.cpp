@@ -153,7 +153,7 @@ ConvexHullBuilder2D::EResult ConvexHullBuilder2D::Initialize(int inIdx1, int inI
 	FreeEdges();
 	outEdges.clear();
 
-	// Reset flag
+	// Reset flags
 	EResult result = EResult::Success;
 
 	// Determine a suitable tolerance for detecting that points are colinear

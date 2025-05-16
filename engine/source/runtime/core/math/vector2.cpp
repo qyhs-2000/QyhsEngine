@@ -1,6 +1,6 @@
 #include "vector2.h"
 
-namespace QYHS
+namespace qyhs
 {
     const Vector2 Vector2::ZERO(0, 0);
     const Vector2 Vector2::UNIT_X(1, 0);

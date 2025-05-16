@@ -63,7 +63,7 @@ bool TriangleSplitterFixedLeafSize::Split(const Range &inTriangles, Range &outLe
 		if (bounds_size < 1.0e-5f)
 			continue;
 
-		// Initialize bins
+		// initialize bins
 		for (uint b = 0; b < num_bins; ++b)
 		{
 			Bin &bin = bins[b];

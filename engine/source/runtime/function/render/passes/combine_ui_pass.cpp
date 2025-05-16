@@ -1,7 +1,6 @@
 #include "combine_ui_pass.h"
 #include "core/utils/utils.h"
-#include "function/render/rhi/vulkan/vulkan_utils.h"
-namespace QYHS
+namespace qyhs
 {
 	void CombineUIPass::initialize(RenderPassInitInfo * info)
 	{
@@ -23,13 +22,13 @@ namespace QYHS
 		VkDescriptorSetLayoutBinding& scene_input_attachment_binding = layout_bindings[0];
 		scene_input_attachment_binding.binding = 0;
 		scene_input_attachment_binding.descriptorType = VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT;
-		scene_input_attachment_binding.descriptorCount = 1;
+		scene_input_attachment_binding.descriptor_count = 1;
 		scene_input_attachment_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 
 		VkDescriptorSetLayoutBinding& ui_input_attachment_binding = layout_bindings[1];
 		ui_input_attachment_binding.binding = 1;
 		ui_input_attachment_binding.descriptorType = VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT;
-		ui_input_attachment_binding.descriptorCount = 1;
+		ui_input_attachment_binding.descriptor_count = 1;
 		ui_input_attachment_binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 
 		VkDescriptorSetLayoutCreateInfo layout_create_info{};
@@ -58,8 +57,8 @@ namespace QYHS
 		auto vertShaderCode = Utils::readFile("E://VS_Project//QyhsEngine//engine//shader//combine_ui_vert.spv");
 		auto fragShaderCode = Utils::readFile("E://VS_Project//QyhsEngine//engine//shader//combine_ui_frag.spv");
 
-		VkShaderModule vertShaderModule = VulkanUtils::createShaderModule(m_vulkan_rhi->getDevice(), vertShaderCode);
-		VkShaderModule fragShaderModule = VulkanUtils::createShaderModule(m_vulkan_rhi->getDevice(), fragShaderCode);
+		VkShaderModule vertShaderModule = m_vulkan_rhi->createShaderModule(m_vulkan_rhi->getDevice(), vertShaderCode);
+		VkShaderModule fragShaderModule = m_vulkan_rhi->createShaderModule(m_vulkan_rhi->getDevice(), fragShaderCode);
 
 		VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
 		vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -177,12 +176,12 @@ namespace QYHS
 		m_vulkan_rhi->allocateDescriptorSets(m_descriptors[0].descriptor_set_layout, 1, m_descriptors[0].descriptor_set);
 
 		VkDescriptorImageInfo per_frame_scene_input_attachment_info = {};
-		per_frame_scene_input_attachment_info.sampler = VulkanUtils::getOrCreateNearestSampler(m_vulkan_rhi->getPhysicalDevice(),m_vulkan_rhi->getDevice());
+		per_frame_scene_input_attachment_info.sampler = m_vulkan_rhi->getOrCreateNearestSampler(m_vulkan_rhi->getPhysicalDevice(),m_vulkan_rhi->getDevice());
 		per_frame_scene_input_attachment_info.imageView   = *m_scene_attachment;
 		per_frame_scene_input_attachment_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
 		VkDescriptorImageInfo per_frame_ui_input_attachment_info = {};
-		per_frame_ui_input_attachment_info.sampler = VulkanUtils::getOrCreateNearestSampler(m_vulkan_rhi->getPhysicalDevice(),m_vulkan_rhi->getDevice());
+		per_frame_ui_input_attachment_info.sampler = m_vulkan_rhi->getOrCreateNearestSampler(m_vulkan_rhi->getPhysicalDevice(),m_vulkan_rhi->getDevice());
 		per_frame_ui_input_attachment_info.imageView   = *m_ui_attachment;
 		per_frame_ui_input_attachment_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
@@ -237,12 +236,12 @@ namespace QYHS
 	void CombineUIPass::updateAfterRecreateSwapChain(VkImageView* input_color_attachment, VkImageView* input_ui_attachment)
 	{
 		VkDescriptorImageInfo per_frame_scene_input_attachment_info = {};
-		per_frame_scene_input_attachment_info.sampler = VulkanUtils::getOrCreateNearestSampler(m_vulkan_rhi->getPhysicalDevice(),m_vulkan_rhi->getDevice());
+		per_frame_scene_input_attachment_info.sampler = m_vulkan_rhi->getOrCreateNearestSampler(m_vulkan_rhi->getPhysicalDevice(),m_vulkan_rhi->getDevice());
 		per_frame_scene_input_attachment_info.imageView   = *input_color_attachment;
 		per_frame_scene_input_attachment_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
 		VkDescriptorImageInfo per_frame_ui_input_attachment_info = {};
-		per_frame_ui_input_attachment_info.sampler = VulkanUtils::getOrCreateNearestSampler(m_vulkan_rhi->getPhysicalDevice(),m_vulkan_rhi->getDevice());
+		per_frame_ui_input_attachment_info.sampler = m_vulkan_rhi->getOrCreateNearestSampler(m_vulkan_rhi->getPhysicalDevice(),m_vulkan_rhi->getDevice());
 		per_frame_ui_input_attachment_info.imageView   = *input_ui_attachment;
 		per_frame_ui_input_attachment_info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 

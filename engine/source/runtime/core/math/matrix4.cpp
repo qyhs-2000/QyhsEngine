@@ -1,6 +1,6 @@
 #include "matrix4.h"
 
-namespace QYHS
+namespace qyhs
 {
     const Matrix4x4 Matrix4x4::ZERO(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
