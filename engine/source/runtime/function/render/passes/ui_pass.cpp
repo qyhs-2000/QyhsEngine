@@ -31,7 +31,7 @@ namespace qyhs
     void UIPass::initializeUIRenderBackend(WindowUI* window_ui)
     {
         m_window_ui = window_ui;
-        
+        ImGui_ImplVulkan_LoadFunctions([](const char* name, void*) { return vkGetInstanceProcAddr(volkGetLoadedInstance(), name); });
         ImGui_ImplGlfw_InitForVulkan(std::static_pointer_cast<VulkanRHI>(m_rhi)->m_window, true);
         ImGui_ImplVulkan_InitInfo init_info = {};
         init_info.Instance                  = std::static_pointer_cast<VulkanRHI>(m_rhi)->instance;
