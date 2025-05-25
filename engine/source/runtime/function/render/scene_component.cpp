@@ -130,7 +130,6 @@ namespace qyhs::scene
 					const uint8_t wind = vertex_windweights.empty() ? 0xFF : vertex_windweights[i];
 					Vertex_POS16 vert;
 					vert.fromFull(aabb, pos, wind);
-					std::cout << vert.x << "  " << vert.y << "  " << vert.z << "  " << vert.w << std::endl;
 					std::memcpy(vertices + i, &vert, sizeof(vert));
 				}
 			}
@@ -218,14 +217,15 @@ namespace qyhs::scene
 
 		P = XMMatrixPerspectiveFovLH(fov, width / height, z_far, z_near); // reverse zbuffer!
 
-
-
 		XMStoreFloat4x4(&proj, P);
-
 
 		XMVECTOR _Eye = XMLoadFloat3(&eye);
 		XMVECTOR _At = XMLoadFloat3(&look_at);
 		XMVECTOR _Up = XMLoadFloat3(&up);
+
+		/*std::cout << "eye:" << eye.x << "  " << eye.y << "  " << eye.z << std::endl;
+		std::cout << "at:" << look_at.x << "  " << look_at.y << "  " << look_at.z << std::endl;
+		std::cout << "up:" << up.x << "  " << up.y << "  " << up.z << std::endl;*/
 
 		XMMATRIX _V = XMMatrixLookToLH(_Eye, _At, _Up);
 		XMStoreFloat4x4(&view, _V);
@@ -234,7 +234,7 @@ namespace qyhs::scene
 		XMMATRIX _InvP = XMMatrixInverse(nullptr, _P);
 		XMStoreFloat4x4(&inv_projection, _InvP);
 
-		XMMATRIX _VP = XMMatrixMultiply(_V, _P);
+		XMMATRIX _VP = XMMatrixTranspose(XMMatrixMultiply(_V, _P));
 		XMStoreFloat4x4(&view, _V);
 		XMStoreFloat4x4(&view_proj, _VP);
 		XMMATRIX _InvV = XMMatrixInverse(nullptr, _V);

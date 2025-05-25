@@ -81,6 +81,7 @@ namespace qyhs::scene
 		ShaderMaterial* material_upload_buffer_mapped = nullptr;
 		ShaderGeometry * geometry_upload_buffer_mapped = nullptr;
 		std::vector<primitive::AABB> aabb_objects;
+		std::vector<XMFLOAT4X4> object_matrices;
 	private:
 		std::atomic<uint32_t> geometry_allocator{ 0 };
 	};

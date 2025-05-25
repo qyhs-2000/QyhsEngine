@@ -34,4 +34,9 @@ namespace qyhs
 		WindowCreateInfo info;
 		m_window_system->initialize(&info);
 	}
+
+	void RuntimeGlobalContext::updateWindow()
+	{
+		m_window_system->updateWindow();
+	}
 }

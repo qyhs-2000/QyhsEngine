@@ -3250,31 +3250,6 @@ namespace qyhs
 		depth_image_view = createImageView(depthImage, depthFormat, 1, VK_IMAGE_ASPECT_DEPTH_BIT);
 	}
 
-	void VulkanRHI::createFramebuffers() {
-		swapChainFramebuffers.resize(swapChainImageViews.size());
-
-		for (size_t i = 0; i < swapChainImageViews.size(); i++) {
-			std::array<VkImageView, 3> attachments = {
-				colorImageView,
-				depth_image_view,
-				swapChainImageViews[i]
-			};
-
-			VkFramebufferCreateInfo framebufferInfo{};
-			framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-			framebufferInfo.renderPass = renderPass;
-			framebufferInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
-			framebufferInfo.pAttachments = attachments.data();
-			framebufferInfo.width = m_swapchain_extent.width;
-			framebufferInfo.height = m_swapchain_extent.height;
-			framebufferInfo.layers = 1;
-
-			if (vkCreateFramebuffer(m_device, &framebufferInfo, nullptr, &swapChainFramebuffers[i]) != VK_SUCCESS) {
-				throw std::runtime_error("failed to create framebuffer!");
-			}
-		}
-	}
-
 	void VulkanRHI::recreateSwapChain() {
 		int width = 0, height = 0;
 		glfwGetFramebufferSize(m_window, &width, &height);
@@ -3300,7 +3275,6 @@ namespace qyhs
 		createImageViews();
 		//createColorResource();
 		createDepthResources();
-		createFramebuffers();
 	}
 
 	void VulkanRHI::cleanupSwapChain() {
@@ -3310,9 +3284,9 @@ namespace qyhs
 		vkDestroyImage(m_device, depthImage, nullptr);
 		vkFreeMemory(m_device, depthImageMemory, nullptr);
 
-		vkDestroyImageView(m_device, colorImageView, nullptr);
-		vkDestroyImage(m_device, colorImage, nullptr);
-		vkFreeMemory(m_device, colorImageMemory, nullptr);
+		//vkDestroyImageView(m_device, colorImageView, nullptr);
+		//vkDestroyImage(m_device, colorImage, nullptr);
+		//vkFreeMemory(m_device, colorImageMemory, nullptr);
 
 		for (auto framebuffer : swapChainFramebuffers) {
 			vkDestroyFramebuffer(m_device, framebuffer, nullptr);
@@ -4068,10 +4042,10 @@ namespace qyhs
 		VkSubmitInfo submitInfo{};
 		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
-		VkSemaphore waitSemaphores[] = { imageAvailableSemaphores[m_current_frame_index] };
+		std::vector<VkSemaphore> waitSemaphores = { imageAvailableSemaphores[m_current_frame_index] };
 		VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
-		submitInfo.waitSemaphoreCount = 1;
-		submitInfo.pWaitSemaphores = waitSemaphores;
+		submitInfo.waitSemaphoreCount = waitSemaphores.size();
+		submitInfo.pWaitSemaphores = waitSemaphores.data();;
 		submitInfo.pWaitDstStageMask = waitStages;
 
 		submitInfo.commandBufferCount = 1;
@@ -4081,6 +4055,7 @@ namespace qyhs
 		submitInfo.signalSemaphoreCount = 1;
 		submitInfo.pSignalSemaphores = signalSemaphores;
 
+		std::lock_guard<std::mutex> lock(queue_submit_mutex);
 		if (vkQueueSubmit(graphics_queue, 1, &submitInfo, m_is_frame_in_flight_fences[m_current_frame_index]) != VK_SUCCESS) {
 			throw std::runtime_error("failed to submit draw command buffer!");
 		}
@@ -4102,6 +4077,8 @@ namespace qyhs
 		if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) {
 
 			recreateSwapChain();
+			g_runtime_global_context.updateWindow();
+			createViewport();
 			update_pass_after_recreate_swap_chain();
 
 		}
@@ -5847,7 +5824,7 @@ namespace qyhs
 		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 		submitInfo.commandBufferCount = 1;
 		submitInfo.pCommandBuffers = &commandBuffer;
-
+		std::lock_guard<std::mutex> lock(queue_submit_mutex);
 		vkQueueSubmit(graphics_queue, 1, &submitInfo, VK_NULL_HANDLE);
 		vkQueueWaitIdle(graphics_queue);
 
@@ -5993,7 +5970,6 @@ namespace qyhs
 
 			actualExtent.width = std::clamp(actualExtent.width, capabilities.minImageExtent.width, capabilities.maxImageExtent.width);
 			actualExtent.height = std::clamp(actualExtent.height, capabilities.minImageExtent.height, capabilities.maxImageExtent.height);
-
 			return actualExtent;
 		}
 	}

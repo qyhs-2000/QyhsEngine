@@ -30,6 +30,7 @@ namespace qyhs
 		void registerOnCursorPos(onCursorFunc func) { m_onCursorPosFunc.push_back(func); }
 		void registerOnMouseButton(onMouseButtonFunc func) { m_onMouseButtonFunc.push_back(func); }
 		void disableCursor(bool is_disabled);
+		void updateWindow();
 		void toggleFocusMode() { 
 			m_is_focus = !m_is_focus;
 			glfwSetInputMode(m_window, GLFW_CURSOR, m_is_focus ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);

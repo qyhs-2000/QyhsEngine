@@ -9,7 +9,7 @@ PixelInput vertex_to_pixel_export(VertexInput input)
 
 	ShaderCamera camera = getCamera();
 //#ifndef OBJECT_SHADER_NO_USE_CAMERA
-	output.position = mul(camera.view_projection,output.position);
+	output.position = mul(output.position,camera.view_projection);
 //#endif
 	return output;
 }

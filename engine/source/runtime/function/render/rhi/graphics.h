@@ -122,6 +122,38 @@ namespace qyhs::graphics
 		NV12,				// video YUV420; SRV Luminance aspect: R8_UNORM, SRV Chrominance aspect: R8G8_UNORM
 	};
 
+	constexpr bool IsFormatUnorm(Format format)
+	{
+		switch (format)
+		{
+		case Format::R16G16B16A16_UNORM:
+		case Format::R10G10B10A2_UNORM:
+		case Format::R8G8B8A8_UNORM:
+		case Format::R8G8B8A8_UNORM_SRGB:
+		case Format::B8G8R8A8_UNORM:
+		case Format::B8G8R8A8_UNORM_SRGB:
+		case Format::R16G16_UNORM:
+		case Format::D24_UNORM_S8_UINT:
+		case Format::R8G8_UNORM:
+		case Format::D16_UNORM:
+		case Format::R16_UNORM:
+		case Format::R8_UNORM:
+		case Format::BC1_UNORM:
+		case Format::BC1_UNORM_SRGB:
+		case Format::BC2_UNORM:
+		case Format::BC2_UNORM_SRGB:
+		case Format::BC3_UNORM:
+		case Format::BC3_UNORM_SRGB:
+		case Format::BC4_UNORM:
+		case Format::BC5_UNORM:
+		case Format::BC7_UNORM:
+		case Format::BC7_UNORM_SRGB:
+			return true;
+		default:
+			return false;
+		}
+	}
+
 	enum class ImageAspect : uint8_t
 	{
 		COLOR,

@@ -77,6 +77,11 @@ namespace qyhs
 		}
 	}
 
+	void WindowSystem::updateWindow()
+	{
+		glfwGetFramebufferSize(m_window, &m_width, &m_height);
+	}
+
 }
 
 

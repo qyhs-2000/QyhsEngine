@@ -660,6 +660,7 @@ namespace qyhs
 		VkCommandBuffer& getCurrentCommandBuffer() { return m_command_buffers[m_current_frame_index]; }
 		VkDescriptorPool& getDescriptorPool() { return m_descriptor_pool; }
 		virtual void bindPipelineState(const PipelineState* state, CommandList cmd) override;
+		std::mutex queue_submit_mutex;
 		VkBuffer getUniformBuffer(uint32_t index) {
 			return uniformBuffers[index];
 		}
@@ -758,7 +759,6 @@ namespace qyhs
 		void createImageViews();
 		void createCommandPool();
 		void createDepthResources();
-		void createFramebuffers();
 		void loadModel();
 		void createDescriptorPool();
 		void createCommandBuffers();

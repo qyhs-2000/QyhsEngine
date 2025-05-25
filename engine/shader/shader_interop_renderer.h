@@ -64,7 +64,6 @@ struct alignas(16) ShaderGeometry
 
 struct alignas(16) ShaderCamera
 {
-	uint options;
 	float4x4 view_projection;
 	float4x4 view;
 	float4x4 projection;
@@ -74,6 +73,7 @@ struct alignas(16) ShaderCamera
 	float3 position;
 	float3 forward;
 	float3 up;
+	uint options;
 	float z_near;
 	float z_far;
 	float distant_from_origin;
@@ -100,6 +100,7 @@ struct ShaderMeshInstancePointer
 	}
 	void create(uint32_t instance_index)
 	{
+		data = 0;
 		data |= instance_index&0xFFFFFF;
 	}
 	uint getInstanceIndex()

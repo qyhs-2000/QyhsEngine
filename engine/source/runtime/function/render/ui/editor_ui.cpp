@@ -562,8 +562,8 @@ namespace qyhs
 	{
 		ImGuiDockNodeFlags dock_flags = ImGuiDockNodeFlags_DockSpace;
 		ImGuiWindowFlags   window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoTitleBar |
-			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
-			ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBackground |
+			ImGuiWindowFlags_NoCollapse |
+			ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_AlwaysAutoResize|
 			ImGuiConfigFlags_NoMouseCursorChange | ImGuiWindowFlags_NoBringToFrontOnFocus;
 
 

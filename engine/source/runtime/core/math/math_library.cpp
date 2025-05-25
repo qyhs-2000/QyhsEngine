@@ -10,6 +10,11 @@ constexpr T inverse_lerp(T value1, T value2, T pos)
 
 namespace qyhs::math
 {
+	XMFLOAT4X4 IDENTITY_MATRIX = XMFLOAT4X4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+	XMFLOAT4X4 getIdentityMatrix()
+	{
+		return IDENTITY_MATRIX;
+	}
 	XMFLOAT3 min(const XMFLOAT3& a, const XMFLOAT3& b)
 	{
 		return XMFLOAT3(std::min(a.x,b.x),std::min(a.y,b.y),std::min(a.z,b.z));

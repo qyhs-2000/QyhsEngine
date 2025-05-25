@@ -94,7 +94,7 @@ namespace qyhs::scene
 				_flag &= DIRTY;
 			}
 		}
-		XMFLOAT4X4 world;
+		XMFLOAT4X4 world = math::getIdentityMatrix();
 		XMFLOAT3 local_scale = XMFLOAT3(1, 1, 1);
 		XMFLOAT3 local_position = XMFLOAT3(0, 0, 0);
 		XMFLOAT4 local_rotation = XMFLOAT4(0, 0, 0, 1);

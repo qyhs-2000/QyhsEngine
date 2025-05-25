@@ -52,6 +52,11 @@ namespace qyhs::primitive
 			return AABB(min, max);
 		}
 
+		inline XMMATRIX getUnormRemapMatrix()const
+		{
+			return XMMatrixScaling(_max.x - _min.x, _max.y - _min.y, _max.z - _min.z) * XMMatrixTranslation(_min.x, _min.y, _min.z);
+		}
+
 		XMFLOAT3 getCenter()const
 		{
 			return XMFLOAT3((_min.x + _max.x) * 0.5f, (_min.y + _max.y) * 0.5f, (_min.z + _max.z) * 0.5f);

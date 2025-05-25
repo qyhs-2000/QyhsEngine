@@ -25,4 +25,5 @@ namespace qyhs
 		delete m_input_manager;
 		delete m_scene_manager;
 	}
+
 }

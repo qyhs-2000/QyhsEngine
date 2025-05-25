@@ -67,10 +67,12 @@ namespace qyhs
 		resizeBuffers();
 		import_model_gltf(scene, "E://GithubClone//WickedEngine//Content//models//white_triangle.gltf");
 		//initialize camera position
-		XMMATRIX mat = XMMatrixTranslation(0.0f, 0.0f, -1.0f);
+		XMMATRIX mat = XMMatrixTranslation(0.f, 0.f, -10.f);
 		camera->transformCamera(mat);
 		camera->SetDirty();
+		camera_transform.MatrixTransform(mat);
 		camera_transform.updateTransform();
+		camera->updateCamera();
 	}
 
 	void RenderPath3D::resizeBuffers()
@@ -202,6 +204,7 @@ namespace qyhs
 		}
 		if (std::abs(x_dif) + std::abs(y_dif) > 0 || move_length > 0.0001)
 		{
+			std::cout << x_dif << "  " << y_dif << "  " << move_length << std::endl;
 			XMMATRIX camera_rotation = XMMatrixRotationQuaternion(XMLoadFloat4(&camera_transform.local_rotation));
 			XMVECTOR move_rot = XMVector3TransformNormal(move, camera_rotation);
 			XMFLOAT3 _move;
@@ -273,7 +276,7 @@ namespace qyhs
 	{
 		RHI* rhi = rhi::getRHI();
 		RenderPassImage rp[] = {
-			RenderPassImage::renderTarget(&rt_main_render,RenderPassImage::LoadOp::LOAD),
+			RenderPassImage::renderTarget(&rt_main_render,RenderPassImage::LoadOp::CLEAR),
 			RenderPassImage::depthStencil(&depth_buffer_main,RenderPassImage::LoadOp::LOAD,
 				RenderPassImage::StoreOp::STORE,
 				ResourceState::DEPTHSTENCIL,

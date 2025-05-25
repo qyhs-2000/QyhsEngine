@@ -497,9 +497,6 @@ namespace qyhs::shadercompiler
 	
 	Internal_DXCompiler::Internal_DXCompiler(const std::string& modifier)
 	{
-
-
-
 		const std::string library = "dxcompiler" + modifier + ".dll";
 		HMODULE dxcompiler = LoadLibrary(library.c_str());
 		if (dxcompiler != nullptr)

@@ -2,6 +2,8 @@
 #include "function/render/primitive.h"
 namespace qyhs::math
 {
+	XMFLOAT4X4 getIdentityMatrix();
+	
 	XMFLOAT3 min(const XMFLOAT3& a, const XMFLOAT3& b);
 	XMFLOAT3 max(const XMFLOAT3& a, const XMFLOAT3& b);
 

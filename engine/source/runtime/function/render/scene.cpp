@@ -14,6 +14,7 @@ namespace qyhs::scene
 	void Scene::updateObjects(jobsystem::Context& ctx)
 	{
 		aabb_objects.resize(objects.getCount());
+		object_matrices.resize(objects.getCount());
 		jobsystem::dispatch(ctx, (uint32_t)objects.getCount(), small_subtask_groupsize, [&](jobsystem::JobArgs args) {
 			Entity entity = objects.getEntity(args.job_index);
 			primitive::AABB& aabb = aabb_objects[args.job_index];
@@ -33,7 +34,20 @@ namespace qyhs::scene
 
 
 				//create mesh instance gpu data
+				ShaderMeshInstance instance;
+				instance.init();
 
+				XMStoreFloat4x4(object_matrices.data() + args.job_index, w);
+				XMFLOAT4X4 world_matrix = object_matrices[args.job_index];
+
+				if (graphics::IsFormatUnorm(mesh.position_format))
+				{
+					XMMATRIX remap = mesh.aabb.getUnormRemapMatrix();
+					XMStoreFloat4x4(&world_matrix, remap * w);
+				}
+
+				instance.transform.create(world_matrix);
+				std::memcpy(instance_upload_buffer_mapped + args.job_index, &instance, sizeof(instance));
 			}
 
 
