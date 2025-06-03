@@ -142,6 +142,32 @@ namespace qyhs::helper
 		return filename.substr(0, it);
 	}
 
+	uint64_t fileTimeStamp(std::string name)
+	{
+		if (!fileExit(name))
+		{
+			return 0;
+		}
+		auto time = std::filesystem::last_write_time(toNativeString(name));
+		return std::chrono::duration_cast<std::chrono::duration<uint64_t>>(time.time_since_epoch()).count();
+	}
+
+	bool fileExit(std::string name)
+	{
+		return std::filesystem::exists(toNativeString(name));
+	}
+
+	std::string toUpper(const std::string& s)
+	{
+		std::string result;
+		std::locale loc;
+		for (unsigned int i = 0; i < s.length(); ++i)
+		{
+			result += std::toupper(s.at(i), loc);
+		}
+		return result;
+	}
+
 	std::wstring toNativeString(std::string str)
 	{
 		std::wstring file_wide_name;

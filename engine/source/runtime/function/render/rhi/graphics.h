@@ -442,6 +442,33 @@ namespace qyhs::graphics
 		return vertex_count > 65536 ? IndexBufferFormat::UINT32 : IndexBufferFormat::UINT16;
 	}
 
+	constexpr Format getFormatSRGB(Format format)
+	{
+		switch (format)
+		{
+		case Format::R8G8B8A8_UNORM:
+		case Format::R8G8B8A8_UNORM_SRGB:
+			return Format::R8G8B8A8_UNORM_SRGB;
+		case Format::B8G8R8A8_UNORM:
+		case Format::B8G8R8A8_UNORM_SRGB:
+			return Format::B8G8R8A8_UNORM_SRGB;
+		case Format::BC1_UNORM:
+		case Format::BC1_UNORM_SRGB:
+			return Format::BC1_UNORM_SRGB;
+		case Format::BC2_UNORM:
+		case Format::BC2_UNORM_SRGB:
+			return Format::BC2_UNORM_SRGB;
+		case Format::BC3_UNORM:
+		case Format::BC3_UNORM_SRGB:
+			return Format::BC3_UNORM_SRGB;
+		case Format::BC7_UNORM:
+		case Format::BC7_UNORM_SRGB:
+			return Format::BC7_UNORM_SRGB;
+		default:
+			return Format::UNKNOWN;
+		}
+	}
+
 	const uint32_t getFormatStride(Format format);
 	const uint32_t getFormatBlockSize(Format format);
 	constexpr bool isFormatBlockCompressed(Format format);

@@ -19,6 +19,9 @@ namespace qyhs::helper
 	std::string getCacheDirectoryPath();
 	std::string getExtensionFromFileName(const std::string & filename);
 	std::string removeExtension(const std::string& filename);
+	uint64_t fileTimeStamp(std::string name);
+	bool fileExit(std::string name);
+	std::string toUpper(const std::string &str);
 	uint64_t getNextPowerOfTwo(uint64_t value);
 	template<typename T>
 	constexpr void hash_combine(std::size_t& seed, const T& v)

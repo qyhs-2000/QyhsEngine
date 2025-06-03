@@ -65,9 +65,9 @@ namespace qyhs
 	void RenderPath3D::start()
 	{
 		resizeBuffers();
-		import_model_gltf(scene, "E://GithubClone//WickedEngine//Content//models//white_triangle.gltf");
+		import_model_gltf(scene, "E://VS_Project//QyhsEngine//engine//source//runtime//resource//model//CesiumMan//glTF-Embedded//CesiumMan_test.gltf");
 		//initialize camera position
-		XMMATRIX mat = XMMatrixTranslation(0.f, 0.f, -10.f);
+		XMMATRIX mat = XMMatrixTranslation(0.f, 0.f, -5.f);
 		camera->transformCamera(mat);
 		camera->SetDirty();
 		camera_transform.MatrixTransform(mat);
@@ -196,7 +196,7 @@ namespace qyhs
 		moveNew += XMVectorSet(leftStick.x, 0, leftStick.y, 0);
 		moveNew *= speed;
 
-		move = XMVectorLerp(move, moveNew, 0.18 * clamped_delta_time / 0.0166f); // smooth the movement a bit
+		move = XMVectorLerp(move, moveNew, 0.28 * clamped_delta_time / 0.0066f); // smooth the movement a bit
 		float move_length = XMVectorGetX(XMVector3Length(move));
 		if (move_length < 0.0001f)
 		{
@@ -204,7 +204,6 @@ namespace qyhs
 		}
 		if (std::abs(x_dif) + std::abs(y_dif) > 0 || move_length > 0.0001)
 		{
-			std::cout << x_dif << "  " << y_dif << "  " << move_length << std::endl;
 			XMMATRIX camera_rotation = XMMatrixRotationQuaternion(XMLoadFloat4(&camera_transform.local_rotation));
 			XMVECTOR move_rot = XMVector3TransformNormal(move, camera_rotation);
 			XMFLOAT3 _move;
@@ -251,6 +250,41 @@ namespace qyhs
 			});
 
 		jobsystem::wait(*ctx);
+		static const uint32_t drawscene_flags = renderer::DRAWSCENE_OPAQUE | renderer::DRAWSCENE_MAINCAMERA;
+
+		//main camera depth prepass
+		cmd = rhi->beginCommandList();
+		CommandList cmd_maincamera_prepass = cmd;
+		jobsystem::execute(*ctx, [this,cmd](jobsystem::JobArgs args) {
+			RHI* rhi = rhi::getRHI();
+			renderer::bindCameraConstantBuffer(*camera, cmd);
+			RenderPassImage rp[] = {
+				RenderPassImage::depthStencil(&depth_buffer_main,RenderPassImage::LoadOp::CLEAR,
+					RenderPassImage::StoreOp::STORE,
+					ResourceState::DEPTHSTENCIL,
+					ResourceState::DEPTHSTENCIL,
+					ResourceState::DEPTHSTENCIL)
+			};
+			rhi->beginRenderPass(rp, arraysize(rp), cmd);
+			rhi->beginEvent("Opaque Z-prepass", cmd);
+			renderer::bindCameraConstantBuffer(*camera, cmd);
+			renderer::bindCommonResources(cmd);
+			Rect scissor = getScissorInternalResolution();
+			rhi->bindScissorRects(1, &scissor, cmd);
+			Viewport vp;
+			vp.width = (float)depth_buffer_main.desc.width;
+			vp.height = (float)depth_buffer_main.desc.height;
+			vp.min_depth = 0;
+			vp.max_depth = 1;
+			rhi->bindViewports(cmd, 1, &vp);
+			renderer::drawScene(visibility_main, drawscene_flags, RENDERPASS_PREPASS, cmd);
+			rhi->endRenderPass(cmd);
+			rhi->endEvent(cmd);
+		});
+
+		jobsystem::wait(*ctx);
+
+
 
 		jobsystem::execute(*ctx, [this, cmd](jobsystem::JobArgs args) {
 			renderer::bindCameraConstantBuffer(*camera, cmd);

@@ -399,6 +399,7 @@ namespace qyhs
 				frame_allocators[buffer_index].reset();
 				active_pso = nullptr;
 				active_cs = nullptr;
+				renderpass_barriers_end.clear();
 			}
 		};
 
@@ -798,10 +799,10 @@ namespace qyhs
 		VkPipelineDynamicStateCreateInfo dynamic_state_info_mesh_shader = {};
 		PFN_vkCmdBeginDebugUtilsLabelEXT _vkCmdBeginDebugUtilsLabelEXT;
 		PFN_vkCmdEndDebugUtilsLabelEXT _vkCmdEndDebugUtilsLabelEXT;
-		virtual void bindViewports(CommandList& cmd_list, uint32_t viewport_count, Viewport* viewport) override;
+		virtual void bindViewports(const CommandList& cmd_list, uint32_t viewport_count, Viewport* viewport) override;
 		virtual void beginRenderPass(SwapChain* swapchain, CommandList& cmd_list) override;
 		virtual void beginRenderPass(const RenderPassImage *image, uint32_t size, CommandList cmd,RenderPassFlags flags = RenderPassFlags::NONE) override;
-		virtual void endRenderPass(CommandList& cmd_list) override;
+		virtual void endRenderPass(CommandList cmd_list) override;
 		virtual void bindStencilRef(uint32_t stencil_ref, CommandList cmd) override;
 		virtual ShaderFormat getShaderFormat()const override { return ShaderFormat::SPIRV; };
 		virtual bool createShader(ShaderStage stage, const void* shader_code, size_t shader_size, Shader* shader) override;

@@ -2,7 +2,7 @@
 #define QYHS_SHADER_GLOBALS
 
 #include "ColorSpaceUtility.hlsli"
-#include "shader_interop_renderer.h"
+
 #if defined(__spirv__)
 
 static const uint DESCRIPTOR_SET_BINDLESS_STORAGE_BUFFER = 1;
@@ -17,9 +17,14 @@ static const uint DESCRIPTOR_SET_BINDLESS_ACCELERATION_STRUCTURE = 7;
 bindless_buffers[];
 [[vk::binding(0, DESCRIPTOR_SET_BINDLESS_SAMPLER)]] SamplerState bindless_samplers[];
 [[vk::binding(0, DESCRIPTOR_SET_BINDLESS_UNIFORM_TEXEL_BUFFER)]] Buffer<float4> bindless_buffers_float4[];
+[[vk::binding(0, DESCRIPTOR_SET_BINDLESS_SAMPLED_IMAGE)]] Texture2D bindless_textures[];
+
+#include "shader_interop_renderer.h"
+
 [[vk::binding(0, DESCRIPTOR_SET_BINDLESS_STORAGE_BUFFER)]] StructuredBuffer<ShaderGeometry> bindless_structured_geometry[];
 [[vk::binding(0, DESCRIPTOR_SET_BINDLESS_STORAGE_BUFFER)]] StructuredBuffer<ShaderMeshInstance> bindless_structured_meshinstance[];
-[[vk::binding(0, DESCRIPTOR_SET_BINDLESS_SAMPLED_IMAGE)]] Texture2D bindless_textures[];
+[[vk::binding(0, DESCRIPTOR_SET_BINDLESS_STORAGE_BUFFER)]] StructuredBuffer<ShaderMaterial> bindless_structured_material[];
+
 #else   //hlsl
 
 SamplerState bindless_samplers[] : register(space1);
@@ -87,6 +92,10 @@ inline ShaderCamera getCamera(uint camera_index = 0)
 	return g_camera.cameras[camera_index];
 }
 
+inline ShaderMaterial loadMaterial(uint material_index)
+{
+	return bindless_structured_material[getScene().material_buffer][material_index];
+}
 
 SamplerState sampler_linear_clamp : register(s100);
 

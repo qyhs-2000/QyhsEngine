@@ -15,11 +15,16 @@ namespace qyhs::scene
 	{
 		aabb_objects.resize(objects.getCount());
 		object_matrices.resize(objects.getCount());
+		occlusion_result_objects.resize(objects.getCount());
 		jobsystem::dispatch(ctx, (uint32_t)objects.getCount(), small_subtask_groupsize, [&](jobsystem::JobArgs args) {
 			Entity entity = objects.getEntity(args.job_index);
 			primitive::AABB& aabb = aabb_objects[args.job_index];
 			scene::ObjectComponent& object = objects[args.job_index];
 			aabb = primitive::AABB();
+
+			//TODO:update occlusion culling states
+			OccludedResult occluded_result = occlusion_result_objects[args.job_index];
+			
 			if (object.mesh_entity != INVALID_ENTITY && meshes.contain(object.mesh_entity) && transforms.contain(entity))
 			{
 				object.mesh_index = meshes.getIndex(object.mesh_entity);
@@ -65,9 +70,10 @@ namespace qyhs::scene
 			if (geometry_upload_buffer_mapped != nullptr)
 			{
 				ShaderGeometry shader_geometry = {};
+				shader_geometry.init();
 				shader_geometry.index_buffer = mesh.ib.descriptor_srv;
 				shader_geometry.vertex_buffer_position_wind = mesh.vb_pos_wind.descriptor_srv;
-
+				shader_geometry.vb_uvs = mesh.vb_uvs.descriptor_srv;
 				uint32_t subset_index = 0;
 				for (auto& subset : mesh.subsets)
 				{
@@ -81,13 +87,22 @@ namespace qyhs::scene
 						subset.material_index = 0;
 					}
 					ShaderGeometry subset_geometry = shader_geometry;
-					
-					std::memcpy(geometry_upload_buffer_mapped + subset_index, &subset_geometry,sizeof(subset_geometry) );
+
+					std::memcpy(geometry_upload_buffer_mapped + subset_index, &subset_geometry, sizeof(subset_geometry));
 					++subset_index;
 				}
 			}
 
 
+			});
+	}
+
+	void Scene::updateMaterial(jobsystem::Context& ctx)
+	{
+		jobsystem::dispatch(ctx, (uint32_t)materials.getCount(), small_subtask_groupsize, [&](jobsystem::JobArgs args) {
+			MaterialComponent& material = materials[args.job_index];
+			Entity entity = materials.getEntity(args.job_index);
+			material.writeShaderMaterial(material_upload_buffer_mapped + args.job_index);
 			});
 	}
 
@@ -212,6 +227,7 @@ namespace qyhs::scene
 
 		updateObjects(ctx);
 		updateMeshes(ctx);
+		updateMaterial(ctx);
 		jobsystem::wait(ctx);
 
 		updateShaderScene();

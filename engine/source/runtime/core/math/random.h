@@ -98,3 +98,41 @@ namespace qyhs
 
     using DefaultRNG = RandomNumberGenerator<std::mt19937>;
 } // namespace Chaos
+
+namespace qyhs::random
+{
+    //Pseudo-Random Number Generator
+    class RandomNumberGenerator
+    {
+    public:
+        uint64_t state = 0;
+
+        inline RandomNumberGenerator(uint64_t seed = 0) : state(seed) {}
+
+        inline void seed(uint64_t seed)
+        {
+            state = seed;
+        }
+
+        inline uint32_t next_uint(uint32_t min, uint32_t max)
+        {
+            return min + (uint32_t(next_uint()) % (std::min(std::numeric_limits<uint32_t>::max() - uint32_t(1), std::max(uint32_t(1), max - min)) + uint32_t(1)));
+        }
+
+        inline uint64_t next_uint()
+        {
+            state ^= state >> 12;
+            state ^= state << 25;
+            state ^= state >> 27;
+            return state * 0x2545F4914F6CDD1DULL;
+        }
+        inline uint32_t next_int(int32_t min, int32_t max)
+        {
+            auto t = std::min(std::numeric_limits<int32_t>::max() - int32_t(1), std::max(int32_t(1), max - min)) + int32_t(1);
+            return min + int32_t(next_uint() % (std::min(std::numeric_limits<int32_t>::max() - int32_t(1), std::max(int32_t(1), max - min)) + int32_t(1)));
+        }
+    private:
+    };
+
+    uint32_t getRandom(uint32_t max_value);
+}

@@ -2,14 +2,21 @@
 #include "shader_interop.h"
 static const int shader_camera_count = 16;
 static const uint SHADERTYPE_BIN_COUNT = 11;
+
+#ifndef __cplusplus
+#ifdef TEXTURE_SLOT_NONUNIFORM
+#define UniformTextureSlot(x) NonUniformResourceIndex(x)
+#else
+#define UniformTextureSlot(x) (x)
+#endif // TEXTURE_SLOT_NONUNIFORM
+#endif
+
 enum SHADERCAMERA_OPTIONS
 {
 	SHADERCAMERA_OPTION_NONE = 0,
 	SHADERCAMERA_OPTION_USE_SHADOW_MASK = 1 << 0,
 	SHADERCAMERA_OPTION_ORTHO = 1 << 1,
 };
-
-
 
 struct alignas(16) ShaderTransform
 {
@@ -49,17 +56,78 @@ struct alignas(16) ShaderMeshInstance
 	}
 };
 
+enum TEXTURESLOT
+{
+	BASECOLORMAP,
+
+	TEXTURESLOT_COUNT
+};
+
+struct alignas(16) ShaderTextureSlot
+{
+	uint uvset_aniso_lodclamp;
+	int texture_descriptor;
+	inline void init()
+	{
+		uvset_aniso_lodclamp = 0;
+		texture_descriptor = -1;
+	}
+	inline uint getUVSet()
+	{
+		return uvset_aniso_lodclamp & 1u;
+	}
+	inline bool isValid()
+	{
+		return texture_descriptor >= 0;
+	}
+#ifndef __cplusplus
+	Texture2D getTexture()
+	{
+		return bindless_textures[UniformTextureSlot(texture_descriptor)];
+	}
+
+	float4 Sample(in SamplerState sam, in float4 uvsets)
+	{
+		Texture2D tex = getTexture();
+		float2 uv = getUVSet() == 0 ? uvsets.xy : uvsets.zw;
+		return tex.Sample(sam, uv);
+	}
+#endif
+};
+
 struct alignas(16) ShaderMaterial
 {
-
+	float4 base_color;
+	
+	int sampler_descriptor;
+	float3 _padding;
+	
+	ShaderTextureSlot textures[TEXTURESLOT_COUNT];
+	void init()
+	{
+		for (int i = 0; i < TEXTURESLOT_COUNT; ++i)
+		{
+			textures[i].init();
+		}
+	}
 };
 
 
 struct alignas(16) ShaderGeometry
 {
 	int index_buffer;
-	int vertex_buffer_position_wind; 
-
+	int vertex_buffer_position_wind;
+	int vb_uvs;
+	float2 uv_range_min;
+	float2 uv_range_max;
+	void init()
+	{
+		index_buffer = -1;
+		vertex_buffer_position_wind = -1;
+		vb_uvs = -1;
+		uv_range_min = float2(0, 0);
+		uv_range_max = float2(1, 1);
+	}
 };
 
 struct alignas(16) ShaderCamera
@@ -101,11 +169,11 @@ struct ShaderMeshInstancePointer
 	void create(uint32_t instance_index)
 	{
 		data = 0;
-		data |= instance_index&0xFFFFFF;
+		data |= instance_index & 0xFFFFFF;
 	}
 	uint getInstanceIndex()
 	{
-		return data&0xFFFFFF;
+		return data & 0xFFFFFF;
 	}
 };
 
@@ -135,7 +203,7 @@ struct ObjectPushConstant
 struct alignas(16) ShaderScene
 {
 	int geometry_buffer;
-	int instance_buffer; 
+	int instance_buffer;
 	int material_buffer;
 };
 

@@ -42,6 +42,8 @@ qyhs::jobsystem::Context object_pso_job_ctxs[RENDERPASS_COUNT][OBJECT_MESH_SHADE
 namespace qyhs::renderer
 {
 	Shader shaders[SHADER_TYPE_COUNT];
+	Sampler samplers[SAMPLER_COUNT];
+
 	RHI*& rhi = rhi::getRHI();
 	std::string SHADER_PATH = helper::getCurrentPath() + "/shaders/";
 	std::atomic<size_t> SHADER_MISSING{ 0 };
@@ -49,7 +51,7 @@ namespace qyhs::renderer
 	RasterizerState rasterizers[RASTERIZER_STATE_TYPE_COUNT];
 	BlendState blend_states[BLEND_STATE_TYPE_COUNT];
 	DepthStencilState depth_stencils[DSSTYPE_COUNT];
-	bool loadShader(graphics::ShaderStage stage, graphics::Shader& shader, const std::string& filename,ShaderModel min_shader_model,const std::vector<std::string>& permutation_definitions)
+	bool loadShader(graphics::ShaderStage stage, graphics::Shader& shader, const std::string& filename, ShaderModel min_shader_model, const std::vector<std::string>& permutation_definitions)
 	{
 		std::string shader_binary_filename = SHADER_PATH + filename;
 		if (!permutation_definitions.empty())
@@ -141,7 +143,7 @@ namespace qyhs::renderer
 
 
 
-	void renderMeshes(scene::Scene* scene, const RenderQueue& render_queue,RENDERPASS render_pass, CommandList cmd)
+	void renderMeshes(scene::Scene* scene, const RenderQueue& render_queue, RENDERPASS render_pass, CommandList cmd)
 	{
 		if (render_queue.empty())
 		{
@@ -162,6 +164,9 @@ namespace qyhs::renderer
 		const size_t allocate_size = render_queue.size() * sizeof(ShaderMeshInstancePointer);
 		RHI::GPUAllocation instances = rhi->allocateGPU(allocate_size, cmd);
 		int instance_buffer_descriptor_index = rhi->getDescriptorIndex(&instances.buffer, SubresourceType::SRV);
+		
+		int prev_stencilref = STENCILREF_DEFAULT;
+		rhi->bindStencilRef(prev_stencilref, cmd);
 		auto batch_flush = [&]()
 			{
 				if (instanced_batch.instance_count == 0)
@@ -181,7 +186,7 @@ namespace qyhs::renderer
 				{
 					const scene::MeshComponent::MeshSubset& subset = mesh.subsets[subset_index];
 
-					rhi->bindIndexBuffer(&mesh.general_buffer, mesh.getIndexFormat(), mesh.ib.offset,cmd);
+					rhi->bindIndexBuffer(&mesh.general_buffer, mesh.getIndexFormat(), mesh.ib.offset, cmd);
 
 					ObjectPushConstant push_constant;
 					push_constant.geometry_index = mesh.geometry_offset + subset_index;
@@ -238,7 +243,7 @@ namespace qyhs::renderer
 		rhi->endEvent(cmd);
 	}
 
-	void drawScene(const Visibility& visibility, uint32_t flags,RENDERPASS render_pass, CommandList cmd)
+	void drawScene(const Visibility& visibility, uint32_t flags, RENDERPASS render_pass, CommandList cmd)
 	{
 		static thread_local RenderQueue render_queue;
 		render_queue.init();
@@ -254,7 +259,7 @@ namespace qyhs::renderer
 		}
 		if (!render_queue.empty())
 		{
-			renderMeshes(visibility.scene, render_queue,render_pass, cmd);
+			renderMeshes(visibility.scene, render_queue, render_pass, cmd);
 		}
 
 	}
@@ -350,6 +355,33 @@ namespace qyhs::renderer
 		SHADER_TYPE vs_type = SHADER_TYPE_COUNT;
 		switch (render_pass)
 		{
+		case qyhs::enums::RENDERPASS_PREPASS:
+		{
+			if (tessellation)
+			{
+				if (alpha_test)
+				{
+					vs_type = VSTYPE_OBJECT_PREPASS;
+				}
+				else
+				{
+					vs_type = VSTYPE_OBJECT_PREPASS;
+				}
+			}
+			else
+			{
+				if (alpha_test)
+				{
+					vs_type = VSTYPE_OBJECT_PREPASS;
+				}
+				else
+				{
+					vs_type = VSTYPE_OBJECT_PREPASS;
+				}
+			}
+
+		}
+		break;
 		case qyhs::enums::RENDERPASS_MAIN:
 			if (tessellation)
 			{
@@ -360,31 +392,31 @@ namespace qyhs::renderer
 				vs_type = VS_OBJECT_COMMON_VS;
 			}
 			break;
-		/*case RENDERPASS_PREPASS:
-		case qyhs::enums::RENDERPASS_PREPASS_DEPTHONLY:
-			if (tessellation)
-			{
-				if (alpha_test)
+			/*case RENDERPASS_PREPASS:
+			case qyhs::enums::RENDERPASS_PREPASS_DEPTHONLY:
+				if (tessellation)
 				{
-					vs_type = VS_OBJECT_PREPASS_ALPHATEST_TESSELLATION;
+					if (alpha_test)
+					{
+						vs_type = VS_OBJECT_PREPASS_ALPHATEST_TESSELLATION;
+					}
+					else
+					{
+						vs_type = VS_OBJECT_PREPASS_TESSELLATION;
+					}
 				}
 				else
 				{
-					vs_type = VS_OBJECT_PREPASS_TESSELLATION;
+					if (alpha_test)
+					{
+						vs_type = VSTYPE_OBJECT_PREPASS_ALPHATEST;
+					}
+					else
+					{
+						vs_type = VSTYPE_OBJECT_PREPASS;
+					}
 				}
-			}
-			else
-			{
-				if (alpha_test)
-				{
-					vs_type = VSTYPE_OBJECT_PREPASS_ALPHATEST;
-				}
-				else
-				{
-					vs_type = VSTYPE_OBJECT_PREPASS;
-				}
-			}
-			break;*/
+				break;*/
 		}
 		return vs_type;
 	}
@@ -398,26 +430,18 @@ namespace qyhs::renderer
 		case RENDERPASS_MAIN:
 			realPS = SHADER_TYPE((transparent ? PSTYPE_OBJECT_TRANSPARENT_PERMUTATION_BEGIN : PSTYPE_OBJECT_PERMUTATION_BEGIN) + shaderType);
 			break;
-		/*case RENDERPASS_PREPASS:
+		case RENDERPASS_PREPASS:
 			if (alphatest)
 			{
-				realPS = PSTYPE_OBJECT_PREPASS_ALPHATEST;
+				realPS = PSTYPE_OBJECT_PREPASS;
 			}
 			else
 			{
 				realPS = PSTYPE_OBJECT_PREPASS;
 			}
 			break;
-		case RENDERPASS_PREPASS_DEPTHONLY:
-			if (alphatest)
-			{
-				realPS = PSTYPE_OBJECT_PREPASS_DEPTHONLY_ALPHATEST;
-			}
-			else
-			{
-				realPS = PSTYPE_OBJECT_PREPASS_DEPTHONLY;
-			}
-			break;*/
+		default:
+			assert(0);
 		}
 
 		return realPS;
@@ -427,11 +451,28 @@ namespace qyhs::renderer
 	{
 		RHI* rhi = rhi::getRHI();
 		jobsystem::Context ctx;
+
+		//vertex shader
 		jobsystem::execute(ctx, [](jobsystem::JobArgs args)
 			{
 				loadShader(ShaderStage::VERTEX_SHADER, shaders[VS_OBJECT_COMMON_VS], "object_common_vs.cso");
 
 			});
+		jobsystem::execute(ctx, [](jobsystem::JobArgs args) {
+			loadShader(ShaderStage::VERTEX_SHADER, shaders[VSTYPE_OBJECT_PREPASS], "objectVS_prepass.cso");
+			});
+
+		//jobsystem::execute(ctx, [](jobsystem::JobArgs args) {
+		//	loadShader(ShaderStage::VERTEX_SHADER, shaders[VSTYPE_OBJECT_PREPASS_ALPHATEST], "objectVS_prepass_alphatest.cso");
+		//	});
+		//jobsystem::execute(ctx, [](jobsystem::JobArgs args) { loadShader(ShaderStage::VERTEX_SHADER, shaders[VSTYPE_OBJECT_PREPASS_TESSELLATION], "objectVS_prepass_tessellation.cso"); });
+		//jobsystem::execute(ctx, [](jobsystem::JobArgs args) { loadShader(ShaderStage::VERTEX_SHADER, shaders[VSTYPE_OBJECT_PREPASS_ALPHATEST_TESSELLATION], "objectVS_prepass_alphatest_tessellation.cso"); });
+		
+		//piexel shaders
+		jobsystem::execute(ctx, [](jobsystem::JobArgs args) { loadShader(ShaderStage::PIXEL_SHADER, shaders[PSTYPE_OBJECT_PREPASS], "objectPS_prepass.cso"); });
+		//jobsystem::execute(ctx, [](jobsystem::JobArgs args) { loadShader(ShaderStage::PIXEL_SHADER, shaders[PSTYPE_OBJECT_PREPASS_ALPHATEST], "objectPS_prepass_alphatest.cso"); });
+		//jobsystem::execute(ctx, [](jobsystem::JobArgs args) { loadShader(ShaderStage::PIXEL_SHADER, shaders[PSTYPE_OBJECT_PREPASS_DEPTHONLY], "objectPS_prepass_depthonly.cso"); });
+		//jobsystem::execute(ctx, [](jobsystem::JobArgs args) { loadShader(ShaderStage::PIXEL_SHADER, shaders[PSTYPE_OBJECT_PREPASS_DEPTHONLY_ALPHATEST], "objectPS_prepass_depthonly_alphatest.cso"); });
 		jobsystem::dispatch(ctx, scene::MaterialComponent::SHADERTYPE_COUNT, 1, [](jobsystem::JobArgs args) {
 			loadShader(ShaderStage::PIXEL_SHADER, shaders[PSTYPE_OBJECT_PERMUTATION_BEGIN + args.job_index],
 				"objectPS.cso", ShaderModel::SM_6_0, scene::MaterialComponent::shadertype_definitions[args.job_index]);
@@ -462,8 +503,12 @@ namespace qyhs::renderer
 									for (uint32_t alpha_test = 0; alpha_test <= 1; ++alpha_test)
 									{
 										const bool transparency = blend_mode != BLENDMODE_OPAQUE;
+										if ((render_pass == RENDERPASS_PREPASS) && transparency)
+										{
+											continue;
+										}
 										PipelineStateDesc desc;
-										
+
 										if (mesh_shader)
 										{
 											if (tessellation)
@@ -471,12 +516,13 @@ namespace qyhs::renderer
 										}
 										else
 										{
-											SHADER_TYPE real_vertex_shader = getVertexShaderType((RENDERPASS)render_pass,  tessellation,  alpha_test,  transparency);
-											desc.vertex_shader = real_vertex_shader<SHADER_TYPE_COUNT?&shaders[real_vertex_shader]:nullptr;
+											SHADER_TYPE real_vertex_shader = getVertexShaderType((RENDERPASS)render_pass, tessellation, alpha_test, transparency);
+											desc.vertex_shader = real_vertex_shader < SHADER_TYPE_COUNT ? &shaders[real_vertex_shader] : nullptr;
 										}
-										SHADER_TYPE real_fragment_shader = getPixelShaderType((RENDERPASS)render_pass,alpha_test,transparency,(scene::MaterialComponent::SHADERTYPE)shader_type);
+										SHADER_TYPE real_fragment_shader = getPixelShaderType((RENDERPASS)render_pass, alpha_test, transparency, (scene::MaterialComponent::SHADERTYPE)shader_type);
 										desc.fragment_shader = real_fragment_shader < SHADER_TYPE_COUNT ? &shaders[real_fragment_shader] : nullptr;
-
+										assert(desc.vertex_shader->isValid());
+										assert(desc.fragment_shader->isValid());
 										ObjectRenderingVariant variant = {};
 										variant.bits.renderpass = render_pass;
 										variant.bits.shadertype = shader_type;
@@ -518,16 +564,16 @@ namespace qyhs::renderer
 										case BLENDMODE_ALPHA:
 											desc.blend_state = &blend_states[BLEND_STATE_TYPE_ALPHA];
 											break;
-										/*
-										case BLENDMODE_ADDITIVE:
-											desc.blend_state = &blend_states[BLEND_STATE_TYPE_ADDITIVE];
-											break;
-										case BLENDMODE_PREMULTIPLIED:
-											desc.blend_state = &blend_states[BLEND_STATE_TYPE_PREMULTIPLIED];
-											break;
-										case BLENDMODE_MULTIPLY:
-											desc.blend_state = &blend_states[BLEND_STATE_TYPE_MULTIPLY];
-											break;*/
+											/*
+											case BLENDMODE_ADDITIVE:
+												desc.blend_state = &blend_states[BLEND_STATE_TYPE_ADDITIVE];
+												break;
+											case BLENDMODE_PREMULTIPLIED:
+												desc.blend_state = &blend_states[BLEND_STATE_TYPE_PREMULTIPLIED];
+												break;
+											case BLENDMODE_MULTIPLY:
+												desc.blend_state = &blend_states[BLEND_STATE_TYPE_MULTIPLY];
+												break;*/
 										default:
 											assert(0);
 											break;
@@ -536,10 +582,37 @@ namespace qyhs::renderer
 										switch (render_pass)
 										{
 										case RENDERPASS_MAIN:
+											if (blend_mode == BLENDMODE_ADDITIVE)
+											{
+												desc.depth_stencil_state = &depth_stencils[DSSTYPE_DEPTHREAD];
+											}
+											else
+											{
+												desc.depth_stencil_state = &depth_stencils[transparency ? DSSTYPE_TRANSPARENT : DSSTYPE_DEPTHREADEQUAL];
+											}
+											break;
+										default:
+											desc.depth_stencil_state = &depth_stencils[DSSTYPE_DEFAULT];
+											break;
+										}
+
+										switch (render_pass)
+										{
+										case RENDERPASS_PREPASS:
+										case RENDERPASS_MAIN:
 										{
 											RenderPassInfo render_pass_info{};
-											render_pass_info.rt_count = 1;
-											render_pass_info.rt_formats[0] = render_pass == RENDERPASS_MAIN ? format_rendertarget_main : format_idbuffer;
+											if (render_pass == RENDERPASS_PREPASS)
+											{
+												render_pass_info.rt_count = 0;
+												render_pass_info.rt_formats[0] = Format::UNKNOWN;
+											}
+											else
+											{
+												render_pass_info.rt_count = 1;
+												render_pass_info.rt_formats[0] = render_pass == RENDERPASS_MAIN ? format_rendertarget_main : format_idbuffer;
+											}
+											
 											render_pass_info.ds_format = format_depthbuffer_main;
 											const uint32_t msaa_support[] = { 1,2,4,8 };
 											for (uint32_t msaa : msaa_support)
@@ -618,9 +691,102 @@ namespace qyhs::renderer
 		dsd.back_face.stencil_depth_fail_op = StencilOp::KEEP;
 		depth_stencils[DSSTYPE_DEFAULT] = dsd;
 
+		dsd.depth_enable = true;
+		dsd.stencil_enable = false;
+		dsd.depth_write_mask = DepthWriteMask::ZERO;
+		dsd.depth_func = ComparisonFunc::GREATER_EQUAL;
+		depth_stencils[DSSTYPE_DEPTHREAD] = dsd;
+
+		dsd.depth_enable = true;
+		dsd.depth_write_mask = DepthWriteMask::ZERO;
+		dsd.depth_func = ComparisonFunc::EQUAL;
+		depth_stencils[DSSTYPE_DEPTHREADEQUAL] = dsd;
+
 		dsd.depth_write_mask = DepthWriteMask::ZERO;
 
 		depth_stencils[DSSTYPE_HOLOGRAM] = dsd;
+
+		//create samplers
+		SamplerDesc samplerDesc;
+		samplerDesc.filter = Filter::MIN_MAG_MIP_LINEAR;
+		samplerDesc.address_u = TextureAddressMode::MIRROR;
+		samplerDesc.address_v = TextureAddressMode::MIRROR;
+		samplerDesc.address_w = TextureAddressMode::MIRROR;
+		samplerDesc.mip_lod_bias = 0.0f;
+		samplerDesc.max_anisotropy = 0;
+		samplerDesc.comparison_func = ComparisonFunc::NEVER;
+		samplerDesc.border_color = SamplerBorderColor::TRANSPARENT_BLACK;
+		samplerDesc.min_lod = 0;
+		samplerDesc.max_lod = std::numeric_limits<float>::max();
+		rhi->createSampler(&samplerDesc, &samplers[SAMPLER_LINEAR_MIRROR]);
+
+		samplerDesc.filter = Filter::MIN_MAG_MIP_LINEAR;
+		samplerDesc.address_u = TextureAddressMode::CLAMP;
+		samplerDesc.address_v = TextureAddressMode::CLAMP;
+		samplerDesc.address_w = TextureAddressMode::CLAMP;
+		rhi->createSampler(&samplerDesc, &samplers[SAMPLER_LINEAR_CLAMP]);
+
+		samplerDesc.filter = Filter::MIN_MAG_MIP_LINEAR;
+		samplerDesc.address_u = TextureAddressMode::WRAP;
+		samplerDesc.address_v = TextureAddressMode::WRAP;
+		samplerDesc.address_w = TextureAddressMode::WRAP;
+		rhi->createSampler(&samplerDesc, &samplers[SAMPLER_LINEAR_WRAP]);
+
+		samplerDesc.filter = Filter::MIN_MAG_MIP_POINT;
+		samplerDesc.address_u = TextureAddressMode::MIRROR;
+		samplerDesc.address_v = TextureAddressMode::MIRROR;
+		samplerDesc.address_w = TextureAddressMode::MIRROR;
+		rhi->createSampler(&samplerDesc, &samplers[SAMPLER_POINT_MIRROR]);
+
+		samplerDesc.filter = Filter::MIN_MAG_MIP_POINT;
+		samplerDesc.address_u = TextureAddressMode::WRAP;
+		samplerDesc.address_v = TextureAddressMode::WRAP;
+		samplerDesc.address_w = TextureAddressMode::WRAP;
+		rhi->createSampler(&samplerDesc, &samplers[SAMPLER_POINT_WRAP]);
+
+
+		samplerDesc.filter = Filter::MIN_MAG_MIP_POINT;
+		samplerDesc.address_u = TextureAddressMode::CLAMP;
+		samplerDesc.address_v = TextureAddressMode::CLAMP;
+		samplerDesc.address_w = TextureAddressMode::CLAMP;
+		rhi->createSampler(&samplerDesc, &samplers[SAMPLER_POINT_CLAMP]);
+
+		samplerDesc.filter = Filter::ANISOTROPIC;
+		samplerDesc.address_u = TextureAddressMode::CLAMP;
+		samplerDesc.address_v = TextureAddressMode::CLAMP;
+		samplerDesc.address_w = TextureAddressMode::CLAMP;
+		samplerDesc.max_anisotropy = 16;
+		rhi->createSampler(&samplerDesc, &samplers[SAMPLER_ANISO_CLAMP]);
+
+		samplerDesc.filter = Filter::ANISOTROPIC;
+		samplerDesc.address_u = TextureAddressMode::WRAP;
+		samplerDesc.address_v = TextureAddressMode::WRAP;
+		samplerDesc.address_w = TextureAddressMode::WRAP;
+		samplerDesc.max_anisotropy = 16;
+		rhi->createSampler(&samplerDesc, &samplers[SAMPLER_ANISO_WRAP]);
+
+		samplerDesc.filter = Filter::ANISOTROPIC;
+		samplerDesc.address_u = TextureAddressMode::MIRROR;
+		samplerDesc.address_v = TextureAddressMode::MIRROR;
+		samplerDesc.address_w = TextureAddressMode::MIRROR;
+		samplerDesc.max_anisotropy = 16;
+		rhi->createSampler(&samplerDesc, &samplers[SAMPLER_ANISO_MIRROR]);
+
+		samplerDesc.filter = Filter::ANISOTROPIC;
+		samplerDesc.address_u = TextureAddressMode::WRAP;
+		samplerDesc.address_v = TextureAddressMode::WRAP;
+		samplerDesc.address_w = TextureAddressMode::WRAP;
+		samplerDesc.max_anisotropy = 16;
+		rhi->createSampler(&samplerDesc, &samplers[SAMPLER_OBJECTSHADER]);
+
+		samplerDesc.filter = Filter::COMPARISON_MIN_MAG_LINEAR_MIP_POINT;
+		samplerDesc.address_u = TextureAddressMode::CLAMP;
+		samplerDesc.address_v = TextureAddressMode::CLAMP;
+		samplerDesc.address_w = TextureAddressMode::CLAMP;
+		samplerDesc.mip_lod_bias = 0.0f;
+		samplerDesc.max_anisotropy = 0;
+		samplerDesc.comparison_func = ComparisonFunc::GREATER_EQUAL;
+		rhi->createSampler(&samplerDesc, &samplers[SAMPLER_CMP_DEPTH]);
 	}
 
 	void loadBuffers()
@@ -646,31 +812,36 @@ namespace qyhs::renderer
 		frame_cb.scene = visibility.scene->shader_scene;
 	}
 
-	void updateRenderData(const Visibility& visibility, const FrameConstantBuffer& frame_cb,CommandList & cmd)
+	void updateRenderData(const Visibility& visibility, const FrameConstantBuffer& frame_cb, CommandList& cmd)
 	{
-		rhi->updateBuffer(&frame_constant_buffer,&frame_cb,cmd);
+		rhi->updateBuffer(&frame_constant_buffer, &frame_cb, cmd);
 		if (visibility.scene->instance_buffer.isValid() && visibility.scene->scene_instance_count > 0)
 		{
-			rhi->copyBuffer(&visibility.scene->instance_buffer, 0, 
+			rhi->copyBuffer(&visibility.scene->instance_buffer, 0,
 				&visibility.scene->instance_upload_buffers[rhi->getBufferIndex()], 0,
 				visibility.scene->scene_instance_count * sizeof(ShaderMeshInstance), cmd);
 		}
 
-		if (visibility.scene->material_buffer.isValid() && visibility.scene->materials_array_size> 0)
+		if (visibility.scene->material_buffer.isValid() && visibility.scene->materials_array_size > 0)
 		{
-			rhi->copyBuffer(&visibility.scene->material_buffer, 0, 
+			rhi->copyBuffer(&visibility.scene->material_buffer, 0,
 				&visibility.scene->material_upload_buffers[rhi->getBufferIndex()], 0,
 				visibility.scene->materials_array_size * sizeof(ShaderMaterial), cmd);
 		}
 
-		if (visibility.scene->geometry_buffer.isValid() && visibility.scene->geometry_array_size> 0)
+		if (visibility.scene->geometry_buffer.isValid() && visibility.scene->geometry_array_size > 0)
 		{
-			rhi->copyBuffer(&visibility.scene->geometry_buffer, 0, 
+			rhi->copyBuffer(&visibility.scene->geometry_buffer, 0,
 				&visibility.scene->geometry_upload_buffers[rhi->getBufferIndex()], 0,
 				visibility.scene->geometry_array_size * sizeof(ShaderGeometry), cmd);
 		}
 
 		bindCommonResources(cmd);
+	}
+
+	const Sampler* getSampler(enums::SAMPLERTYPES id)
+	{
+		return &samplers[id];
 	}
 
 

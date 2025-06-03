@@ -695,7 +695,10 @@ namespace qyhs
 		begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 		begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
 		begin_info.pInheritanceInfo = nullptr; // Optional
-		result = vkBeginCommandBuffer(cmd_vulkan.getCommandBuffer(), &begin_info);
+
+		auto cb = cmd_vulkan.getCommandBuffer();
+		assert(cb != VK_NULL_HANDLE); 
+		result = vkBeginCommandBuffer(cb, &begin_info);
 		assert(result == VK_SUCCESS);
 		return cmd;
 	}
@@ -1281,7 +1284,11 @@ namespace qyhs
 	}
 
 	static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData) {
-		std::cerr << "validation layer: " << pCallbackData->pMessage << std::endl;
+		if (messageSeverity == VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT)
+		{
+			std::cerr << "validation layer: " << pCallbackData->pMessage << std::endl;
+			int a = 0;
+		}
 
 		return VK_FALSE;
 	}
@@ -3508,7 +3515,7 @@ namespace qyhs
 		m_viewport.maxDepth = 1.0f;
 	}
 
-	void VulkanRHI::bindViewports(CommandList& cmd_list, uint32_t viewport_count, Viewport* viewport)
+	void VulkanRHI::bindViewports(const CommandList& cmd_list, uint32_t viewport_count, Viewport* viewport)
 	{
 		VkViewport p_viewport[16];
 		assert(viewport_count < ARRAYSIZE(p_viewport));
@@ -3745,7 +3752,7 @@ namespace qyhs
 		commandlist.renderpass_info = RenderPassInfo::from(images, image_count);
 	}
 
-	void VulkanRHI::endRenderPass(CommandList& cmd_list)
+	void VulkanRHI::endRenderPass(CommandList cmd_list)
 	{
 		CommandList_Vulkan& commandlist = getCommandList(cmd_list);
 		vkCmdEndRendering(commandlist.getCommandBuffer());

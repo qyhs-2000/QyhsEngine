@@ -4,6 +4,7 @@
 #include "function/framework/component/ecs.h"
 #include "function/render/primitive.h"
 #include "core/math/math_library.h"
+#include "resource/resource_manager.h"
 namespace qyhs::scene
 {
 	class ObjectComponent
@@ -30,7 +31,9 @@ namespace qyhs::scene
 		{
 			EMPTY = 0,
 			DOUBLE_SIDE = 1 << 0,
-			DIRTY = 1 << 1
+			DIRTY = 1 << 1,
+			PREFER_UNCOMPRESSED_TEXTURES = 1<< 2,
+			DISABLE_TEXTURE_STREAMING = 1<<3
 		};
 		enum
 		{
@@ -44,18 +47,42 @@ namespace qyhs::scene
 			SHADERTYPE_COUNT
 		}shader_type = SHADERTYPE_PBR;
 
+		enum TEXTURESLOT
+		{
+			BASECOLORMAP,
+
+			TEXTURESLOT_COUNT
+		};
+		XMFLOAT4 base_color = XMFLOAT4(1, 1, 1, 1);
 		struct TextureMap
 		{
 			std::string name;
 			uint32_t uvset = 0;
+			resourcemanager::Resource resource;
+			const graphics::GPUResource* getGPUResource()const
+			{
+				if (!resource.isValid() || !resource.getTexture().isValid())
+				{
+					return nullptr;
+				}
+				return &resource.getTexture();
+			}
 		} textures[TEXTUREMAP_COUNT];
 		inline enums::BLENDMODE getBlendMode() const { return userBlendMode; }
 		inline bool isDoubleSided()const { return _flags & DOUBLE_SIDE; }
+		inline bool isPreferUnCompressedTexturesEnabled()const { return _flags & PREFER_UNCOMPRESSED_TEXTURES; }
+		inline bool isTextureStreamingDisabled()const { return _flags & DISABLE_TEXTURE_STREAMING; }
+		resourcemanager::Flags getTextureSlotResourceFlags(TEXTURESLOT slot);
+		int sampler_descriptor = -1;
 		BLENDMODE userBlendMode = BLENDMODE::BLENDMODE_OPAQUE;
 		uint32_t _flags = 0;
 		inline static const std::vector<std::string> shadertype_definitions[] = {
 			{} // SHADERTYPE_PBR,
 		};
+
+		void writeShaderMaterial(ShaderMaterial* dst);
+		void createRenderData();
+
 	private:
 	};
 
@@ -180,6 +207,26 @@ namespace qyhs::scene
 			}
 		};
 
+		struct Vertex_TEX
+		{
+			uint16_t x = 0;
+			uint16_t y = 0;
+
+			constexpr void FromFULL(const XMFLOAT2& uv, const XMFLOAT2& uv_range_min = XMFLOAT2(0, 0), const XMFLOAT2& uv_range_max = XMFLOAT2(1, 1))
+			{
+				x = uint16_t(math::inverseLerp(uv_range_min.x, uv_range_max.x, uv.x) * 65535.0f);
+				y = uint16_t(math::inverseLerp(uv_range_min.y, uv_range_max.y, uv.y) * 65535.0f);
+			}
+			static constexpr graphics::Format FORMAT = graphics::Format::R16G16_UNORM;
+		};
+		struct Vertex_UVS
+		{
+			Vertex_TEX uv0;
+			Vertex_TEX uv1;
+			static constexpr graphics::Format FORMAT = graphics::Format::R16G16B16A16_UNORM;
+		};
+		XMFLOAT2 uv_range_min = XMFLOAT2(0, 0);
+		XMFLOAT2 uv_range_max = XMFLOAT2(1, 1);
 		Format position_format = Vertex_POS16::FORMAT;
 		uint32_t geometry_offset;
 		std::vector<MeshSubset> subsets;
@@ -230,6 +277,7 @@ namespace qyhs::scene
 
 		BufferView ib;
 		BufferView vb_pos_wind;
+		BufferView vb_uvs;
 	private:
 	};
 

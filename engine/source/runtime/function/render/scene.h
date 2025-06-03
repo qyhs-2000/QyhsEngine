@@ -47,6 +47,7 @@ namespace qyhs::scene
 		
 		void updateObjects(jobsystem::Context &ctx);
 		void updateMeshes(jobsystem::Context& ctx);
+		void updateMaterial(jobsystem::Context& ctx);
 		void detachComponent(ecs::Entity entity)
 		{
 			const HierarchyComponent* parent = hierarchy.getComponent(entity);
@@ -68,6 +69,7 @@ namespace qyhs::scene
 		std::vector<uint32_t>visible_objects;
 		std::vector<OccludedResult> occlusion_result_objects;
 		void updateShaderScene();
+		
 		uint32_t scene_instance_count = 0;
 		uint32_t materials_array_size = 0;
 		uint32_t geometry_array_size = 0;

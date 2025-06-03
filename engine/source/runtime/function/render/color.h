@@ -29,6 +29,11 @@ namespace qyhs
 		constexpr uint8_t getG() const { return (rgba >> 8) & 0xFF; }
 		constexpr uint8_t getB() const { return (rgba >> 16) & 0xFF; }
 		constexpr uint8_t getA() const { return (rgba >> 24) & 0xFF; }
+
+		inline void setR(uint8_t value){*this = Color(value, getG(), getB(), getA());}
+		inline void setG(uint8_t value){*this = Color(getR(), value, getB(), getA()); }
+		inline void setB(uint8_t value){*this = Color(getR(), getG(), value, getA()); }
+		inline void setA(uint8_t value){*this = Color(getR(), getG(), getB(), value); }
 	private:
 	};
 }

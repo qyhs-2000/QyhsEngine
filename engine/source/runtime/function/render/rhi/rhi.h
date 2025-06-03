@@ -155,10 +155,10 @@ namespace qyhs
 		virtual bool createSwapChain(platform::WindowType window, SwapChain* swapChain, SwapChainDesc desc) = 0;
 		virtual bool createSampler(const SamplerDesc* sampler_desc, Sampler* sampler) = 0;
 		virtual CommandList beginCommandList(QueueType queue = QUEUE_GRAPHICS) = 0;
-		virtual void bindViewports(CommandList& cmd_list, uint32_t viewport_count, Viewport* viewport) = 0;
+		virtual void bindViewports(const CommandList& cmd_list, uint32_t viewport_count, Viewport* viewport) = 0;
 		virtual void beginRenderPass(SwapChain* swapChain, CommandList& cmd_list) = 0;
 		virtual void beginRenderPass(const RenderPassImage *image, uint32_t size, CommandList cmd,RenderPassFlags flags = RenderPassFlags::NONE) = 0;
-		virtual void endRenderPass(CommandList& cmd_list) = 0;
+		virtual void endRenderPass(CommandList cmd_list) = 0;
 		virtual void submitCommandLists() = 0;
 		virtual void bindScissorRects(uint32_t scissor_count, const Rect* rect, CommandList cmd) = 0;
 		bool checkCapability(GraphicsDeviceCapability capability) { return has_flag(capabilities, capability); }

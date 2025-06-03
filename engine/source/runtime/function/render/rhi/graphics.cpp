@@ -36,7 +36,7 @@ namespace qyhs::graphics
 			return false;
 		}
 	}
-
+	
 }
 
 const uint32_t qyhs::graphics::getFormatStride(Format format)

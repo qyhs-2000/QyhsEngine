@@ -6,6 +6,7 @@
 #include "function/framework/level/level.h"
 #include "function/render/scene.h"
 #define TINYGLTF_IMPLEMENTATION
+#define TINYGLTF_NO_STB_IMAGE
 #define TINYGLTF_NO_STB_IMAGE_WRITE
 #ifdef VK_USE_PLATFORM_ANDROID_KHR
 #	define TINYGLTF_ANDROID_LOAD_FROM_ASSETS
@@ -13,6 +14,43 @@
 #include "tinygltf/tiny_gltf.h"
 #include "function/framework/component/mesh/mesh_component.h"
 #include "function/framework/component/transform/transform_component.h"
+
+#include "core/math/random.h"
+#include "resource/resource_manager.h"
+namespace tinygltf
+{
+	bool LoadImageData(Image* image, const int image_idx, std::string* err,
+		std::string* warn, int req_width, int req_height,
+		const unsigned char* bytes, int size, void* userdata)
+	{
+		if (image->uri.empty())
+		{
+			std::string ss;
+			while (true)
+			{
+				ss.clear();
+				ss += "gltfimport_" + std::to_string(qyhs::random::getRandom(std::numeric_limits<uint32_t>::max())) + ".png";
+				if (!qyhs::resourcemanager::contains(ss))
+				{
+					image->uri = ss;
+					break;
+				}
+			}
+
+		}
+		auto resource = qyhs::resourcemanager::load(image->uri,qyhs::resourcemanager::Flags::IMPORT_RETAIN_FILEDATA | qyhs::resourcemanager::Flags::IMPORT_DELAY,
+			(const uint8_t*)bytes,
+			(size_t)size);
+		if (!resource.isValid())
+		{
+			return false;
+		}
+		qyhs::resourcemanager::ResourceSerializer* seri = (qyhs::resourcemanager::ResourceSerializer*)(userdata);
+		seri->resources.push_back(resource);
+		return true;
+	}
+}
+
 namespace qyhs
 {
 	class LoaderState
@@ -500,6 +538,8 @@ namespace qyhs
 
 	}
 
+	
+
 	bool import_model_gltf(scene::Scene* scene, std::string file_path)
 	{
 		tinygltf::TinyGLTF loader;
@@ -507,6 +547,9 @@ namespace qyhs
 		std::string warn;
 		LoaderState_Scene loader_state;
 		std::string extension = Helper::toUpper(Helper::getFileExtension(file_path));
+
+		resourcemanager::ResourceSerializer seri;
+		loader.SetImageLoader(tinygltf::LoadImageData, &seri);
 		std::vector<uint8_t> file_data;
 		bool ret = Helper::fileRead(file_path, file_data);
 		if (ret)
@@ -556,6 +599,14 @@ namespace qyhs
 
 			scene::MaterialComponent& material_component = *scene->materials.getComponent(material_entity);
 			auto base_color_texture_iter = material.values.find("baseColorTexture");
+			auto base_color_factor = material.values.find("baseColorFactor");
+			if (base_color_factor != material.values.end())
+			{
+				material_component.base_color.x = float(base_color_factor->second.ColorFactor()[0]);
+				material_component.base_color.y = float(base_color_factor->second.ColorFactor()[1]);
+				material_component.base_color.z = float(base_color_factor->second.ColorFactor()[2]);
+				material_component.base_color.w = float(base_color_factor->second.ColorFactor()[3]);
+			}
 			if (base_color_texture_iter != material.values.end())
 			{
 				auto& tex = loader_state.model.textures[base_color_texture_iter->second.TextureIndex()];
@@ -564,6 +615,7 @@ namespace qyhs
 				material_component.textures[scene::MaterialComponent::BASECOLOR_MAP].name = img.uri;
 				material_component.textures[scene::MaterialComponent::BASECOLOR_MAP].uvset = base_color_texture_iter->second.TextureTexCoord();
 			}
+			material_component.createRenderData();
 		}
 
 		//create mesh

@@ -1,6 +1,8 @@
 #include "scene_component.h"
 #include "core/math/math_library.h"
+#include "function/render/renderer.h"
 #include <iostream>
+
 namespace qyhs::scene
 {
 	CameraComponent& getCamera()
@@ -97,9 +99,11 @@ namespace qyhs::scene
 		desc.misc_flags = ResourceMiscFlag::BUFFER_RAW | ResourceMiscFlag::NO_DEFAULT_DESCRIPTORS;
 		const uint64_t alignment = rhi->getMinOffsetAlignment(&desc);
 		const uint32_t position_stride = getFormatStride(position_format);
+		const size_t uv_count = std::max(vertex_uvset_0.size(), vertex_uvset_1.size());
 		desc.size = alignTo(vertex_positions.size() * position_stride, alignment) +
 			alignTo(indices.size() * getIndexBufferStride(), alignment) +
-			alignTo(vertex_colors.size() * sizeof(Vertex_Color), alignment);
+			alignTo(vertex_colors.size() * sizeof(Vertex_Color), alignment) +
+			alignTo(uv_count * sizeof(Vertex_UVS),alignment);
 
 		XMFLOAT3 _min = XMFLOAT3(std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
 		XMFLOAT3 _max = XMFLOAT3(std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest());
@@ -177,6 +181,26 @@ namespace qyhs::scene
 				}
 			}
 
+			
+
+			//vertex buffer - UV Sets
+			if (!vertex_uvset_0.empty() || !vertex_uvset_1.empty())
+			{
+				const XMFLOAT2* uv0_stream = vertex_uvset_0.empty() ? vertex_uvset_1.data() : vertex_uvset_0.data();
+				const XMFLOAT2* uv1_stream = vertex_uvset_1.empty() ? vertex_uvset_0.data() : vertex_uvset_1.data();
+
+				vb_uvs.offset = buffer_offset;
+				vb_uvs.size = uv_count * sizeof(Vertex_UVS);
+				Vertex_UVS* vertices = (Vertex_UVS*)(buffer_data + buffer_offset);
+				buffer_offset += alignTo(vb_uvs.size, alignment);
+				for (int i = 0; i < uv_count; ++i)
+				{
+					Vertex_UVS vert;
+					vert.uv0.FromFULL(uv0_stream[i], uv_range_min, uv_range_max);
+					vert.uv1.FromFULL(uv1_stream[i], uv_range_min, uv_range_max);
+					std::memcpy(vertices + i, &vert, sizeof(vert));
+				}
+			}
 
 			};
 
@@ -191,7 +215,11 @@ namespace qyhs::scene
 		const Format ib_format = getIndexFormat() == IndexBufferFormat::UINT32 ? Format::R32_UINT : Format::R16_UINT;
 		ib.subresource_srv = rhi->createSubresource(&general_buffer, SubresourceType::SRV, ib.offset, ib.size, &ib_format);
 		ib.descriptor_srv = rhi->getDescriptorIndex(&general_buffer, SubresourceType::SRV, ib.subresource_srv);
-
+		if (vb_uvs.IsValid())
+		{
+			vb_uvs.subresource_srv = rhi->createSubresource(&general_buffer, SubresourceType::SRV, vb_uvs.offset, vb_uvs.size, &Vertex_UVS::FORMAT);
+			vb_uvs.descriptor_srv = rhi->getDescriptorIndex(&general_buffer, SubresourceType::SRV, vb_uvs.subresource_srv);
+		}
 	}
 
 	void CameraComponent::transformCamera(const XMMATRIX& transform_matrix)
@@ -241,6 +269,74 @@ namespace qyhs::scene
 		XMStoreFloat4x4(&inv_view, _InvV);
 		XMStoreFloat3x3(&rotation_matrix, _InvV);
 		XMStoreFloat4x4(&inv_view_projection, XMMatrixInverse(nullptr, _VP));
+	}
+
+	void MaterialComponent::writeShaderMaterial(ShaderMaterial* dst)
+	{
+		RHI* rhi = rhi::getRHI();
+		ShaderMaterial material;
+		material.init();
+		material.base_color = base_color;
+		material.base_color = XMFLOAT4(0.8,0.8,0.8,1);
+		for (int i = 0; i < TEXTURESLOT_COUNT; ++i)
+		{
+			const MaterialComponent::TextureMap& texture_map = textures[i];
+			material.textures[i].uvset_aniso_lodclamp = (texture_map.uvset & 1);
+			if (texture_map.resource.isValid())
+			{
+				int subresource = -1;
+				switch (i)
+				{
+				case BASECOLORMAP:
+					subresource = texture_map.resource.getTextureSRGBSubresource();
+					break;
+				default:
+					break;
+				}
+				material.textures[i].texture_descriptor = rhi->getDescriptorIndex(texture_map.getGPUResource(), SubresourceType::SRV, subresource);
+			}
+			else
+			{
+				material.textures[i].texture_descriptor = -1;
+			}
+		}
+		if (sampler_descriptor < 0)
+		{
+			material.sampler_descriptor = rhi->getDescriptorIndex(renderer::getSampler(enums::SAMPLER_OBJECTSHADER));
+		}
+		else
+		{
+			material.sampler_descriptor = sampler_descriptor;
+		}
+		std::memcpy(dst, &material, sizeof(material));
+		assert(dst->textures[BASECOLORMAP].isValid());
+	}
+
+	resourcemanager::Flags MaterialComponent::getTextureSlotResourceFlags(TEXTURESLOT slot)
+	{
+		resourcemanager::Flags flags = resourcemanager::Flags::NONE;
+		if (!isPreferUnCompressedTexturesEnabled())
+		{
+			flags |= resourcemanager::Flags::IMPORT_BLOCK_COMPRESSED;
+		}
+		if (!isTextureStreamingDisabled())
+		{
+			flags |= resourcemanager::Flags::STREAMING;
+		}
+		return flags;
+	}
+
+	void MaterialComponent::createRenderData()
+	{
+		for (uint32_t i = 0; i < TEXTURESLOT_COUNT; ++i)
+		{
+			TextureMap & tex = textures[i];
+			if (!tex.name.empty())
+			{
+				resourcemanager::Flags flags = getTextureSlotResourceFlags(TEXTURESLOT(i));
+				tex.resource = resourcemanager::load(tex.name, flags);
+			}
+		}
 	}
 
 }
