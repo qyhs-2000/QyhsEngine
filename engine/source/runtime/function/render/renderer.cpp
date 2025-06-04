@@ -9,6 +9,8 @@
 using namespace qyhs::enums;
 //#include "function/render/scene_component.h"
 
+bool grid_helper = true;
+PipelineState PSO_debug[DEBUG_RENDERING_COUNT];
 union ObjectRenderingVariant
 {
 	struct
@@ -43,7 +45,7 @@ namespace qyhs::renderer
 {
 	Shader shaders[SHADER_TYPE_COUNT];
 	Sampler samplers[SAMPLER_COUNT];
-
+	InputLayout input_layouts[ILTYPE_COUNT];
 	RHI*& rhi = rhi::getRHI();
 	std::string SHADER_PATH = helper::getCurrentPath() + "/shaders/";
 	std::atomic<size_t> SHADER_MISSING{ 0 };
@@ -164,7 +166,7 @@ namespace qyhs::renderer
 		const size_t allocate_size = render_queue.size() * sizeof(ShaderMeshInstancePointer);
 		RHI::GPUAllocation instances = rhi->allocateGPU(allocate_size, cmd);
 		int instance_buffer_descriptor_index = rhi->getDescriptorIndex(&instances.buffer, SubresourceType::SRV);
-		
+
 		int prev_stencilref = STENCILREF_DEFAULT;
 		rhi->bindStencilRef(prev_stencilref, cmd);
 		auto batch_flush = [&]()
@@ -456,28 +458,48 @@ namespace qyhs::renderer
 		jobsystem::execute(ctx, [](jobsystem::JobArgs args)
 			{
 				loadShader(ShaderStage::VERTEX_SHADER, shaders[VS_OBJECT_COMMON_VS], "object_common_vs.cso");
-
 			});
 		jobsystem::execute(ctx, [](jobsystem::JobArgs args) {
 			loadShader(ShaderStage::VERTEX_SHADER, shaders[VSTYPE_OBJECT_PREPASS], "objectVS_prepass.cso");
 			});
-
-		//jobsystem::execute(ctx, [](jobsystem::JobArgs args) {
-		//	loadShader(ShaderStage::VERTEX_SHADER, shaders[VSTYPE_OBJECT_PREPASS_ALPHATEST], "objectVS_prepass_alphatest.cso");
-		//	});
-		//jobsystem::execute(ctx, [](jobsystem::JobArgs args) { loadShader(ShaderStage::VERTEX_SHADER, shaders[VSTYPE_OBJECT_PREPASS_TESSELLATION], "objectVS_prepass_tessellation.cso"); });
-		//jobsystem::execute(ctx, [](jobsystem::JobArgs args) { loadShader(ShaderStage::VERTEX_SHADER, shaders[VSTYPE_OBJECT_PREPASS_ALPHATEST_TESSELLATION], "objectVS_prepass_alphatest_tessellation.cso"); });
-		
+		jobsystem::execute(ctx, [](jobsystem::JobArgs args) {
+			input_layouts[ILTYPE_VERTEXCOLOR].elements = {
+				{ "POSITION", 0, Format::R32G32B32A32_FLOAT, 0, InputLayout::APPEND_ALIGNED_ELEMENT, InputClassification::PER_VERTEX_DATA },
+				{ "TEXCOORD", 0, Format::R32G32B32A32_FLOAT, 0, InputLayout::APPEND_ALIGNED_ELEMENT, InputClassification::PER_VERTEX_DATA },
+			};
+			loadShader(ShaderStage::VERTEX_SHADER, shaders[VSTYPE_VERTEXCOLOR], "vertexcolorVS.cso");
+			});
 		//piexel shaders
 		jobsystem::execute(ctx, [](jobsystem::JobArgs args) { loadShader(ShaderStage::PIXEL_SHADER, shaders[PSTYPE_OBJECT_PREPASS], "objectPS_prepass.cso"); });
-		//jobsystem::execute(ctx, [](jobsystem::JobArgs args) { loadShader(ShaderStage::PIXEL_SHADER, shaders[PSTYPE_OBJECT_PREPASS_ALPHATEST], "objectPS_prepass_alphatest.cso"); });
-		//jobsystem::execute(ctx, [](jobsystem::JobArgs args) { loadShader(ShaderStage::PIXEL_SHADER, shaders[PSTYPE_OBJECT_PREPASS_DEPTHONLY], "objectPS_prepass_depthonly.cso"); });
-		//jobsystem::execute(ctx, [](jobsystem::JobArgs args) { loadShader(ShaderStage::PIXEL_SHADER, shaders[PSTYPE_OBJECT_PREPASS_DEPTHONLY_ALPHATEST], "objectPS_prepass_depthonly_alphatest.cso"); });
+		jobsystem::execute(ctx, [](jobsystem::JobArgs args) {loadShader(ShaderStage::PIXEL_SHADER, shaders[PSTYPE_VERTEXCOLOR], "vertexcolorPS.cso"); });
 		jobsystem::dispatch(ctx, scene::MaterialComponent::SHADERTYPE_COUNT, 1, [](jobsystem::JobArgs args) {
 			loadShader(ShaderStage::PIXEL_SHADER, shaders[PSTYPE_OBJECT_PERMUTATION_BEGIN + args.job_index],
 				"objectPS.cso", ShaderModel::SM_6_0, scene::MaterialComponent::shadertype_definitions[args.job_index]);
 			});
 		jobsystem::wait(ctx);
+
+		jobsystem::dispatch(ctx, DEBUG_RENDERING_COUNT, 1, [&](jobsystem::JobArgs args) {
+			PipelineStateDesc desc = {};
+			RHI* rhi = rhi::getRHI();
+			switch (args.job_index)
+			{
+			case DEBUG_RENDERING_GRID:
+			{
+				desc.vertex_shader = &shaders[VSTYPE_VERTEXCOLOR];
+				desc.fragment_shader = &shaders[PSTYPE_VERTEXCOLOR];
+				desc.input_layout = &input_layouts[ILTYPE_VERTEXCOLOR];
+				desc.depth_stencil_state = &depth_stencils[DSSTYPE_DEPTHREAD];
+				desc.rasterizer_state = &rasterizers[RASTERIZER_STATE_TYPE_WIRE_DOUBLE_SIDED_SMOOTH];
+				desc.blend_state = &blend_states[BLEND_STATE_TYPE_TRANSPARENT];
+				desc.primitive_topology = PrimitiveTopology::LINE_LIST;
+				break;
+			}
+			break;
+			default:
+				break;
+			}
+			rhi->createPipelineState(&desc, &PSO_debug[args.job_index]);
+			});
 
 		for (uint32_t render_pass = 0; render_pass < RENDERPASS_COUNT; ++render_pass)
 		{
@@ -612,7 +634,7 @@ namespace qyhs::renderer
 												render_pass_info.rt_count = 1;
 												render_pass_info.rt_formats[0] = render_pass == RENDERPASS_MAIN ? format_rendertarget_main : format_idbuffer;
 											}
-											
+
 											render_pass_info.ds_format = format_depthbuffer_main;
 											const uint32_t msaa_support[] = { 1,2,4,8 };
 											for (uint32_t msaa : msaa_support)
@@ -656,6 +678,20 @@ namespace qyhs::renderer
 		rasterizer_state.conservative_rasterization_enable = false;
 		rasterizers[RASTERIZER_STATE_TYPE_FRONT] = rasterizer_state;
 
+		rasterizer_state.fill_mode = FillMode::WIREFRAME;
+		rasterizer_state.cull_mode = CullMode::NONE;
+		rasterizer_state.front_counter_clockwise = true;
+		rasterizer_state.depth_bias = 0;
+		rasterizer_state.depth_bias_clamp = 0;
+		rasterizer_state.slope_scaled_depth_bias = 0;
+		rasterizer_state.depth_clip_enable = true;
+		rasterizer_state.multisample_enable = false;
+		rasterizer_state.antialiased_line_enable = false;
+		rasterizer_state.conservative_rasterization_enable = false;
+		rasterizers[RASTERIZER_STATE_TYPE_WIRE_DOUBLESIDED] = rasterizer_state;
+		rasterizer_state.antialiased_line_enable = true;
+		rasterizers[RASTERIZER_STATE_TYPE_WIRE_DOUBLE_SIDED_SMOOTH] = rasterizer_state;
+
 		BlendState blend_state;
 		blend_state.render_targets[0].blend_enable = false;
 		blend_state.render_targets[0].render_target_write_mask = ColorWrite::ENABLE_ALL;
@@ -672,6 +708,18 @@ namespace qyhs::renderer
 		blend_state.independent_blend_enable = false,
 			blend_state.alpha_to_coverage_enable = false;
 		blend_states[BLEND_STATE_TYPE_ADDITIVE] = blend_state;
+
+		blend_state.render_targets[0].src_blend = Blend::SRC_ALPHA;
+		blend_state.render_targets[0].dest_blend = Blend::INV_SRC_ALPHA;
+		blend_state.render_targets[0].blend_op = BlendOp::ADD;
+		blend_state.render_targets[0].src_blend_alpha = Blend::ONE;
+		blend_state.render_targets[0].dest_blend_alpha = Blend::INV_SRC_ALPHA;
+		blend_state.render_targets[0].blend_op_alpha = BlendOp::ADD;
+		blend_state.render_targets[0].blend_enable = true;
+		blend_state.render_targets[0].render_target_write_mask = ColorWrite::ENABLE_ALL;
+		blend_state.alpha_to_coverage_enable = false;
+		blend_state.independent_blend_enable = false;
+		blend_states[BLEND_STATE_TYPE_TRANSPARENT] = blend_state;
 
 		DepthStencilState dsd;
 		dsd.depth_enable = true;
@@ -842,6 +890,65 @@ namespace qyhs::renderer
 	const Sampler* getSampler(enums::SAMPLERTYPES id)
 	{
 		return &samplers[id];
+	}
+
+	void drawDebugWorld(const scene::CameraComponent & camera,CommandList cmd)
+	{
+		RHI* rhi = rhi::getRHI();
+		if (grid_helper)
+		{
+			rhi->beginEvent("Draw Grid", cmd);
+			rhi->bindPipelineState(&PSO_debug[DEBUG_RENDERING_GRID], cmd);
+			static float alpha = 0.75f;
+			const float channel_min = 0.2f;
+			static uint32_t gridVertexCount = 0;
+			static GPUBuffer grid;
+			if (!grid.isValid())
+			{
+				const float h = 0.01f; // avoid z-fight with zero plane
+				const int a = 20;
+				XMFLOAT4 verts[((a + 1) * 2 + (a + 1) * 2) * 2];
+
+				int count = 0;
+				for (int i = 0; i <= a; ++i)
+				{
+					verts[count++] = XMFLOAT4(i - a * 0.5f, h, -a * 0.5f, 1);
+					verts[count++] = (i == a / 2 ? XMFLOAT4(channel_min, channel_min, 1, alpha) : XMFLOAT4(1, 1, 1, alpha));
+
+					verts[count++] = XMFLOAT4(i - a * 0.5f, h, +a * 0.5f, 1);
+					verts[count++] = (i == a / 2 ? XMFLOAT4(channel_min, channel_min, 1, alpha) : XMFLOAT4(1, 1, 1, alpha));
+				}
+				for (int j = 0; j <= a; ++j)
+				{
+					verts[count++] = XMFLOAT4(-a * 0.5f, h, j - a * 0.5f, 1);
+					verts[count++] = (j == a / 2 ? XMFLOAT4(1, channel_min, channel_min, alpha) : XMFLOAT4(1, 1, 1, alpha));
+
+					verts[count++] = XMFLOAT4(+a * 0.5f, h, j - a * 0.5f, 1);
+					verts[count++] = (j == a / 2 ? XMFLOAT4(1, channel_min, channel_min, alpha) : XMFLOAT4(1, 1, 1, alpha));
+				}
+
+				gridVertexCount = arraysize(verts) / 2;
+
+				GPUBufferDesc bd;
+				bd.size = sizeof(verts);
+				bd.bind_flags = BindFlag::VERTEX_BUFFER;
+				rhi->createBuffer(&bd, verts, &grid);
+			}
+
+			const GPUBuffer* vbs[] = {
+				&grid
+			};
+			const uint32_t strides[] = {
+				sizeof(XMFLOAT4) + sizeof(XMFLOAT4)
+			};
+			MiscConstantBuffer misc;
+			XMStoreFloat4x4(&misc.g_xTransform, XMMatrixTranspose(camera.getViewProjection()));
+			misc.g_xColor = float4(1, 1, 1, 1);
+			rhi->bindDynamicConstantBuffer(misc, CB_GETBINDSLOT(MiscConstantBuffer), cmd);
+			rhi->bindVertexBuffers(vbs, 0, arraysize(vbs), strides, nullptr, cmd);
+			rhi->draw(gridVertexCount, 0, cmd);
+			rhi->endEvent(cmd);
+		}
 	}
 
 

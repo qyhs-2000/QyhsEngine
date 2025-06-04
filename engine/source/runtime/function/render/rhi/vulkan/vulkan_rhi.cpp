@@ -2384,48 +2384,72 @@ namespace qyhs
 				pipeline_info.pColorBlendState = &colorBlending;
 
 				// Input layout:
+				//TODO:fix the vertex stride
 				VkPipelineVertexInputStateCreateInfo vertexInputInfo = {};
 				vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 				std::vector<VkVertexInputBindingDescription> bindings;
 				std::vector<VkVertexInputAttributeDescription> attributes;
 				if (pso->desc.input_layout != nullptr)
 				{
-					uint32_t lastBinding = 0xFFFFFFFF;
-					for (auto& x : pso->desc.input_layout->elements)
-					{
-						if (x.input_slot == lastBinding)
+					std::unordered_map<uint32_t, uint32_t> bindingStrides;
+					std::unordered_map<uint32_t, uint32_t> currentOffsets; // 用于自动对齐的临时偏移
+
+					for (auto& x : pso->desc.input_layout->elements) {
+						uint32_t slot = x.input_slot;
+						uint32_t formatStride = GetFormatStride(x.format);
+
+						if (currentOffsets.find(slot) == currentOffsets.end()) {
+							currentOffsets[slot] = 0;
+							bindingStrides[slot] = 0;
+						}
+
+						uint32_t offset = (x.aligned_byte_offset == InputLayout::APPEND_ALIGNED_ELEMENT)
+							? currentOffsets[slot] // 使用自动计算的偏移
+							: x.aligned_byte_offset; // 使用显式指定的偏移
+
+						bindingStrides[slot] = std::max(bindingStrides[slot], offset + formatStride);
+						if (x.aligned_byte_offset == InputLayout::APPEND_ALIGNED_ELEMENT) {
+							currentOffsets[slot] = offset + formatStride;
+						}
+					}
+
+					std::unordered_map<uint32_t, bool> processedBindings;
+					for (auto& x : pso->desc.input_layout->elements) {
+						if (processedBindings.find(x.input_slot) != processedBindings.end()) 
 							continue;
-						lastBinding = x.input_slot;
-						VkVertexInputBindingDescription& bind = bindings.emplace_back();
+						processedBindings[x.input_slot] = true;
+
+						VkVertexInputBindingDescription bind = {};
 						bind.binding = x.input_slot;
-						bind.inputRate = x.input_slot_class == InputClassification::PER_VERTEX_DATA ? VK_VERTEX_INPUT_RATE_VERTEX : VK_VERTEX_INPUT_RATE_INSTANCE;
-						bind.stride = GetFormatStride(x.format);
+						bind.inputRate = (x.input_slot_class == InputClassification::PER_VERTEX_DATA)
+							? VK_VERTEX_INPUT_RATE_VERTEX
+							: VK_VERTEX_INPUT_RATE_INSTANCE;
+						bind.stride = bindingStrides[x.input_slot]; // 使用总大小
+						bindings.push_back(bind);
 					}
 
 					uint32_t offset = 0;
 					uint32_t i = 0;
-					lastBinding = 0xFFFFFFFF;
-					for (auto& x : pso->desc.input_layout->elements)
-					{
+					uint32_t lastBinding = 0xFFFFFFFF;
+					for (auto& x : pso->desc.input_layout->elements) {
 						VkVertexInputAttributeDescription attr = {};
 						attr.binding = x.input_slot;
-						if (attr.binding != lastBinding)
-						{
+						if (attr.binding != lastBinding) {
 							lastBinding = attr.binding;
-							offset = 0;
+							offset = 0; // 切换到新 binding 时重置偏移
 						}
+
 						attr.format = convertFormat(x.format);
 						attr.location = i;
-						attr.offset = x.aligned_byte_offset;
-						if (attr.offset == InputLayout::APPEND_ALIGNED_ELEMENT)
-						{
-							// need to manually resolve this from the format spec.
-							attr.offset = offset;
-							offset += GetFormatStride(x.format);
-						}
+						attr.offset = (x.aligned_byte_offset == InputLayout::APPEND_ALIGNED_ELEMENT)
+							? offset
+							: x.aligned_byte_offset;
 
 						attributes.push_back(attr);
 
+						if (x.aligned_byte_offset == InputLayout::APPEND_ALIGNED_ELEMENT) {
+							offset += GetFormatStride(x.format);
+						}
 						i++;
 					}
 
@@ -4691,6 +4715,15 @@ namespace qyhs
 		return res == VK_SUCCESS;
 	}
 
+	bool VulkanRHI::createBuffer(const GPUBufferDesc* desc, const void* initial_data, GPUBuffer* buffer)
+	{
+		if (initial_data == nullptr)
+		{
+			return createBuffer(desc, buffer);
+		}
+		return createBuffer(desc, buffer, [&](void* dest) {std::memcpy(dest, initial_data, desc->size); });
+	}
+
 	constexpr Format getFormatNonSRGB(Format format)
 	{
 		switch (format)
@@ -5612,6 +5645,35 @@ namespace qyhs
 		default:
 			return VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
 		}
+	}
+
+	void VulkanRHI::bindVertexBuffers(const GPUBuffer* const* vertexBuffers, uint32_t slot, uint32_t count, const uint32_t* strides, const uint64_t* offsets, CommandList cmd)
+	{
+		VkBuffer vbuffers[8] = {};
+		VkDeviceSize voffsets[8] = {};
+		VkDeviceSize vstrides[8] = {};
+		assert(count <= 8);
+		for (int i = 0; i < count; ++i)
+		{
+			if (vertexBuffers == nullptr || !vertexBuffers[i]->isValid())
+			{
+				vbuffers[i] = nullBuffer;
+			}
+			else
+			{
+				auto internal_state = to_internal(vertexBuffers[i]);
+				vbuffers[i] = internal_state->resource;
+				if (offsets != nullptr)
+				{
+					voffsets[i] = offsets[i];
+				}
+				if (strides != nullptr)
+				{
+					vstrides[i] = strides[i];
+				}
+			}
+		}
+		vkCmdBindVertexBuffers2(getCommandList(cmd).getCommandBuffer(), slot, count, vbuffers, voffsets, nullptr, vstrides);
 	}
 
 	void VulkanRHI::updateUniformBuffer() {

@@ -685,9 +685,11 @@ namespace qyhs
 		virtual int getDescriptorIndex(const Sampler* sampler)override;
 		virtual GPUBufferAllocator& getFrameAllocator(CommandList cmd) override;
 		virtual bool createBuffer(const GPUBufferDesc *desc, GPUBuffer* buffer,const std::function<void(void*)>& init_buffer_callback = nullptr) override;
+		virtual bool createBuffer(const GPUBufferDesc * desc,const void * initial_data, GPUBuffer* buffer) override;
 		virtual bool createTexture(const TextureDesc* desc, graphics::Texture* texture,SubresourceData * initial_data = nullptr) override;
 		virtual RenderPassInfo getRenderPassInfo(CommandList cmd) const override;
 		VkSamplerAddressMode convertTextureAddressMode(const TextureAddressMode& address_mode);
+		virtual void bindVertexBuffers(const GPUBuffer* const* vertexBuffers, uint32_t slot, uint32_t count, const uint32_t* strides, const uint64_t* offsets, CommandList cmd) override;
 		virtual void drawImage(const graphics::Texture* texture, const qyhs::image::Params& params, CommandList cmd) override;
 		virtual void submitCommandLists() override;
 		VkImageView& getTextureImageView() { return textureImageView; }

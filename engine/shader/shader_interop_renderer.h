@@ -177,6 +177,12 @@ struct ShaderMeshInstancePointer
 	}
 };
 
+CBUFFER(MiscConstantBuffer,CBSLOT_RENDERER_MISC)
+{
+	float4x4 g_xTransform;
+	float4 g_xColor;
+};
+
 struct alignas(16) CameraConstantBuffer
 {
 	ShaderCamera cameras[shader_camera_count];

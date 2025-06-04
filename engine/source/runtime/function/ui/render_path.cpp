@@ -65,9 +65,11 @@ namespace qyhs
 	void RenderPath3D::start()
 	{
 		resizeBuffers();
+	
 		import_model_gltf(scene, "E://VS_Project//QyhsEngine//engine//source//runtime//resource//model//CesiumMan//glTF-Embedded//CesiumMan_test.gltf");
+		//import_model_gltf(scene, "E://GithubClone//WickedEngine//Content//feibi.gltf");
 		//initialize camera position
-		XMMATRIX mat = XMMatrixTranslation(0.f, 0.f, -5.f);
+		XMMATRIX mat = XMMatrixTranslation(0.f, 2.f, -4.f);
 		camera->transformCamera(mat);
 		camera->SetDirty();
 		camera_transform.MatrixTransform(mat);
@@ -334,7 +336,7 @@ namespace qyhs
 
 			renderer::drawScene(visibility_main,renderer::DRAWSCENE_TRANSPARENT|renderer::DRAWSCENE_MAINCAMERA,RENDERPASS_MAIN,cmd);
 		}
-
+		renderer::drawDebugWorld(*camera,cmd);
 		rhi->endRenderPass(cmd);
 	}
 

@@ -154,6 +154,7 @@ namespace qyhs
 		virtual void prepareContext() = 0;
 		virtual bool createSwapChain(platform::WindowType window, SwapChain* swapChain, SwapChainDesc desc) = 0;
 		virtual bool createSampler(const SamplerDesc* sampler_desc, Sampler* sampler) = 0;
+		virtual void bindVertexBuffers(const GPUBuffer *const* vertexBuffers, uint32_t slot, uint32_t count, const uint32_t* strides, const uint64_t* offsets, CommandList cmd) = 0;
 		virtual CommandList beginCommandList(QueueType queue = QUEUE_GRAPHICS) = 0;
 		virtual void bindViewports(const CommandList& cmd_list, uint32_t viewport_count, Viewport* viewport) = 0;
 		virtual void beginRenderPass(SwapChain* swapChain, CommandList& cmd_list) = 0;
@@ -166,6 +167,7 @@ namespace qyhs
 		virtual int getDescriptorIndex(const GPUResource* resource, SubresourceType type, int subresource = -1)const = 0;
 		virtual bool createTexture(const TextureDesc* desc, graphics::Texture* texture,SubresourceData * initial_data = nullptr) = 0;
 		virtual bool createBuffer(const GPUBufferDesc * desc, GPUBuffer* buffer,const std::function<void(void*)>& init_buffer_callback = nullptr) = 0;
+		virtual bool createBuffer(const GPUBufferDesc * desc,const void * initial_data, GPUBuffer* buffer) = 0;
 		virtual void drawInstanced(uint32_t vertexCount, uint32_t instanceCount, uint32_t startVertexLocation, uint32_t startInstanceLocation, CommandList cmd) = 0;
 		virtual int createSubresource(Texture* texture, SubresourceType type, uint32_t firstSlice, uint32_t sliceCount, uint32_t firstMip, uint32_t mipCount, const Format* format_change = nullptr, const ImageAspect* aspect = nullptr, const Swizzle* swizzle = nullptr, float min_lod_clamp = 0) const = 0;
 		virtual int createSubresource(GPUBuffer* buffer, SubresourceType type, uint64_t offset, uint64_t size = ~0ull,const Format * foramt_change = nullptr) = 0;

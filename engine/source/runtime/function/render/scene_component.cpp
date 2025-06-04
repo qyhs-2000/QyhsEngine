@@ -181,8 +181,6 @@ namespace qyhs::scene
 				}
 			}
 
-			
-
 			//vertex buffer - UV Sets
 			if (!vertex_uvset_0.empty() || !vertex_uvset_1.empty())
 			{
@@ -250,7 +248,7 @@ namespace qyhs::scene
 		XMVECTOR _Eye = XMLoadFloat3(&eye);
 		XMVECTOR _At = XMLoadFloat3(&look_at);
 		XMVECTOR _Up = XMLoadFloat3(&up);
-
+		std::cout << "eye:" << eye.x << "  " << eye.y << "  " << eye.z << std::endl;
 		/*std::cout << "eye:" << eye.x << "  " << eye.y << "  " << eye.z << std::endl;
 		std::cout << "at:" << look_at.x << "  " << look_at.y << "  " << look_at.z << std::endl;
 		std::cout << "up:" << up.x << "  " << up.y << "  " << up.z << std::endl;*/
@@ -277,7 +275,7 @@ namespace qyhs::scene
 		ShaderMaterial material;
 		material.init();
 		material.base_color = base_color;
-		material.base_color = XMFLOAT4(0.8,0.8,0.8,1);
+		material.base_color = XMFLOAT4(1,1,1,1);
 		for (int i = 0; i < TEXTURESLOT_COUNT; ++i)
 		{
 			const MaterialComponent::TextureMap& texture_map = textures[i];

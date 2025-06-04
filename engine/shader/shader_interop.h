@@ -15,9 +15,13 @@ static const std::string SHADER_SOURCE_DIR = qyhs::helper::getCurrentPath()+ "/"
 
 #define CONSTANTBUFFER(name,type,slot)
 
+#define CB_GETBINDSLOT(name) __CBUFFERBINDSLOT__##name##__
+#define CBUFFER(name, slot) static const int CB_GETBINDSLOT(name) = slot; struct alignas(16) name
+
 #else      //shader side
 #define PASTE(a,b) a##b
 #define alignas(x)
+#define CBUFFER(name,slot) cbuffer name:register(PASTE(b,slot))
 #define CONSTANTBUFFER(name, type, slot) ConstantBuffer< type > name : register(PASTE(b, slot))
 
 #if defined(__spirv__)
@@ -32,5 +36,7 @@ static const std::string SHADER_SOURCE_DIR = qyhs::helper::getCurrentPath()+ "/"
 #define CBSLOT_FONT								0
 #define CBSLOT_RENDERER_FRAME					0
 #define CBSLOT_RENDERER_CAMERA					1
+
+#define CBSLOT_RENDERER_MISC					3
 
 #endif  //SHADER_INTEROP_H
