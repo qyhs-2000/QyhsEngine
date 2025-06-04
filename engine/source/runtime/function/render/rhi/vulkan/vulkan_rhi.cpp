@@ -2384,7 +2384,6 @@ namespace qyhs
 				pipeline_info.pColorBlendState = &colorBlending;
 
 				// Input layout:
-				//TODO:fix the vertex stride
 				VkPipelineVertexInputStateCreateInfo vertexInputInfo = {};
 				vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 				std::vector<VkVertexInputBindingDescription> bindings;
@@ -2392,7 +2391,7 @@ namespace qyhs
 				if (pso->desc.input_layout != nullptr)
 				{
 					std::unordered_map<uint32_t, uint32_t> bindingStrides;
-					std::unordered_map<uint32_t, uint32_t> currentOffsets; // 用于自动对齐的临时偏移
+					std::unordered_map<uint32_t, uint32_t> currentOffsets; 
 
 					for (auto& x : pso->desc.input_layout->elements) {
 						uint32_t slot = x.input_slot;
@@ -2404,8 +2403,8 @@ namespace qyhs
 						}
 
 						uint32_t offset = (x.aligned_byte_offset == InputLayout::APPEND_ALIGNED_ELEMENT)
-							? currentOffsets[slot] // 使用自动计算的偏移
-							: x.aligned_byte_offset; // 使用显式指定的偏移
+							? currentOffsets[slot] 
+							: x.aligned_byte_offset; 
 
 						bindingStrides[slot] = std::max(bindingStrides[slot], offset + formatStride);
 						if (x.aligned_byte_offset == InputLayout::APPEND_ALIGNED_ELEMENT) {
@@ -2436,7 +2435,7 @@ namespace qyhs
 						attr.binding = x.input_slot;
 						if (attr.binding != lastBinding) {
 							lastBinding = attr.binding;
-							offset = 0; // 切换到新 binding 时重置偏移
+							offset = 0; 
 						}
 
 						attr.format = convertFormat(x.format);

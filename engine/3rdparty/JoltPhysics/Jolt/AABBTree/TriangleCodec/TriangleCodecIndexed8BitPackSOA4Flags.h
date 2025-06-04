@@ -298,7 +298,7 @@ public:
 			while (t < end);
 		}
 
-		/// Tests a ray against the packed triangles
+		/// Editor a ray against the packed triangles
 		JPH_INLINE float			TestRay(Vec3Arg inRayOrigin, Vec3Arg inRayDirection, const void *inTriangleStart, uint32 inNumTriangles, float inClosest, uint32 &outClosestTriangleIndex) const
 		{
 			JPH_ASSERT(inNumTriangles > 0);

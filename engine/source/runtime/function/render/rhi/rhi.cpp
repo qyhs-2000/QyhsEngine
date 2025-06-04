@@ -8,8 +8,6 @@ namespace qyhs::rhi
 		return rhi;
 	}
 
-	
-
 }
 
 namespace qyhs
@@ -44,8 +42,6 @@ namespace qyhs
 			desc.misc_flags = ResourceMiscFlag::BUFFER_RAW;
 			allocator.alignment = getMinOffsetAlignment(&desc);
 			desc.size = alignTo((allocator.buffer.desc.size + size) * 2, allocator.alignment);
-			//TODO:it won't update descriptor set
-			//desc.size = 1024;
 			createBuffer(&desc, &allocator.buffer);
 			setName(&allocator.buffer, "frame_allocator");
 			allocator.offset = 0;

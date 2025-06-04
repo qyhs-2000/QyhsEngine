@@ -24,6 +24,7 @@ namespace qyhs::gui
 		ComboBox::Item& item = items.back();
 		item.name = name;
 		item.value = value;
+		item.userdata = value;
 		if (selected = -1)
 		{
 			selected = 0;
@@ -80,7 +81,7 @@ namespace qyhs::gui
 		selected_font.draw(cmd);
 	}
 
-	void gui::ComboBox::onSelect(std::function<void()> function)
+	void gui::ComboBox::onSelect(std::function<void(EventArgs args)> function)
 	{
 		on_select = function;
 	}
@@ -90,7 +91,9 @@ namespace qyhs::gui
 		selected = index;
 		if (on_select != nullptr)
 		{
-			on_select();
+			EventArgs args;
+			args.userdata = getItemUserData(selected);
+			on_select(args);
 		}
 	}
 

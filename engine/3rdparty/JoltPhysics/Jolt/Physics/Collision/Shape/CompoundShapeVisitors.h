@@ -170,7 +170,7 @@ struct CompoundShape::CastShapeVisitor
 		return mCollector.ShouldEarlyOut();
 	}
 
-	/// Tests the shape cast against 4 boundign boxes, returns the distance along the shape cast where the shape first enters the bounding box
+	/// Editor the shape cast against 4 boundign boxes, returns the distance along the shape cast where the shape first enters the bounding box
 	JPH_INLINE Vec4		TestBounds(Vec4Arg inBoundsMinX, Vec4Arg inBoundsMinY, Vec4Arg inBoundsMinZ, Vec4Arg inBoundsMaxX, Vec4Arg inBoundsMaxY, Vec4Arg inBoundsMaxZ) const
 	{
 		// Scale the bounding boxes
@@ -238,7 +238,7 @@ struct CompoundShape::CollectTransformedShapesVisitor
 		return mCollector.ShouldEarlyOut();
 	}
 
-	/// Tests 4 bounding boxes against the query box, returns true for the ones that collide
+	/// Editor 4 bounding boxes against the query box, returns true for the ones that collide
 	JPH_INLINE UVec4	TestBounds(Vec4Arg inBoundsMinX, Vec4Arg inBoundsMinY, Vec4Arg inBoundsMinZ, Vec4Arg inBoundsMaxX, Vec4Arg inBoundsMaxY, Vec4Arg inBoundsMaxZ) const
 	{
 		// Scale the bounding boxes of this node
@@ -302,7 +302,7 @@ struct CompoundShape::CollideCompoundVsShapeVisitor
 		return mCollector.ShouldEarlyOut();
 	}
 
-	/// Tests the bounds of shape 2 vs 4 bounding boxes, returns true for the ones that intersect
+	/// Editor the bounds of shape 2 vs 4 bounding boxes, returns true for the ones that intersect
 	JPH_INLINE UVec4	TestBounds(Vec4Arg inBoundsMinX, Vec4Arg inBoundsMinY, Vec4Arg inBoundsMinZ, Vec4Arg inBoundsMaxX, Vec4Arg inBoundsMaxY, Vec4Arg inBoundsMaxZ) const
 	{
 		// Scale the bounding boxes
@@ -366,7 +366,7 @@ struct CompoundShape::CollideShapeVsCompoundVisitor
 		return mCollector.ShouldEarlyOut();
 	}
 
-	/// Tests the bounds of shape 1 vs 4 bounding boxes, returns true for the ones that intersect
+	/// Editor the bounds of shape 1 vs 4 bounding boxes, returns true for the ones that intersect
 	JPH_INLINE UVec4	TestBounds(Vec4Arg inBoundsMinX, Vec4Arg inBoundsMinY, Vec4Arg inBoundsMinZ, Vec4Arg inBoundsMaxX, Vec4Arg inBoundsMaxY, Vec4Arg inBoundsMaxZ) const
 	{
 		// Scale the bounding boxes
@@ -418,7 +418,7 @@ struct CompoundShape::GetIntersectingSubShapesVisitor
 		return mNumResults >= mMaxSubShapeIndices;
 	}
 		
-	/// Tests the box vs 4 bounding boxes, returns true for the ones that intersect
+	/// Editor the box vs 4 bounding boxes, returns true for the ones that intersect
 	JPH_INLINE UVec4	TestBounds(Vec4Arg inBoundsMinX, Vec4Arg inBoundsMinY, Vec4Arg inBoundsMinZ, Vec4Arg inBoundsMaxX, Vec4Arg inBoundsMaxY, Vec4Arg inBoundsMaxZ) const
 	{
 		// Test which bounding boxes collide

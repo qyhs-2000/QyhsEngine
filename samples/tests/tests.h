@@ -6,14 +6,16 @@ namespace qyhs
 {
 	enum TestType : int
 	{
-		HELLOTRIANGLE
+		HELLOTRIANGLE,
+		CesiumMan
 	};
 	
-	class TestsRenderer :public RenderPath3D
+	class TestRenderer :public RenderPath3D
 	{
 	public:
 		virtual void load() override;
 		virtual void render() override;
+		virtual void start() override;
 	private:
 		gui::ComboBox test_selector;
 		
@@ -25,6 +27,6 @@ namespace qyhs
 		virtual void initialize2() override;
 		
 	private:
-		TestsRenderer renderer;
+		TestRenderer renderer;
 	};
 }

@@ -414,7 +414,7 @@ namespace qyhs
                 scalar * m_mat[3][3]);
         }
 
-        /** Tests 2 matrices for equality.
+        /** Editor 2 matrices for equality.
         */
         bool operator==(const Matrix4x4& m2) const
         {
@@ -426,7 +426,7 @@ namespace qyhs
                 m_mat[3][3] != m2.m_mat[3][3]);
         }
 
-        /** Tests 2 matrices for inequality.
+        /** Editor 2 matrices for inequality.
         */
         bool operator!=(const Matrix4x4& m2) const
         {

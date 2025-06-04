@@ -8,7 +8,7 @@
 
 JPH_NAMESPACE_BEGIN
 
-/// Tests a ray starting at inRayOrigin and extending infinitely in inRayDirection
+/// Editor a ray starting at inRayOrigin and extending infinitely in inRayDirection
 /// against a capsule centered around the origin with its axis along the Y axis and half height specified.
 /// @return FLT_MAX if there is no intersection, otherwise the fraction along the ray.
 /// @param inRayDirection Ray direction. Does not need to be normalized.

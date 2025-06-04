@@ -1,0 +1,39 @@
+set(TARGET_NAME ${EDITOR})
+
+file(GLOB HEADER_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h ${CMAKE_CURRENT_SOURCE_DIR}/*.h )
+file(GLOB SOURCE_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+file(GLOB RESOURCE_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/*.rc)
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${HEADER_FILES} ${SOURCE_FILES} ${RESOURCE_FILES})
+
+
+add_executable(${TARGET_NAME} ${HEADER_FILES} ${SOURCE_FILES} ${RESOURCE_FILES})
+
+add_dependencies(${TARGET_NAME} "QyhsRuntime")
+
+add_definitions(-DUNICODE -D_UNICODE)
+
+set_target_properties("${EDITOR}" PROPERTIES FOLDER "Engine")
+
+target_link_libraries(${TARGET_NAME} "QyhsRuntime")
+
+target_precompile_headers(${TARGET_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/pch.h)
+target_sources(${TARGET_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/pch.cpp)
+
+target_link_libraries(${TARGET_NAME} imgui)
+
+target_link_options(${TARGET_NAME} PRIVATE "/SUBSYSTEM:WINDOWS")
+
+set_target_properties(${TARGET_NAME} PROPERTIES
+	RUNTIME_OUTPUT_DIRECTORY "${OUTPUT_DIR}"
+)
+
+
+set(LIB_DXCOMPILER "dxcompiler.dll")
+
+
+add_custom_command(
+	TARGET ${TARGET_NAME} POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E echo ">>> Copying dxcompiler.dll to ${CMAKE_CURRENT_BINARY_DIR}"
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different  ${QYHS_ROOT_DIR}/engine/${LIB_DXCOMPILER}  ${CMAKE_CURRENT_BINARY_DIR}
+	)
+

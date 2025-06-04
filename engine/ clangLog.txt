@@ -549,6 +549,7 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   E:/VS_Project/QyhsEngine/engine/source\runtime\resource\type\data\skeleton_data.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/common/object.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/config_manager/config_manager.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/resource/resource_manager.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/component/mesh/mesh.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/data/camera_config.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/data/mash_data.h \

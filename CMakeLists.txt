@@ -24,9 +24,11 @@ set(BINARY_ROOT_DIR ${CMAKE_INSTALL_PREFIX})
 #Samples
 set(TEMPLATE_WINDOW "Template_Window")
 set(TESTS "Tests")
+set(EDITOR "Editor")
 
 
 add_subdirectory(engine)
 add_subdirectory(samples/template_windows)
 add_subdirectory(samples/tests)
+add_subdirectory(editor)
 

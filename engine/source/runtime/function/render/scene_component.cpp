@@ -248,7 +248,6 @@ namespace qyhs::scene
 		XMVECTOR _Eye = XMLoadFloat3(&eye);
 		XMVECTOR _At = XMLoadFloat3(&look_at);
 		XMVECTOR _Up = XMLoadFloat3(&up);
-		std::cout << "eye:" << eye.x << "  " << eye.y << "  " << eye.z << std::endl;
 		/*std::cout << "eye:" << eye.x << "  " << eye.y << "  " << eye.z << std::endl;
 		std::cout << "at:" << look_at.x << "  " << look_at.y << "  " << look_at.z << std::endl;
 		std::cout << "up:" << up.x << "  " << up.y << "  " << up.z << std::endl;*/
@@ -307,7 +306,7 @@ namespace qyhs::scene
 			material.sampler_descriptor = sampler_descriptor;
 		}
 		std::memcpy(dst, &material, sizeof(material));
-		assert(dst->textures[BASECOLORMAP].isValid());
+		
 	}
 
 	resourcemanager::Flags MaterialComponent::getTextureSlotResourceFlags(TEXTURESLOT slot)

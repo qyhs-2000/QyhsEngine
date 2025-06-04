@@ -39,7 +39,7 @@ public:
 	inline explicit				Quat(Vec4Arg inV)												: mValue(inV) { }
 	///@}
 								
-	///@name Tests					
+	///@name Editor					
 	///@{
 
 	/// Check if two quaternions are exactly equal

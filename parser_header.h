@@ -109,6 +109,7 @@
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/resource/asset_manager/asset_manager.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/resource/common/object.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/resource/config_manager/config_manager.h"
+#include "E:/VS_Project/QyhsEngine/engine/source/runtime/resource/resource_manager.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/component/mesh/mesh.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/data/camera_config.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/data/mash_data.h"

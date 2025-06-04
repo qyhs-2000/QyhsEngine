@@ -7,7 +7,7 @@
 
 JPH_NAMESPACE_BEGIN
 
-/// Tests a ray starting at inRayOrigin and extending infinitely in inRayDirection
+/// Editor a ray starting at inRayOrigin and extending infinitely in inRayDirection
 /// against an infinite cylinder centered along the Y axis
 /// @return FLT_MAX if there is no intersection, otherwise the fraction along the ray.
 /// @param inRayDirection Direction of the ray. Does not need to be normalized.

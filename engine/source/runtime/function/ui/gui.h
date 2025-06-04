@@ -18,6 +18,10 @@ namespace qyhs::gui
 		WIDGET_STATE_COUNT,
 	};
 
+	struct EventArgs
+	{
+		uint64_t userdata;
+	};
 
 	class Widget :public TransformComponent
 	{
@@ -53,19 +57,28 @@ namespace qyhs::gui
 		void create(const std::string name);
 		void addItem(const std::string name, const int value);
 		void setSelected(int index);
+		inline uint64_t getItemUserData(int index)const
+		{
+			if (index >= 0 && index < items.size())
+			{
+				return items[index].userdata;
+			}
+			return 0;
+		}
 		virtual void update(const Canvas& canvas, float delta_time) override;
 		virtual void render(const Canvas& rhi, CommandList cmd) override;
 		struct Item
 		{
 			std::string name;
 			int value;
+			uint64_t userdata;
 		};
 		std::vector<Item> items;
-		void onSelect(std::function<void()> function);
+		void onSelect(std::function<void(EventArgs args)> function);
 		Color shadow_color = Color::shadow();
 		int selected = -1;
 	protected:
-		std::function<void()> on_select;
+		std::function<void(EventArgs args)> on_select;
 		bool drop_arrow = true;
 		SpriteFont selected_font;
 	};
