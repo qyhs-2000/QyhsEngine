@@ -109,13 +109,13 @@ void CollideConvexVsTriangles::Collide(Vec3Arg inV0, Vec3Arg inV1, Vec3Arg inV2,
 	if (penetration_axis_len > 0.0f)
 		point1 -= penetration_axis * (mCollideShapeSettings.mMaxSeparationDistance / penetration_axis_len);
 
-	// Check if we have enabled active edge detection
+	// Check if we have enabled activate edge detection
 	if (mCollideShapeSettings.mActiveEdgeMode == EActiveEdgeMode::CollideOnlyWithActive && inActiveEdges != 0b111)
 	{
-		// Convert the active edge velocity hint to local space
+		// Convert the activate edge velocity hint to local space
 		Vec3 active_edge_movement_direction = mTransform1.Multiply3x3Transposed(mCollideShapeSettings.mActiveEdgeMovementDirection);
 
-		// Update the penetration axis to account for active edges
+		// Update the penetration axis to account for activate edges
 		// Note that we flip the triangle normal as the penetration axis is pointing towards the triangle instead of away
 		penetration_axis = ActiveEdges::FixNormal(v0, v1, v2, back_facing? triangle_normal : -triangle_normal, inActiveEdges, point2, penetration_axis, active_edge_movement_direction);
 	}

@@ -7,6 +7,7 @@
 #include "function/framework/component/transform/transform_component.h"
 #include "function/render/rhi/rhi.h"
 #include "function/ui/sprite_font.h"
+#include "function/render/primitive.h"
 namespace qyhs::gui
 {
 	enum WIDGET_STATE
@@ -14,7 +15,7 @@ namespace qyhs::gui
 		IDLE,			// widget is doing nothing
 		FOCUS,			// widget got pointer dragged on or selected
 		ACTIVE,			// widget is interacted with right now
-		DEACTIVATING,	// widget has last been active but no more interactions are occuring
+		DEACTIVATING,	// widget has last been activate but no more interactions are occuring
 		WIDGET_STATE_COUNT,
 	};
 
@@ -28,16 +29,19 @@ namespace qyhs::gui
 	public:
 		virtual void setName(const std::string name);
 		virtual void render(const Canvas& rhi, CommandList cmd) {};
-		virtual void update(const Canvas & canvas,float delta_time);
+		virtual void update(const Canvas& canvas, float delta_time);
 		virtual void setText(const char* text);
+		virtual void setColor(const Color& color, int id = -1);
 		Sprite sprites[WIDGET_STATE_COUNT];
 		WIDGET_STATE state = IDLE;
 		void setSize(const Vector2& size);
 		void setPosition(const Vector2& position);
+		primitive::HitBox2D getPointerHitbox()const;
 	protected:
 		std::string name;
 		float shadow = 1;
 		SpriteFont font;
+		Color shadow_color = Color::shadow();
 	};
 
 	class Gui
@@ -50,6 +54,20 @@ namespace qyhs::gui
 		std::vector<Widget*> widgets;
 	};
 
+	class Button :public Widget
+	{
+	public:
+		virtual void create(const std::string& name);
+		virtual void render(const Canvas& canvas, CommandList cmd) override;
+		virtual void update(const Canvas& canvas, float delta_time) override;
+		void activate();
+		void deactivate();
+		primitive::HitBox2D hitbox;
+
+		void onClickFunc(std::function<void(gui::EventArgs)> func) { on_click_func = func; }
+	private:
+		std::function<void(gui::EventArgs)> on_click_func;
+	};
 
 	class ComboBox :public Widget
 	{
@@ -75,7 +93,7 @@ namespace qyhs::gui
 		};
 		std::vector<Item> items;
 		void onSelect(std::function<void(EventArgs args)> function);
-		Color shadow_color = Color::shadow();
+
 		int selected = -1;
 	protected:
 		std::function<void(EventArgs args)> on_select;

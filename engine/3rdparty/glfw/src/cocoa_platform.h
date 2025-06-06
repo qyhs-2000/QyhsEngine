@@ -166,7 +166,7 @@ typedef struct _GLFWlibraryNS
     CGPoint             cascadePoint;
     // Where to place the cursor when re-enabled
     double              restoreCursorPosX, restoreCursorPosY;
-    // The window whose disabled cursor mode is active
+    // The window whose disabled cursor mode is activate
     _GLFWwindow*        disabledCursorWindow;
 
     struct {

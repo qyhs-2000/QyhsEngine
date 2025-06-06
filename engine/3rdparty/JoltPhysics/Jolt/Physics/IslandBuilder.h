@@ -23,7 +23,7 @@ public:
 	/// Destructor
 							~IslandBuilder();
 
-	/// initialize the island builder with the maximum amount of bodies that could be active						
+	/// initialize the island builder with the maximum amount of bodies that could be activate						
 	void					Init(uint32 inMaxActiveBodies);
 
 	/// Prepare for simulation step by allocating space for the contact constraints
@@ -96,8 +96,8 @@ private:
 	uint32 *				mIslandsSorted = nullptr;						///< A list of island indices in order of most constraints first
 
 	// Counters
-	uint32					mMaxActiveBodies;								///< Maximum size of the active bodies list (see BodyManager::mActiveBodies)
-	uint32					mNumActiveBodies = 0;							///< Number of active bodies passed to 
+	uint32					mMaxActiveBodies;								///< Maximum size of the activate bodies list (see BodyManager::mActiveBodies)
+	uint32					mNumActiveBodies = 0;							///< Number of activate bodies passed to 
 	uint32					mNumConstraints = 0;							///< Size of the constraint list (see ConstraintManager::mConstraints)
 	uint32					mMaxContacts = 0;								///< Maximum amount of contacts supported
 	uint32					mNumContacts = 0;								///< Size of the contacts list (see ContactConstraintManager::mNumConstraints)

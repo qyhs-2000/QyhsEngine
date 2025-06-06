@@ -17,7 +17,7 @@ namespace qyhs::ecs
 	class ComponentManager_Interface
 	{
 	public:
-
+		virtual void merge(ComponentManager_Interface& other) = 0;
 	private:
 	};
 
@@ -25,6 +25,29 @@ namespace qyhs::ecs
 	class ComponentManager :public ComponentManager_Interface
 	{
 	public:
+		inline void merge(ComponentManager_Interface& other)
+		{
+			merge((ComponentManager<TComponent>&) other);
+		}
+
+		inline void merge(ComponentManager<TComponent>& other)
+		{
+			m_components.reserve(getCount() + other.getCount());
+			m_entities.reserve(getCount() + other.getCount());
+			lookup_map.reserve(getCount() + other.getCount());
+
+			for (size_t i = 0; i < other.getCount(); ++i)
+			{
+				Entity entity = other.m_entities[i];
+				assert(!contain(entity));
+				m_entities.push_back(entity);
+				lookup_map[entity] = m_components.size();
+				m_components.push_back(std::move(other.m_components[i]));
+			}
+
+			other.clear();
+		}
+
 		bool contain(GameObjectID gobject_id)
 		{
 			for (auto& entity : m_entities)
@@ -49,6 +72,13 @@ namespace qyhs::ecs
 				return it->second;
 			}
 			return ~0u;
+		}
+
+		inline void clear()
+		{
+			m_components.clear();
+			m_entities.clear();
+			lookup_map.clear();
 		}
 
 		uint32_t getCount()const
@@ -114,6 +144,7 @@ namespace qyhs::ecs
 		struct LibraryEntry
 		{
 			std::unique_ptr<ComponentManager_Interface> component_manager;
+
 		};
 		template<typename TComponent>
 		ComponentManager<TComponent>& Register(const std::string& name)
@@ -122,8 +153,8 @@ namespace qyhs::ecs
 			return static_cast<ComponentManager<TComponent>&>(*entries[name].component_manager);
 		}
 
-	private:
 		std::unordered_map<std::string, LibraryEntry> entries;
+	private:
 	};
 
 }

@@ -2,6 +2,7 @@
 #include "core/math/directx_math.h"
 #include <limits>
 #include <cmath>
+
 namespace qyhs::primitive
 {
 
@@ -81,6 +82,18 @@ namespace qyhs::primitive
 	public:
 		bool checkBox(const AABB& aabb);  //true if aabb can't be culled
 		XMFLOAT4 planes[6];
+	private:
+	};
+
+	class HitBox2D
+	{
+	public:
+		HitBox2D() :pos(XMFLOAT2(0, 0)), size(XMFLOAT2(0, 0)) {};
+		HitBox2D(XMFLOAT2 new_pos, XMFLOAT2 new_size) :pos(new_pos), size(new_size) {}
+		bool intersects(const HitBox2D& hb);
+		
+		XMFLOAT2 pos;
+		XMFLOAT2 size;
 	private:
 	};
 }

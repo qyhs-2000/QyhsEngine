@@ -130,7 +130,7 @@ public:
 	uint32					GetIslandIndexInternal() const									{ return mIslandIndex; }
 	void					SetIslandIndexInternal(uint32 inIndex)							{ mIslandIndex = inIndex; }
 
-	/// Access to the index in the active bodies array
+	/// Access to the index in the activate bodies array
 	uint32					GetIndexInActiveBodiesInternal() const							{ return mIndexInActiveBodies; }
 
 	/// Reset spheres to center around inPoints with radius 0
@@ -163,8 +163,8 @@ private:
 	float					mMaxLinearVelocity;												///< Maximum linear velocity that this body can reach (m/s)
 	float					mMaxAngularVelocity;											///< Maximum angular velocity that this body can reach (rad/s)
 	float					mGravityFactor;													///< Factor to multiply gravity with
-	uint32					mIndexInActiveBodies;											///< If the body is active, this is the index in the active body list or cInactiveIndex if it is not active
-	uint32					mIslandIndex;													///< Index of the island that this body is part of, when the body has not yet been updated or is not active this is cInactiveIndex 
+	uint32					mIndexInActiveBodies;											///< If the body is activate, this is the index in the activate body list or cInactiveIndex if it is not activate
+	uint32					mIslandIndex;													///< Index of the island that this body is part of, when the body has not yet been updated or is not activate this is cInactiveIndex 
 
 	// 1 byte aligned
 	EMotionQuality			mMotionQuality;													///< Motion quality, or how well it detects collisions when it has a high velocity

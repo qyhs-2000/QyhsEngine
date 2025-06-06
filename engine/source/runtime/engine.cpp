@@ -10,6 +10,7 @@
 #include <imgui/imgui.h>
 #include "function/ui/font.h"
 #include "function/input/input.h"
+#include "core/event/event_handler.h"
 namespace qyhs
 {
 	bool g_is_editor_mode = true;
@@ -124,6 +125,7 @@ namespace qyhs
 		}
 
 		input::Update(window, canvas);
+		eventhandler::fireEvent(eventhandler::EVENT_THREAD_SAFE_POINT, 0);
 		update(delta_time);
 		render();
 

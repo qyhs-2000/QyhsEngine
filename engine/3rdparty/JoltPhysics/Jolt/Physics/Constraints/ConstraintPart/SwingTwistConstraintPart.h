@@ -328,7 +328,7 @@ public:
 		mTwistLimitConstraintPart.Deactivate();
 	}
 
-	/// Check if constraint is active
+	/// Check if constraint is activate
 	inline bool					IsActive() const
 	{
 		return mSwingLimitYConstraintPart.IsActive() || mSwingLimitZConstraintPart.IsActive() || mTwistLimitConstraintPart.IsActive();

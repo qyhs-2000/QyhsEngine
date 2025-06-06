@@ -444,7 +444,7 @@ void DebugRenderer::Initialize()
 	// Iterate over levels
 	for (int level = sMaxLevel; level >= 1; --level)
 	{
-		// Determine at which distance this level should be active
+		// Determine at which distance this level should be activate
 		float distance = sLODDistanceForLevel[sMaxLevel - level];
 
 		// Sphere
@@ -691,7 +691,7 @@ DebugRenderer::GeometryRef DebugRenderer::CreateTriangleGeometryForConvex(Suppor
 	// Iterate over levels
 	for (int level = sMaxLevel; level >= 1; --level)
 	{
-		// Determine at which distance this level should be active
+		// Determine at which distance this level should be activate
 		float distance = sLODDistanceForLevel[sMaxLevel - level];
 
 		// Create triangle batch and only calculate bounds for highest LOD level

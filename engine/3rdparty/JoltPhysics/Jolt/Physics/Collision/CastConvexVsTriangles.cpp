@@ -66,13 +66,13 @@ void CastConvexVsTriangles::Cast(Vec3Arg inV0, Vec3Arg inV1, Vec3Arg inV2, uint8
 	Vec3 contact_point_a, contact_point_b, contact_normal;
 	if (epa.CastShape(mShapeCast.mCenterOfMassStart, mShapeCast.mDirection, mShapeCastSettings.mCollisionTolerance, mShapeCastSettings.mPenetrationTolerance, *mSupport, triangle, mSupport->GetConvexRadius(), 0.0f, mShapeCastSettings.mReturnDeepestPoint, fraction, contact_point_a, contact_point_b, contact_normal))
 	{
-		// Check if we have enabled active edge detection
+		// Check if we have enabled activate edge detection
 		if (mShapeCastSettings.mActiveEdgeMode == EActiveEdgeMode::CollideOnlyWithActive && inActiveEdges != 0b111)
 		{
-			// Convert the active edge velocity hint to local space
+			// Convert the activate edge velocity hint to local space
 			Vec3 active_edge_movement_direction = mCenterOfMassTransform2.Multiply3x3Transposed(mShapeCastSettings.mActiveEdgeMovementDirection);
 
-			// Update the contact normal to account for active edges
+			// Update the contact normal to account for activate edges
 			// Note that we flip the triangle normal as the penetration axis is pointing towards the triangle instead of away
 			contact_normal = ActiveEdges::FixNormal(v0, v1, v2, back_facing? triangle_normal : -triangle_normal, inActiveEdges, contact_point_b, contact_normal, active_edge_movement_direction);
 		}

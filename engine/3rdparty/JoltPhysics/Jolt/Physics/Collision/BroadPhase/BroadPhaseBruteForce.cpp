@@ -261,7 +261,7 @@ void BroadPhaseBruteForce::FindCollidingPairs(BodyID *ioActiveBodies, int inNumA
 {
 	shared_lock lock(mMutex);
 
-	// Loop through all active bodies
+	// Loop through all activate bodies
 	size_t num_bodies = mBodyIDs.size();
 	for (int b1 = 0; b1 < inNumActiveBodies; ++b1)
 	{

@@ -118,7 +118,7 @@ void PhysicsSystem::Update(float inDeltaTime, int inCollisionSteps, int inIntegr
 	// Sync point for the broadphase. This will allow it to do clean up operations without having any mutexes locked yet.
 	mBroadPhase->FrameSync();
 
-	// If there are no active bodies or there's no time delta
+	// If there are no activate bodies or there's no time delta
 	uint32 num_active_bodies = mBodyManager.GetNumActiveBodies();
 	if (num_active_bodies == 0 || inDeltaTime <= 0.0f)
 	{
@@ -169,19 +169,19 @@ void PhysicsSystem::Update(float inDeltaTime, int inCollisionSteps, int inIntegr
 	// Calculate how many step listener jobs we spawn
 	int num_step_listener_jobs = mStepListeners.empty()? 0 : max(1, min((int)mStepListeners.size() / mPhysicsSettings.mStepListenersBatchSize / mPhysicsSettings.mStepListenerBatchesPerJob, max_concurrency));
 
-	// Number of gravity jobs depends on the amount of active bodies.
-	// Launch max 1 job per batch of active bodies
-	// Leave 1 thread for update broadphase prepare and 1 for determine active constraints
+	// Number of gravity jobs depends on the amount of activate bodies.
+	// Launch max 1 job per batch of activate bodies
+	// Leave 1 thread for update broadphase prepare and 1 for determine activate constraints
 	int num_apply_gravity_jobs = max(1, min(((int)num_active_bodies + cApplyGravityBatchSize - 1) / cApplyGravityBatchSize, max_concurrency - 2));
 
-	// Number of determine active constraints jobs to run depends on number of constraints.
+	// Number of determine activate constraints jobs to run depends on number of constraints.
 	// Leave 1 thread for update broadphase prepare and 1 for apply gravity
 	int num_determine_active_constraints_jobs = max(1, min(((int)mConstraintManager.GetNumConstraints() + cDetermineActiveConstraintsBatchSize - 1) / cDetermineActiveConstraintsBatchSize, max_concurrency - 2));
 
-	// Number of find collisions jobs to run depends on number of active bodies.
+	// Number of find collisions jobs to run depends on number of activate bodies.
 	int num_find_collisions_jobs = max(1, min(((int)num_active_bodies + cActiveBodiesBatchSize - 1) / cActiveBodiesBatchSize, max_concurrency));
 
-	// Number of integrate velocity jobs depends on number of active bodies.
+	// Number of integrate velocity jobs depends on number of activate bodies.
 	int num_integrate_velocity_jobs = max(1, min(((int)num_active_bodies + cIntegrateVelocityBatchSize - 1) / cIntegrateVelocityBatchSize, max_concurrency));
 
 	{
@@ -237,23 +237,23 @@ void PhysicsSystem::Update(float inDeltaTime, int inCollisionSteps, int inIntegr
 				step.mFindCollisions[i] = inJobSystem->CreateJob("FindCollisions", cColorFindCollisions, [&step, i]() 
 					{ 
 						step.mContext->mPhysicsSystem->JobFindCollisions(&step, i); 
-					}, num_apply_gravity_jobs + num_determine_active_constraints_jobs + 1); // depends on: apply gravity, determine active constraints, finish building jobs
+					}, num_apply_gravity_jobs + num_determine_active_constraints_jobs + 1); // depends on: apply gravity, determine activate constraints, finish building jobs
 			}
 
 			if (is_first_step)
 			{
 			#ifdef JPH_ENABLE_ASSERTS
-				// Don't allow write operations to the active bodies list
+				// Don't allow write operations to the activate bodies list
 				mBodyManager.SetActiveBodiesLocked(true);
 			#endif
 
-				// Store the number of active bodies at the start of the step
+				// Store the number of activate bodies at the start of the step
 				step.mNumActiveBodiesAtStepStart = mBodyManager.GetNumActiveBodies();
 
 				// Lock all constraints
 				mConstraintManager.LockAllConstraints();
 
-				// Allocate memory for storing the active constraints
+				// Allocate memory for storing the activate constraints
 				JPH_ASSERT(context.mActiveConstraints == nullptr);
 				context.mActiveConstraints = static_cast<Constraint **>(inTempAllocator->Allocate(mConstraintManager.GetNumConstraints() * sizeof(Constraint *)));
 
@@ -264,7 +264,7 @@ void PhysicsSystem::Update(float inDeltaTime, int inCollisionSteps, int inIntegr
 				mIslandBuilder.PrepareContactConstraints(mContactManager.GetMaxConstraints(), context.mTempAllocator);
 			}
 
-			// This job applies gravity to all active bodies
+			// This job applies gravity to all activate bodies
 			step.mApplyGravity.resize(num_apply_gravity_jobs);
 			for (int i = 0; i < num_apply_gravity_jobs; ++i)
 				step.mApplyGravity[i] = inJobSystem->CreateJob("ApplyGravity", cColorApplyGravity, [&context, &step]() 
@@ -280,7 +280,7 @@ void PhysicsSystem::Update(float inDeltaTime, int inCollisionSteps, int inIntegr
 					context.mPhysicsSystem->JobSetupVelocityConstraints(context.mSubStepDeltaTime, &step);
 
 					JobHandle::sRemoveDependencies(step.mSubSteps[0].mSolveVelocityConstraints);
-				}, num_determine_active_constraints_jobs + 1); // depends on: determine active constraints, finish building jobs
+				}, num_determine_active_constraints_jobs + 1); // depends on: determine activate constraints, finish building jobs
 
 			// This job will build islands from constraints
 			step.mBuildIslandsFromConstraints = inJobSystem->CreateJob("BuildIslandsFromConstraints", cColorBuildIslandsFromConstraints, [&context, &step]() 
@@ -288,9 +288,9 @@ void PhysicsSystem::Update(float inDeltaTime, int inCollisionSteps, int inIntegr
 					context.mPhysicsSystem->JobBuildIslandsFromConstraints(&context, &step);
 
 					step.mFinalizeIslands.RemoveDependency(); 
-				}, num_determine_active_constraints_jobs + 1); // depends on: determine active constraints, finish building jobs
+				}, num_determine_active_constraints_jobs + 1); // depends on: determine activate constraints, finish building jobs
 
-			// This job determines active constraints
+			// This job determines activate constraints
 			step.mDetermineActiveConstraints.resize(num_determine_active_constraints_jobs);
 			for (int i = 0; i < num_determine_active_constraints_jobs; ++i)
 				step.mDetermineActiveConstraints[i] = inJobSystem->CreateJob("DetermineActiveConstraints", cColorDetermineActiveConstraints, [&context, &step]() 
@@ -312,7 +312,7 @@ void PhysicsSystem::Update(float inDeltaTime, int inCollisionSteps, int inIntegr
 						// Call the step listeners
 						context.mPhysicsSystem->JobStepListeners(&step);
 
-						// Kick apply gravity and determine active constraint jobs
+						// Kick apply gravity and determine activate constraint jobs
 						JobHandle::sRemoveDependencies(step.mApplyGravity);
 						JobHandle::sRemoveDependencies(step.mDetermineActiveConstraints);
 					}, previous_step_dependency_count);
@@ -367,7 +367,7 @@ void PhysicsSystem::Update(float inDeltaTime, int inCollisionSteps, int inIntegr
 						mBodyManager.ValidateActiveBodyBounds();
 					#endif // _DEBUG
 
-						// Store the number of active bodies at the start of the step
+						// Store the number of activate bodies at the start of the step
 						next_step->mNumActiveBodiesAtStepStart = mBodyManager.GetNumActiveBodies();
 
 						// Clear the island builder
@@ -384,7 +384,7 @@ void PhysicsSystem::Update(float inDeltaTime, int inCollisionSteps, int inIntegr
 						next_step->mBroadPhasePrepare.RemoveDependency();
 						if (next_step->mStepListeners.empty())
 						{
-							// Kick the gravity and active constraints jobs immediately
+							// Kick the gravity and activate constraints jobs immediately
 							JobHandle::sRemoveDependencies(next_step->mApplyGravity);
 							JobHandle::sRemoveDependencies(next_step->mDetermineActiveConstraints);
 						}
@@ -434,7 +434,7 @@ void PhysicsSystem::Update(float inDeltaTime, int inCollisionSteps, int inIntegr
 					step.mSubSteps[sub_step_idx - 1].mStartNextSubStep.RemoveDependency();
 				}
 
-				// This job will prepare the position update of all active bodies
+				// This job will prepare the position update of all activate bodies
 				int num_dependencies_integrate_velocity = is_first_sub_step? 2 + max_concurrency : 1 + max_concurrency;  // depends on: broadphase update finalize in first step, solve velocity constraints in all steps. For both: finish building jobs.
 				sub_step.mPreIntegrateVelocity = inJobSystem->CreateJob("PreIntegrateVelocity", cColorPreIntegrateVelocity, [&context, &sub_step]() 
 					{ 
@@ -448,7 +448,7 @@ void PhysicsSystem::Update(float inDeltaTime, int inCollisionSteps, int inIntegr
 					step.mUpdateBroadphaseFinalize.RemoveDependency();
 				JobHandle::sRemoveDependencies(sub_step.mSolveVelocityConstraints);
 
-				// This job will update the positions of all active bodies
+				// This job will update the positions of all activate bodies
 				sub_step.mIntegrateVelocity.resize(num_integrate_velocity_jobs);
 				for (int i = 0; i < num_integrate_velocity_jobs; ++i)
 					sub_step.mIntegrateVelocity[i] = inJobSystem->CreateJob("IntegrateVelocity", cColorIntegrateVelocity, [&context, &sub_step]() 
@@ -461,7 +461,7 @@ void PhysicsSystem::Update(float inDeltaTime, int inCollisionSteps, int inIntegr
 				// Unblock previous job
 				sub_step.mPreIntegrateVelocity.RemoveDependency();
 
-				// This job will finish the position update of all active bodies
+				// This job will finish the position update of all activate bodies
 				sub_step.mPostIntegrateVelocity = inJobSystem->CreateJob("PostIntegrateVelocity", cColorPostIntegrateVelocity, [&context, &sub_step]() 
 					{ 
 						context.mPhysicsSystem->JobPostIntegrateVelocity(&context, &sub_step);
@@ -581,7 +581,7 @@ void PhysicsSystem::Update(float inDeltaTime, int inCollisionSteps, int inIntegr
 	// Clear the contact manager
 	mContactManager.FinishConstraintBuffer();
 
-	// Free active constraints
+	// Free activate constraints
 	inTempAllocator->Free(context.mActiveConstraints, mConstraintManager.GetNumConstraints() * sizeof(Constraint *));
 	context.mActiveConstraints = nullptr;
 
@@ -596,7 +596,7 @@ void PhysicsSystem::Update(float inDeltaTime, int inCollisionSteps, int inIntegr
 	mConstraintManager.UnlockAllConstraints();
 
 #ifdef JPH_ENABLE_ASSERTS
-	// Allow write operations to the active bodies list
+	// Allow write operations to the activate bodies list
 	mBodyManager.SetActiveBodiesLocked(false);
 #endif
 
@@ -613,7 +613,7 @@ void PhysicsSystem::JobStepListeners(PhysicsUpdateContext::Step *ioStep)
 	// Read positions (broadphase updates concurrently so we can't write), read/write velocities
 	BodyAccess::Grant grant(BodyAccess::EAccess::ReadWrite, BodyAccess::EAccess::Read);
 
-	// Can activate bodies only (we cache the amount of active bodies at the beginning of the step in mNumActiveBodiesAtStepStart so we cannot deactivate here)
+	// Can activate bodies only (we cache the amount of activate bodies at the beginning of the step in mNumActiveBodiesAtStepStart so we cannot deactivate here)
 	BodyManager::GrantActiveBodiesAccess grant_active(true, false);
 #endif
 
@@ -653,10 +653,10 @@ void PhysicsSystem::JobDetermineActiveConstraints(PhysicsUpdateContext::Step *io
 		// Calculate the end of the batch
 		uint32 constraint_idx_end = min(num_constraints, constraint_idx + cDetermineActiveConstraintsBatchSize);
 
-		// Store the active constraints at the start of the step (bodies get activated during the step which in turn may activate constraints leading to an inconsistent shapshot)
+		// Store the activate constraints at the start of the step (bodies get activated during the step which in turn may activate constraints leading to an inconsistent shapshot)
 		mConstraintManager.GetActiveConstraints(constraint_idx, constraint_idx_end, active_constraints, num_active_constraints);
 
-		// Copy the block of active constraints to the global list of active constraints
+		// Copy the block of activate constraints to the global list of activate constraints
 		if (num_active_constraints > 0)
 		{
 			uint32 active_constraint_idx = ioStep->mNumActiveConstraints.fetch_add(num_active_constraints);
@@ -672,7 +672,7 @@ void PhysicsSystem::JobApplyGravity(const PhysicsUpdateContext *ioContext, Physi
 	BodyAccess::Grant grant(BodyAccess::EAccess::ReadWrite, BodyAccess::EAccess::Read);
 #endif
 
-	// Get list of active bodies that we had at the start of the physics update.
+	// Get list of activate bodies that we had at the start of the physics update.
 	// Any body that is activated as part of the simulation step does not receive gravity this frame.
 	// Note that bodies may be activated during this job but not deactivated, this means that only elements
 	// will be added to the array. Since the array is made to not reallocate, this is a safe operation.
@@ -743,7 +743,7 @@ void PhysicsSystem::TrySpawnJobFindCollisions(PhysicsUpdateContext::Step *ioStep
 	for (const PhysicsUpdateContext::BodyPairQueue &queue : ioStep->mBodyPairQueues)
 		num_body_pairs += queue.mWriteIdx - queue.mReadIdx;
 
-	// Count how many active bodies we have waiting
+	// Count how many activate bodies we have waiting
 	uint32 num_active_bodies = mBodyManager.GetNumActiveBodies() - ioStep->mActiveBodyReadIdx;
 
 	// Calculate how many jobs we would like
@@ -751,7 +751,7 @@ void PhysicsSystem::TrySpawnJobFindCollisions(PhysicsUpdateContext::Step *ioStep
 
 	for (;;)
 	{
-		// Get the bit mask of active jobs and see if we can spawn more
+		// Get the bit mask of activate jobs and see if we can spawn more
 		PhysicsUpdateContext::JobMask current_active_jobs = ioStep->mActiveFindCollisionJobs;
 		if (CountBits(current_active_jobs) >= desired_num_jobs)
 			break;
@@ -804,12 +804,12 @@ void PhysicsSystem::JobFindCollisions(PhysicsUpdateContext::Step *ioStep, int in
 
 	for (;;)
 	{
-		// Check if there are active bodies to be processed
+		// Check if there are activate bodies to be processed
 		uint32 active_bodies_read_idx = ioStep->mActiveBodyReadIdx;
 		uint32 num_active_bodies = mBodyManager.GetNumActiveBodies();
 		if (active_bodies_read_idx < num_active_bodies)
 		{
-			// Take a batch of active bodies
+			// Take a batch of activate bodies
 			uint32 active_bodies_read_idx_end = min(num_active_bodies, active_bodies_read_idx + cActiveBodiesBatchSize);
 			if (ioStep->mActiveBodyReadIdx.compare_exchange_strong(active_bodies_read_idx, active_bodies_read_idx_end))
 			{
@@ -851,7 +851,7 @@ void PhysicsSystem::JobFindCollisions(PhysicsUpdateContext::Step *ioStep, int in
 				};
 				MyBodyPairCallback add_pair(ioStep, contact_allocator, inJobIndex);
 
-				// Copy active bodies to temporary array, broadphase will reorder them
+				// Copy activate bodies to temporary array, broadphase will reorder them
 				uint32 batch_size = active_bodies_read_idx_end - active_bodies_read_idx;
 				BodyID *active_bodies = (BodyID *)JPH_STACK_ALLOC(batch_size * sizeof(BodyID));
 				memcpy(active_bodies, mBodyManager.GetActiveBodiesUnsafe() + active_bodies_read_idx, batch_size * sizeof(BodyID));
@@ -1211,7 +1211,7 @@ void PhysicsSystem::JobFinalizeIslands(PhysicsUpdateContext *ioContext)
 	BodyAccess::Grant grant(BodyAccess::EAccess::None, BodyAccess::EAccess::None);
 #endif
 
-	// Finish collecting the islands, at this point the active body list doesn't change so it's safe to access
+	// Finish collecting the islands, at this point the activate body list doesn't change so it's safe to access
 	mIslandBuilder.Finalize(mBodyManager.GetActiveBodiesUnsafe(), mBodyManager.GetNumActiveBodies(), mContactManager.GetNumConstraints(), ioContext->mTempAllocator);
 }
 
@@ -1339,7 +1339,7 @@ void PhysicsSystem::JobPreIntegrateVelocity(PhysicsUpdateContext *ioContext, Phy
 	ioSubStep->mCCDBodiesCapacity = mBodyManager.GetNumActiveCCDBodies();
 	ioSubStep->mCCDBodies = (CCDBody *)temp_allocator->Allocate(ioSubStep->mCCDBodiesCapacity * sizeof(CCDBody));
 
-	// initialize the mapping table between active body and CCD body
+	// initialize the mapping table between activate body and CCD body
 	JPH_ASSERT(ioSubStep->mActiveBodyToCCDBody == nullptr);
 	ioSubStep->mNumActiveBodyToCCDBody = mBodyManager.GetNumActiveBodies();
 	ioSubStep->mActiveBodyToCCDBody = (int *)temp_allocator->Allocate(ioSubStep->mNumActiveBodyToCCDBody * sizeof(int));
@@ -1378,7 +1378,7 @@ void PhysicsSystem::JobIntegrateVelocity(const PhysicsUpdateContext *ioContext, 
 			// Update the positions using an Symplectic Euler step (which integrates using the updated velocity v1' rather
 			// than the original velocity v1):
 			// x1' = x1 + h * v1'
-			// At this point the active bodies list does not change, so it is safe to access the array.
+			// At this point the activate bodies list does not change, so it is safe to access the array.
 			BodyID body_id = active_bodies[active_body_idx];
 			Body &body = mBodyManager.GetBody(body_id);
 			MotionProperties *mp = body.GetMotionProperties();
@@ -1443,7 +1443,7 @@ void PhysicsSystem::JobIntegrateVelocity(const PhysicsUpdateContext *ioContext, 
 				// Move the body now
 				body.AddPositionStep(delta_pos);
 
-				// If the body was activated due to an earlier CCD step it will have an index in the active
+				// If the body was activated due to an earlier CCD step it will have an index in the activate
 				// body list that it higher than the highest one we processed during FindCollisions
 				// which means it hasn't been assigned an island and will not be updated by an island
 				// this means that we need to update its bounds manually
@@ -1524,12 +1524,12 @@ inline static PhysicsUpdateContext::SubStep::CCDBody *sGetCCDBody(const Body &in
 	if (motion_properties == nullptr)
 		return nullptr;
 
-	// If it is not active it cannot have a CCD body
+	// If it is not activate it cannot have a CCD body
 	uint32 active_index = motion_properties->GetIndexInActiveBodiesInternal();
 	if (active_index == Body::cInactiveIndex)
 		return nullptr;
 
-	// Check if the active body has a corresponding CCD body
+	// Check if the activate body has a corresponding CCD body
 	JPH_ASSERT(active_index < inSubStep->mNumActiveBodyToCCDBody); // Ensure that the body has a mapping to CCD body
 	int ccd_index = inSubStep->mActiveBodyToCCDBody[active_index];
 	if (ccd_index < 0)
@@ -1750,7 +1750,7 @@ void PhysicsSystem::JobFindCCDContacts(const PhysicsUpdateContext *ioContext, Ph
 				mCollector.mValidateBodyPair = true;
 				mCollector.mRejectAll = false;
 
-				// Provide direction as hint for the active edges algorithm
+				// Provide direction as hint for the activate edges algorithm
 				mShapeCastSettings.mActiveEdgeMovementDirection = direction;
 
 				// Do narrow phase collision check
@@ -1855,8 +1855,8 @@ void PhysicsSystem::JobResolveCCDContacts(PhysicsUpdateContext *ioContext, Physi
 				});
 		}
 
-		// We can collide with bodies that are not active, we track them here so we can activate them in one go at the end.
-		// This is also needed because we can't modify the active body array while we iterate it.
+		// We can collide with bodies that are not activate, we track them here so we can activate them in one go at the end.
+		// This is also needed because we can't modify the activate body array while we iterate it.
 		static constexpr int cBodiesBatch = 64;
 		BodyID *bodies_to_activate = (BodyID *)JPH_STACK_ALLOC(cBodiesBatch * sizeof(BodyID));
 		int num_bodies_to_activate = 0;
@@ -1946,7 +1946,7 @@ void PhysicsSystem::JobResolveCCDContacts(PhysicsUpdateContext *ioContext, Physi
 						body2_mp->ClampLinearVelocity();
 						body2_mp->ClampAngularVelocity();
 
-						// Activate the body if it is not already active
+						// Activate the body if it is not already activate
 						if (!body2.IsActive())
 						{
 							bodies_to_activate[num_bodies_to_activate++] = ccd_body->mBodyID2;
@@ -1984,7 +1984,7 @@ void PhysicsSystem::JobResolveCCDContacts(PhysicsUpdateContext *ioContext, Physi
 			// Update body position
 			body1.AddPositionStep(ccd_body->mDeltaPosition * ccd_body->mFractionPlusSlop);
 
-			// If the body was activated due to an earlier CCD step it will have an index in the active
+			// If the body was activated due to an earlier CCD step it will have an index in the activate
 			// body list that it higher than the highest one we processed during FindCollisions
 			// which means it hasn't been assigned an island and will not be updated by an island
 			// this means that we need to update its bounds manually

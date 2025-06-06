@@ -64,7 +64,7 @@ void BodyManager::Init(uint inMaxBodies, uint inNumBodyMutexes, const BroadPhase
 	// Allocate space for bodies
 	mBodies.reserve(inMaxBodies);
 
-	// Allocate space for active bodies
+	// Allocate space for activate bodies
 	JPH_ASSERT(mActiveBodies == nullptr);
 	mActiveBodies = new BodyID [inMaxBodies];
 
@@ -317,13 +317,13 @@ void BodyManager::DeactivateBodies(const BodyID *inBodyIDs, int inNumber)
 					BodyID last_body_id = mActiveBodies[last_body_index];
 					mActiveBodies[body.mMotionProperties->mIndexInActiveBodies] = last_body_id;
 
-					// Update that body's index in the active list
+					// Update that body's index in the activate list
 					Body &last_body = *mBodies[last_body_id.GetIndex()];
 					JPH_ASSERT(last_body.mMotionProperties->mIndexInActiveBodies == last_body_index);
 					last_body.mMotionProperties->mIndexInActiveBodies = body.mMotionProperties->mIndexInActiveBodies;
 				}
 
-				// Mark this body as no longer active
+				// Mark this body as no longer activate
 				body.mMotionProperties->mIndexInActiveBodies = Body::cInactiveIndex;
 				body.mMotionProperties->mIslandIndex = Body::cInactiveIndex;
 
@@ -331,7 +331,7 @@ void BodyManager::DeactivateBodies(const BodyID *inBodyIDs, int inNumber)
 				body.mMotionProperties->mLinearVelocity = Vec3::sZero();
 				body.mMotionProperties->mAngularVelocity = Vec3::sZero();
 
-				// Remove unused element from active bodies list
+				// Remove unused element from activate bodies list
 				--mNumActiveBodies;
 
 				// Count CCD bodies
@@ -484,7 +484,7 @@ void BodyManager::SaveState(StateRecorder &inStream) const
 	{
 		UniqueLock lock(mActiveBodiesMutex, EPhysicsLockTypes::ActiveBodiesList);
 
-		// Write active bodies, sort because activation can come from multiple threads, so order is not deterministic
+		// Write activate bodies, sort because activation can come from multiple threads, so order is not deterministic
 		inStream.Write(mNumActiveBodies);
 		BodyIDVector sorted_active_bodies(mActiveBodies, mActiveBodies + mNumActiveBodies);
 		sort(sorted_active_bodies.begin(), sorted_active_bodies.end());
@@ -534,13 +534,13 @@ bool BodyManager::RestoreState(StateRecorder &inStream)
 	{
 		UniqueLock lock(mActiveBodiesMutex, EPhysicsLockTypes::ActiveBodiesList);
 
-		// Mark current active bodies as deactivated
+		// Mark current activate bodies as deactivated
 		for (const BodyID *id = mActiveBodies, *id_end = mActiveBodies + mNumActiveBodies; id < id_end; ++id)
 			mBodies[id->GetIndex()]->mMotionProperties->mIndexInActiveBodies = Body::cInactiveIndex;
 
 		sort(mActiveBodies, mActiveBodies + mNumActiveBodies); // Sort for validation
 
-		// Read active bodies
+		// Read activate bodies
 		inStream.Read(mNumActiveBodies);
 		for (BodyID *id = mActiveBodies, *id_end = mActiveBodies + mNumActiveBodies; id < id_end; ++id)
 		{

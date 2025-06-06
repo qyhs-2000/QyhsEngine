@@ -3,6 +3,7 @@
 #include <cassert>
 #include <iostream>
 #include "core/math/vector2.h"
+#include "function/input/input.h"
 namespace qyhs::gui
 {
 	void ComboBox::create(const std::string name)
@@ -97,6 +98,21 @@ namespace qyhs::gui
 		}
 	}
 
+	void Widget::setColor(const Color& color, int id)
+	{
+		if (id < 0)
+		{
+			for (int i = 0; i < arraysize(sprites); ++i)
+			{
+				sprites[i].params.color = color;
+			}
+		}
+		else if (id < arraysize(sprites))
+		{
+			sprites[id].params.color = color;
+		}
+	}
+
 	void Widget::setName(const std::string value)
 	{
 		if (value.length() <= 0)
@@ -130,6 +146,14 @@ namespace qyhs::gui
 		m_transform.m_position.y = position.y;
 		updateWorldMatrix();
 		translation = m_transform.m_position;
+	}
+
+	primitive::HitBox2D Widget::getPointerHitbox() const
+	{
+
+		XMFLOAT4 pointer = input::GetPointer();
+		primitive::HitBox2D hitbox = primitive::HitBox2D(XMFLOAT2(pointer.x, pointer.y), XMFLOAT2(1, 1));
+		return hitbox;
 	}
 
 	void Widget::update(const Canvas& canvas, float delta_time)
@@ -183,6 +207,121 @@ namespace qyhs::gui
 			Widget* widget = widgets[i];
 			widget->update(canvas, delta_time);
 		}
+	}
+
+	void Button::create(const std::string& name)
+	{
+		setName(name);
+
+		font.params.h_align = font::FONT_ALIGN_CENTER;
+		font.params.v_align = font::FONT_ALIGN_CENTER;
+	}
+
+	void Button::render(const Canvas& canvas, CommandList cmd)
+	{
+		Widget::render(canvas, cmd);
+		if (shadow > 0)
+		{
+			qyhs::image::Params params = sprites[state].params;
+			params.pos.x -= shadow;
+			params.pos.y -= shadow;
+			params.size.x += shadow * 2;
+
+			params.size.y += shadow * 2;
+			params.color = shadow_color;
+			params._flags |= image::Params::BACKGROUND;
+			image::draw(nullptr, params, cmd);
+		}
+
+		font.draw(cmd);
+	}
+
+	void Button::update(const Canvas& canvas, float delta_time)
+	{
+		Widget::update(canvas, delta_time);
+		hitbox.pos.x = translation.x;
+		hitbox.pos.y = translation.y;
+		hitbox.size.x = scale.x;
+		hitbox.size.y = scale.y;
+
+		switch (font.params.h_align)
+		{
+		case font::FONT_ALIGN_LEFT:
+			font.params.posX = translation.x + 2;
+			break;
+		case font::FONT_ALIGN_RIGHT:
+			font.params.posX = translation.x + scale.x - 2;
+			break;
+		case font::FONT_ALIGN_CENTER:
+		default:
+			font.params.posX = translation.x + scale.x * 0.5;
+			break;
+		}
+		switch (font.params.v_align)
+		{
+		case font::FONT_ALIGN_TOP:
+			font.params.posY = translation.y + 2;
+			break;
+		case font::FONT_ALIGN_BOTTOM:
+			font.params.posY = translation.y + scale.y - 2;
+			break;
+		case font::FONT_ALIGN_CENTER:
+		default:
+			font.params.posY = translation.y + scale.y * 0.5;
+			break;
+		}
+
+		if (state == FOCUS)
+		{
+			state = IDLE;
+		}
+
+		primitive::HitBox2D pointer_hitbox = getPointerHitbox();
+
+		bool clicked = false;
+		if (pointer_hitbox.intersects(hitbox))
+		{
+			if (state == IDLE)
+			{
+				state = FOCUS;
+			}
+		}
+		if (input::Press(input::MOUSE_BUTTON_LEFT))
+		{
+			if (state == FOCUS)
+			{
+				clicked = true;
+			}
+		}
+
+		if (state == DEACTIVATING)
+		{
+			if (on_click_func != nullptr && pointer_hitbox.intersects(hitbox))
+			{
+				gui::EventArgs args = {};
+				this->on_click_func(args);
+			}
+			state = IDLE;
+		}
+		if (state == ACTIVE)
+		{
+			deactivate();
+		}
+
+		if (clicked)
+		{
+			activate();
+		}
+	}
+
+	void Button::activate()
+	{
+		state = ACTIVE;
+	}
+
+	void Button::deactivate()
+	{
+		state = DEACTIVATING;
 	}
 
 }

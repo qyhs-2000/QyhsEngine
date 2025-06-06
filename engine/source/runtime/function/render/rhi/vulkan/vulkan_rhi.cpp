@@ -4861,8 +4861,6 @@ namespace qyhs
 			}
 			try
 			{
-				std::cout << "size = " << internal_state->subresources_srv.size()
-					<< ", capacity = " << internal_state->subresources_srv.capacity() << std::endl;
 				internal_state->subresources_srv.push_back(subresource);
 			}
 			catch (const std::bad_array_new_length& e) {

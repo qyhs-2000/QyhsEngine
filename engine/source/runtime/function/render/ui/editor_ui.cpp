@@ -592,12 +592,12 @@ namespace qyhs
 				}
 				if (ImGui::MenuItem("Open File"))
 				{
-					FileDialogParam param;
+					helper::FileDialogParam param;
 					param.descriptions = ".obj,.gltf";
 					param.extensions.push_back("obj");
 					param.extensions.push_back("gltf");
 					param.extensions.push_back("glb");
-					Helper::fileDialog(param, [=](std::string file_name) {
+					helper::fileDialog(param, [=](std::string file_name) {
 						g_runtime_global_context.m_world_manager->loadOBJFile(file_name);
 						});
 				}

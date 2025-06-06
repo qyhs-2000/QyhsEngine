@@ -97,7 +97,7 @@ void IslandBuilder::LinkBodies(uint32 inFirst, uint32 inSecond)
 {
 	JPH_PROFILE_FUNCTION();
 
-	// Both need to be active, we don't want to create an island with static objects
+	// Both need to be activate, we don't want to create an island with static objects
 	if (inFirst >= mMaxActiveBodies || inSecond >= mMaxActiveBodies)
 		return;
 
@@ -159,13 +159,13 @@ void IslandBuilder::LinkConstraint(uint32 inConstraintIndex, uint32 inFirst, uin
 	LinkBodies(inFirst, inSecond);
 
 	JPH_ASSERT(inConstraintIndex < mNumConstraints);
-	mConstraintLinks[inConstraintIndex] = min(inFirst, inSecond); // Use fact that invalid index is 0xffffffff, we want the active body of two
+	mConstraintLinks[inConstraintIndex] = min(inFirst, inSecond); // Use fact that invalid index is 0xffffffff, we want the activate body of two
 }
 
 void IslandBuilder::LinkContact(uint32 inContactIndex, uint32 inFirst, uint32 inSecond)
 {
 	JPH_ASSERT(inContactIndex < mMaxContacts);
-	mContactLinks[inContactIndex] = min(inFirst, inSecond); // Use fact that invalid index is 0xffffffff, we want the active body of two
+	mContactLinks[inContactIndex] = min(inFirst, inSecond); // Use fact that invalid index is 0xffffffff, we want the activate body of two
 }
 
 #ifdef JPH_VALIDATE_ISLAND_BUILDER
@@ -207,7 +207,7 @@ void IslandBuilder::BuildBodyIslands(const BodyID *inActiveBodies, uint32 inNumA
 {
 	JPH_PROFILE_FUNCTION();
 
-	// Store the amount of active bodies
+	// Store the amount of activate bodies
 	mNumActiveBodies = inNumActiveBodies;
 
 	// Create output arrays for body ID's, don't call constructors

@@ -26,4 +26,6 @@ namespace qyhs::math
 		XMVECTOR vector2 = XMLoadFloat3(&v2);
 		return Distance(vector1, vector2);
 	}
+
+	const bool collision2D(const XMFLOAT2& hb_pos1, const XMFLOAT2& hb_size1, const XMFLOAT2& hb_pos2, const XMFLOAT2& hb_size2);
 }

@@ -1,7 +1,19 @@
 #pragma once
 #include <filesystem>
+#include <functional>
 namespace qyhs::helper
 {
+	struct FileDialogParam
+	{
+		enum TYPE
+		{
+			OPEN,
+			SAVE
+		} type = OPEN;
+		std::string descriptions;
+		std::vector<std::string> extensions;
+	};
+
 	std::string getCurrentPath();
 	bool existFile(const std::string& filename);
 	std::string replaceExtension(std::string str, std::string extension);
@@ -22,6 +34,7 @@ namespace qyhs::helper
 	uint64_t fileTimeStamp(std::string name);
 	bool fileExit(std::string name);
 	std::string toUpper(const std::string &str);
+	void fileDialog(const FileDialogParam & param,std::function<void(std::string file_name)> on_success_func);
 	uint64_t getNextPowerOfTwo(uint64_t value);
 	template<typename T>
 	constexpr void hash_combine(std::size_t& seed, const T& v)

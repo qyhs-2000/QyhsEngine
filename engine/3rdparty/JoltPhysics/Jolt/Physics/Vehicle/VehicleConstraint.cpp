@@ -148,7 +148,7 @@ void VehicleConstraint::OnStep(float inDeltaTime, PhysicsSystem &inPhysicsSystem
 	// Callback on our controller
 	mController->PreCollide(inDeltaTime, inPhysicsSystem);
 
-	// Calculate if this constraint is active by checking if our main vehicle body is active or any of the bodies we touch are active
+	// Calculate if this constraint is activate by checking if our main vehicle body is activate or any of the bodies we touch are activate
 	mIsActive = mBody->IsActive();
 
 	// Test collision for wheels
@@ -175,7 +175,7 @@ void VehicleConstraint::OnStep(float inDeltaTime, PhysicsSystem &inPhysicsSystem
 			// Store contact velocity, cache this as the contact body may be removed
 			w->mContactPointVelocity = w->mContactBody->GetPointVelocity(w->mContactPosition);
 
-			// Check if body is active, if so the entire vehicle should be active
+			// Check if body is activate, if so the entire vehicle should be activate
 			mIsActive |= w->mContactBody->IsActive();
 
 			// Determine world space forward using steering angle and body rotation
@@ -251,7 +251,7 @@ void VehicleConstraint::BuildIslands(uint32 inConstraintIndex, IslandBuilder &io
 	{
 		if (!mBody->IsActive())
 		{
-			// Our main body is not active, activate it too
+			// Our main body is not activate, activate it too
 			body_ids[num_bodies] = mBody->GetID();
 			inBodyManager.ActivateBodies(body_ids, num_bodies + 1);
 		}

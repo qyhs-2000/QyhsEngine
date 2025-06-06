@@ -162,7 +162,7 @@ public:
 		mTotalLambda.SetZero();
 	}
 
-	/// Check if constraint is active
+	/// Check if constraint is activate
 	inline bool					IsActive() const
 	{
 		return !mEffectiveMass.IsZero();

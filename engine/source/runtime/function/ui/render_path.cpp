@@ -65,8 +65,9 @@ namespace qyhs
 	void RenderPath3D::start()
 	{
 		resizeBuffers();
+		import_model_gltf(scene, "E://VS_Project//QyhsEngine//engine//source//runtime//resource//model//CesiumMan//glTF-Embedded//CesiumMan_test.gltf");
+		//import_model_gltf(scene, "E://GithubClone//WickedEngine//Content//models//cube.gltf");
 	
-		//import_model_gltf(scene, "E://GithubClone//WickedEngine//Content//feibi.gltf");
 		//initialize camera position
 		XMMATRIX mat = XMMatrixTranslation(0.f, 2.f, -4.f);
 		camera->transformCamera(mat);

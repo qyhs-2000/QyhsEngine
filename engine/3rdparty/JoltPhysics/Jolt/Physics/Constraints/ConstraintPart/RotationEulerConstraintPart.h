@@ -155,7 +155,7 @@ public:
 		mTotalLambda = Vec3::sZero();
 	}
 
-	/// Check if constraint is active
+	/// Check if constraint is activate
 	inline bool					IsActive() const
 	{
 		return mEffectiveMass(3, 3) != 0.0f;

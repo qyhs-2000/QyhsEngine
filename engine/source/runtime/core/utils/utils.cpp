@@ -44,65 +44,6 @@ namespace qyhs
 			}
 		}
 
-		void fileDialog(const FileDialogParam & param,std::function<void(std::string file_name)> on_success_func)
-		{
-			std::thread([=] {
-				OPENFILENAME open_file_name;
-				wchar_t sz_file[256];
-				ZeroMemory(&open_file_name, sizeof(open_file_name));
-				open_file_name.lStructSize = sizeof(open_file_name);
-				open_file_name.hwndOwner = nullptr;
-				open_file_name.lpstrFile = sz_file;
-				//it won't work if this line is not added
-				open_file_name.lpstrFile[0] = '\0';
-				open_file_name.nMaxFile = sizeof(sz_file);
-				open_file_name.lpstrFileTitle = NULL;
-				open_file_name.nMaxFileTitle = 0;
-				open_file_name.lpstrInitialDir = NULL;
-				open_file_name.nFilterIndex = 1;
-
-				std::vector<wchar_t> filter;
-				filter.reserve(256);
-				for (auto& desc : param.descriptions)
-				{
-					filter.push_back(desc);
-				}
-				filter.push_back(0);
-				for (auto& extension : param.extensions)
-				{
-					filter.push_back('*');
-					filter.push_back('.');
-					for (auto& x : extension)
-					{
-						filter.push_back(x);
-					}
-					filter.push_back(';');
-				}
-				filter.push_back(0);
-				filter.push_back(0);
-				open_file_name.lpstrFilter = filter.data();
-				
-				bool get_file_name_success = false;
-				switch (param.type)
-				{
-				case FileDialogParam::OPEN:
-					open_file_name.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
-					break;
-				case FileDialogParam::SAVE:
-					open_file_name.Flags = OFN_OVERWRITEPROMPT | OFN_NOCHANGEDIR;
-					break;
-				default:
-					break;
-				}
-				get_file_name_success = GetOpenFileName(&open_file_name);
-				if (get_file_name_success)
-				{
-					std::string result_file_name;
-					stringConvert(open_file_name.lpstrFile, result_file_name);
-					on_success_func(result_file_name);
-				}
-			}).detach();
-		}
 		std::string toUpper(std::string str)
 		{
 			std::string result;

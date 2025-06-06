@@ -35,8 +35,6 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\ammintrin.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/core/helper.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\filesystem \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/initializer.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/jobsystem.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\functional \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\exception \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\yvals.h \
@@ -91,6 +89,8 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cstring \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\string.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_memory.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/core/initializer.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/core/jobsystem.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\thread \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\__msvc_chrono.hpp \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\ctime \

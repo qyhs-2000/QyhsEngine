@@ -17,7 +17,7 @@ public:
 	/// Called before every simulation step (received inCollisionSteps times for every PhysicsSystem::Update(...) call)
 	/// This is called while all bodies and constraints are locked for modifications. Multiple listeners can be executed in parallel and it is the responsibility of the listener
 	/// to avoid race conditions.
-	/// Note that this function is not called if there aren't any active bodies or when the physics system is updated with 0 delta time.
+	/// Note that this function is not called if there aren't any activate bodies or when the physics system is updated with 0 delta time.
 	virtual void			OnStep(float inDeltaTime, PhysicsSystem &inPhysicsSystem) = 0;
 };
 

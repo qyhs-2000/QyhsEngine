@@ -75,7 +75,7 @@ public:
 	struct TriangleBlock
 	{
 		uint8						mIndices[3][4];				///< 8 bit indices to triangle vertices for 4 triangles in the form mIndices[vertex][triangle] where vertex in [0, 2] and triangle in [0, 3]
-		uint8						mFlags[4];					///< Triangle flags (could contain material and active edges)
+		uint8						mFlags[4];					///< Triangle flags (could contain material and activate edges)
 	};
 
 	static_assert(sizeof(TriangleBlock) == 16, "Compiler added padding");

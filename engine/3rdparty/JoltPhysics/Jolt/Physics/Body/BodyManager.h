@@ -48,10 +48,10 @@ public:
 		uint						mNumBodiesStatic			= 0;			///< Number of static bodies
 
 		uint						mNumBodiesDynamic			= 0;			///< Number of dynamic bodies
-		uint						mNumActiveBodiesDynamic		= 0;			///< Number of dynamic bodies that are currently active
+		uint						mNumActiveBodiesDynamic		= 0;			///< Number of dynamic bodies that are currently activate
 
 		uint						mNumBodiesKinematic			= 0;			///< Number of kinematic bodies
-		uint						mNumActiveBodiesKinematic	= 0;			///< Number of kinematic bodies that are currently active
+		uint						mNumActiveBodiesKinematic	= 0;			///< Number of kinematic bodies that are currently activate
 	};
 
 	/// Get stats about the bodies in the body manager (slow, iterates through all bodies)
@@ -73,16 +73,16 @@ public:
 	/// This function should only be called when an exclusive lock for the bodies are held.
 	void							DeactivateBodies(const BodyID *inBodyIDs, int inNumber);
 
-	/// Get copy of the list of active bodies under protection of a lock.
+	/// Get copy of the list of activate bodies under protection of a lock.
 	void							GetActiveBodies(BodyIDVector &outBodyIDs) const;
 
-	/// Get the list of active bodies. Note: Not thread safe. The active bodies list can change at any moment.
+	/// Get the list of activate bodies. Note: Not thread safe. The activate bodies list can change at any moment.
 	const BodyID *					GetActiveBodiesUnsafe() const				{ return mActiveBodies; }
 
-	/// Get the number of active bodies.
+	/// Get the number of activate bodies.
 	uint32							GetNumActiveBodies() const					{ return mNumActiveBodies; }
 
-	/// Get the number of active bodies that are using continuous collision detection
+	/// Get the number of activate bodies that are using continuous collision detection
 	uint32							GetNumActiveCCDBodies() const				{ return mNumActiveCCDBodies; }
 
 	/// Listener that is notified whenever a body is activated/deactivated
@@ -156,7 +156,7 @@ public:
 		ShapeTypeColor,				///< Convex = green, scaled = yellow, compound = orange, mesh = red
 		MotionTypeColor,			///< Static = grey, keyframed = green, dynamic = random color per instance
 		SleepColor,					///< Static = grey, keyframed = green, dynamic = yellow, sleeping = red
-		IslandColor,				///< Static = grey, active = random color per island, sleeping = light grey
+		IslandColor,				///< Static = grey, activate = random color per island, sleeping = light grey
 		MaterialColor,				///< Color as defined by the PhysicsMaterial of the shape
 	};
 
@@ -183,7 +183,7 @@ public:
 #endif // JPH_DEBUG_RENDERER
 
 #ifdef JPH_ENABLE_ASSERTS
-	/// Lock the active body list, asserts when Activate/DeactivateBody is called.
+	/// Lock the activate body list, asserts when Activate/DeactivateBody is called.
 	void							SetActiveBodiesLocked(bool inLocked)		{ mActiveBodiesLocked = inLocked; }
 
 	/// Per thread override of the locked state, to be used by the PhysicsSystem only!
@@ -208,7 +208,7 @@ public:
 #endif
 
 #ifdef _DEBUG
-	/// Validate if the cached bounding boxes are correct for all active bodies
+	/// Validate if the cached bounding boxes are correct for all activate bodies
 	void							ValidateActiveBodyBounds();
 #endif // _DEBUG
 
@@ -253,13 +253,13 @@ private:
 	/// Mutex that protects the mActiveBodies array
 	mutable Mutex					mActiveBodiesMutex;
 
-	/// List of all active dynamic bodies (size is equal to max amount of bodies)
+	/// List of all activate dynamic bodies (size is equal to max amount of bodies)
 	BodyID *						mActiveBodies = nullptr;
 
-	/// How many bodies there are in the list of active bodies
+	/// How many bodies there are in the list of activate bodies
 	atomic<uint32>					mNumActiveBodies = 0;
 
-	/// How many of the active bodies have continuous collision detection enabled
+	/// How many of the activate bodies have continuous collision detection enabled
 	uint32							mNumActiveCCDBodies = 0;
 
 	/// Mutex that protects the mBodiesCacheInvalid array
@@ -275,7 +275,7 @@ private:
 	const BroadPhaseLayerInterface *mBroadPhaseLayerInterface = nullptr;
 
 #ifdef JPH_ENABLE_ASSERTS
-	/// Debug system that tries to limit changes to active bodies during the PhysicsSystem::Update()
+	/// Debug system that tries to limit changes to activate bodies during the PhysicsSystem::Update()
 	bool							mActiveBodiesLocked = false;
 	static thread_local bool		sOverrideAllowActivation;
 	static thread_local bool		sOverrideAllowDeactivation;

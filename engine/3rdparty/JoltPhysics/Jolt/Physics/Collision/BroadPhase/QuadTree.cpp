@@ -1354,7 +1354,7 @@ void QuadTree::FindCollidingPairs(const BodyVector &inBodies, const BodyID *inAc
 		
 	NodeID node_stack[cStackSize];
 
-	// Loop over all active bodies
+	// Loop over all activate bodies
 	for (int b1 = 0; b1 < inNumActiveBodies; ++b1)
 	{
 		BodyID b1_id = inActiveBodies[b1];

@@ -142,7 +142,7 @@ public:
 	/// Gets the current amount of bodies that are in the body manager
 	uint						GetNumBodies() const										{ return mBodyManager.GetNumBodies(); }
 
-	/// Gets the current amount of active bodies that are in the body manager
+	/// Gets the current amount of activate bodies that are in the body manager
 	uint32						GetNumActiveBodies() const									{ return mBodyManager.GetNumActiveBodies(); }
 
 	/// Get the maximum amount of bodies that this physics system supports
@@ -158,7 +158,7 @@ public:
 	/// @param outBodyIDs On return, this will contain the list of BodyIDs
 	void						GetBodies(BodyIDVector &outBodyIDs) const					{ return mBodyManager.GetBodyIDs(outBodyIDs); }
 
-	/// Get copy of the list of active bodies under protection of a lock.
+	/// Get copy of the list of activate bodies under protection of a lock.
 	/// @param outBodyIDs On return, this will contain the list of BodyIDs
 	void						GetActiveBodies(BodyIDVector &outBodyIDs) const				{ return mBodyManager.GetActiveBodies(outBodyIDs); }
 
@@ -202,10 +202,10 @@ private:
 	/// Number of bodies to process at once in JobApplyGravity
 	static constexpr int		cApplyGravityBatchSize = 64;
 
-	/// Number of active bodies to test for collisions per batch
+	/// Number of activate bodies to test for collisions per batch
 	static constexpr int		cActiveBodiesBatchSize = 16;
 
-	/// Number of active bodies to integrate velocities for
+	/// Number of activate bodies to integrate velocities for
 	static constexpr int		cIntegrateVelocityBatchSize = 64;
 
 	/// Number of contacts that need to be queued before another narrow phase job is started

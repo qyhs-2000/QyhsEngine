@@ -54,14 +54,14 @@ void CastSphereVsTriangles::AddHit(bool inBackFacing, const SubShapeID &inSubSha
 
 void CastSphereVsTriangles::AddHitWithActiveEdgeDetection(Vec3Arg inV0, Vec3Arg inV1, Vec3Arg inV2, bool inBackFacing, Vec3Arg inTriangleNormal, uint8 inActiveEdges, const SubShapeID &inSubShapeID2, float inFraction, Vec3Arg inContactPointA, Vec3Arg inContactPointB, Vec3Arg inContactNormal)
 {
-	// Check if we have enabled active edge detection
+	// Check if we have enabled activate edge detection
 	Vec3 contact_normal = inContactNormal;
 	if (mShapeCastSettings.mActiveEdgeMode == EActiveEdgeMode::CollideOnlyWithActive && inActiveEdges != 0b111)
 	{
-		// Convert the active edge velocity hint to local space
+		// Convert the activate edge velocity hint to local space
 		Vec3 active_edge_movement_direction = mCenterOfMassTransform2.Multiply3x3Transposed(mShapeCastSettings.mActiveEdgeMovementDirection);
 
-		// Update the contact normal to account for active edges
+		// Update the contact normal to account for activate edges
 		// Note that we flip the triangle normal as the penetration axis is pointing towards the triangle instead of away
 		contact_normal = ActiveEdges::FixNormal(inV0, inV1, inV2, inBackFacing? inTriangleNormal : -inTriangleNormal, inActiveEdges, inContactPointB, inContactNormal, active_edge_movement_direction);
 	}
@@ -181,7 +181,7 @@ void CastSphereVsTriangles::Cast(Vec3Arg inV0, Vec3Arg inV1, Vec3Arg inV2, uint8
 				ClosestPoint::GetBaryCentricCoordinates(v0 - p, v1 - p, v2 - p, u, v, w);
 				if (u >= 0.0f && v >= 0.0f && w >= 0.0f)
 				{
-					// Interior point, we found the collision point. We don't need to check active edges.
+					// Interior point, we found the collision point. We don't need to check activate edges.
 					AddHit(back_facing, inSubShapeID2, plane_intersection, p, p, back_facing? triangle_normal : -triangle_normal);
 					return;
 				}

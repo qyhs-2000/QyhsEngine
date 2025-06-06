@@ -176,8 +176,8 @@ MeshShape::MeshShape(const MeshShapeSettings &inSettings, ShapeResult &outResult
 		return;
 	}
 
-	// Fill in active edge bits
-	IndexedTriangleList indexed_triangles = inSettings.mIndexedTriangles; // Copy indices since we're adding the 'active edge' flags
+	// Fill in activate edge bits
+	IndexedTriangleList indexed_triangles = inSettings.mIndexedTriangles; // Copy indices since we're adding the 'activate edge' flags
 	sFindActiveEdges(inSettings.mTriangleVertices, indexed_triangles);
 
 	// Create triangle splitter
@@ -271,7 +271,7 @@ void MeshShape::sFindActiveEdges(const VertexList &inVertices, IndexedTriangleLi
 			}
 			else
 			{
-				// 3 or more triangles share an edge, mark this edge as active
+				// 3 or more triangles share an edge, mark this edge as activate
 				uint32 mask = 1 << (edge_idx + FLAGS_ACTIVE_EGDE_SHIFT);
 				JPH_ASSERT((triangle.mMaterialIndex & mask) == 0);
 				triangle.mMaterialIndex |= mask;
@@ -279,18 +279,18 @@ void MeshShape::sFindActiveEdges(const VertexList &inVertices, IndexedTriangleLi
 		}
 	}
 
-	// Walk over all edges and determine which ones are active
+	// Walk over all edges and determine which ones are activate
 	for (const EdgeToTriangle::value_type &edge : edge_to_triangle)
 	{
 		uint num_active = 0;
 		if (edge.second.mNumTriangles == 1)
 		{
-			// Edge is not shared, it is an active edge
+			// Edge is not shared, it is an activate edge
 			num_active = 1;
 		}
 		else if (edge.second.mNumTriangles == 2)
 		{
-			// Simple shared edge, determine if edge is active based on the two adjacent triangles
+			// Simple shared edge, determine if edge is activate based on the two adjacent triangles
 			const IndexedTriangle &triangle1 = ioIndices[edge.second.mTriangleIndices[0]];
 			const IndexedTriangle &triangle2 = ioIndices[edge.second.mTriangleIndices[1]];
 
@@ -310,16 +310,16 @@ void MeshShape::sFindActiveEdges(const VertexList &inVertices, IndexedTriangleLi
 			Vec3 triangle2_op = Vec3(inVertices[triangle2.mIdx[(edge_idx2 + 2) % 3]]);
 			Plane triangle2_plane = Plane::sFromPointsCCW(triangle2_e1, triangle2_e2, triangle2_op);
 
-			// Determine if the edge is active
+			// Determine if the edge is activate
 			num_active = ActiveEdges::IsEdgeActive(triangle1_plane.GetNormal(), triangle2_plane.GetNormal(), triangle1_e2 - triangle1_e1)? 2 : 0;
 		}
 		else
 		{
-			// More edges incoming, we've already marked all edges beyond the 2nd as active
+			// More edges incoming, we've already marked all edges beyond the 2nd as activate
 			num_active = 2;
 		}
 
-		// Mark edges of all original triangles active
+		// Mark edges of all original triangles activate
 		for (uint i = 0; i < num_active; ++i)
 		{
 			uint triangle_idx = edge.second.mTriangleIndices[i];
@@ -451,7 +451,7 @@ JPH_INLINE void MeshShape::WalkTreePerTriangle(const SubShapeIDCreator &inSubSha
 			int triangle_idx = 0;
 			for (const Vec3 *v = vertices, *v_end = vertices + inNumTriangles * 3; v < v_end; v += 3, triangle_idx++)
 			{
-				// Determine active edges
+				// Determine activate edges
 				uint8 active_edges = (flags[triangle_idx] >> FLAGS_ACTIVE_EGDE_SHIFT) & FLAGS_ACTIVE_EDGE_MASK;
 
 				// Create ID for triangle
@@ -596,7 +596,7 @@ void MeshShape::Draw(DebugRenderer *inRenderer, Mat44Arg inCenterOfMassTransform
 						Vec3 v1 = mTransform * v[edge_idx];
 						Vec3 v2 = mTransform * v[(edge_idx + 1) % 3];
 
-						// Draw active edge as a green arrow, other edges as grey
+						// Draw activate edge as a green arrow, other edges as grey
 						if (*f & (1 << (edge_idx + FLAGS_ACTIVE_EGDE_SHIFT)))
 							mRenderer->DrawArrow(v1, v2, Color::sGreen, 0.01f);
 						else

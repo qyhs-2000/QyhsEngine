@@ -87,7 +87,7 @@ public:
 		}
 	}
 
-	/// Returns if this spring is active
+	/// Returns if this spring is activate
 	inline bool					IsActive() const
 	{
 		return mSoftness != 0.0f;

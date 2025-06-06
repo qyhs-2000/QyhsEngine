@@ -73,6 +73,7 @@ namespace qyhs
 		renderer::Visibility visibility_main;
 		graphics::Texture depth_buffer_main;
 		scene::Scene* scene = scene::getScene();
+		scene::Scene& getCurrentScene() { return *scene; }
 		bool occlusion_culling_enabled = true;
 		FrameConstantBuffer frame_cb = {};
 	public:

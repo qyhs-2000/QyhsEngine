@@ -61,6 +61,17 @@ namespace qyhs::scene
 
 	}
 
+	void Scene::merge(Scene& other)
+	{
+		for (auto& entry : component_library.entries)
+		{
+			entry.second.component_manager->merge(*other.component_library.entries[entry.first].component_manager);
+		}
+
+		aabb_objects.insert(aabb_objects.end(), other.aabb_objects.begin(), other.aabb_objects.end());
+		object_matrices.insert(object_matrices.end(), other.object_matrices.begin(), other.object_matrices.end());
+	}
+
 	void Scene::updateMeshes(jobsystem::Context& ctx)
 	{
 		jobsystem::dispatch(ctx, (uint32_t)meshes.getCount(), small_subtask_groupsize, [&](jobsystem::JobArgs args) {

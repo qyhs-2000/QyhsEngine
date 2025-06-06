@@ -52,7 +52,7 @@ public:
 class CollideSettingsBase
 {
 public:
-	/// How active edges (edges that a moving object should bump into) are handled
+	/// How activate edges (edges that a moving object should bump into) are handled
 	EActiveEdgeMode			mActiveEdgeMode				= EActiveEdgeMode::CollideOnlyWithActive;
 
 	/// If colliding faces should be collected or only the collision point

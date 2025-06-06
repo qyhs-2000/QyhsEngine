@@ -146,7 +146,7 @@ SixDOFConstraint::SixDOFConstraint(Body &inBody1, Body &inBody2, const SixDOFCon
 	for (int i = 0; i < EAxis::Num; ++i)
 		mMotorSettings[i] = inSettings.mMotorSettings[i];
 
-	// Cache if motors are active (motors are off initially, but we may have friction)
+	// Cache if motors are activate (motors are off initially, but we may have friction)
 	CacheTranslationMotorActive();
 	CacheRotationMotorActive();
 }
@@ -309,12 +309,12 @@ void SixDOFConstraint::SetupVelocityConstraint(float inDeltaTime)
 			bool constraint_active = false;
 			if (IsAxisFixed(axis))
 			{
-				// When constraint is fixed it is always active
+				// When constraint is fixed it is always activate
 				constraint_active = true;
 			}
 			else if (!IsAxisFree(axis))
 			{
-				// When constraint is limited, it is only active when outside of the allowed range
+				// When constraint is limited, it is only activate when outside of the allowed range
 				float d = translation_axis.Dot(u);
 				constraint_active = d <= mLimitMin[i] || d >= mLimitMax[i];
 				mDisplacement[i] = d; // Store for SolveVelocityConstraint
@@ -564,7 +564,7 @@ bool SixDOFConstraint::SolveVelocityConstraint(float inDeltaTime)
 		for (int i = 0; i < 3; ++i)
 			if (mTranslationConstraintPart[i].IsActive())
 			{
-				// If the axis is not fixed it must be limited (or else the constraint would not be active)
+				// If the axis is not fixed it must be limited (or else the constraint would not be activate)
 				// Calculate the min and max constraint force based on on which side we're limited
 				float limit_min = -FLT_MAX, limit_max = FLT_MAX;
 				if (!IsAxisFixed(EAxis(EAxis::TranslationX + i)))

@@ -83,7 +83,7 @@ public:
 	/// Find all colliding pairs between dynamic bodies
 	/// Note that this function is very specifically tailored for the PhysicsSystem::Update function, hence it is not part of the BroadPhaseQuery interface.
 	/// One of the assumptions it can make is that no locking is needed during the query as it will only be called during a very particular part of the update.
-	/// @param ioActiveBodies is a list of bodies for which we need to find colliding pairs (this function can change the order of the ioActiveBodies array). This can be a subset of the set of active bodies in the system.
+	/// @param ioActiveBodies is a list of bodies for which we need to find colliding pairs (this function can change the order of the ioActiveBodies array). This can be a subset of the set of activate bodies in the system.
 	/// @param inNumActiveBodies is the size of the ioActiveBodies array.
 	/// @param inSpeculativeContactDistance Distance at which speculative contact points will be created.
 	/// @param inObjectVsBroadPhaseLayerFilter is the filter that determines if an object can collide with a broadphase layer.

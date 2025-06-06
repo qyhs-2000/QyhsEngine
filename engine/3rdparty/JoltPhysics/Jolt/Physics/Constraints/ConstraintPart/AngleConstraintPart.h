@@ -90,7 +90,7 @@ public:
 		mTotalLambda = 0.0f;
 	}
 
-	/// Check if constraint is active
+	/// Check if constraint is activate
 	inline bool					IsActive() const
 	{
 		return mEffectiveMass != 0.0f;

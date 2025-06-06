@@ -123,7 +123,7 @@ private:
 	Wheels						mWheels;									///< Wheel states of the vehicle
 	vector<VehicleAntiRollBar>	mAntiRollBars;								///< Anti rollbars of the vehicle
 	VehicleController *			mController;								///< Controls the acceleration / declerration of the vehicle
-	bool						mIsActive = false;							///< If this constraint is active
+	bool						mIsActive = false;							///< If this constraint is activate
 
 	// Prevent vehicle from toppling over
 	float						mCosMaxPitchRollAngle;						///< Cos of the max pitch/roll angle

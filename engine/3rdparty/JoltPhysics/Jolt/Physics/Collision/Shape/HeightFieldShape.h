@@ -181,7 +181,7 @@ private:
 	/// Calculate commonly used values and store them in the shape
 	void							CacheValues();
 
-	/// Calculate bit mask for all active edges in the heightfield
+	/// Calculate bit mask for all activate edges in the heightfield
 	void							CalculateActiveEdges();
 	
 	/// Store material indices in the least amount of bits per index possible
@@ -249,7 +249,7 @@ private:
 	uint16							mMaxSample = HeightFieldShapeConstants::cNoCollisionValue16;
 	vector<RangeBlock>				mRangeBlocks;						///< Hierarchical grid of range data describing the height variations within 1 block. The grid for level <level> starts at offset sGridOffsets[<level>]
 	vector<uint8>					mHeightSamples;						///< mBitsPerSample-bit height samples. Value [0, mMaxHeightValue] maps to highest detail grid in mRangeBlocks [mMin, mMax]. mNoCollisionValue is reserved to indicate no collision.
-	vector<uint8>					mActiveEdges;						///< (mSampleCount - 1)^2 * 3-bit active edge flags. 
+	vector<uint8>					mActiveEdges;						///< (mSampleCount - 1)^2 * 3-bit activate edge flags. 
 
 	/// Materials
 	PhysicsMaterialList				mMaterials;							///< The materials of square at (x, y) is: mMaterials[mMaterialIndices[x + y * (mSampleCount - 1)]]

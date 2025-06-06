@@ -206,7 +206,7 @@ void _glfwPollMonitorsWin32(void)
             type = _GLFW_INSERT_LAST;
         }
 
-        // HACK: If an active adapter does not have any display devices
+        // HACK: If an activate adapter does not have any display devices
         //       (as sometimes happens), add it directly as a monitor
         if (displayIndex == 0)
         {

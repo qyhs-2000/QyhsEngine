@@ -444,7 +444,7 @@ static void fitToMonitor(_GLFWwindow* window)
                  SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOCOPYBITS);
 }
 
-// Make the specified window and its video mode active on its monitor
+// Make the specified window and its video mode activate on its monitor
 //
 static void acquireMonitor(_GLFWwindow* window)
 {

@@ -17,7 +17,7 @@ template <class T> class RefConst;
 /// Derive your class from RefTarget and you can reference it by using Ref<classname> or RefConst<classname>
 ///
 /// Reference counting classes keep an integer which indicates how many references
-/// to the object are active. Reference counting objects are derived from RefTarget
+/// to the object are activate. Reference counting objects are derived from RefTarget
 /// and staT & their life with a reference count of zero. They can then be assigned
 /// to equivalents of pointers (Ref) which will increase the reference count immediately.
 /// If the destructor of Ref is called or another object is assigned to the reference

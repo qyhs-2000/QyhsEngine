@@ -79,13 +79,13 @@ void CollideSphereVsTriangles::Collide(Vec3Arg inV0, Vec3Arg inV1, Vec3Arg inV2,
 	// Calculate the point on the sphere
 	Vec3 point1 = mRadius * penetration_axis;
 
-	// Check if we have enabled active edge detection
+	// Check if we have enabled activate edge detection
 	JPH_ASSERT(closest_feature != 0);
 	if (mCollideShapeSettings.mActiveEdgeMode == EActiveEdgeMode::CollideOnlyWithActive 
 		&& closest_feature != 0b111 // For an interior hit we should already have the right normal
-		&& (inActiveEdges & sClosestFeatureToActiveEdgesMask[closest_feature]) == 0) // If we didn't hit an active edge we should take the triangle normal
+		&& (inActiveEdges & sClosestFeatureToActiveEdgesMask[closest_feature]) == 0) // If we didn't hit an activate edge we should take the triangle normal
 	{
-		// Convert the active edge velocity hint to local space
+		// Convert the activate edge velocity hint to local space
 		Vec3 active_edge_movement_direction = mTransform2.Multiply3x3Transposed(mCollideShapeSettings.mActiveEdgeMovementDirection);
 
 		// See ActiveEdges::FixNormal. If penetration_axis affects the movement less than the triangle normal we keep penetration_axis.

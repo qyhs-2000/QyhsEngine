@@ -3356,7 +3356,7 @@ static void ShowDemoWindowPopups()
     if (ImGui::TreeNode("Popups"))
     {
         ImGui::TextWrapped(
-            "When a popup is active, it inhibits interacting with windows that are behind the popup. "
+            "When a popup is activate, it inhibits interacting with windows that are behind the popup. "
             "Clicking outside the popup closes it.");
 
         static int selected_fish = -1;
@@ -3617,7 +3617,7 @@ static void ShowDemoWindowPopups()
         // Note: As a quirk in this very specific example, we want to differentiate the parent of this menu from the
         // parent of the various popup menus above. To do so we are encloding the items in a PushID()/PopID() block
         // to make them two different menusets. If we don't, opening any popup above and hovering our menu here would
-        // open it. This is because once a menu is active, we allow to switch to a sibling menu by just hovering on it,
+        // open it. This is because once a menu is activate, we allow to switch to a sibling menu by just hovering on it,
         // which is the desired behavior for regular menus.
         ImGui::PushID("foo");
         ImGui::MenuItem("Menu item", "CTRL+M");
@@ -5315,7 +5315,7 @@ static void ShowDemoWindowTables()
 
                 // From a user point of view we will tend to use 'inner_width' differently depending on whether our table is embedding scrolling.
                 // To facilitate toying with this demo we will actually pass 0.0f to the BeginTable() when ScrollX is disabled.
-                ImGui::DragFloat("inner_width (when ScrollX active)", &inner_width_with_scroll, 1.0f, 0.0f, FLT_MAX);
+                ImGui::DragFloat("inner_width (when ScrollX activate)", &inner_width_with_scroll, 1.0f, 0.0f, FLT_MAX);
 
                 ImGui::DragFloat("row_min_height", &row_min_height, 1.0f, 0.0f, FLT_MAX);
                 ImGui::SameLine(); HelpMarker("Specify height of the Selectable item.");
@@ -6642,7 +6642,7 @@ struct ExampleAppConsole
         // - That your items are evenly spaced (same height)
         // - That you have cheap random access to your elements (you can access them given their index,
         //   without processing all the ones before)
-        // You cannot this code as-is if a filter is active because it breaks the 'cheap random-access' property.
+        // You cannot this code as-is if a filter is activate because it breaks the 'cheap random-access' property.
         // We would need random-access on the post-filtered list.
         // A typical application wanting coarse clipping and filtering may want to pre-compute an array of indices
         // or offsets of items that passed the filtering test, recomputing this array when user changes the filter,
@@ -7741,9 +7741,9 @@ void ShowExampleAppDockSpace(bool* p_open)
         window_flags |= ImGuiWindowFlags_NoBackground;
 
     // Important: note that we proceed even if Begin() returns false (aka window is collapsed).
-    // This is because we want to keep our DockSpace() active. If a DockSpace() is inactive,
-    // all active windows docked into it will lose their parent and become undocked.
-    // We cannot preserve the docking relationship between an active window and an inactive docking, otherwise
+    // This is because we want to keep our DockSpace() activate. If a DockSpace() is inactive,
+    // all activate windows docked into it will lose their parent and become undocked.
+    // We cannot preserve the docking relationship between an activate window and an inactive docking, otherwise
     // any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
     if (!opt_padding)
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));

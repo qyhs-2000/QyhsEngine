@@ -45,6 +45,7 @@ namespace qyhs::scene
 			}
 		}
 		
+		void merge(Scene& other);
 		void updateObjects(jobsystem::Context &ctx);
 		void updateMeshes(jobsystem::Context& ctx);
 		void updateMaterial(jobsystem::Context& ctx);

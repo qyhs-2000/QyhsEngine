@@ -195,7 +195,7 @@ uint32 HeightFieldShapeSettings::CalculateBitsPerSampleForError(float inMaxError
 
 void HeightFieldShape::CalculateActiveEdges()
 {
-	// Store active edges. The triangles are organized like this:
+	// Store activate edges. The triangles are organized like this:
 	//  +       +
 	//  | \ T1B | \ T2B 
 	// e0   e2  |   \
@@ -205,11 +205,11 @@ void HeightFieldShape::CalculateActiveEdges()
 	//  |   \   |   \
 	//  | T3A \ | T4A \
 	//  +-------+-------+
-	// We store active edges e0 .. e2 as bits 0 .. 2. 
+	// We store activate edges e0 .. e2 as bits 0 .. 2. 
 	// We store triangles horizontally then vertically (order T1A, T2A, T3A and T4A).
-	// The top edge and right edge of the heightfield are always active so we do not need to store them, 
+	// The top edge and right edge of the heightfield are always activate so we do not need to store them, 
 	// therefore we only need to store (mSampleCount - 1)^2 * 3-bit
-	// The triangles T1B, T2B, T3B and T4B do not need to be stored, their active edges can be constructed from adjacent triangles.
+	// The triangles T1B, T2B, T3B and T4B do not need to be stored, their activate edges can be constructed from adjacent triangles.
 	// Add 1 byte padding so we can always read 1 uint16 to get the bits that cross an 8 bit boundary
 	uint count_min_1 = mSampleCount - 1;
 	uint count_min_1_sq = Square(count_min_1);
@@ -242,7 +242,7 @@ void HeightFieldShape::CalculateActiveEdges()
 				}
 			}
 
-	// Calculate active edges
+	// Calculate activate edges
 	for (uint y = 0; y < count_min_1; ++y)
 		for (uint x = 0; x < count_min_1; ++x)
 		{
@@ -589,7 +589,7 @@ HeightFieldShape::HeightFieldShape(const HeightFieldShapeSettings &inSettings, S
 			sample += inSettings.mBitsPerSample;
 		}
 
-	// Calculate the active edges
+	// Calculate the activate edges
 	CalculateActiveEdges();
 
 	// Compress material indices
@@ -993,7 +993,7 @@ void HeightFieldShape::Draw(DebugRenderer *inRenderer, Mat44Arg inCenterOfMassTr
 
 			JPH_INLINE void			VisitTriangle(uint inX, uint inY, uint inTriangle, Vec3Arg inV0, Vec3Arg inV1, Vec3Arg inV2) const
 			{			
-				// Determine active edges
+				// Determine activate edges
 				uint8 active_edges = mShape->GetEdgeFlags(inX, inY, inTriangle);
 
 				// Loop through edges
@@ -1003,7 +1003,7 @@ void HeightFieldShape::Draw(DebugRenderer *inRenderer, Mat44Arg inCenterOfMassTr
 					Vec3 v1 = mTransform * v[edge_idx];
 					Vec3 v2 = mTransform * v[(edge_idx + 1) % 3];
 
-					// Draw active edge as a green arrow, other edges as grey
+					// Draw activate edge as a green arrow, other edges as grey
 					if (active_edges & (1 << edge_idx))
 						mRenderer->DrawArrow(v1, v2, Color::sGreen, 0.01f);
 					else
@@ -1547,7 +1547,7 @@ void HeightFieldShape::sCastConvexVsHeightField(const ShapeCast &inShapeCast, co
 			// Create sub shape id for this part
 			SubShapeID triangle_sub_shape_id = mShape2->EncodeSubShapeID(mSubShapeIDCreator2, inX, inY, inTriangle);
 
-			// Determine active edges
+			// Determine activate edges
 			uint8 active_edges = mShape2->GetEdgeFlags(inX, inY, inTriangle);
 
 			Cast(inV0, inV1, inV2, active_edges, triangle_sub_shape_id);
@@ -1612,7 +1612,7 @@ void HeightFieldShape::sCastSphereVsHeightField(const ShapeCast &inShapeCast, co
 			// Create sub shape id for this part
 			SubShapeID triangle_sub_shape_id = mShape2->EncodeSubShapeID(mSubShapeIDCreator2, inX, inY, inTriangle);
 
-			// Determine active edges
+			// Determine activate edges
 			uint8 active_edges = mShape2->GetEdgeFlags(inX, inY, inTriangle);
 
 			Cast(inV0, inV1, inV2, active_edges, triangle_sub_shape_id);
@@ -1783,7 +1783,7 @@ void HeightFieldShape::sCollideConvexVsHeightField(const Shape *inShape1, const 
 			// Create ID for triangle
 			SubShapeID triangle_sub_shape_id = mShape2->EncodeSubShapeID(mSubShapeIDCreator2, inX, inY, inTriangle);
 
-			// Determine active edges
+			// Determine activate edges
 			uint8 active_edges = mShape2->GetEdgeFlags(inX, inY, inTriangle);
 
 			Collide(inV0, inV1, inV2, active_edges, triangle_sub_shape_id);
@@ -1839,7 +1839,7 @@ void HeightFieldShape::sCollideSphereVsHeightField(const Shape *inShape1, const 
 			// Create ID for triangle
 			SubShapeID triangle_sub_shape_id = mShape2->EncodeSubShapeID(mSubShapeIDCreator2, inX, inY, inTriangle);
 
-			// Determine active edges
+			// Determine activate edges
 			uint8 active_edges = mShape2->GetEdgeFlags(inX, inY, inTriangle);
 
 			Collide(inV0, inV1, inV2, active_edges, triangle_sub_shape_id);

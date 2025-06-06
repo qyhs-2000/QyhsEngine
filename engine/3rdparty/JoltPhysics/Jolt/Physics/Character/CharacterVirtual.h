@@ -320,7 +320,7 @@ private:
 	// Current linear velocity
 	Vec3								mLinearVelocity = Vec3::sZero();
 
-	// List of contacts that were active in the last frame
+	// List of contacts that were activate in the last frame
 	ContactList							mActiveContacts;
 
 	// Remembers the delta time of the last update

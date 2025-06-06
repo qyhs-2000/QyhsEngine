@@ -91,7 +91,7 @@ void SPDLOG_INLINE thread_pool::worker_loop_()
 }
 
 // process next message in the queue
-// return true if this thread should still be active (while no terminate msg
+// return true if this thread should still be activate (while no terminate msg
 // was received)
 bool SPDLOG_INLINE thread_pool::process_next_msg_()
 {

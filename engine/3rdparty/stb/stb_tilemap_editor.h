@@ -267,7 +267,7 @@
 //
 // EDITING MULTIPLE LEVELS
 //
-//   You can only have one active editor instance. To switch between multiple
+//   You can only have one activate editor instance. To switch between multiple
 //   levels, you can either store the levels in your own format and copy them
 //   in and out of the editor format, or you can create multiple stbte_tilemap
 //   objects and switch between them. The latter has the advantage that each
@@ -2133,7 +2133,7 @@ static void stbte__compute_panel_locations(stbte_tilemap *tm)
    // compute number of digits needs for info panel
    stbte__compute_digits(tm);
 
-   // determine which panels are active
+   // determine which panels are activate
    panel_active[STBTE__panel_categories] = tm->num_categories != 0;
    panel_active[STBTE__panel_layers    ] = tm->num_layers     >  1;
 #ifdef STBTE__COLORPICKER
@@ -2367,7 +2367,7 @@ static void stbte__brush(stbte_tilemap *tm, int x, int y)
       return;
    }
 
-   //stbte__alert("Selected tile not valid on active layer(s)");
+   //stbte__alert("Selected tile not valid on activate layer(s)");
 }
 
 enum
@@ -2542,7 +2542,7 @@ static void stbte__eyedrop(stbte_tilemap *tm, int x, int y)
       stbte__ui.eyedrop_last_layer = tm->num_layers;
    }
 
-   // if only one layer is active, query that
+   // if only one layer is activate, query that
    i = tm->cur_layer;
    if (tm->solo_layer >= 0)
       i = tm->solo_layer;
@@ -2634,7 +2634,7 @@ static void stbte__clear_stack(stbte_tilemap *tm, short result[])
             result[i] = STBTE__BG(tm,i);
 }
 
-// check if some map square is active
+// check if some map square is activate
 #define STBTE__IS_MAP_ACTIVE()  ((stbte__ui.active_id & 127) == STBTE__map)
 #define STBTE__IS_MAP_HOT()     ((stbte__ui.hot_id & 127) == STBTE__map)
 

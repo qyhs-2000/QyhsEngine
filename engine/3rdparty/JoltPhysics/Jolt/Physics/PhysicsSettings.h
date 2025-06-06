@@ -101,7 +101,7 @@ struct PhysicsSettings
 	/// If objects can go to sleep or not
 	bool		mAllowSleeping = true;
 
-	/// When false, we prevent collision against non-active (shared) edges. Mainly for debugging the algorithm.
+	/// When false, we prevent collision against non-activate (shared) edges. Mainly for debugging the algorithm.
 	bool		mCheckActiveEdges = true;
 
 	///@}

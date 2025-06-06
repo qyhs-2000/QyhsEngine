@@ -1625,7 +1625,7 @@ namespace {
 
 #ifdef TINYGLTF_USE_RAPIDJSON_CRTALLOCATOR
     // This uses the RapidJSON CRTAllocator.  It is thread safe and multiple
-    // documents may be active at once.
+    // documents may be activate at once.
     using json =
         rapidjson::GenericValue<rapidjson::UTF8<>, rapidjson::CrtAllocator>;
     using json_const_iterator = json::ConstMemberIterator;
@@ -1636,8 +1636,8 @@ namespace {
     rapidjson::CrtAllocator &GetAllocator() { return s_CrtAllocator; }
 #else
     // This uses the default RapidJSON MemoryPoolAllocator.  It is very fast, but
-    // not thread safe. Only a single JsonDocument may be active at any one time,
-    // meaning only a single gltf load/save can be active any one time.
+    // not thread safe. Only a single JsonDocument may be activate at any one time,
+    // meaning only a single gltf load/save can be activate any one time.
     using json = rapidjson::Value;
     using json_const_iterator = json::ConstMemberIterator;
     using json_const_array_iterator = json const *;
@@ -1657,7 +1657,7 @@ namespace {
         JsonDocument() {
             assert(s_pActiveDocument ==
                 nullptr);  // When using default allocator, only one document can be
-            // active at a time, if you need multiple active at once,
+            // activate at a time, if you need multiple activate at once,
             // define TINYGLTF_USE_RAPIDJSON_CRTALLOCATOR
             s_pActiveDocument = this;
         }

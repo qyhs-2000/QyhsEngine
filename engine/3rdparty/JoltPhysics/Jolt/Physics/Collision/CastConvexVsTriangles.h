@@ -24,8 +24,8 @@ public:
 
 	/// Cast convex object with a single triangle
 	/// @param inV0 , inV1 , inV2: CCW triangle vertices
-	/// @param inActiveEdges bit 0 = edge v0..v1 is active, bit 1 = edge v1..v2 is active, bit 2 = edge v2..v0 is active
-	/// An active edge is an edge that is not connected to another triangle in such a way that it is impossible to collide with the edge
+	/// @param inActiveEdges bit 0 = edge v0..v1 is activate, bit 1 = edge v1..v2 is activate, bit 2 = edge v2..v0 is activate
+	/// An activate edge is an edge that is not connected to another triangle in such a way that it is impossible to collide with the edge
 	/// @param inSubShapeID2 The sub shape ID for the triangle
 	void							Cast(Vec3Arg inV0, Vec3Arg inV1, Vec3Arg inV2, uint8 inActiveEdges, const SubShapeID &inSubShapeID2);
 

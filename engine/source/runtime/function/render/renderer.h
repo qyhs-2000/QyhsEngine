@@ -17,7 +17,7 @@ namespace qyhs::renderer
 		DRAWSCENE_OCEAN = 1 << 6, // include ocean
 		DRAWSCENE_SKIP_PLANAR_REFLECTION_OBJECTS = 1 << 7, // don't draw subsets which have planar reflection material
 		DRAWSCENE_FOREGROUND_ONLY = 1 << 8, // only include objects that are tagged as foreground
-		DRAWSCENE_MAINCAMERA = 1 << 9, // If this is active, then ObjectComponent with SetNotVisibleInMainCamera(true) won't be drawn
+		DRAWSCENE_MAINCAMERA = 1 << 9, // If this is activate, then ObjectComponent with SetNotVisibleInMainCamera(true) won't be drawn
 	};
 	class Visibility
 	{

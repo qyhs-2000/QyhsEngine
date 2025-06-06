@@ -148,7 +148,7 @@ private:
 	void						DumpChart(const char *inTag, const Threads &inThreads, const KeyToAggregator &inKeyToAggregators, const Aggregators &inAggregators);
 
 	mutex						mLock;																///< Lock that protects mThreads
-	vector<ProfileThread *>		mThreads;															///< List of all active threads
+	vector<ProfileThread *>		mThreads;															///< List of all activate threads
 	bool						mDump = false;														///< When true, the samples are dumped next frame
 	string						mDumpTag;															///< When not empty, this overrides the auto incrementing number of the dump filename
 };							

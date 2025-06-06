@@ -81,7 +81,7 @@ namespace qyhs
 	{
 		if (!m_current_active_level.lock())
 		{
-			LOG_ERROR("no active level,failed to save level");
+			LOG_ERROR("no activate level,failed to save level");
 			return;
 		}
 		m_current_active_level.lock()->save();

@@ -1,5 +1,5 @@
 #include "primitive.h"
-
+#include "core/math/math_library.h"
 namespace qyhs::primitive
 {
 	bool Frustum::checkBox(const AABB& aabb)
@@ -30,6 +30,11 @@ namespace qyhs::primitive
 		if (_min.x > _max.x || _min.y > _max.y || _min.z > _max.z)
 			return false;
 		return true;
+	}
+
+	bool HitBox2D::intersects(const HitBox2D& hb)
+	{
+		return qyhs::math::collision2D(pos, size, hb.pos, hb.size);
 	}
 
 }

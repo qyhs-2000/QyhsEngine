@@ -137,7 +137,7 @@ private:
 	static constexpr int			NumTriangleBits = 3;										///< How many bits to reserve to encode the triangle index
 	static constexpr int			MaxTrianglesPerLeaf = 1 << NumTriangleBits;					///< Number of triangles that are stored max per leaf aabb node 
 
-	/// Find and flags active edges
+	/// Find and flags activate edges
 	static void						sFindActiveEdges(const VertexList &inVertices, IndexedTriangleList &ioIndices);
 
 	/// Visit the entire tree using a visitor pattern

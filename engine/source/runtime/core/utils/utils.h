@@ -26,20 +26,9 @@ namespace qyhs
 		}
 	};
 
-	struct FileDialogParam
-	{
-		enum TYPE
-		{
-			OPEN,
-			SAVE
-		} type = OPEN;
-		std::string descriptions;
-		std::vector<std::string> extensions;
-	};
-
 	namespace Helper
 	{
-		void fileDialog(const FileDialogParam & param,std::function<void(std::string file_name)> on_success_func);
+		
 		std::string toUpper(std::string str);
 		std::string getFileExtension(std::string file);
 		bool fileRead(std::string file,std::vector<uint8_t> & file_data);
