@@ -118,6 +118,8 @@ struct alignas(16) ShaderGeometry
 	int index_buffer;
 	int vertex_buffer_position_wind;
 	int vb_uvs;
+	int vb_nor;
+
 	float2 uv_range_min;
 	float2 uv_range_max;
 	void init()
@@ -125,6 +127,7 @@ struct alignas(16) ShaderGeometry
 		index_buffer = -1;
 		vertex_buffer_position_wind = -1;
 		vb_uvs = -1;
+		vb_nor = -1;
 		uv_range_min = float2(0, 0);
 		uv_range_max = float2(1, 1);
 	}

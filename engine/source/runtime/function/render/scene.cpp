@@ -99,7 +99,7 @@ namespace qyhs::scene
 					}
 					ShaderGeometry subset_geometry = shader_geometry;
 
-					std::memcpy(geometry_upload_buffer_mapped + subset_index, &subset_geometry, sizeof(subset_geometry));
+					std::memcpy(geometry_upload_buffer_mapped + mesh.geometry_offset + subset_index, &subset_geometry, sizeof(subset_geometry));
 					++subset_index;
 				}
 			}

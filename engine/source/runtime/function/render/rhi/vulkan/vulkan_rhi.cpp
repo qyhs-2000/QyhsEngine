@@ -194,13 +194,13 @@ namespace qyhs
 
 		VkFenceCreateInfo fence_create_info = {};
 		fence_create_info.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-		fence_create_info.flags = VK_FENCE_CREATE_SIGNALED_BIT;
+		//fence_create_info.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 		for (int i = 0; i < BUFFER_COUNT; ++i)
 		{
 			for (int j = 0; j < QUEUE_COUNT; ++j)
 			{
 				assert(vkCreateFence(m_device, &fence_create_info, nullptr, &frame_fences[i][j]) == VK_SUCCESS);
-				assert(vkResetFences(m_device, 1, &frame_fences[i][j]) == VK_SUCCESS);
+				//assert(vkResetFences(m_device, 1, &frame_fences[i][j]) == VK_SUCCESS);
 			}
 		}
 

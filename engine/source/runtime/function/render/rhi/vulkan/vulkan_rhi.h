@@ -825,7 +825,7 @@ namespace qyhs
 		VkCommandPool* m_p_command_pools{ nullptr };
 		VkCommandBuffer* m_p_command_buffers{ nullptr };
 		VkCommandBuffer  m_current_command_buffer;
-		VkFence frame_fences[BUFFER_COUNT][QUEUE_COUNT];
+		VkFence frame_fences[BUFFER_COUNT][QUEUE_COUNT] = {};
 		std::unordered_map<uint32_t, std::shared_ptr<std::mutex>> queue_lockers;
 	public:
 		VkQueue graphics_queue;

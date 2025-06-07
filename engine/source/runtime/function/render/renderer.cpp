@@ -236,7 +236,7 @@ namespace qyhs::renderer
 			}
 			ShaderMeshInstancePointer instance_pointer;
 			instance_pointer.create(instance_index);
-			std::memcpy((ShaderMeshInstance*)instances.data + instance_count, &instance_pointer, sizeof(instance_pointer));
+			std::memcpy((ShaderMeshInstancePointer*)instances.data + instance_count, &instance_pointer, sizeof(instance_pointer));
 			++instanced_batch.instance_count;
 			++instance_count;
 		}
