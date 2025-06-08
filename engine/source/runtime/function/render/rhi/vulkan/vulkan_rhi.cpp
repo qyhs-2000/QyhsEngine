@@ -697,7 +697,7 @@ namespace qyhs
 		begin_info.pInheritanceInfo = nullptr; // Optional
 
 		auto cb = cmd_vulkan.getCommandBuffer();
-		assert(cb != VK_NULL_HANDLE); 
+		assert(cb != VK_NULL_HANDLE);
 		result = vkBeginCommandBuffer(cb, &begin_info);
 		assert(result == VK_SUCCESS);
 		return cmd;
@@ -965,6 +965,38 @@ namespace qyhs
 			1, &barrier);
 
 		vulkan_rhi->endSingleTimeCommands(command_buffer);
+	}
+
+	VkSemaphore VulkanRHI::createNewSemaphore()
+	{
+		std::scoped_lock lock(semaphore_pool_locker);
+		if (semaphore_pool.empty())
+		{
+			VkSemaphore &semaphore = semaphore_pool.emplace_back();
+			VkSemaphoreCreateInfo create_info = {};
+			create_info.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+			VkResult res = vkCreateSemaphore(m_device, &create_info, nullptr, &semaphore);
+			assert(res == VK_SUCCESS);
+		}
+		VkSemaphore semaphore = semaphore_pool.back();
+		semaphore_pool.pop_back();
+		return semaphore;
+	}
+
+	void VulkanRHI::freeSemaphore(VkSemaphore semaphore)
+	{
+		std::scoped_lock lock(semaphore_pool_locker);
+		semaphore_pool.push_back(semaphore);
+	}
+
+	void VulkanRHI::waitCommandList(CommandList cmd, CommandList wait_for)
+	{
+		CommandList_Vulkan& commandlist = getCommandList(cmd);
+		CommandList_Vulkan& commandlist_wait_for = getCommandList(wait_for);
+		assert(commandlist.index > commandlist_wait_for.index);
+		VkSemaphore semaphore = createNewSemaphore();
+		commandlist.waits.push_back(semaphore);
+		commandlist_wait_for.signals.push_back(semaphore);
 	}
 
 	VkSampler& VulkanRHI::getOrCreateMipMapSampler(VkPhysicalDevice physical_device, VkDevice device, uint32_t mip_levels) {
@@ -2391,7 +2423,7 @@ namespace qyhs
 				if (pso->desc.input_layout != nullptr)
 				{
 					std::unordered_map<uint32_t, uint32_t> bindingStrides;
-					std::unordered_map<uint32_t, uint32_t> currentOffsets; 
+					std::unordered_map<uint32_t, uint32_t> currentOffsets;
 
 					for (auto& x : pso->desc.input_layout->elements) {
 						uint32_t slot = x.input_slot;
@@ -2403,8 +2435,8 @@ namespace qyhs
 						}
 
 						uint32_t offset = (x.aligned_byte_offset == InputLayout::APPEND_ALIGNED_ELEMENT)
-							? currentOffsets[slot] 
-							: x.aligned_byte_offset; 
+							? currentOffsets[slot]
+							: x.aligned_byte_offset;
 
 						bindingStrides[slot] = std::max(bindingStrides[slot], offset + formatStride);
 						if (x.aligned_byte_offset == InputLayout::APPEND_ALIGNED_ELEMENT) {
@@ -2414,7 +2446,7 @@ namespace qyhs
 
 					std::unordered_map<uint32_t, bool> processedBindings;
 					for (auto& x : pso->desc.input_layout->elements) {
-						if (processedBindings.find(x.input_slot) != processedBindings.end()) 
+						if (processedBindings.find(x.input_slot) != processedBindings.end())
 							continue;
 						processedBindings[x.input_slot] = true;
 
@@ -2435,7 +2467,7 @@ namespace qyhs
 						attr.binding = x.input_slot;
 						if (attr.binding != lastBinding) {
 							lastBinding = attr.binding;
-							offset = 0; 
+							offset = 0;
 						}
 
 						attr.format = convertFormat(x.format);
@@ -3443,7 +3475,7 @@ namespace qyhs
 					for (auto& semaphore : command_list.signals)
 					{
 						queue.signal(semaphore);
-						//free_semaphore(semaphore);
+						freeSemaphore(semaphore);
 					}
 					command_list.signals.clear();
 					queue.submit(this, VK_NULL_HANDLE);
@@ -4041,7 +4073,7 @@ namespace qyhs
 			}
 			//assert(0);
 		}
-	
+
 	}
 
 	void VulkanRHI::drawIndexedInstanced(uint32_t index_count, uint32_t instance_count, uint32_t start_index_location, int32_t base_vertex_location, uint32_t start_instance_location, CommandList cmd)
@@ -4541,7 +4573,7 @@ namespace qyhs
 		return alignment;
 	}
 
-	bool VulkanRHI::createBuffer(const GPUBufferDesc *desc, GPUBuffer* buffer,const std::function<void(void*)>& init_buffer_callback)
+	bool VulkanRHI::createBuffer(const GPUBufferDesc* desc, GPUBuffer* buffer, const std::function<void(void*)>& init_buffer_callback)
 	{
 		std::shared_ptr<Buffer_Vulkan> internal_state = std::make_shared<Buffer_Vulkan>();
 		internal_state->allocation_handler = allocation_handler;
@@ -4637,7 +4669,7 @@ namespace qyhs
 
 			init_buffer_callback(mapped_data);
 
-			if(cmd.isValid())
+			if (cmd.isValid())
 			{
 				VkBufferCopy copyRegion = {};
 				copyRegion.size = buffer->desc.size;
@@ -4687,7 +4719,7 @@ namespace qyhs
 					barrier.dstAccessMask |= VK_ACCESS_2_SHADER_READ_BIT;
 					barrier.dstAccessMask |= VK_ACCESS_2_SHADER_WRITE_BIT;
 				}
-				
+
 
 				VkDependencyInfo dependencyInfo = {};
 				dependencyInfo.sType = VK_STRUCTURE_TYPE_DEPENDENCY_INFO;
@@ -6699,7 +6731,7 @@ namespace qyhs
 						VkDescriptorBufferInfo& buffer_info = buffer_infos.emplace_back();
 						buffer_info = {};
 						write.pBufferInfo = &buffer_info;
-						
+
 
 						const uint32_t original_binding = unroll_binding - VULKAN_BINDING_SHIFT_B;
 						const GPUBuffer& buffer = table.CONSTANT_BUFFER_VIEW[original_binding];
@@ -6726,7 +6758,7 @@ namespace qyhs
 								buffer_infos.back().range = VK_WHOLE_SIZE;
 							}
 						}
-						
+
 					}
 					break;
 

@@ -250,18 +250,37 @@ namespace qyhs::renderer
 		static thread_local RenderQueue render_queue;
 		render_queue.init();
 		const bool occlusion = flags & DRAWSCENE_OPAQUE;
-		for (uint32_t instance_id : visibility.visible_objects)
+		const bool opaque = flags & DRAWSCENE_OPAQUE;
+		const bool transparent = flags & DRAWSCENE_TRANSPARENT;
+		uint32_t filter_mask = 0;
+		if (opaque)
 		{
-			if (occlusion && visibility.scene->occlusion_result_objects[instance_id].isOccluded())
-			{
-				continue;
-			}
-			const scene::ObjectComponent& object = visibility.scene->objects[instance_id];
-			render_queue.add(object.mesh_index, instance_id);
+			filter_mask |= FILTER_OPAQUE;
 		}
-		if (!render_queue.empty())
+		if (transparent)
 		{
-			renderMeshes(visibility.scene, render_queue, render_pass, cmd);
+			filter_mask |= FILTER_TRANSPARENT;
+		}
+		if (opaque || transparent)
+		{
+
+			for (uint32_t instance_id : visibility.visible_objects)
+			{
+				if (occlusion && visibility.scene->occlusion_result_objects[instance_id].isOccluded())
+				{
+					continue;
+				}
+				const scene::ObjectComponent& object = visibility.scene->objects[instance_id];
+				if ((object.getFilterMask() & filter_mask) == 0)
+				{
+					continue;
+				}
+				render_queue.add(object.mesh_index, instance_id);
+			}
+			if (!render_queue.empty())
+			{
+				renderMeshes(visibility.scene, render_queue, render_pass, cmd);
+			}
 		}
 
 	}
@@ -476,6 +495,11 @@ namespace qyhs::renderer
 			loadShader(ShaderStage::PIXEL_SHADER, shaders[PSTYPE_OBJECT_PERMUTATION_BEGIN + args.job_index],
 				"objectPS.cso", ShaderModel::SM_6_0, scene::MaterialComponent::shadertype_definitions[args.job_index]);
 			});
+		jobsystem::dispatch(ctx, scene::MaterialComponent::SHADERTYPE_COUNT, 1, [](jobsystem::JobArgs args) {
+			auto defines = scene::MaterialComponent::shadertype_definitions[args.job_index];
+			defines.push_back("TRANSPARENT");
+			loadShader(ShaderStage::PIXEL_SHADER, shaders[PSTYPE_OBJECT_TRANSPARENT_PERMUTATION_BEGIN + args.job_index], "objectPS.cso", ShaderModel::SM_6_0, defines);
+			});
 		jobsystem::wait(ctx);
 
 		jobsystem::dispatch(ctx, DEBUG_RENDERING_COUNT, 1, [&](jobsystem::JobArgs args) {
@@ -511,7 +535,7 @@ namespace qyhs::renderer
 				{
 					jobsystem::execute(object_pso_job_ctxs[render_pass][mesh_shader], [=](jobsystem::JobArgs args) {
 						//now just for opaque scene
-						for (uint32_t blend_mode = 0; blend_mode <= BLENDMODE_OPAQUE; ++blend_mode)
+						for (uint32_t blend_mode = 0; blend_mode <= BLENDMODE_ALPHA; ++blend_mode)
 						{
 							for (uint32_t cull_mode = 0; cull_mode < (uint32_t)CullMode::COUNT; ++cull_mode)
 							{
@@ -541,6 +565,7 @@ namespace qyhs::renderer
 											SHADER_TYPE real_vertex_shader = getVertexShaderType((RENDERPASS)render_pass, tessellation, alpha_test, transparency);
 											desc.vertex_shader = real_vertex_shader < SHADER_TYPE_COUNT ? &shaders[real_vertex_shader] : nullptr;
 										}
+										//TODO: transparent shaders not implemented yet
 										SHADER_TYPE real_fragment_shader = getPixelShaderType((RENDERPASS)render_pass, alpha_test, transparency, (scene::MaterialComponent::SHADERTYPE)shader_type);
 										desc.fragment_shader = real_fragment_shader < SHADER_TYPE_COUNT ? &shaders[real_fragment_shader] : nullptr;
 										assert(desc.vertex_shader->isValid());
@@ -584,7 +609,7 @@ namespace qyhs::renderer
 											desc.blend_state = &blend_states[BLEND_STATE_TYPE_OPAQUE];
 											break;
 										case BLENDMODE_ALPHA:
-											desc.blend_state = &blend_states[BLEND_STATE_TYPE_ALPHA];
+											desc.blend_state = &blend_states[BLEND_STATE_TYPE_TRANSPARENT];
 											break;
 											/*
 											case BLENDMODE_ADDITIVE:
@@ -739,6 +764,9 @@ namespace qyhs::renderer
 		dsd.back_face.stencil_depth_fail_op = StencilOp::KEEP;
 		depth_stencils[DSSTYPE_DEFAULT] = dsd;
 
+		dsd.depth_func = ComparisonFunc::GREATER_EQUAL;
+		depth_stencils[DSSTYPE_TRANSPARENT] = dsd;
+
 		dsd.depth_enable = true;
 		dsd.stencil_enable = false;
 		dsd.depth_write_mask = DepthWriteMask::ZERO;
@@ -892,7 +920,7 @@ namespace qyhs::renderer
 		return &samplers[id];
 	}
 
-	void drawDebugWorld(const scene::CameraComponent & camera,CommandList cmd)
+	void drawDebugWorld(const scene::CameraComponent& camera, CommandList cmd)
 	{
 		RHI* rhi = rhi::getRHI();
 		if (grid_helper)

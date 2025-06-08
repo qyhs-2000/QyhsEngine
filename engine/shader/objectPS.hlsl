@@ -1,2 +1,3 @@
 #define OBJECTSHADER_COMPILER_PS
+#define OBJECTSHADER_LAYOUT_COMMON
 #include "objectHF.hlsli"

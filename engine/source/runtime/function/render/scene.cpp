@@ -37,7 +37,17 @@ namespace qyhs::scene
 				object.center = aabb.getCenter();
 				object.radius = aabb.getRadius();
 
-
+				int first_subset = 0, last_subset = 0;
+				mesh.getLodSubsetRange(object.lod, first_subset, last_subset);
+				for (int i = first_subset; i < last_subset; ++i)
+				{
+					const MeshComponent::MeshSubset& subset = mesh.subsets[i];
+					const MaterialComponent* material = materials.getComponent(subset.materialID);
+					if (material != nullptr)
+					{
+						object.filter_mask_dynamic |= material->getFilterMask();
+					}
+				}
 				//create mesh instance gpu data
 				ShaderMeshInstance instance;
 				instance.init();
@@ -88,9 +98,10 @@ namespace qyhs::scene
 				uint32_t subset_index = 0;
 				for (auto& subset : mesh.subsets)
 				{
-					const scene::MaterialComponent* material = materials.getComponent(entity);
+					const scene::MaterialComponent* material = materials.getComponent(subset.materialID);
 					if (material != nullptr)
 					{
+						//TODO:
 						subset.material_index = materials.getIndex(subset.materialID);
 					}
 					else
@@ -112,7 +123,6 @@ namespace qyhs::scene
 	{
 		jobsystem::dispatch(ctx, (uint32_t)materials.getCount(), small_subtask_groupsize, [&](jobsystem::JobArgs args) {
 			MaterialComponent& material = materials[args.job_index];
-			Entity entity = materials.getEntity(args.job_index);
 			material.writeShaderMaterial(material_upload_buffer_mapped + args.job_index);
 			});
 	}

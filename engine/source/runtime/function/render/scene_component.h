@@ -15,6 +15,12 @@ namespace qyhs::scene
 		uint32_t lod = 0;
 		XMFLOAT3 center = XMFLOAT3(0, 0, 0);
 		float radius = 0;
+		uint32_t filter_mask = 0;
+		uint32_t filter_mask_dynamic = 0;
+		inline uint32_t getFilterMask()const
+		{
+			return filter_mask | filter_mask_dynamic;
+		}
 	};
 
 	class HierarchyComponent
@@ -73,6 +79,7 @@ namespace qyhs::scene
 		inline bool isPreferUnCompressedTexturesEnabled()const { return _flags & PREFER_UNCOMPRESSED_TEXTURES; }
 		inline bool isTextureStreamingDisabled()const { return _flags & DISABLE_TEXTURE_STREAMING; }
 		resourcemanager::Flags getTextureSlotResourceFlags(TEXTURESLOT slot);
+		uint32_t getFilterMask()const;
 		int sampler_descriptor = -1;
 		BLENDMODE userBlendMode = BLENDMODE::BLENDMODE_OPAQUE;
 		uint32_t _flags = 0;

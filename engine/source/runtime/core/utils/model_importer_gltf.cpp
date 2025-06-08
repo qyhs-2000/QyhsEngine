@@ -591,15 +591,17 @@ namespace qyhs
 		loader_state.scene = scene;
 
 		//create material
-		std::map<size_t, size_t> material_map_asset_id;
 		for (auto& material : loader_state.model.materials)
 		{
 			ecs::Entity material_entity = scene->createMaterialEntity(material.name);
 			scene->attachComponent(material_entity, loader_state.root_entity);
 
 			scene::MaterialComponent& material_component = *scene->materials.getComponent(material_entity);
+			material_component.base_color = XMFLOAT4(1, 1, 1, 1);
 			auto base_color_texture_iter = material.values.find("baseColorTexture");
 			auto base_color_factor = material.values.find("baseColorFactor");
+
+			auto alpha_mode = material.additionalValues.find("alphaMode");
 			if (base_color_factor != material.values.end())
 			{
 				material_component.base_color.x = float(base_color_factor->second.ColorFactor()[0]);
@@ -615,6 +617,13 @@ namespace qyhs
 				material_component.textures[scene::MaterialComponent::BASECOLOR_MAP].name = img.uri;
 				material_component.textures[scene::MaterialComponent::BASECOLOR_MAP].uvset = base_color_texture_iter->second.TextureTexCoord();
 			}
+			if (alpha_mode != material.additionalValues.end())
+			{
+				if (alpha_mode->second.string_value.compare("BLEND") == 0)
+				{
+					material_component.userBlendMode = enums::BLENDMODE_ALPHA;
+				}
+			}
 			material_component.createRenderData();
 		}
 
@@ -627,7 +636,11 @@ namespace qyhs
 			for (auto& primitive : mesh.primitives)
 			{
 				mesh_comp.subsets.push_back(scene::MeshComponent::MeshSubset());
-				mesh_comp.subsets.back().materialID = primitive.material==-1?-1: scene->materials.getEntity(std::max(0, primitive.material));
+				if (scene->materials.getCount() == 0)
+				{
+					scene->materials.create(ecs::createEntity());
+				}
+				mesh_comp.subsets.back().materialID = scene->materials.getEntity(std::max(0, primitive.material));
 				uint32_t vertex_offset = (uint32_t)mesh_comp.vertex_positions.size();
 				scene::MaterialComponent* material = scene->materials.getComponent(mesh_comp.subsets.back().materialID);
 				const int index_remap[3] = { 0,2,1 };

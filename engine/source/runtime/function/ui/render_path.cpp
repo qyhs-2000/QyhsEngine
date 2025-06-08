@@ -286,8 +286,16 @@ namespace qyhs
 
 		jobsystem::wait(*ctx);
 
-
-
+		//main camera opaque color pass
+		cmd = rhi->beginCommandList();
+		//rhi->waitCommandList(cmd, cmd_maincamera_prepass);
+		jobsystem::execute(*ctx, [this, cmd](jobsystem::JobArgs args) {
+			renderer::bindCameraConstantBuffer(*camera, cmd);
+			renderer::bindCommonResources(cmd);
+			renderOpaques(cmd);
+			});
+		jobsystem::wait(*ctx);
+		//transparents
 		jobsystem::execute(*ctx, [this, cmd](jobsystem::JobArgs args) {
 			renderer::bindCameraConstantBuffer(*camera, cmd);
 			renderer::bindCommonResources(cmd);
@@ -335,6 +343,38 @@ namespace qyhs
 			rhi->bindViewports(cmd, 1, &vp);
 
 			renderer::drawScene(visibility_main,renderer::DRAWSCENE_TRANSPARENT|renderer::DRAWSCENE_MAINCAMERA,RENDERPASS_MAIN,cmd);
+		}
+		renderer::drawDebugWorld(*camera,cmd);
+		rhi->endRenderPass(cmd);
+	}
+
+	void RenderPath3D::renderOpaques(CommandList cmd) const
+	{
+		RHI* rhi = rhi::getRHI();
+		RenderPassImage rp[] = {
+			RenderPassImage::renderTarget(&rt_main_render,RenderPassImage::LoadOp::CLEAR),
+			RenderPassImage::depthStencil(&depth_buffer_main,RenderPassImage::LoadOp::LOAD,
+				RenderPassImage::StoreOp::STORE,
+				ResourceState::DEPTHSTENCIL,
+				ResourceState::DEPTHSTENCIL,
+				ResourceState::DEPTHSTENCIL),
+				RenderPassImage::resolve(&rt_main),
+		};
+		rhi->beginRenderPass(rp, getMSAASampleCount() > 1 ? 3 : 2, cmd);
+		Rect scissor = getScissorInternalResolution();
+		rhi->bindScissorRects(1, &scissor, cmd);
+
+		Viewport vp;
+		vp.width = (float)depth_buffer_main.desc.width;
+		vp.height = (float)depth_buffer_main.desc.height;
+		vp.min_depth = 0;
+		vp.max_depth = 1;
+		//Opaque scene
+		{
+			rhi->beginEvent("Opaque Scene", cmd);
+			rhi->bindViewports(cmd, 1, &vp);
+
+			renderer::drawScene(visibility_main,renderer::DRAWSCENE_OPAQUE|renderer::DRAWSCENE_MAINCAMERA,RENDERPASS_MAIN,cmd);
 		}
 		renderer::drawDebugWorld(*camera,cmd);
 		rhi->endRenderPass(cmd);

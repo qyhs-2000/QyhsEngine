@@ -55,6 +55,7 @@ namespace qyhs
 		virtual void start()override;
 		virtual void render();
 		void renderTransparents(CommandList cmd) const;
+		void renderOpaques(CommandList cmd) const;
 		virtual void compose(CommandList cmd) override;
 		virtual void resizeBuffers() override;
 		virtual void update(float delta_time) override;

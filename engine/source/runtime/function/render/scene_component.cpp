@@ -288,6 +288,7 @@ namespace qyhs::scene
 					subresource = texture_map.resource.getTextureSRGBSubresource();
 					break;
 				default:
+					assert(0);
 					break;
 				}
 				material.textures[i].texture_descriptor = rhi->getDescriptorIndex(texture_map.getGPUResource(), SubresourceType::SRV, subresource);
@@ -321,6 +322,15 @@ namespace qyhs::scene
 			flags |= resourcemanager::Flags::STREAMING;
 		}
 		return flags;
+	}
+
+	uint32_t MaterialComponent::getFilterMask() const
+	{
+		if (userBlendMode == BLENDMODE_OPAQUE)
+		{
+			return FILTER_OPAQUE;
+		}
+		return FILTER_TRANSPARENT;
 	}
 
 	void MaterialComponent::createRenderData()

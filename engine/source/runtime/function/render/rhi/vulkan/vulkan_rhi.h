@@ -729,6 +729,11 @@ namespace qyhs
 		void createTextureImageView(VkDevice device, VkImage image, VkImageView& image_view, uint32_t mip_levels);
 		void copyBuffer(RHI* rhi, VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize src_offset, VkDeviceSize dst_offset, VkDeviceSize size);
 		std::vector<VkSampler> immutable_samplers;
+		std::vector<VkSemaphore> semaphore_pool;
+		std::mutex semaphore_pool_locker;
+		VkSemaphore createNewSemaphore();
+		void freeSemaphore(VkSemaphore semaphore);
+		virtual void waitCommandList(CommandList cmd, CommandList wait_for);
 		VkSampler& getOrCreateMipMapSampler(VkPhysicalDevice physical_device, VkDevice device, uint32_t mip_levels);
 		std::unordered_map<uint32_t, VkSampler> m_mipmap_sampler_map;
 		void createCubeMap(RHI* rhi, VkImage& image, VkImageView& image_view, VmaAllocation& allocation, uint32_t width, uint32_t height, std::array<void*, 6> pixels, PIXEL_FORMAT texture_image_format, uint32_t miplevels);

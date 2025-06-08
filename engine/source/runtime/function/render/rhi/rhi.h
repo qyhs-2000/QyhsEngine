@@ -189,6 +189,7 @@ namespace qyhs
 		virtual void updateBuffer(const GPUBuffer* buffer, const void* data, CommandList cmd, uint64_t size = ~0, uint64_t offset = 0);
 		virtual void copyBuffer(const GPUBuffer* dst_buffer, uint64_t dst_offset, const GPUBuffer* src_buffer, uint64_t src_offset,uint64_t size,CommandList cmd) = 0;
 		virtual void bindIndexBuffer(const GPUBuffer* indexBuffer, const IndexBufferFormat format, uint64_t offset, CommandList cmd) = 0;
+		virtual void waitCommandList(CommandList cmd, CommandList wait_for) = 0;
 		template<typename T>
 		void bindDynamicConstantBuffer(const T& data, uint32_t slot, CommandList cmd)
 		{

@@ -67,10 +67,14 @@ struct alignas(16) ShaderTextureSlot
 {
 	uint uvset_aniso_lodclamp;
 	int texture_descriptor;
+	int sparse_residencymap_descriptor;
+	int sparse_feedbackmap_descriptor;
 	inline void init()
 	{
 		uvset_aniso_lodclamp = 0;
 		texture_descriptor = -1;
+		sparse_residencymap_descriptor = -1;
+		sparse_feedbackmap_descriptor = -1;
 	}
 	inline uint getUVSet()
 	{
@@ -101,7 +105,15 @@ struct alignas(16) ShaderMaterial
 	
 	int sampler_descriptor;
 	float3 _padding;
-	
+#ifndef __cplusplus
+	inline half getAlphaTest()
+	{
+		return 0;
+	}
+
+#endif // !__cplusplus
+
+
 	ShaderTextureSlot textures[TEXTURESLOT_COUNT];
 	void init()
 	{

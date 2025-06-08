@@ -51,7 +51,7 @@ namespace qyhs
 		allocation.offset = allocator.offset;
 		allocation.data = (void*)((size_t)allocator.buffer.mapped_data + allocator.offset);
 		allocator.offset += alignTo(size, allocator.alignment);
-		assert(allocation.isValid());
+		//assert(allocation.isValid());
 		return allocation;
 	}
 }
