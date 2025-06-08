@@ -320,7 +320,7 @@ namespace qyhs
 	{
 		RHI* rhi = rhi::getRHI();
 		RenderPassImage rp[] = {
-			RenderPassImage::renderTarget(&rt_main_render,RenderPassImage::LoadOp::CLEAR),
+			RenderPassImage::renderTarget(&rt_main_render,RenderPassImage::LoadOp::LOAD),
 			RenderPassImage::depthStencil(&depth_buffer_main,RenderPassImage::LoadOp::LOAD,
 				RenderPassImage::StoreOp::STORE,
 				ResourceState::DEPTHSTENCIL,
@@ -376,7 +376,7 @@ namespace qyhs
 
 			renderer::drawScene(visibility_main,renderer::DRAWSCENE_OPAQUE|renderer::DRAWSCENE_MAINCAMERA,RENDERPASS_MAIN,cmd);
 		}
-		renderer::drawDebugWorld(*camera,cmd);
+		
 		rhi->endRenderPass(cmd);
 	}
 
