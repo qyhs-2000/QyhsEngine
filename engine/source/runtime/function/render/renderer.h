@@ -64,7 +64,7 @@ namespace qyhs::renderer
 	bool getOcclusionCullingEnabled();
 	void initialize();
 	void updatePerFrameData(scene::Scene& scene, Visibility& visibility, FrameConstantBuffer& frame_cb);
-	void updateRenderData(const Visibility& visibility, const FrameConstantBuffer& frame_cb,CommandList & cmd);
+	void updateRenderData(const Visibility& visibility, const FrameConstantBuffer& frame_cb,CommandList  cmd);
 	const Sampler* getSampler(enums::SAMPLERTYPES id);
 	void drawDebugWorld(const scene::CameraComponent & camera,CommandList cmd);
 }

@@ -888,7 +888,7 @@ namespace qyhs::renderer
 		frame_cb.scene = visibility.scene->shader_scene;
 	}
 
-	void updateRenderData(const Visibility& visibility, const FrameConstantBuffer& frame_cb, CommandList& cmd)
+	void updateRenderData(const Visibility& visibility, const FrameConstantBuffer& frame_cb, CommandList cmd)
 	{
 		rhi->updateBuffer(&frame_constant_buffer, &frame_cb, cmd);
 		if (visibility.scene->instance_buffer.isValid() && visibility.scene->scene_instance_count > 0)

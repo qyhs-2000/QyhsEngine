@@ -245,18 +245,19 @@ namespace qyhs
 		std::shared_ptr<jobsystem::Context> ctx = std::make_shared<jobsystem::Context>();
 		RHI* rhi = rhi::getRHI();
 		CommandList cmd = rhi->beginCommandList();
-
+		CommandList cmd_prepareframe = cmd;
 		//prepare the frame
-		jobsystem::execute(*ctx, [&](jobsystem::JobArgs args) {
+		jobsystem::execute(*ctx, [this,cmd](jobsystem::JobArgs args) {
 			renderer::updateRenderData(visibility_main, frame_cb, cmd);
 			});
 
-		jobsystem::wait(*ctx);
+		//jobsystem::wait(*ctx);
 		static const uint32_t drawscene_flags = renderer::DRAWSCENE_OPAQUE | renderer::DRAWSCENE_MAINCAMERA;
 
 		//main camera depth prepass
 		cmd = rhi->beginCommandList();
 		CommandList cmd_maincamera_prepass = cmd;
+		rhi->waitCommandList(cmd, cmd_prepareframe);
 		jobsystem::execute(*ctx, [this,cmd](jobsystem::JobArgs args) {
 			RHI* rhi = rhi::getRHI();
 			renderer::bindCameraConstantBuffer(*camera, cmd);
@@ -284,11 +285,11 @@ namespace qyhs
 			rhi->endEvent(cmd);
 		});
 
-		jobsystem::wait(*ctx);
+		//jobsystem::wait(*ctx);
 
 		//main camera opaque color pass
 		cmd = rhi->beginCommandList();
-		//rhi->waitCommandList(cmd, cmd_maincamera_prepass);
+		rhi->waitCommandList(cmd, cmd_maincamera_prepass);
 		jobsystem::execute(*ctx, [this, cmd](jobsystem::JobArgs args) {
 			renderer::bindCameraConstantBuffer(*camera, cmd);
 			renderer::bindCommonResources(cmd);

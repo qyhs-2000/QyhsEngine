@@ -600,8 +600,8 @@ namespace qyhs
 			std::vector<uint32_t> submit_swapchain_image_indices;
 			bool sparse_binding_supported{ false };
 			void submit(VulkanRHI* rhi, VkFence fence);
-			void signal(VkSemaphore& semaphore);
-			void wait(VkSemaphore& semaphore);
+			void signal(VkSemaphore semaphore);
+			void wait(VkSemaphore semaphore);
 		} queues[QUEUE_COUNT];
 
 		struct SwapChain_Vulkan

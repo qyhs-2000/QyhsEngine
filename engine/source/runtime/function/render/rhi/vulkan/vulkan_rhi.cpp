@@ -3417,7 +3417,7 @@ namespace qyhs
 		{
 			uint32_t cmd_last = cmd_count;
 			cmd_count = 0;
-			for (int i = 0; i < cmd_last; ++i)
+			for (uint32_t i = 0; i < cmd_last; ++i)
 			{
 				CommandList_Vulkan& command_list = *commandlists[i].get();
 				result = vkEndCommandBuffer(command_list.getCommandBuffer());
@@ -3427,8 +3427,9 @@ namespace qyhs
 				const bool dependency = !command_list.signals.empty() || !command_list.waits.empty() || !command_list.wait_queues.empty();
 				if (dependency)
 				{
+					
 					//if current queue is dependent on other queue, we need to wait for the other queue to finish
-					queue.submit(this, nullptr);
+					queue.submit(this, VK_NULL_HANDLE);
 				}
 				VkCommandBufferSubmitInfo& cmd = queue.submit_cmds.emplace_back();
 				cmd.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_SUBMIT_INFO;
@@ -3464,7 +3465,7 @@ namespace qyhs
 						wait_queue.submit(this, VK_NULL_HANDLE);
 
 						queue.wait(semaphore);
-						//free_semaphore(semaphore);
+						freeSemaphore(semaphore);
 					}
 					command_list.wait_queues.clear();
 					for (auto& semaphore : command_list.waits)
@@ -6327,19 +6328,23 @@ namespace qyhs
 					assert(0);
 				}
 			}
-			swapchain_updates.clear();
-			submit_swapchains.clear();
-			submit_swapchain_image_indices.clear();
-			submit_waitSemaphoreInfos.clear();
-			submit_signalSemaphores.clear();
-			submit_signalSemaphoreInfos.clear();
-			submit_cmds.clear();
-
 		}
+
+		swapchain_updates.clear();
+		submit_swapchains.clear();
+		submit_swapchain_image_indices.clear();
+		submit_waitSemaphoreInfos.clear();
+		submit_signalSemaphores.clear();
+		submit_signalSemaphoreInfos.clear();
+		submit_cmds.clear();
 	}
 
-	void VulkanRHI::CommandQueue::signal(VkSemaphore& semaphore)
+	void VulkanRHI::CommandQueue::signal(VkSemaphore semaphore)
 	{
+		if (queue == VK_NULL_HANDLE)
+		{
+			return;
+		}
 		VkSemaphoreSubmitInfo& signal_submit_info = submit_signalSemaphoreInfos.emplace_back();
 		signal_submit_info.sType = VK_STRUCTURE_TYPE_SEMAPHORE_SUBMIT_INFO;
 		signal_submit_info.semaphore = semaphore;
@@ -6348,10 +6353,14 @@ namespace qyhs
 
 	}
 
-	void VulkanRHI::CommandQueue::wait(VkSemaphore& semaphore)
+	void VulkanRHI::CommandQueue::wait(VkSemaphore semaphore)
 	{
+		if (queue == VK_NULL_HANDLE)
+		{
+			return;
+		}
 		VkSemaphoreSubmitInfo& wait_submit_info = submit_waitSemaphoreInfos.emplace_back();
-		wait_submit_info.sType = VK_STRUCTURE_TYPE_SEMAPHORE_WAIT_INFO;
+		wait_submit_info.sType = VK_STRUCTURE_TYPE_SEMAPHORE_SUBMIT_INFO;
 		wait_submit_info.semaphore = semaphore;
 		wait_submit_info.stageMask = VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT;
 		wait_submit_info.value = 0;
