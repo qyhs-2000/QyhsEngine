@@ -12,7 +12,7 @@ JPH_NAMESPACE_BEGIN
 class StreamIn;
 class StreamOut;
 
-/// Resource that contains the joint hierarchy for a skeleton
+/// Resource that contains the joint hierarchies for a skeleton
 class Skeleton : public RefTarget<Skeleton>
 {
 public:

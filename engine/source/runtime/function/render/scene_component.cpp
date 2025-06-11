@@ -82,6 +82,10 @@ namespace qyhs::scene
 		XMStoreFloat4(&local_rotation, quat);
 	}
 
+	void TransformComponent::serialize(Archive& archive, ecs::EntitySerializer& seri)
+	{
+	}
+
 	void MeshComponent::deleteRenderData()
 	{
 		general_buffer = {};
@@ -114,8 +118,9 @@ namespace qyhs::scene
 			_max = math::max(_max, pos);
 		}
 		aabb = primitive::AABB(_min, _max);
-
-		auto init_buffer_callback = [&](void* dest) {
+		
+		auto init_buffer_callback = [=](void* dest) {
+			
 			uint8_t* buffer_data = (uint8_t*)dest;
 			uint64_t buffer_offset = 0ull;
 
@@ -199,7 +204,7 @@ namespace qyhs::scene
 					std::memcpy(vertices + i, &vert, sizeof(vert));
 				}
 			}
-
+			
 			};
 
 		bool success = rhi->createBuffer(&desc, &general_buffer, init_buffer_callback);
@@ -266,6 +271,10 @@ namespace qyhs::scene
 		XMStoreFloat4x4(&inv_view, _InvV);
 		XMStoreFloat3x3(&rotation_matrix, _InvV);
 		XMStoreFloat4x4(&inv_view_projection, XMMatrixInverse(nullptr, _VP));
+	}
+
+	void CameraComponent::serialize(Archive& archive, ecs::EntitySerializer& seri)
+	{
 	}
 
 	void MaterialComponent::writeShaderMaterial(ShaderMaterial* dst)
@@ -345,5 +354,7 @@ namespace qyhs::scene
 			}
 		}
 	}
+
+	
 
 }

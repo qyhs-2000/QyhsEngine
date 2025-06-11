@@ -2850,7 +2850,7 @@ static SpvReflectResult ParseDescriptorBlockVariableUsage(SpvReflectPrvParser* p
       break;
 
     case SpvOpTypeArray: {
-      // Parse through array's type hierarchy to find the actual/non-array element type
+      // Parse through array's type hierarchies to find the actual/non-array element type
       while ((p_type->op == SpvOpTypeArray) && (index_index < p_access_chain->index_count)) {
         // Find the array element type id
         SpvReflectPrvNode* p_node = FindNode(p_parser, p_type->id);

@@ -29,7 +29,7 @@ template <class T> class RefConst;
 /// have one object reference another and have the other reference the first one
 /// back, because this way the reference count of both objects will never become
 /// lower than 1, resulting in a memory leak. By carefully designing your classses
-/// (and particularly identifying who owns who in the class hierarchy) you can avoid
+/// (and particularly identifying who owns who in the class hierarchies) you can avoid
 /// these problems.
 template <class T>
 class RefTarget		

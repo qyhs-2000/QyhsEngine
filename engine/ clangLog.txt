@@ -33,8 +33,7 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_malloc.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\zmmintrin.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\ammintrin.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/helper.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\filesystem \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/core/event/event_handler.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\functional \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\exception \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\yvals.h \
@@ -89,34 +88,36 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cstring \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\string.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_memory.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/initializer.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/jobsystem.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\thread \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\memory \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\iosfwd \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\mutex \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\__msvc_chrono.hpp \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\ctime \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\time.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\ratio \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xtimec.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\memory \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\iosfwd \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\process.h \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_startup.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vcruntime_startup.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\string \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xstring \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\__msvc_sanitizer_annotate_container.hpp \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cctype \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\ctype.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xthreads.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\atomic \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\deque \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\mutex \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\system_error \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\__msvc_system_error_abi.hpp \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cerrno \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\stdexcept \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xstring \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\__msvc_sanitizer_annotate_container.hpp \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xcall_once.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xerrc.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\atomic \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xthreads.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\thread \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\process.h \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_startup.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vcruntime_startup.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\string \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cctype \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\ctype.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/core/helper.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\filesystem \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/core/initializer.h \
+  E:/VS_Project/QyhsEngine/engine/source/runtime/core/jobsystem.h \
+  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\deque \
   core/common_include.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cassert \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\assert.h \
@@ -393,10 +394,12 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   E:\VS2022\VC\Tools\MSVC\14.38.33130\include\map \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/camera/camera_component.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/camera/../component.h \
+  function/framework/component/ecs.h \
   function/framework/game_object/game_object.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/component.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/ecs.h \
   function/framework/game_object/game_object_id_allocator.h \
+  function/file/archive.h core/jobsystem.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/hierarchy/hierarchy_component.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/mesh/mesh_component.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/mesh/../component.h \
@@ -414,7 +417,6 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   core/utils/utils.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/level/level.h \
   function/framework/game_object/character.h \
-  function/framework/component/ecs.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/world/world_manager.h \
   function/framework/level/level.h resource/type/world_resource.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/global/global_context.h \
@@ -467,7 +469,7 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   function/render/scene_component.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/scene.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/scene_component.h \
-  core/math/math_library.h resource/resource_manager.h core/jobsystem.h \
+  core/math/math_library.h resource/resource_manager.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/rhi/vulkan/common/vulkan_render_type.h \
   E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/shader_compiler.h \
   function/render/rhi/graphics.h \

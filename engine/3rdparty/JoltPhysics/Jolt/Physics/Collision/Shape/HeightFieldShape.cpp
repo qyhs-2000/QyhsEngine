@@ -433,7 +433,7 @@ HeightFieldShape::HeightFieldShape(const HeightFieldShapeSettings &inSettings, S
 	// Calculate amount of grids
 	uint max_level = sGetMaxLevel(n);
 
-	// Temporary data structure used during creating of a hierarchy of grids 
+	// Temporary data structure used during creating of a hierarchies of grids 
 	struct Range
 	{
 		uint16	mMin;

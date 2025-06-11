@@ -3,15 +3,17 @@
 #include "core/utils/model_importer_gltf.h"
 #include "core/utils/utils.h"
 #include "core/event/event_handler.h"
-
+#include "function/file/archive.h"
 enum class FileType
 {
 	INVALID,
-	GLTF
+	GLTF,
+	XSCENE
 };
 
 static std::unordered_map<std::string, FileType> filetypes = {
-	{"GLTF",FileType::GLTF}
+	{"GLTF",FileType::GLTF},
+	{"XSCENE",FileType::XSCENE}
 };
 
 namespace qyhs
@@ -39,8 +41,9 @@ namespace qyhs
 			std::cout << "Click Open Button" << std::endl;
 			helper::FileDialogParam param;
 			param.type = helper::FileDialogParam::OPEN;
-			param.descriptions = ".gltf";
+			param.descriptions = ".gltf,.xscene";
 			param.extensions.push_back("gltf");
+			param.extensions.push_back("xscene");
 			helper::fileDialog(param, [&](std::string filename) {
 				eventhandler::subscribe_once(eventhandler::EVENT_THREAD_SAFE_POINT, [=](uint64_t userdata) {
 					open(filename);
@@ -54,6 +57,22 @@ namespace qyhs
 		save_button.setColor(Color(50, 180, 100, 180), gui::WIDGET_STATE::IDLE);
 		save_button.setColor(Color(50, 220, 140, 255), gui::WIDGET_STATE::FOCUS);
 		save_button.setSize(Vector2(70, 30));
+		save_button.onClickFunc([&](gui::EventArgs) {
+			std::cout << "Click Save Button" << std::endl;
+			helper::FileDialogParam param;
+			param.type = helper::FileDialogParam::SAVE;
+			param.descriptions = "Qyhs Scene(.xscene) | GLTF Model(.gltf)";
+			param.extensions.push_back("gltf");
+			param.extensions.push_back("xscene");
+			helper::fileDialog(param, [=](std::string filename) {
+				eventhandler::subscribe_once(eventhandler::EVENT_THREAD_SAFE_POINT, [=](uint64_t userdata) {
+					auto extension = helper::toUpper(helper::getExtensionFromFileName(filename));
+					std::string file_name = (!extension.compare("GLTF") || !extension.compare("GLB") || !extension.compare("H")) ? filename : helper::forceExtension(filename, param.extensions.front());
+					save(filename);
+					});
+				});
+
+			});
 
 		gui.addWeights(&open_button);
 		gui.addWeights(&save_button);
@@ -92,6 +111,10 @@ namespace qyhs
 			{
 				import_model_gltf(scene.get(), filename);
 			}
+			else if (file_type == FileType::XSCENE)
+			{
+				scene::loadModel(*scene, filename);
+			}
 			eventhandler::subscribe_once(eventhandler::EVENT_THREAD_SAFE_POINT, [=](uint64_t userdata) {
 				getCurrentScene().merge(*scene);
 				});
@@ -99,4 +122,28 @@ namespace qyhs
 
 	}
 
+	void EditorRenderer::save(const std::string& filename)
+	{
+		std::string extension = helper::toUpper(helper::getExtensionFromFileName(filename));
+		FileType file_type = FileType::INVALID;
+		auto iter = filetypes.find(extension);
+		if (iter != filetypes.end())
+		{
+			file_type = iter->second;
+		}
+		if (file_type == FileType::INVALID)
+		{
+			return;
+		}
+		if (file_type == FileType::XSCENE)
+		{
+			Archive archive = Archive(filename,false);
+			if (archive.isOpen())
+			{
+				scene::Scene& scene = getCurrentScene();
+				scene.serialize(archive);
+			}
+		}
+	}
+	
 }

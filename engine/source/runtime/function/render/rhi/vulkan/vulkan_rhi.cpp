@@ -4667,9 +4667,7 @@ namespace qyhs
 				cmd = copy_allocator.allocate(desc->size);
 				mapped_data = cmd.upload_buffer.mapped_data;
 			}
-
 			init_buffer_callback(mapped_data);
-
 			if (cmd.isValid())
 			{
 				VkBufferCopy copyRegion = {};

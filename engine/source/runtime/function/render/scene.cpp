@@ -11,6 +11,156 @@ namespace qyhs::scene
 		return &scene;
 	}
 
+	ecs::Entity loadModel(Scene& scene, const std::string& filename, const XMMATRIX& transformMatrix, bool attached)
+	{
+		Entity root_entity = INVALID_ENTITY;
+		if (attached)
+		{
+			root_entity = createEntity();
+		}
+		LoadModel2(scene, filename, transformMatrix, root_entity);
+		return ecs::Entity();
+	}
+
+	void LoadModel2(Scene& scene, const std::string& fileName, const XMMATRIX& transformMatrix, ecs::Entity rootEntity)
+	{
+		Archive archive(fileName, true);
+		if (!archive.isOpen())
+		{
+			return;
+		}
+		scene.serialize(archive);
+		bool attached = true;
+		if (rootEntity == INVALID_ENTITY)
+		{
+			rootEntity = createEntity();
+			attached = false;
+		}
+		scene.transforms.create(rootEntity);
+
+		{
+			// Apply the optional transformation matrix to the new scene:
+
+			// Parent all unparented transforms to new root entity
+			for (size_t i = 0; i < scene.transforms.getCount(); ++i)
+			{
+				Entity entity = scene.transforms.getEntity(i);
+				if (entity != rootEntity && !scene.hierarchies.contain(entity))
+				{
+					scene.attachComponent(entity, rootEntity);
+				}
+			}
+
+			// The root component is transformed, scene is updated:
+			TransformComponent* root_transform = scene.transforms.getComponent(rootEntity);
+			root_transform->MatrixTransform(transformMatrix);
+
+			scene.update(0);
+		}
+
+		if (!attached)
+		{
+			// In this case, we don't care about the root anymore, so delete it. This will simplify overall hierarchies
+			scene.Component_DetachChildren(rootEntity);
+			scene.Entity_Remove(rootEntity);
+		}
+	}
+
+	void Scene::Component_DetachChildren(Entity parent)
+	{
+		for (int i = 0; i < hierarchies.getCount();)
+		{
+			if (hierarchies[i].parent_id == parent)
+			{
+				Entity entity = hierarchies.getEntity(i);
+				detachComponent(entity);
+			}
+			else
+			{
+				++i;
+			}
+		}
+	}
+
+	void Scene::Entity_Remove(ecs::Entity entity,bool recursive)
+	{
+		if (recursive)
+		{
+			std::vector<Entity> entities_to_remove;
+			for (int i = 0; i < hierarchies.getCount(); ++i)
+			{
+				const HierarchyComponent& hierarchy = hierarchies[i];
+				if (hierarchy.parent_id == entity)
+				{
+					Entity child = hierarchies.getEntity(i);
+					entities_to_remove.push_back(child);
+				}
+			}
+			for (int i = 0; i < entities_to_remove.size(); ++i)
+			{
+				Entity_Remove(entities_to_remove[i]);
+			}
+		}
+
+		for (auto& entry : component_library.entries)
+		{
+			entry.second.component_manager->remove(entity);	
+		}
+	}
+
+
+	void Scene::serialize(Archive& archive)
+	{
+		if (archive.isReadMode())
+		{
+			uint32_t reserved;
+			archive >> reserved;
+		}
+		else
+		{
+			uint32_t reserved = 0;
+			archive << reserved;
+		}
+
+		size_t jump_before = 0;
+		size_t jump_after = 0;
+		size_t original_pos = 0;
+
+		if (archive.isReadMode())
+		{
+			archive >> jump_before;
+			archive >> jump_after;
+			original_pos = archive.getPos();
+			archive.jump(jump_before);
+		}
+		else
+		{
+			jump_before = archive.writeUnKnownJumpPosition();
+			jump_after = archive.writeUnKnownJumpPosition();
+		}
+		resourcemanager::ResourceSerializer resource_seri;
+		if (archive.isReadMode())
+		{
+			resourcemanager::Serialize_READ(archive, resource_seri);
+			archive.jump(original_pos);
+		}
+		EntitySerializer seri;
+		seri.ctx.priority = jobsystem::Priority::Low;
+		component_library.serialize(archive, seri);
+
+		if (archive.isReadMode())
+		{
+			archive.jump(jump_after);
+		}
+		else
+		{
+			archive.patchUnKnownJumpPosition(jump_before);
+			resourcemanager::Serialize_WRITE(archive, seri.resource_registration);
+			archive.patchUnKnownJumpPosition(jump_after);
+			
+		}
+	}
+
 	void Scene::updateObjects(jobsystem::Context& ctx)
 	{
 		aabb_objects.resize(objects.getCount());
@@ -24,7 +174,7 @@ namespace qyhs::scene
 
 			//TODO:update occlusion culling states
 			OccludedResult occluded_result = occlusion_result_objects[args.job_index];
-			
+
 			if (object.mesh_entity != INVALID_ENTITY && meshes.contain(object.mesh_entity) && transforms.contain(entity))
 			{
 				object.mesh_index = meshes.getIndex(object.mesh_entity);

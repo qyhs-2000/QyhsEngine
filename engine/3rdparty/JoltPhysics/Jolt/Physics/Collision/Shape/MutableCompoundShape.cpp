@@ -47,7 +47,7 @@ MutableCompoundShape::MutableCompoundShape(const MutableCompoundShapeSettings &i
 	// Check if we're not exceeding the amount of sub shape id bits
 	if (GetSubShapeIDBitsRecursive() > SubShapeID::MaxBits)
 	{
-		outResult.SetError("Compound hierarchy is too deep and exceeds the amount of available sub shape ID bits");
+		outResult.SetError("Compound hierarchies is too deep and exceeds the amount of available sub shape ID bits");
 		return;
 	}
 

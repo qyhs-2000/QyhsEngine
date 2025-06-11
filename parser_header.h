@@ -4,6 +4,7 @@
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/core/base/macro.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/core/base/vulkan_base.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/core/common_include.h"
+#include "E:/VS_Project/QyhsEngine/engine/source/runtime/core/event/event_handler.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/core/helper.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/core/initializer.h"
 #include "E:/VS_Project/QyhsEngine/engine/source/runtime/core/jobsystem.h"

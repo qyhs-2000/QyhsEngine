@@ -2,6 +2,9 @@
 #include "core/helper.h"
 #include "function/render/rhi/rhi.h"
 #include <stb_image.h>
+#include "core/jobsystem.h"
+#include <iostream>
+#include <fstream>
 namespace qyhs::resourcemanager
 {
 	struct ResourceInternal
@@ -14,6 +17,7 @@ namespace qyhs::resourcemanager
 		std::string filename;
 		std::string container_filename;
 		size_t container_fileoffset = 0;
+		size_t container_filesize = 0;
 	};
 	enum class DataType
 	{
@@ -161,6 +165,8 @@ namespace qyhs::resourcemanager
 			{
 				resource->container_filename = container_filename;
 			}
+			resource->container_filesize = filesize;
+			resource->container_fileoffset = container_fileoffset;
 			if (filedata != nullptr && resource->filedata.empty() && (has_flag(flags, Flags::IMPORT_RETAIN_FILEDATA)))
 			{
 				resource->filedata.resize(filesize);
@@ -175,13 +181,12 @@ namespace qyhs::resourcemanager
 			}
 		}
 
-		locker.unlock();
-
 		if (filedata == nullptr || filesize == 0)
 		{
 			if (resource->filedata.empty())
 			{
-				if (!helper::readFile(resource->container_filename, resource->filedata, resource->container_fileoffset));
+				bool read_success = helper::readFile(resource->container_filename, resource->filedata, resource->container_filesize, resource->container_fileoffset);
+				if (!read_success)
 				{
 					resource.reset();
 					return Resource();
@@ -190,6 +195,7 @@ namespace qyhs::resourcemanager
 			filedata = resource->filedata.data();
 			filesize = resource->filedata.size();
 		}
+		locker.unlock();
 		flags |= resource->flags;
 
 		bool success = false;
@@ -230,6 +236,108 @@ namespace qyhs::resourcemanager
 		locker.unlock();
 		return result;
 	}
+
+	void Serialize_WRITE(Archive& archive, const std::unordered_set<std::string>& resource_names)
+	{
+		assert(!archive.isReadMode());
+		locker.lock();
+		uint32_t serializable_count = 0;
+		for (const std::string& name : resource_names)
+		{
+			auto iter = resources.find(name);
+			if (iter == resources.end())
+			{
+				continue;
+			}
+			std::shared_ptr<ResourceInternal> resource = iter->second.lock();
+			if (resource != nullptr)
+			{
+				serializable_count++;
+			}
+		}
+		std::cout << "Write Resources:" << std::endl;
+		archive << serializable_count;
+		for (auto& name : resource_names)
+		{
+			auto iter = resources.find(name);
+			if (iter == resources.end())
+			{
+				continue;
+			}
+			std::shared_ptr<ResourceInternal> resource = iter->second.lock();
+			if (resource != nullptr)
+			{
+				std::string name = iter->first;
+				helper::makeRelativePath(archive.getSourceDir(), name);
+				if (resource->filedata.empty())
+				{
+					helper::readFile(resource->container_filename, resource->filedata);
+				}
+				archive << name;
+				archive << (uint32_t)resource->flags;
+				archive << resource->filedata;
+
+				if (!archive.getSourceFileName().empty())
+				{
+					resource->container_filename = archive.getSourceFileName();
+					resource->container_fileoffset = archive.getPos() - resource->filedata.size();
+					resource->container_filesize = resource->filedata.size();
+					if (!has_flag(resource->flags, Flags::IMPORT_RETAIN_FILEDATA))
+					{
+						resource->filedata.clear();
+						resource->filedata.shrink_to_fit();
+					}
+				}
+			}
+		}
+
+		locker.unlock();
+	}
+
+	void Serialize_READ(Archive& archive, ResourceSerializer& seri)
+	{
+		size_t serializable_count = 0;
+		archive >> serializable_count;
+		struct TempResource
+		{
+			std::string name;
+			const uint8_t* data_ptr;
+			size_t data_size = 0;
+		};
+		std::vector<TempResource> tmp_resources;
+		tmp_resources.resize(serializable_count);
+
+		jobsystem::Context ctx;
+		ctx.priority = jobsystem::Priority::Low;
+		std::cout << "Read Resources" << std::endl;
+		for (int i = 0; i < serializable_count; ++i)
+		{
+			TempResource& tmp_res = tmp_resources[i];
+			archive >> tmp_res.name;
+			uint32_t flags_tmp;
+			archive >> flags_tmp;
+			std::cout << "name :" <<tmp_res.name<<"  flags: "<< (uint32_t)flags_tmp<<" file data" << std::endl;
+			archive.mapVector(tmp_res.data_ptr, tmp_res.data_size);
+			tmp_res.name = archive.getSourceDir() + tmp_res.name;
+			size_t file_offset = archive.getPos() - tmp_res.data_size;
+			if (contains(tmp_res.name))
+			{
+				continue;
+			}
+			jobsystem::execute(ctx, [i, &tmp_resources, &seri, &archive, file_offset](jobsystem::JobArgs args) {
+				auto& tmp_resource = tmp_resources[i];
+				auto res = load(tmp_resource.name, Flags::IMPORT_DELAY, tmp_resource.data_ptr,
+					tmp_resource.data_size, archive.getSourceFileName(), file_offset);
+				static std::mutex seri_locker;
+				seri_locker.lock();
+				seri.resources.push_back(res);
+				seri_locker.unlock();
+				});
+		}
+		jobsystem::wait(ctx);
+		
+	}
+
 	int Resource::getTextureSRGBSubresource() const
 	{
 		const ResourceInternal* resourceinternal = (ResourceInternal*)internal_state.get();

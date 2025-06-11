@@ -4,6 +4,8 @@
 #include <memory>
 #include <function/framework/game_object/game_object_id_allocator.h>
 #include <cassert>
+#include "function/file/archive.h"
+#include "core/jobsystem.h"
 namespace qyhs::ecs
 {
 	using Entity = uint32_t;
@@ -14,10 +16,53 @@ namespace qyhs::ecs
 		return next.fetch_add(1);
 	}
 
+	class EntitySerializer
+	{
+	public:
+		std::unordered_set<std::string> resource_registration;
+		jobsystem::Context ctx;
+		std::unordered_map<uint64_t, Entity> remap;
+		bool allow_remap = true;
+		void registerResource(const std::string& name);
+	private:
+	};
+
+	inline void serializeEntity(Archive& archive, Entity& entity, EntitySerializer& seri)
+	{
+		if (archive.isReadMode())
+		{
+			uint64_t mem;
+			archive >> mem;
+			if (mem != INVALID_ENTITY && seri.allow_remap)
+			{
+				auto it = seri.remap.find(mem);
+				if (it == seri.remap.end())
+				{
+					entity = createEntity();
+					seri.remap[mem] = entity;
+				}
+				else
+				{
+					entity = it->second;
+				}
+			}
+			else
+			{
+				entity = (Entity)mem;
+			}
+		}
+		else
+		{
+			archive << entity;
+		}
+	}
+
 	class ComponentManager_Interface
 	{
 	public:
 		virtual void merge(ComponentManager_Interface& other) = 0;
+		virtual void serialize(Archive& archive, EntitySerializer& seri) = 0;
+		virtual void remove(Entity entity) = 0;
 	private:
 	};
 
@@ -28,6 +73,41 @@ namespace qyhs::ecs
 		inline void merge(ComponentManager_Interface& other)
 		{
 			merge((ComponentManager<TComponent>&) other);
+		}
+
+		inline void serialize(Archive& archive, EntitySerializer& seri)
+		{
+			if (archive.isReadMode())
+			{
+				const size_t prev_count = m_components.size();
+				size_t count;
+				archive >> count;
+				m_components.resize(prev_count + count);
+				for (int i = 0; i < count; ++i)
+				{
+					m_components[prev_count + i].serialize(archive, seri);
+				}
+				m_entities.resize(prev_count + count);
+				for (int i = 0; i < count; ++i)
+				{
+					Entity entity;
+					serializeEntity(archive, entity, seri);
+					m_entities[prev_count + i] = entity;
+					lookup_map[entity] = prev_count + i;
+				}
+			}
+			else
+			{
+				archive << m_components.size();
+				for (TComponent& component : m_components)
+				{
+					component.serialize(archive, seri);
+				}
+				for (Entity entity : m_entities)
+				{
+					serializeEntity(archive, entity, seri);
+				}
+			}
 		}
 
 		inline void merge(ComponentManager<TComponent>& other)
@@ -86,13 +166,13 @@ namespace qyhs::ecs
 			return m_components.size();
 		}
 
-		void remove(GameObjectID gobject)
+		void remove(Entity gobject)
 		{
 			auto iter = lookup_map.find(gobject);
 			if (iter != lookup_map.end())
 			{
 				const size_t index = iter->second;
-				const GameObjectID entity = m_entities[index];
+				const Entity entity = m_entities[index];
 				if (index < m_components.size() - 1)
 				{
 					m_components[index] = std::move(m_components.back());
@@ -118,7 +198,7 @@ namespace qyhs::ecs
 			return m_components.back();
 		}
 
-		inline TComponent* getComponent(GameObjectID gobject) 
+		inline TComponent* getComponent(GameObjectID gobject)
 		{
 			auto iter = lookup_map.find(gobject);
 			if (iter == lookup_map.end())
@@ -152,9 +232,10 @@ namespace qyhs::ecs
 			entries[name].component_manager = std::make_unique<ComponentManager<TComponent>>();
 			return static_cast<ComponentManager<TComponent>&>(*entries[name].component_manager);
 		}
-
+		void serialize(Archive& archive, EntitySerializer& entity_serializer);
 		std::unordered_map<std::string, LibraryEntry> entries;
 	private:
 	};
+
 
 }

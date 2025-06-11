@@ -30,6 +30,8 @@ namespace qyhs
         Matrix4x4 getMatrix() { return m_transform.getMatrix(); }
         const Transform& getTransformConst() { return m_transform; }
         Matrix4x4 world_matrix;
+
+        void serialize(Archive& archive, ecs::EntitySerializer& seri) {};
     protected:
         META(Enable)
             Transform m_transform;            //local transform

@@ -326,14 +326,14 @@ StaticCompoundShape::StaticCompoundShape(const StaticCompoundShapeSettings &inSe
 	// Check if we ran out of bits for addressing a node
 	if (next_node_idx > IS_SUBSHAPE)
 	{
-		outResult.SetError("Compound hierarchy has too many nodes");
+		outResult.SetError("Compound hierarchies has too many nodes");
 		return;
 	}
 
 	// Check if we're not exceeding the amount of sub shape id bits
 	if (GetSubShapeIDBitsRecursive() > SubShapeID::MaxBits)
 	{
-		outResult.SetError("Compound hierarchy is too deep and exceeds the amount of available sub shape ID bits");
+		outResult.SetError("Compound hierarchies is too deep and exceeds the amount of available sub shape ID bits");
 		return;
 	}
 

@@ -3,12 +3,14 @@
 #include "core/math/transform.h"
 namespace qyhs
 {
+    class Archive;
     REFLECTION_TYPE(MotorComponentRes)
         CLASS(MotorComponentRes, Fields)
     {
         REFLECTION_BODY(MotorComponentRes)
     public:
         float move_speed{ 100.f };
+        void serialize(Archive& archive, ecs::EntitySerializer& seri) {};
     private:
     };
 

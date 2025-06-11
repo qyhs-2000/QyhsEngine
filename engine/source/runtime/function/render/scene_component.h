@@ -7,7 +7,13 @@
 #include "resource/resource_manager.h"
 namespace qyhs::scene
 {
-	class ObjectComponent
+	class Component
+	{
+	public:
+		virtual void serialize(Archive& archive, ecs::EntitySerializer& seri) = 0;
+	private:
+	};
+	class ObjectComponent :public Component
 	{
 	public:
 		ecs::Entity mesh_entity = ecs::INVALID_ENTITY;
@@ -21,16 +27,20 @@ namespace qyhs::scene
 		{
 			return filter_mask | filter_mask_dynamic;
 		}
+
+		virtual void serialize(Archive& archive, ecs::EntitySerializer& seri) override;
 	};
 
-	class HierarchyComponent
+	class HierarchyComponent:public Component
 	{
 	public:
 		qyhs::ecs::Entity parent_id;
+		virtual void serialize(Archive& archive, ecs::EntitySerializer& seri) override;
+
 	private:
 	};
 
-	class MaterialComponent
+	class MaterialComponent :public Component
 	{
 	public:
 		enum FLAGS
@@ -38,8 +48,8 @@ namespace qyhs::scene
 			EMPTY = 0,
 			DOUBLE_SIDE = 1 << 0,
 			DIRTY = 1 << 1,
-			PREFER_UNCOMPRESSED_TEXTURES = 1<< 2,
-			DISABLE_TEXTURE_STREAMING = 1<<3
+			PREFER_UNCOMPRESSED_TEXTURES = 1 << 2,
+			DISABLE_TEXTURE_STREAMING = 1 << 3
 		};
 		enum
 		{
@@ -90,18 +100,20 @@ namespace qyhs::scene
 		void writeShaderMaterial(ShaderMaterial* dst);
 		void createRenderData();
 
+		virtual void serialize(Archive& archive, ecs::EntitySerializer& seri) override;
 	private:
 	};
 
-	class NameComponent
+	class NameComponent :public Component
 	{
 	public:
 		inline void operator=(const std::string  str) { name = str; }
+		virtual void serialize(Archive& archive, ecs::EntitySerializer& seri) override;
 	private:
 		std::string name;
 	};
 
-	class TransformComponent
+	class TransformComponent :public Component
 	{
 	public:
 		enum
@@ -132,11 +144,13 @@ namespace qyhs::scene
 		XMFLOAT3 local_scale = XMFLOAT3(1, 1, 1);
 		XMFLOAT3 local_position = XMFLOAT3(0, 0, 0);
 		XMFLOAT4 local_rotation = XMFLOAT4(0, 0, 0, 1);
+
+		virtual void serialize(Archive& archive, ecs::EntitySerializer& seri) override;
 	private:
 		uint32_t _flag = DIRTY;
 	};
 
-	class MeshComponent
+	class MeshComponent :public Component
 	{
 	public:
 		enum FLAGS
@@ -239,6 +253,7 @@ namespace qyhs::scene
 		std::vector<MeshSubset> subsets;
 		graphics::GPUBuffer general_buffer;   //index buffer and all static vertex buffer
 		primitive::AABB aabb;
+		
 		inline uint32_t getLodCount() const { return subsets_per_lod == 0 ? 1 : (uint32_t)(subsets.size() / subsets_per_lod); }
 		void createRenderData();
 		void deleteRenderData();
@@ -285,10 +300,12 @@ namespace qyhs::scene
 		BufferView ib;
 		BufferView vb_pos_wind;
 		BufferView vb_uvs;
+
+		virtual void serialize(Archive& archive, ecs::EntitySerializer& seri) override;
 	private:
 	};
 
-	class CameraComponent
+	class CameraComponent :public Component
 	{
 	public:
 		enum FLAGS
@@ -324,6 +341,8 @@ namespace qyhs::scene
 		float z_near = 0.1f;
 		float z_far = 5000.0f;
 		primitive::Frustum frustum;
+
+		virtual void serialize(Archive& archive, ecs::EntitySerializer& seri) override;
 	private:
 		uint32_t _flags = 0;
 	};

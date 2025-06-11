@@ -4,6 +4,8 @@
 #include <unordered_map>
 #include "core/common_include.h"
 #include "function/render/rhi/graphics.h"
+#include <unordered_set>
+#include "function/file/archive.h"
 namespace qyhs::resourcemanager
 {
 	static std::mutex locker;
@@ -38,6 +40,8 @@ namespace qyhs::resourcemanager
 		const std::string& container_filename = "",
 		size_t container_fileoffset = 0);
 	bool contains(std::string name);
+	void Serialize_WRITE(Archive& archive, const std::unordered_set<std::string>& resource_names);
+	void Serialize_READ(Archive& archive, ResourceSerializer & seri);
 }
 
 template<>

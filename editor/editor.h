@@ -17,6 +17,7 @@ namespace qyhs
 		virtual void render() override;
 		virtual void start() override;
 		void open(const std::string & filename);
+		void save(const std::string & filename);
 		jobsystem::Context loadmodel_workload;
 	private:
 		//gui::ComboBox test_selector;

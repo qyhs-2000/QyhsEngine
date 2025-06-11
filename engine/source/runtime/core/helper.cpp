@@ -20,8 +20,10 @@
 #endif // 
 #include <functional>
 #include <algorithm>
+#include <cassert>
 namespace qyhs::helper
 {
+
 	std::string getCurrentPath()
 	{
 		auto path = std::filesystem::current_path();
@@ -235,6 +237,20 @@ namespace qyhs::helper
 			}).detach();
 	}
 
+	std::string forceExtension(std::string filename, std::string extension)
+	{
+		std::string ext = "." + extension;
+		if (ext.size() > filename.size())
+		{
+			return filename + ext;
+		}
+		if (filename.substr(filename.length() - ext.length()).compare(ext))
+		{
+			return filename + ext;
+		}
+		return filename;
+	}
+
 	bool writeFile(const std::string& filename, const uint8_t* data, size_t data_size)
 	{
 		if (data_size <= 0) 
@@ -312,22 +328,22 @@ namespace qyhs::helper
 		return ret;
 	}
 
-	bool readFile(const std::string& filename, std::vector<uint8_t>& data,size_t offset)
+	bool readFile(const std::string& filename, std::vector<uint8_t>& data,size_t max_read,size_t offset)
 	{
 		std::ifstream file(toNativeString(filename), std::ios::binary | std::ios::ate);
 		if (file.is_open())
 		{
 			size_t data_size = (size_t)file.tellg() - offset;
+			data_size = data_size<max_read?data_size:max_read;
 			file.seekg((std::streampos)offset);
 			data.resize(data_size);
 			file.read((char*)data.data(), data_size);
 			file.close();
 			return true;
 		}
-		else
-		{
-			return false;
-		}
+		
+		return false;
+		
 	}
 	
 }

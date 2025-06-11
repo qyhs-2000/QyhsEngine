@@ -5,6 +5,7 @@
 #include <function/render/game_object_desc.h>
 namespace qyhs
 {
+	class Archive;
 	class MeshComponentRes;
 	REFLECTION_TYPE(MeshComponent)
 	CLASS(MeshComponent :public Component,WhiteListFields)
@@ -16,6 +17,8 @@ namespace qyhs
 		std::vector<GameObjectPartDesc> m_raw_meshes;
 		META(Enable)
 		MeshComponentRes m_mesh_res;
+
+		void serialize(Archive & archive, ecs::EntitySerializer & seri) {};
 	private:
 		bool is_dirty = true;
 		float test;

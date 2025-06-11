@@ -731,6 +731,7 @@ namespace qyhs
 		std::vector<VkSampler> immutable_samplers;
 		std::vector<VkSemaphore> semaphore_pool;
 		std::mutex semaphore_pool_locker;
+		std::mutex create_buffer_locker;
 		VkSemaphore createNewSemaphore();
 		void freeSemaphore(VkSemaphore semaphore);
 		virtual void waitCommandList(CommandList cmd, CommandList wait_for);

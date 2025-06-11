@@ -88,7 +88,7 @@ private:
 };
 
 /// A sub shape id creator can be used to create a new sub shape id by recursing through the shape 
-/// hierarchy and pushing new ID's onto the chain
+/// hierarchies and pushing new ID's onto the chain
 class SubShapeIDCreator
 {
 public:

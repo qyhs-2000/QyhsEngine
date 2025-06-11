@@ -5634,7 +5634,7 @@ namespace nlohmann
 
         This class implements the @ref json_sax interface and processes the SAX events
         to create a JSON value which makes it basically a DOM parser. The structure or
-        hierarchy of the JSON value is managed by the stack `ref_stack` which contains
+        hierarchies of the JSON value is managed by the stack `ref_stack` which contains
         a pointer to the respective array or object for each recursion depth.
 
         After successful parsing, the value that is passed by reference to the
@@ -5806,7 +5806,7 @@ namespace nlohmann
 
             /// the parsed JSON value
             BasicJsonType& root;
-            /// stack to model hierarchy of values
+            /// stack to model hierarchies of values
             std::vector<BasicJsonType*> ref_stack {};
             /// helper to hold the reference for the next object element
             BasicJsonType* object_element = nullptr;
@@ -6037,7 +6037,7 @@ namespace nlohmann
             object to which we can add elements
 
             @return pair of boolean (whether value should be kept) and pointer (to the
-            passed value in the ref_stack hierarchy; nullptr if not kept)
+            passed value in the ref_stack hierarchies; nullptr if not kept)
             */
             template<typename Value>
             std::pair<bool, BasicJsonType*> handle_value(Value&& v, const bool skip_callback = false)
@@ -6105,7 +6105,7 @@ namespace nlohmann
 
             /// the parsed JSON value
             BasicJsonType& root;
-            /// stack to model hierarchy of values
+            /// stack to model hierarchies of values
             std::vector<BasicJsonType*> ref_stack {};
             /// stack to manage which values to keep
             std::vector<bool> keep_stack {};
@@ -10612,7 +10612,7 @@ namespace nlohmann
             JSON_HEDLEY_NON_NULL(2)
                 bool sax_parse_internal(SAX* sax)
             {
-                // stack to remember the hierarchy of structured values we are parsing
+                // stack to remember the hierarchies of structured values we are parsing
                 // true = array; false = object
                 std::vector<bool> states;
                 // value to avoid a goto (see comment where set to true)
@@ -10791,7 +10791,7 @@ namespace nlohmann
                     // we reached this line after we successfully parsed a value
                     if (states.empty())
                     {
-                        // empty stack: we reached the end of the hierarchy: done
+                        // empty stack: we reached the end of the hierarchies: done
                         return true;
                     }
 

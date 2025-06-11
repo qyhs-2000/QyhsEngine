@@ -19,7 +19,8 @@ namespace qyhs::helper
 	std::string replaceExtension(std::string str, std::string extension);
 	std::string getRelativePath(std::string root_dir, std::string path);
 	std::string getDirectoryFromPath(std::string filename);
-	bool readFile(const std::string& filename, std::vector<uint8_t>& data,size_t offset = 0);
+	std::string forceExtension(std::string filename, std::string extension);
+	bool readFile(const std::string& filename, std::vector<uint8_t>& data,size_t max_read = ~0ull,size_t offset = 0);
 	void stringConvert(const std::string& from, std::wstring& to);
 	std::string getFileNameFromPath(std::string path);
 	void stringConvert(const std::wstring& from, std::string& to);

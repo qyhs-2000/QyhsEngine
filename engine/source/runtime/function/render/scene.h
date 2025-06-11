@@ -2,6 +2,7 @@
 #include "scene_component.h"
 #include "function/framework/component/ecs.h"
 #include "core/jobsystem.h"
+#include "function/file/archive.h"
 namespace qyhs::scene
 {
 	class Scene
@@ -13,7 +14,7 @@ namespace qyhs::scene
 		ecs::ComponentManager<scene::TransformComponent>& transforms = component_library.Register<scene::TransformComponent>("qyhs::scene::Scene::transforms");
 		ecs::ComponentManager<scene::NameComponent>& names = component_library.Register<scene::NameComponent>("qyhs::scene::Scene::names");
 		ecs::ComponentManager<scene::MaterialComponent>& materials = component_library.Register<scene::MaterialComponent>("qyhs::scene::Scene::materials");
-		ecs::ComponentManager<scene::HierarchyComponent>& hierarchy = component_library.Register<scene::HierarchyComponent>("qyhs::scene::Scene::hierarchy");
+		ecs::ComponentManager<scene::HierarchyComponent>& hierarchies = component_library.Register<scene::HierarchyComponent>("qyhs::scene::Scene::hierarchies");
 		struct OccludedResult
 		{
 			bool isOccluded()const
@@ -24,11 +25,11 @@ namespace qyhs::scene
 		void attachComponent(ecs::Entity entity, ecs::Entity parent, bool child_is_in_local_space = false)
 		{
 			assert(entity != parent);
-			if (hierarchy.contain(entity))
+			if (hierarchies.contain(entity))
 			{
 				detachComponent(entity);
 			}
-			scene::HierarchyComponent& parent_component = hierarchy.create(entity);
+			scene::HierarchyComponent& parent_component = hierarchies.create(entity);
 			parent_component.parent_id = parent;
 
 			TransformComponent* transform_parent = transforms.getComponent(parent);
@@ -44,14 +45,18 @@ namespace qyhs::scene
 				transform_child->updateTransformParented(transform_parent);
 			}
 		}
+
+		void Component_DetachChildren(ecs::Entity entity);
+		void Entity_Remove(ecs::Entity entity,bool recursive = true);
 		
+		void serialize(Archive& archive);
 		void merge(Scene& other);
 		void updateObjects(jobsystem::Context &ctx);
 		void updateMeshes(jobsystem::Context& ctx);
 		void updateMaterial(jobsystem::Context& ctx);
 		void detachComponent(ecs::Entity entity)
 		{
-			const HierarchyComponent* parent = hierarchy.getComponent(entity);
+			const HierarchyComponent* parent = hierarchies.getComponent(entity);
 			if (parent != nullptr)
 			{
 				TransformComponent* transform = transforms.getComponent(entity);
@@ -59,7 +64,7 @@ namespace qyhs::scene
 				{
 					transform->applyWorldToLocal();
 				}
-				hierarchy.remove(entity);
+				hierarchies.remove(entity);
 			}
 		}
 		ecs::Entity createMaterialEntity(const std::string& name);
@@ -90,5 +95,6 @@ namespace qyhs::scene
 	};
 
 	Scene* getScene();
-
+	ecs::Entity loadModel(Scene& scene, const std::string& fileName, const XMMATRIX& transformMatrix = XMMatrixIdentity(), bool attached = false);
+	void LoadModel2(Scene& scene, const std::string& fileName, const XMMATRIX& transformMatrix = XMMatrixIdentity(), ecs::Entity rootEntity = ecs::INVALID_ENTITY);
 }

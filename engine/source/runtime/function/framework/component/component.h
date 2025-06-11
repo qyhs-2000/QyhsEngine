@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include "function/framework/component/ecs.h"
 #include <function/framework/game_object/game_object.h>
 #include "core/meta/reflection/reflection.h"
 namespace qyhs

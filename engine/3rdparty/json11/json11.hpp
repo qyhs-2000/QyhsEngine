@@ -11,7 +11,7 @@
  * Json::parse (static) to parse a std::string as a Json object.
  *
  * Internally, the various types of Json object are represented by the JsonValue class
- * hierarchy.
+ * hierarchies.
  *
  * A note on numbers - JSON specifies the syntax of number formatting but not its semantics,
  * so some JSON implementations distinguish between integers and floating-point numbers, while
@@ -208,7 +208,7 @@ private:
     std::shared_ptr<JsonValue> m_ptr;
 };
 
-// Internal class hierarchy - JsonValue objects are not exposed to users of this API.
+// Internal class hierarchies - JsonValue objects are not exposed to users of this API.
 class JsonValue {
 protected:
     friend class Json;
