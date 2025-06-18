@@ -82,6 +82,16 @@ namespace qyhs::scene
 		XMStoreFloat4(&local_rotation, quat);
 	}
 
+	XMVECTOR TransformComponent::GetPositionV() const
+	{
+		return XMLoadFloat3((XMFLOAT3*)&world._41);
+	}
+
+	XMFLOAT3 TransformComponent::getPosition() const
+	{
+		return *((XMFLOAT3*)&world._41);
+	}
+
 	void TransformComponent::serialize(Archive& archive, ecs::EntitySerializer& seri)
 	{
 	}
@@ -91,6 +101,48 @@ namespace qyhs::scene
 		general_buffer = {};
 		ib = {};
 		vb_pos_wind = {};
+	}
+
+	void MeshComponent::createStreamOutRenderData()
+	{
+		RHI* rhi = rhi::getRHI();
+		GPUBufferDesc desc;
+		desc.usage = Usage::DEFAULT;
+		desc.bind_flags = BindFlag::VERTEX_BUFFER | BindFlag::SHADER_RESOURCE | BindFlag::UNORDERED_ACCESS;
+		desc.misc_flags = ResourceMiscFlag::BUFFER_RAW | ResourceMiscFlag::TYPED_FORMAT_CASTING | ResourceMiscFlag::NO_DEFAULT_DESCRIPTORS;
+
+		const uint64_t alignment = rhi->getMinOffsetAlignment(&desc) * sizeof(Vertex_POS32); // additional alignment for RGB32F
+		desc.size =
+			alignTo(vertex_positions.size() * sizeof(Vertex_POS32), alignment);
+
+		bool success = rhi->createBuffer(&desc, nullptr, &streamout_buffer);
+		assert(success);
+		rhi->setName(&streamout_buffer, "MeshComponent::streamoutBuffer");
+
+		uint64_t buffer_offset = 0ull;
+
+		shader_output_pos.offset = buffer_offset;
+		shader_output_pos.size = vertex_positions.size() * sizeof(Vertex_POS32);
+		buffer_offset += alignTo(shader_output_pos.size, alignment);
+		shader_output_pos.subresource_srv = rhi->createSubresource(&streamout_buffer, SubresourceType::SRV, shader_output_pos.offset, shader_output_pos.size, &Vertex_POS32::FORMAT);
+		shader_output_pos.subresource_uav = rhi->createSubresource(&streamout_buffer, SubresourceType::UAV, shader_output_pos.offset, shader_output_pos.size); // UAV can't have RGB32_F format!
+		shader_output_pos.descriptor_srv = rhi->getDescriptorIndex(&streamout_buffer, SubresourceType::SRV, shader_output_pos.subresource_srv);
+		shader_output_pos.descriptor_uav = rhi->getDescriptorIndex(&streamout_buffer, SubresourceType::UAV, shader_output_pos.subresource_uav);
+
+	}
+
+	size_t MeshComponent::getBoneInfluencedCount() const
+	{
+		size_t influenced_count = 0;
+		if (!vertex_boneindices.empty())
+		{
+			influenced_count++;
+		}
+		if (!vertex_boneindices2.empty())
+		{
+			influenced_count++;
+		}
+		return influenced_count;
 	}
 
 	void MeshComponent::createRenderData()
@@ -107,7 +159,9 @@ namespace qyhs::scene
 		desc.size = alignTo(vertex_positions.size() * position_stride, alignment) +
 			alignTo(indices.size() * getIndexBufferStride(), alignment) +
 			alignTo(vertex_colors.size() * sizeof(Vertex_Color), alignment) +
-			alignTo(uv_count * sizeof(Vertex_UVS),alignment);
+			alignTo(uv_count * sizeof(Vertex_UVS), alignment) + 
+			alignTo(vertex_boneindices.size() * sizeof(Vertex_Bone), alignment) +
+			alignTo(vertex_boneindices2.size() * sizeof(Vertex_Bone), alignment);
 
 		XMFLOAT3 _min = XMFLOAT3(std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
 		XMFLOAT3 _max = XMFLOAT3(std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest());
@@ -118,9 +172,9 @@ namespace qyhs::scene
 			_max = math::max(_max, pos);
 		}
 		aabb = primitive::AABB(_min, _max);
-		
+
 		auto init_buffer_callback = [=](void* dest) {
-			
+
 			uint8_t* buffer_data = (uint8_t*)dest;
 			uint64_t buffer_offset = 0ull;
 
@@ -204,7 +258,72 @@ namespace qyhs::scene
 					std::memcpy(vertices + i, &vert, sizeof(vert));
 				}
 			}
-			
+
+			if (!vertex_boneindices.empty())
+			{
+				vb_bon.offset = buffer_offset;
+				const size_t influence_div4 = getBoneInfluencedCount();
+				vb_bon.size = (vertex_boneindices.size() + vertex_boneindices2.size()) * sizeof(Vertex_Bone);
+				Vertex_Bone* vertices = (Vertex_Bone*)(buffer_data + buffer_offset);
+				buffer_offset += alignTo(vb_bon.size, alignment);
+				assert(vertex_boneindices.size() == vertex_boneweights.size()); // must have same number of indices as weights
+				assert(vertex_boneindices2.empty() || vertex_boneindices2.size() == vertex_boneindices.size()); // if second influence stream exists, it must be as large as the first
+				assert(vertex_boneindices2.size() == vertex_boneweights2.size()); // must have same number of indices as weights
+				for (size_t i = 0; i < vertex_boneindices.size(); ++i)
+				{
+					// Normalize weights:
+					//	Note: if multiple influence streams are present,
+					//	we have to normalize them together, not separately
+					float weights[8] = {};
+					weights[0] = vertex_boneweights[i].x;
+					weights[1] = vertex_boneweights[i].y;
+					weights[2] = vertex_boneweights[i].z;
+					weights[3] = vertex_boneweights[i].w;
+					if (influence_div4 > 1)
+					{
+						weights[4] = vertex_boneweights2[i].x;
+						weights[5] = vertex_boneweights2[i].y;
+						weights[6] = vertex_boneweights2[i].z;
+						weights[7] = vertex_boneweights2[i].w;
+					}
+					float sum = 0;
+					for (auto& weight : weights)
+					{
+						sum += weight;
+					}
+					if (sum > 0)
+					{
+						const float norm = 1.0f / sum;
+						for (auto& weight : weights)
+						{
+							weight *= norm;
+						}
+					}
+					// Store back normalized weights:
+					vertex_boneweights[i].x = weights[0];
+					vertex_boneweights[i].y = weights[1];
+					vertex_boneweights[i].z = weights[2];
+					vertex_boneweights[i].w = weights[3];
+					if (influence_div4 > 1)
+					{
+						vertex_boneweights2[i].x = weights[4];
+						vertex_boneweights2[i].y = weights[5];
+						vertex_boneweights2[i].z = weights[6];
+						vertex_boneweights2[i].w = weights[7];
+					}
+
+					Vertex_Bone vert;
+					vert.fromFull(vertex_boneindices[i], vertex_boneweights[i]);
+					std::memcpy(vertices + (i * influence_div4 + 0), &vert, sizeof(vert));
+
+					if (influence_div4 > 1)
+					{
+						vert.fromFull(vertex_boneindices2[i], vertex_boneweights2[i]);
+						std::memcpy(vertices + (i * influence_div4 + 1), &vert, sizeof(vert));
+					}
+				}
+			}
+
 			};
 
 		bool success = rhi->createBuffer(&desc, &general_buffer, init_buffer_callback);
@@ -222,6 +341,17 @@ namespace qyhs::scene
 		{
 			vb_uvs.subresource_srv = rhi->createSubresource(&general_buffer, SubresourceType::SRV, vb_uvs.offset, vb_uvs.size, &Vertex_UVS::FORMAT);
 			vb_uvs.descriptor_srv = rhi->getDescriptorIndex(&general_buffer, SubresourceType::SRV, vb_uvs.subresource_srv);
+		}
+
+		if (vb_bon.IsValid())
+		{
+			vb_bon.subresource_srv = rhi->createSubresource(&general_buffer, SubresourceType::SRV, vb_bon.offset, vb_bon.size);
+			vb_bon.descriptor_srv = rhi->getDescriptorIndex(&general_buffer, SubresourceType::SRV, vb_bon.subresource_srv);
+		}
+
+		if (!vertex_boneindices.empty())
+		{
+			createStreamOutRenderData();
 		}
 	}
 
@@ -283,7 +413,7 @@ namespace qyhs::scene
 		ShaderMaterial material;
 		material.init();
 		material.base_color = base_color;
-		material.base_color = XMFLOAT4(1,1,1,1);
+		material.base_color = XMFLOAT4(1, 1, 1, 1);
 		for (int i = 0; i < TEXTURESLOT_COUNT; ++i)
 		{
 			const MaterialComponent::TextureMap& texture_map = textures[i];
@@ -316,7 +446,7 @@ namespace qyhs::scene
 			material.sampler_descriptor = sampler_descriptor;
 		}
 		std::memcpy(dst, &material, sizeof(material));
-		
+
 	}
 
 	resourcemanager::Flags MaterialComponent::getTextureSlotResourceFlags(TEXTURESLOT slot)
@@ -346,7 +476,7 @@ namespace qyhs::scene
 	{
 		for (uint32_t i = 0; i < TEXTURESLOT_COUNT; ++i)
 		{
-			TextureMap & tex = textures[i];
+			TextureMap& tex = textures[i];
 			if (!tex.name.empty())
 			{
 				resourcemanager::Flags flags = getTextureSlotResourceFlags(TEXTURESLOT(i));
@@ -355,6 +485,24 @@ namespace qyhs::scene
 		}
 	}
 
-	
+
+	AnimationComponent::AnimationChannel::PathDataType AnimationComponent::AnimationChannel::getPathDataType() const
+	{
+		switch (path)
+		{
+		case scene::AnimationComponent::AnimationChannel::Path::TRANSLATION:
+			return PathDataType::Float3;
+		case scene::AnimationComponent::AnimationChannel::Path::ROTATION:
+			return PathDataType::Float4;
+		case scene::AnimationComponent::AnimationChannel::Path::SCALE:
+			return PathDataType::Float3;
+		case scene::AnimationComponent::AnimationChannel::Path::WEIGHTS:
+			return PathDataType::Weights;
+		default:
+			assert(0);
+			break;
+		}
+		return PathDataType::Event;
+	}
 
 }

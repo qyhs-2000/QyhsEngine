@@ -1,6 +1,10 @@
 #include "scene.h"
 #include "function/render/renderer.h"
 #include "core/jobsystem.h"
+#include <cassert>
+//#include "core/common_include.h"
+//#include "core/math/math_library.h"
+#include <iostream>
 using namespace qyhs::ecs;
 namespace qyhs::scene
 {
@@ -45,7 +49,7 @@ namespace qyhs::scene
 			for (size_t i = 0; i < scene.transforms.getCount(); ++i)
 			{
 				Entity entity = scene.transforms.getEntity(i);
-				if (entity != rootEntity && !scene.hierarchies.contain(entity))
+				if (entity != rootEntity && !scene.hierarchy.contain(entity))
 				{
 					scene.attachComponent(entity, rootEntity);
 				}
@@ -60,19 +64,80 @@ namespace qyhs::scene
 
 		if (!attached)
 		{
-			// In this case, we don't care about the root anymore, so delete it. This will simplify overall hierarchies
+			// In this case, we don't care about the root anymore, so delete it. This will simplify overall hierarchy
 			scene.Component_DetachChildren(rootEntity);
 			scene.Entity_Remove(rootEntity);
 		}
 	}
 
+	void Scene::scanAnimationDepedencies()
+	{
+		if (animations.getCount() == 0)
+		{
+			animation_queue_count = 0;
+			return;
+		}
+
+		animation_queues.reserve(animations.getCount());
+		animation_queue_count = 0;
+
+		jobsystem::Execute(animation_dependency_scan_workload, [&](jobsystem::JobArgs args) {
+
+			for (size_t i = 0; i < animations.getCount(); ++i)
+			{
+				AnimationComponent& animationA = animations[i];
+				if (!animationA.isPlaying() && animationA.last_update_time == animationA.timer)
+				{
+					continue;
+				}
+				bool dependency = false;
+				for (size_t queue_index = 0; queue_index < animation_queue_count; ++queue_index)
+				{
+					AnimationQueue& queue = animation_queues[queue_index];
+					for (auto& channelA : animationA.channels)
+					{
+						if (dependency)
+						{
+							// If dependency has been found, record all other entities in this animation too:
+							queue.entities.insert(channelA.target);
+						}
+						else if (queue.entities.find(channelA.target) != queue.entities.end())
+						{
+							// If two animations target the same entity, they have a dependency and need to be executed in order:
+							dependency = true;
+							queue.animations.push_back(&animationA);
+						}
+					}
+					if (dependency) break;
+				}
+				if (!dependency)
+				{
+					// No dependency, it can be executed on a separate queue (thread)
+					if (animation_queues.size() <= animation_queue_count)
+					{
+						animation_queues.resize(animation_queue_count + 1);
+					}
+					AnimationQueue& queue = animation_queues[animation_queue_count];
+					queue.animations.clear();
+					queue.animations.push_back(&animationA);
+					queue.entities.clear();
+					for (auto& channelA : animationA.channels)
+					{
+						queue.entities.insert(channelA.target);
+					}
+					animation_queue_count++;
+				}
+			}
+			});
+	}
+
 	void Scene::Component_DetachChildren(Entity parent)
 	{
-		for (int i = 0; i < hierarchies.getCount();)
+		for (int i = 0; i < hierarchy.getCount();)
 		{
-			if (hierarchies[i].parent_id == parent)
+			if (hierarchy[i].parent_id == parent)
 			{
-				Entity entity = hierarchies.getEntity(i);
+				Entity entity = hierarchy.getEntity(i);
 				detachComponent(entity);
 			}
 			else
@@ -82,17 +147,17 @@ namespace qyhs::scene
 		}
 	}
 
-	void Scene::Entity_Remove(ecs::Entity entity,bool recursive)
+	void Scene::Entity_Remove(ecs::Entity entity, bool recursive)
 	{
 		if (recursive)
 		{
 			std::vector<Entity> entities_to_remove;
-			for (int i = 0; i < hierarchies.getCount(); ++i)
+			for (int i = 0; i < hierarchy.getCount(); ++i)
 			{
-				const HierarchyComponent& hierarchy = hierarchies[i];
-				if (hierarchy.parent_id == entity)
+				const HierarchyComponent& hier = hierarchy[i];
+				if (hier.parent_id == entity)
 				{
-					Entity child = hierarchies.getEntity(i);
+					Entity child = hierarchy.getEntity(i);
 					entities_to_remove.push_back(child);
 				}
 			}
@@ -104,7 +169,7 @@ namespace qyhs::scene
 
 		for (auto& entry : component_library.entries)
 		{
-			entry.second.component_manager->remove(entity);	
+			entry.second.component_manager->remove(entity);
 		}
 	}
 
@@ -157,23 +222,23 @@ namespace qyhs::scene
 			archive.patchUnKnownJumpPosition(jump_before);
 			resourcemanager::Serialize_WRITE(archive, seri.resource_registration);
 			archive.patchUnKnownJumpPosition(jump_after);
-			
+
 		}
 	}
 
-	void Scene::updateObjects(jobsystem::Context& ctx)
+	void Scene::updateObjects(jobsystem::context& ctx)
 	{
 		aabb_objects.resize(objects.getCount());
 		object_matrices.resize(objects.getCount());
 		occlusion_result_objects.resize(objects.getCount());
-		jobsystem::dispatch(ctx, (uint32_t)objects.getCount(), small_subtask_groupsize, [&](jobsystem::JobArgs args) {
-			Entity entity = objects.getEntity(args.job_index);
-			primitive::AABB& aabb = aabb_objects[args.job_index];
-			scene::ObjectComponent& object = objects[args.job_index];
+		jobsystem::Dispatch(ctx, (uint32_t)objects.getCount(), small_subtask_groupsize, [&](jobsystem::JobArgs args) {
+			Entity entity = objects.getEntity(args.jobIndex);
+			primitive::AABB& aabb = aabb_objects[args.jobIndex];
+			scene::ObjectComponent& object = objects[args.jobIndex];
 			aabb = primitive::AABB();
 
 			//TODO:update occlusion culling states
-			OccludedResult occluded_result = occlusion_result_objects[args.job_index];
+			OccludedResult occluded_result = occlusion_result_objects[args.jobIndex];
 
 			if (object.mesh_entity != INVALID_ENTITY && meshes.contain(object.mesh_entity) && transforms.contain(entity))
 			{
@@ -186,6 +251,16 @@ namespace qyhs::scene
 
 				object.center = aabb.getCenter();
 				object.radius = aabb.getRadius();
+
+				if (mesh.isSkinned())
+				{
+
+					const ArmatureComponent* armature = armatures.getComponent(mesh.armatureID);
+					if (armature != nullptr)
+					{
+						aabb = primitive::AABB::Merge(aabb, armature->aabb);
+					}
+				}
 
 				int first_subset = 0, last_subset = 0;
 				mesh.getLodSubsetRange(object.lod, first_subset, last_subset);
@@ -202,17 +277,17 @@ namespace qyhs::scene
 				ShaderMeshInstance instance;
 				instance.init();
 
-				XMStoreFloat4x4(object_matrices.data() + args.job_index, w);
-				XMFLOAT4X4 world_matrix = object_matrices[args.job_index];
+				XMStoreFloat4x4(object_matrices.data() + args.jobIndex, w);
+				XMFLOAT4X4 world_matrix = object_matrices[args.jobIndex];
 
-				if (graphics::IsFormatUnorm(mesh.position_format))
+				if (graphics::IsFormatUnorm(mesh.position_format) && !mesh.shader_output_pos.IsValid())
 				{
 					XMMATRIX remap = mesh.aabb.getUnormRemapMatrix();
 					XMStoreFloat4x4(&world_matrix, remap * w);
 				}
 
 				instance.transform.create(world_matrix);
-				std::memcpy(instance_upload_buffer_mapped + args.job_index, &instance, sizeof(instance));
+				std::memcpy(instance_upload_buffer_mapped + args.jobIndex, &instance, sizeof(instance));
 			}
 
 
@@ -232,18 +307,31 @@ namespace qyhs::scene
 		object_matrices.insert(object_matrices.end(), other.object_matrices.begin(), other.object_matrices.end());
 	}
 
-	void Scene::updateMeshes(jobsystem::Context& ctx)
+	void Scene::updateMeshes(jobsystem::context& ctx)
 	{
-		jobsystem::dispatch(ctx, (uint32_t)meshes.getCount(), small_subtask_groupsize, [&](jobsystem::JobArgs args) {
-			Entity entity = meshes.getEntity(args.job_index);
-			scene::MeshComponent& mesh = meshes[args.job_index];
+		jobsystem::Dispatch(ctx, (uint32_t)meshes.getCount(), small_subtask_groupsize, [&](jobsystem::JobArgs args) {
+			Entity entity = meshes.getEntity(args.jobIndex);
+			scene::MeshComponent& mesh = meshes[args.jobIndex];
+
+			/*if (mesh.shader_output_pos.IsValid() && mesh.shader_output_pos_pre.IsValid())
+			{
+				std::swap(mesh.shader_output_pos, mesh.shader_output_pos_pre);
+			}*/
 
 			if (geometry_upload_buffer_mapped != nullptr)
 			{
 				ShaderGeometry shader_geometry = {};
 				shader_geometry.init();
 				shader_geometry.index_buffer = mesh.ib.descriptor_srv;
-				shader_geometry.vertex_buffer_position_wind = mesh.vb_pos_wind.descriptor_srv;
+				if (mesh.shader_output_pos.IsValid())
+				{
+					shader_geometry.vertex_buffer_position_wind = mesh.shader_output_pos.descriptor_srv;
+				}
+				else
+				{
+					shader_geometry.vertex_buffer_position_wind = mesh.vb_pos_wind.descriptor_srv;
+				}
+
 				shader_geometry.vb_uvs = mesh.vb_uvs.descriptor_srv;
 				uint32_t subset_index = 0;
 				for (auto& subset : mesh.subsets)
@@ -269,11 +357,11 @@ namespace qyhs::scene
 			});
 	}
 
-	void Scene::updateMaterial(jobsystem::Context& ctx)
+	void Scene::updateMaterials(jobsystem::context& ctx)
 	{
-		jobsystem::dispatch(ctx, (uint32_t)materials.getCount(), small_subtask_groupsize, [&](jobsystem::JobArgs args) {
-			MaterialComponent& material = materials[args.job_index];
-			material.writeShaderMaterial(material_upload_buffer_mapped + args.job_index);
+		jobsystem::Dispatch(ctx, (uint32_t)materials.getCount(), small_subtask_groupsize, [&](jobsystem::JobArgs args) {
+			MaterialComponent& material = materials[args.jobIndex];
+			material.writeShaderMaterial(material_upload_buffer_mapped + args.jobIndex);
 			});
 	}
 
@@ -306,9 +394,12 @@ namespace qyhs::scene
 
 	void Scene::update(float delta_time)
 	{
-		jobsystem::Context ctx;
+		this->dt = delta_time;
+		jobsystem::context ctx;
+		scanAnimationDepedencies();
 		RHI* rhi = rhi::getRHI();
 		scene_instance_count = objects.getCount();
+
 		if (instance_upload_buffers[0].desc.size < scene_instance_count * sizeof(ShaderMeshInstance))
 		{
 			GPUBufferDesc desc;
@@ -328,6 +419,7 @@ namespace qyhs::scene
 			}
 		}
 		instance_upload_buffer_mapped = (ShaderMeshInstance*)instance_upload_buffers[rhi->getBufferIndex()].mapped_data;
+
 		materials_array_size = materials.getCount();
 		if (material_upload_buffers[0].desc.size < materials_array_size * sizeof(ShaderMaterial))
 		{
@@ -349,20 +441,28 @@ namespace qyhs::scene
 		}
 		material_upload_buffer_mapped = (ShaderMaterial*)material_upload_buffers[rhi->getBufferIndex()].mapped_data;
 
+
 		if (renderer::getOcclusionCullingEnabled())
 		{
 
 		}
 
+
+
 		if (delta_time > 0)
 		{
 			geometry_allocator.store(0u);
-			jobsystem::dispatch(ctx, meshes.getCount(), small_subtask_groupsize, [&](jobsystem::JobArgs args)
+			skinning_allocator.store(0u);
+			jobsystem::Dispatch(ctx, meshes.getCount(), small_subtask_groupsize, [&](jobsystem::JobArgs args)
 				{
-					MeshComponent& mesh = meshes[args.job_index];
+					MeshComponent& mesh = meshes[args.jobIndex];
 					mesh.geometry_offset = geometry_allocator.fetch_add((uint32_t)mesh.subsets.size());
 				});
-			jobsystem::execute(ctx, [&](jobsystem::JobArgs args) {
+			jobsystem::Dispatch(ctx, armatures.getCount(), small_subtask_groupsize, [&](jobsystem::JobArgs args) {
+				ArmatureComponent& armature = armatures[args.jobIndex];
+				skinning_allocator.fetch_add((uint32_t)(armature.bone_collection.size() * sizeof(ShaderTransform)));
+				});
+			jobsystem::Execute(ctx, [&](jobsystem::JobArgs args) {
 				ShaderMeshInstance instance;
 				instance.init();
 				for (int i = 0; i < scene_instance_count; ++i)
@@ -373,7 +473,34 @@ namespace qyhs::scene
 
 		}
 
-		jobsystem::wait(ctx);
+		jobsystem::Wait(ctx);
+
+		skinning_data_size = skinning_allocator.load();
+		skinning_allocator.store(0);
+		if (skinning_upload_buffers[0].desc.size < skinning_data_size)
+		{
+			GPUBufferDesc desc;
+			//desc.stride = sizeof(ShaderTransform);
+			desc.size = skinning_data_size * 2;
+			desc.bind_flags = BindFlag::SHADER_RESOURCE;
+			desc.misc_flags = ResourceMiscFlag::BUFFER_RAW;
+			rhi->createBuffer(&desc, &skinning_buffer);
+			rhi->setName(&skinning_buffer, "Scene::skinning_buffer");
+			desc.bind_flags = BindFlag::NONE;
+			desc.misc_flags = ResourceMiscFlag::NONE;
+			desc.usage = Usage::UPLOAD;
+			for (int i = 0; i < arraysize(skinning_upload_buffers); ++i)
+			{
+				rhi->createBuffer(&desc, &skinning_upload_buffers[i]);
+				rhi->setName(&skinning_upload_buffers[i], "Scene::skinning_upload_buffer");
+			}
+		}
+		skinning_upload_buffer_mapped = skinning_upload_buffers[rhi->getBufferIndex()].mapped_data;
+
+		updateAnimations(ctx);
+		updateTransforms(ctx);
+		jobsystem::Wait(ctx);
+		updateHierarchy(ctx);
 
 		geometry_array_size = geometry_allocator.load();
 		if (geometry_upload_buffers[0].desc.size < geometry_array_size * sizeof(ShaderGeometry))
@@ -396,12 +523,593 @@ namespace qyhs::scene
 		}
 		geometry_upload_buffer_mapped = (ShaderGeometry*)geometry_upload_buffers[rhi->getBufferIndex()].mapped_data;
 
-		updateObjects(ctx);
-		updateMeshes(ctx);
-		updateMaterial(ctx);
-		jobsystem::wait(ctx);
 
+		updateMeshes(ctx);
+		updateMaterials(ctx);
+		jobsystem::Wait(ctx);
+		updateArmatures(ctx);
+		jobsystem::Wait(ctx);
+		updateObjects(ctx);
 		updateShaderScene();
+	}
+
+	void Scene::updateAnimations(jobsystem::context& ctx)
+	{
+
+		static float time_test = 0.f;
+		jobsystem::Wait(animation_dependency_scan_workload);
+		jobsystem::Dispatch(ctx, (uint32_t)animation_queue_count, 1, [&](jobsystem::JobArgs args) {
+
+			AnimationQueue& animation_queue = animation_queues[args.jobIndex];
+			for (size_t animation_index = 0; animation_index < animation_queue.animations.size(); ++animation_index)
+			{
+				AnimationComponent& animation = *animation_queue.animations[animation_index];
+				if (!animation.isPlaying())
+					continue;
+				animation.last_update_time = animation.timer;
+
+				for (const AnimationComponent::AnimationChannel& channel : animation.channels)
+				{
+					assert(channel.sampler_index < (int)animation.samplers.size());
+					const AnimationComponent::AnimationSampler& sampler = animation.samplers[channel.sampler_index];
+					const Scene* data_scene = sampler.scene == nullptr ? this : (const Scene*)sampler.scene;
+					const AnimationDataComponent* animationdata = data_scene->animation_datas.getComponent(sampler.data);
+					if (animationdata == nullptr)
+						continue;
+					if (animationdata->keyframe_times.empty())
+						continue;
+
+					const AnimationComponent::AnimationChannel::PathDataType path_data_type = channel.getPathDataType();
+
+					float timeFirst = std::numeric_limits<float>::max();
+					float timeLast = std::numeric_limits<float>::min();
+					int keyLeft = 0;	float timeLeft = std::numeric_limits<float>::min();
+					int keyRight = 0;	float timeRight = std::numeric_limits<float>::max();
+
+					// search for usable keyframes:
+					for (int k = 0; k < (int)animationdata->keyframe_times.size(); ++k)
+					{
+						const float time = animationdata->keyframe_times[k];
+						if (time < timeFirst)
+						{
+							timeFirst = time;
+						}
+						if (time > timeLast)
+						{
+							timeLast = time;
+						}
+						if (time <= animation.timer && time > timeLeft)
+						{
+							timeLeft = time;
+							keyLeft = k;
+						}
+						if (time >= animation.timer && time < timeRight)
+						{
+							timeRight = time;
+							keyRight = k;
+						}
+					}
+					if (path_data_type != AnimationComponent::AnimationChannel::PathDataType::Event)
+					{
+						if (animation.timer < timeFirst)
+						{
+							// animation beginning haven't been reached, force first keyframe:
+							timeLeft = timeFirst;
+							timeRight = timeFirst;
+							keyLeft = 0;
+							keyRight = 0;
+						}
+					}
+					else
+					{
+						timeLeft = std::max(timeLeft, timeFirst);
+						timeRight = std::max(timeRight, timeLast);
+					}
+
+					const float left = animationdata->keyframe_times[keyLeft];
+					const float right = animationdata->keyframe_times[keyRight];
+
+					union Interpolator
+					{
+						XMFLOAT4 f4;
+						XMFLOAT3 f3;
+						XMFLOAT2 f2;
+						float f;
+					} interpolator = {};
+
+					TransformComponent* target_transform = nullptr;
+					MeshComponent* target_mesh = nullptr;
+
+					CameraComponent* target_camera = nullptr;
+
+					MaterialComponent* target_material = nullptr;
+
+					if (
+						channel.path == AnimationComponent::AnimationChannel::Path::TRANSLATION ||
+						channel.path == AnimationComponent::AnimationChannel::Path::ROTATION ||
+						channel.path == AnimationComponent::AnimationChannel::Path::SCALE
+						)
+					{
+						target_transform = transforms.getComponent(channel.target);
+						if (target_transform == nullptr)
+							continue;
+						switch (channel.path)
+						{
+						case AnimationComponent::AnimationChannel::Path::TRANSLATION:
+							interpolator.f3 = target_transform->local_position;
+							break;
+						case AnimationComponent::AnimationChannel::Path::ROTATION:
+							interpolator.f4 = target_transform->local_rotation;
+							break;
+						case AnimationComponent::AnimationChannel::Path::SCALE:
+							interpolator.f3 = target_transform->local_scale;
+							break;
+						default:
+							break;
+						}
+					}
+					else if (channel.path == AnimationComponent::AnimationChannel::Path::WEIGHTS)
+					{
+						target_mesh = meshes.getComponent(channel.target);
+						if (target_mesh == nullptr)
+						{
+							// Also try going through object's mesh reference:
+							ObjectComponent* object = objects.getComponent(channel.target);
+							if (object == nullptr)
+								continue;
+							target_mesh = meshes.getComponent(object->mesh_entity);
+						}
+						if (target_mesh == nullptr)
+							continue;
+					}
+					else
+					{
+						assert(0);
+						continue;
+					}
+
+					{
+						// Path data interpolation:
+						switch (sampler.mode)
+						{
+						default:
+						case AnimationComponent::AnimationSampler::Mode::STEP:
+						{
+							// Nearest neighbor method:
+							const int key = math::inverseLerp(timeLeft, timeRight, animation.timer) > 0.5f ? keyRight : keyLeft;
+							switch (path_data_type)
+							{
+							default:
+							case AnimationComponent::AnimationChannel::PathDataType::Float:
+							{
+								assert(animationdata->keyframe_data.size() == animationdata->keyframe_times.size());
+								interpolator.f = animationdata->keyframe_data[key];
+							}
+							break;
+							case AnimationComponent::AnimationChannel::PathDataType::Float2:
+							{
+								assert(animationdata->keyframe_data.size() == animationdata->keyframe_times.size() * 2);
+								interpolator.f2 = ((const XMFLOAT2*)animationdata->keyframe_data.data())[key];
+							}
+							break;
+							case AnimationComponent::AnimationChannel::PathDataType::Float3:
+							{
+								assert(animationdata->keyframe_data.size() == animationdata->keyframe_times.size() * 3);
+								interpolator.f3 = ((const XMFLOAT3*)animationdata->keyframe_data.data())[key];
+							}
+							break;
+							case AnimationComponent::AnimationChannel::PathDataType::Float4:
+							{
+								assert(animationdata->keyframe_data.size() == animationdata->keyframe_times.size() * 4);
+								interpolator.f4 = ((const XMFLOAT4*)animationdata->keyframe_data.data())[key];
+							}
+							break;
+							}
+						}
+						break;
+						case AnimationComponent::AnimationSampler::Mode::LINEAR:
+						{
+							// Linear interpolation method:
+							float t;
+							if (keyLeft == keyRight)
+							{
+								t = 0;
+							}
+							else
+							{
+								t = (animation.timer - left) / (right - left);
+							}
+							t = saturate(t);
+
+							switch (path_data_type)
+							{
+							default:
+							case AnimationComponent::AnimationChannel::PathDataType::Float:
+							{
+								assert(animationdata->keyframe_data.size() == animationdata->keyframe_times.size());
+								float vLeft = animationdata->keyframe_data[keyLeft];
+								float vRight = animationdata->keyframe_data[keyRight];
+								float vAnim = math::lerp(vLeft, vRight, t);
+								interpolator.f = vAnim;
+							}
+							break;
+							case AnimationComponent::AnimationChannel::PathDataType::Float2:
+							{
+								assert(animationdata->keyframe_data.size() == animationdata->keyframe_times.size() * 2);
+								const XMFLOAT2* data = (const XMFLOAT2*)animationdata->keyframe_data.data();
+								XMVECTOR vLeft = XMLoadFloat2(&data[keyLeft]);
+								XMVECTOR vRight = XMLoadFloat2(&data[keyRight]);
+								XMVECTOR vAnim = XMVectorLerp(vLeft, vRight, t);
+								XMStoreFloat2(&interpolator.f2, vAnim);
+							}
+							break;
+							case AnimationComponent::AnimationChannel::PathDataType::Float3:
+							{
+								assert(animationdata->keyframe_data.size() == animationdata->keyframe_times.size() * 3);
+								const XMFLOAT3* data = (const XMFLOAT3*)animationdata->keyframe_data.data();
+								XMVECTOR vLeft = XMLoadFloat3(&data[keyLeft]);
+								XMVECTOR vRight = XMLoadFloat3(&data[keyRight]);
+								XMVECTOR vAnim = XMVectorLerp(vLeft, vRight, t);
+								XMStoreFloat3(&interpolator.f3, vAnim);
+							}
+							break;
+							case AnimationComponent::AnimationChannel::PathDataType::Float4:
+							{
+								assert(animationdata->keyframe_data.size() == animationdata->keyframe_times.size() * 4);
+								const XMFLOAT4* data = (const XMFLOAT4*)animationdata->keyframe_data.data();
+								XMVECTOR vLeft = XMLoadFloat4(&data[keyLeft]);
+								XMVECTOR vRight = XMLoadFloat4(&data[keyRight]);
+								XMVECTOR vAnim;
+								if (channel.path == AnimationComponent::AnimationChannel::Path::ROTATION)
+								{
+									vAnim = XMQuaternionSlerp(vLeft, vRight, t);
+									vAnim = XMQuaternionNormalize(vAnim);
+								}
+								else
+								{
+									vAnim = XMVectorLerp(vLeft, vRight, t);
+								}
+								XMStoreFloat4(&interpolator.f4, vAnim);
+							}
+							break;
+							}
+						}
+						break;
+						case AnimationComponent::AnimationSampler::Mode::CUBICSPLINE:
+						{
+							// Cubic Spline interpolation method:
+							float t;
+							if (keyLeft == keyRight)
+							{
+								t = 0;
+							}
+							else
+							{
+								t = (animation.timer - left) / (right - left);
+							}
+							t = saturate(t);
+
+							const float t2 = t * t;
+							const float t3 = t2 * t;
+
+							switch (path_data_type)
+							{
+							default:
+							case AnimationComponent::AnimationChannel::PathDataType::Float:
+							{
+								assert(animationdata->keyframe_data.size() == animationdata->keyframe_times.size());
+								float vLeft = animationdata->keyframe_data[keyLeft * 3 + 1];
+								float vLeftTanOut = animationdata->keyframe_data[keyLeft * 3 + 2];
+								float vRightTanIn = animationdata->keyframe_data[keyRight * 3 + 0];
+								float vRight = animationdata->keyframe_data[keyRight * 3 + 1];
+								float vAnim = (2 * t3 - 3 * t2 + 1) * vLeft + (t3 - 2 * t2 + t) * vLeftTanOut + (-2 * t3 + 3 * t2) * vRight + (t3 - t2) * vRightTanIn;
+								interpolator.f = vAnim;
+							}
+							break;
+							case AnimationComponent::AnimationChannel::PathDataType::Float2:
+							{
+								assert(animationdata->keyframe_data.size() == animationdata->keyframe_times.size() * 2 * 3);
+								const XMFLOAT2* data = (const XMFLOAT2*)animationdata->keyframe_data.data();
+
+								// 加载控制点数据
+								XMVECTOR vLeft = XMLoadFloat2(&data[keyLeft * 3 + 1]);
+								XMVECTOR vLeftTanOut = XMVectorScale(XMLoadFloat2(&data[keyLeft * 3 + 2]), dt);
+								XMVECTOR vRightTanIn = XMVectorScale(XMLoadFloat2(&data[keyRight * 3 + 0]), dt);
+								XMVECTOR vRight = XMLoadFloat2(&data[keyRight * 3 + 1]);
+
+								// 计算三次样条插值
+								XMVECTOR part1 = XMVectorScale(vLeft, (2 * t3 - 3 * t2 + 1));
+								XMVECTOR part2 = XMVectorScale(vLeftTanOut, (t3 - 2 * t2 + t));
+								XMVECTOR part3 = XMVectorScale(vRight, (-2 * t3 + 3 * t2));
+								XMVECTOR part4 = XMVectorScale(vRightTanIn, (t3 - t2));
+
+								XMVECTOR vAnim = XMVectorAdd(part1, XMVectorAdd(part2, XMVectorAdd(part3, part4)));
+								XMStoreFloat2(&interpolator.f2, vAnim);
+							}
+							break;
+
+							case AnimationComponent::AnimationChannel::PathDataType::Float3:
+							{
+								assert(animationdata->keyframe_data.size() == animationdata->keyframe_times.size() * 3 * 3);
+								const XMFLOAT3* data = (const XMFLOAT3*)animationdata->keyframe_data.data();
+
+								XMVECTOR vLeft = XMLoadFloat3(&data[keyLeft * 3 + 1]);
+								XMVECTOR vLeftTanOut = XMVectorScale(XMLoadFloat3(&data[keyLeft * 3 + 2]), dt);
+								XMVECTOR vRightTanIn = XMVectorScale(XMLoadFloat3(&data[keyRight * 3 + 0]), dt);
+								XMVECTOR vRight = XMLoadFloat3(&data[keyRight * 3 + 1]);
+
+								XMVECTOR part1 = XMVectorScale(vLeft, (2 * t3 - 3 * t2 + 1));
+								XMVECTOR part2 = XMVectorScale(vLeftTanOut, (t3 - 2 * t2 + t));
+								XMVECTOR part3 = XMVectorScale(vRight, (-2 * t3 + 3 * t2));
+								XMVECTOR part4 = XMVectorScale(vRightTanIn, (t3 - t2));
+
+								XMVECTOR vAnim = XMVectorAdd(part1, XMVectorAdd(part2, XMVectorAdd(part3, part4)));
+								XMStoreFloat3(&interpolator.f3, vAnim);
+							}
+							break;
+
+							case AnimationComponent::AnimationChannel::PathDataType::Float4:
+							{
+								assert(animationdata->keyframe_data.size() == animationdata->keyframe_times.size() * 4 * 3);
+								const XMFLOAT4* data = (const XMFLOAT4*)animationdata->keyframe_data.data();
+
+								XMVECTOR vLeft = XMLoadFloat4(&data[keyLeft * 3 + 1]);
+								XMVECTOR vLeftTanOut = XMVectorScale(XMLoadFloat4(&data[keyLeft * 3 + 2]), dt);
+								XMVECTOR vRightTanIn = XMVectorScale(XMLoadFloat4(&data[keyRight * 3 + 0]), dt);
+								XMVECTOR vRight = XMLoadFloat4(&data[keyRight * 3 + 1]);
+
+								XMVECTOR part1 = XMVectorScale(vLeft, (2 * t3 - 3 * t2 + 1));
+								XMVECTOR part2 = XMVectorScale(vLeftTanOut, (t3 - 2 * t2 + t));
+								XMVECTOR part3 = XMVectorScale(vRight, (-2 * t3 + 3 * t2));
+								XMVECTOR part4 = XMVectorScale(vRightTanIn, (t3 - t2));
+
+								XMVECTOR vAnim = XMVectorAdd(part1, XMVectorAdd(part2, XMVectorAdd(part3, part4)));
+
+								if (channel.path == AnimationComponent::AnimationChannel::Path::ROTATION)
+								{
+									vAnim = XMQuaternionNormalize(vAnim);
+								}
+								XMStoreFloat4(&interpolator.f4, vAnim);
+							}
+							break;
+
+							}
+						}
+						break;
+						}
+					}
+
+					// The interpolated raw values will be blended on top of component values:
+					const float t = animation.amount;
+
+					// CheckIf this channel is the root motion bone or not.
+					const bool isRootBone = (animation.isRootMotion() && animation.root_motion_bone != ecs::INVALID_ENTITY && (target_transform == transforms.getComponent(animation.root_motion_bone)));
+
+					if (target_transform != nullptr)
+					{
+						target_transform->setDirty();
+
+						switch (channel.path)
+						{
+						case AnimationComponent::AnimationChannel::Path::TRANSLATION:
+						{
+							const XMVECTOR aT = XMLoadFloat3(&target_transform->local_position);
+							XMVECTOR bT = XMLoadFloat3(&interpolator.f3);
+
+							const XMVECTOR T = XMVectorLerp(aT, bT, t);
+							if (!isRootBone)
+							{
+								// Not root motion bone.
+								XMStoreFloat3(&target_transform->local_position, T);
+							}
+
+						}
+						break;
+						case AnimationComponent::AnimationChannel::Path::ROTATION:
+						{
+							const XMVECTOR aR = XMLoadFloat4(&target_transform->local_rotation);
+							XMVECTOR bR = XMLoadFloat4(&interpolator.f4);
+
+							const XMVECTOR R = XMQuaternionSlerp(aR, bR, t);
+							if (!isRootBone)
+							{
+								// Not root motion bone.
+								XMStoreFloat4(&target_transform->local_rotation, R);
+							}
+
+
+						}
+						break;
+						case AnimationComponent::AnimationChannel::Path::SCALE:
+						{
+							const XMVECTOR aS = XMLoadFloat3(&target_transform->local_scale);
+							XMVECTOR bS = XMLoadFloat3(&interpolator.f3);
+
+							const XMVECTOR S = XMVectorLerp(aS, bS, t);
+							XMStoreFloat3(&target_transform->local_scale, S);
+						}
+						break;
+						default:
+							break;
+						}
+					}
+
+
+
+
+
+
+
+				}
+
+				if (animation.timer > animation.end && animation.speed > 0)
+				{
+					if (animation.isLooped())
+					{
+						animation.timer = animation.start;
+						for (auto& channel : animation.channels)
+						{
+							channel.next_event = 0;
+						}
+					}
+					else
+					{
+						animation.timer = animation.end;
+						animation.pause();
+					}
+				}
+				else if (animation.timer < animation.start && animation.speed < 0)
+				{
+					if (animation.isLooped())
+					{
+						animation.timer = animation.end;
+						for (auto& channel : animation.channels)
+						{
+							channel.next_event = 0;
+						}
+					}
+					else
+					{
+						animation.timer = animation.start;
+						animation.pause();
+					}
+				}
+
+				if (animation.isPlaying())
+				{
+					animation.timer += dt * animation.speed;
+					static float time_test = 0.f;
+					time_test += dt * animation.speed;
+					//std::cout << time_test << std::endl;
+				}
+			}
+			});
+		jobsystem::Wait(ctx);
+	}
+
+	void Scene::updateTransforms(jobsystem::context& ctx)
+	{
+		jobsystem::Dispatch(ctx, transforms.getCount(), small_subtask_groupsize, [&](jobsystem::JobArgs args) {
+			TransformComponent& transform = transforms[args.jobIndex];
+			transform.updateTransform();
+			});
+	}
+
+	void Scene::updateArmatures(jobsystem::context& ctx)
+	{
+		jobsystem::Dispatch(ctx, (uint32_t)armatures.getCount(), 1, [&](jobsystem::JobArgs args) {
+
+			ArmatureComponent& armature = armatures[args.jobIndex];
+			Entity entity = armatures.getEntity(args.jobIndex);
+			if (!transforms.contain(entity))
+				return;
+			const TransformComponent& transform = *transforms.getComponent(entity);
+
+			// The transform world matrices are in world space, but skinning needs them in armature-local space, 
+			//	so that the skin is reusable for instanced meshes.
+			//	We remove the armature's world matrix from the bone world matrix to obtain the bone local transform
+			//	These local bone matrices will only be used for skinning, the actual transform components for the bones
+			//	remain unchanged.
+			//
+			//	This is useful for an other thing too:
+			//	If a whole transform tree is transformed by some parent (even gltf import does that to convert from RH to LH space)
+			//	then the inverseBindMatrices are not reflected in that because they are not contained in the hierarchy system. 
+			//	But this will correct them too.
+			XMMATRIX R = XMMatrixInverse(nullptr, XMLoadFloat4x4(&transform.world));
+
+			armature.gpu_bone_offset = skinning_allocator.fetch_add(uint32_t(armature.bone_collection.size() * sizeof(ShaderTransform)));
+			ShaderTransform* gpu_dst = (ShaderTransform*)((uint8_t*)skinning_upload_buffer_mapped + armature.gpu_bone_offset);
+
+			if (armature.bone_data.size() != armature.bone_collection.size())
+			{
+				armature.bone_data.resize(armature.bone_collection.size());
+			}
+
+			XMFLOAT3 _min = XMFLOAT3(std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
+			XMFLOAT3 _max = XMFLOAT3(std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest());
+
+			uint32_t boneIndex = 0;
+			for (Entity boneEntity : armature.bone_collection)
+			{
+				const TransformComponent* bone = transforms.getComponent(boneEntity);
+				if (bone == nullptr)
+					continue;
+
+				XMMATRIX B = XMLoadFloat4x4(&armature.inverse_bind_matrices[boneIndex]);
+				XMMATRIX W = XMLoadFloat4x4(&bone->world);
+				XMMATRIX M = B * W * R;
+
+
+
+				XMFLOAT4X4 mat;
+				XMStoreFloat4x4(&mat, M);
+
+				ShaderTransform& shadertransform = armature.bone_data[boneIndex];
+				shadertransform.create(mat);
+				if (skinning_upload_buffer_mapped != nullptr)
+				{
+					std::memcpy(gpu_dst + boneIndex, &shadertransform, sizeof(shadertransform));
+				}
+
+				const float bone_radius = 1;
+				XMFLOAT3 bonepos = bone->getPosition();
+				primitive::AABB boneAABB;
+				boneAABB.createFromHalfWidth(bonepos, XMFLOAT3(bone_radius, bone_radius, bone_radius));
+				_min = math::min(_min, boneAABB._min);
+				_max = math::max(_max, boneAABB._max);
+
+				boneIndex++;
+			}
+
+			armature.aabb = primitive::AABB(_min, _max);
+			});
+	}
+
+	void Scene::updateHierarchy(jobsystem::context& ctx)
+	{
+		jobsystem::Dispatch(ctx, (uint32_t)hierarchy.getCount(), small_subtask_groupsize, [&](jobsystem::JobArgs args) {
+
+			HierarchyComponent& hier = hierarchy[args.jobIndex];
+			Entity entity = hierarchy.getEntity(args.jobIndex);
+
+			TransformComponent* transform_child = transforms.getComponent(entity);
+			XMMATRIX worldmatrix;
+			if (transform_child != nullptr)
+			{
+				worldmatrix = transform_child->getLocalMatrix();
+			}
+
+
+			if (transform_child == nullptr)
+				return;
+
+			Entity parentID = hier.parent_id;
+			while (parentID != INVALID_ENTITY)
+			{
+				TransformComponent* transform_parent = transforms.getComponent(parentID);
+				if (transform_child != nullptr && transform_parent != nullptr)
+				{
+					worldmatrix *= transform_parent->getLocalMatrix();
+				}
+
+
+				const HierarchyComponent* hier_recursive = hierarchy.getComponent(parentID);
+				if (hier_recursive != nullptr)
+				{
+					parentID = hier_recursive->parent_id;
+				}
+				else
+				{
+					parentID = INVALID_ENTITY;
+				}
+			}
+
+			if (transform_child != nullptr)
+			{
+				XMStoreFloat4x4(&transform_child->world, worldmatrix);
+			}
+
+			});
 	}
 
 	void Scene::updateShaderScene()

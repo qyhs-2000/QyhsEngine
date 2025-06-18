@@ -9,24 +9,53 @@
 namespace qyhs::initializer
 {
 	static std::atomic_bool initializationStarted{ false };
-	static jobsystem::Context context;
-	static std::atomic_bool systems_initialized[INITIALIZED_SYSTEM_COUNT]{};
-	bool initializeFinished()
+	static jobsystem::context ctx;
+	static std::atomic_bool systems[INITIALIZED_SYSTEM_COUNT]{};
+
+	void InitializeComponentsImmediate()
 	{
-		return initializationStarted.load() && !qyhs::jobsystem::isBusy(context);
-	}
-	void initializeComponentAsync()
-	{
-		if (initializeFinished())
-		{
+		if (isInitializeFinished())
 			return;
+		if (!initializationStarted.load())
+		{
+			initializeComponentsAsync();
 		}
+		WaitForInitializationsToFinish();
+	}
+	void initializeComponentsAsync()
+	{
+		if (isInitializeFinished())
+			return;
+
 		initializationStarted.store(true);
 
-		qyhs::jobsystem::initialize(~0u);
-		qyhs::jobsystem::execute(context, [](qyhs::jobsystem::JobArgs args) {qyhs::image::initialize(), systems_initialized[INITIALIZED_SYSTEM_IMAGE].store(true); });
-		qyhs::jobsystem::execute(context, [](qyhs::jobsystem::JobArgs args) {qyhs::font::initialize(), systems_initialized[INITIALIZED_SYSTEM_FONT].store(true); });
-		qyhs::jobsystem::execute(context, [](qyhs::jobsystem::JobArgs args) {qyhs::input::initialize(), systems_initialized[INITIALIZED_SYSTEM_INPUT].store(true); });
-		qyhs::jobsystem::execute(context, [](qyhs::jobsystem::JobArgs args) {qyhs::renderer::initialize(), systems_initialized[INITIALIZED_SYSTEM_RENDERER].store(true); });
+		jobsystem::Initialize();
+
+		jobsystem::Execute(ctx, [](jobsystem::JobArgs args) { font::initialize(); systems[INITIALIZED_SYSTEM_FONT].store(true); });
+		jobsystem::Execute(ctx, [](jobsystem::JobArgs args) { image::initialize(); systems[INITIALIZED_SYSTEM_IMAGE].store(true); });
+		jobsystem::Execute(ctx, [](jobsystem::JobArgs args) { input::initialize(); systems[INITIALIZED_SYSTEM_INPUT].store(true); });
+		jobsystem::Execute(ctx, [](jobsystem::JobArgs args) { renderer::initialize(); systems[INITIALIZED_SYSTEM_RENDERER].store(true); });
+
+		std::thread([] {
+			jobsystem::Wait(ctx);
+			}).detach();
+
+	}
+
+	bool isInitializeFinished(INITIALIZED_SYSTEM system)
+	{
+		if (system == INITIALIZED_SYSTEM_COUNT)
+		{
+			return initializationStarted.load() && !jobsystem::IsBusy(ctx);
+		}
+		else
+		{
+			return systems[system].load();
+		}
+	}
+
+	void WaitForInitializationsToFinish()
+	{
+		jobsystem::Wait(ctx);
 	}
 }

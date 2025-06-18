@@ -171,7 +171,7 @@ const char* _glfwGetVulkanResultString(VkResult result)
         case VK_NOT_READY:
             return "A fence or query has not yet completed";
         case VK_TIMEOUT:
-            return "A wait operation has not completed in the specified time";
+            return "A Wait operation has not completed in the specified time";
         case VK_EVENT_SET:
             return "An event is signaled";
         case VK_EVENT_RESET:

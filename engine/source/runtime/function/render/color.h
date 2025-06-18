@@ -22,6 +22,10 @@ namespace qyhs
 				((rgba >> 24) & 0xFF) / 255.0f
 			);
 		}
+		static constexpr Color fromFloat4(const XMFLOAT4& value)
+		{
+			return Color((uint8_t)(value.x * 255), (uint8_t)(value.y * 255), (uint8_t)(value.z * 255), (uint8_t)(value.w * 255));
+		}
 		constexpr operator XMFLOAT4()const { return toFloat4(); }
 		constexpr operator uint32_t() const { return rgba; }
 		

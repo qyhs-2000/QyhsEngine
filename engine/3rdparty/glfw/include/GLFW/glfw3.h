@@ -46,7 +46,7 @@ extern "C" {
  *
  *  For more information about how to use this file, see @ref build_include.
  */
-/*! @defgroup context Context reference
+/*! @defgroup context context reference
  *  @brief Functions and types related to OpenGL and OpenGL ES contexts.
  *
  *  This is the reference documentation for OpenGL and OpenGL ES context related
@@ -942,33 +942,33 @@ extern "C" {
  */
 #define GLFW_DOUBLEBUFFER           0x00021010
 
-/*! @brief Context client API hint and attribute.
+/*! @brief context client API hint and attribute.
  *
- *  Context client API [hint](@ref GLFW_CLIENT_API_hint) and
+ *  context client API [hint](@ref GLFW_CLIENT_API_hint) and
  *  [attribute](@ref GLFW_CLIENT_API_attrib).
  */
 #define GLFW_CLIENT_API             0x00022001
-/*! @brief Context client API major version hint and attribute.
+/*! @brief context client API major version hint and attribute.
  *
- *  Context client API major version [hint](@ref GLFW_CONTEXT_VERSION_MAJOR_hint)
+ *  context client API major version [hint](@ref GLFW_CONTEXT_VERSION_MAJOR_hint)
  *  and [attribute](@ref GLFW_CONTEXT_VERSION_MAJOR_attrib).
  */
 #define GLFW_CONTEXT_VERSION_MAJOR  0x00022002
-/*! @brief Context client API minor version hint and attribute.
+/*! @brief context client API minor version hint and attribute.
  *
- *  Context client API minor version [hint](@ref GLFW_CONTEXT_VERSION_MINOR_hint)
+ *  context client API minor version [hint](@ref GLFW_CONTEXT_VERSION_MINOR_hint)
  *  and [attribute](@ref GLFW_CONTEXT_VERSION_MINOR_attrib).
  */
 #define GLFW_CONTEXT_VERSION_MINOR  0x00022003
-/*! @brief Context client API revision number hint and attribute.
+/*! @brief context client API revision number hint and attribute.
  *
- *  Context client API revision number
+ *  context client API revision number
  *  [attribute](@ref GLFW_CONTEXT_REVISION_attrib).
  */
 #define GLFW_CONTEXT_REVISION       0x00022004
-/*! @brief Context robustness hint and attribute.
+/*! @brief context robustness hint and attribute.
  *
- *  Context client API revision number [hint](@ref GLFW_CONTEXT_ROBUSTNESS_hint)
+ *  context client API revision number [hint](@ref GLFW_CONTEXT_ROBUSTNESS_hint)
  *  and [attribute](@ref GLFW_CONTEXT_ROBUSTNESS_attrib).
  */
 #define GLFW_CONTEXT_ROBUSTNESS     0x00022005
@@ -990,21 +990,21 @@ extern "C" {
  *  [attribute](@ref GLFW_OPENGL_PROFILE_attrib).
  */
 #define GLFW_OPENGL_PROFILE         0x00022008
-/*! @brief Context flush-on-release hint and attribute.
+/*! @brief context flush-on-release hint and attribute.
  *
- *  Context flush-on-release [hint](@ref GLFW_CONTEXT_RELEASE_BEHAVIOR_hint) and
+ *  context flush-on-release [hint](@ref GLFW_CONTEXT_RELEASE_BEHAVIOR_hint) and
  *  [attribute](@ref GLFW_CONTEXT_RELEASE_BEHAVIOR_attrib).
  */
 #define GLFW_CONTEXT_RELEASE_BEHAVIOR 0x00022009
-/*! @brief Context error suppression hint and attribute.
+/*! @brief context error suppression hint and attribute.
  *
- *  Context error suppression [hint](@ref GLFW_CONTEXT_NO_ERROR_hint) and
+ *  context error suppression [hint](@ref GLFW_CONTEXT_NO_ERROR_hint) and
  *  [attribute](@ref GLFW_CONTEXT_NO_ERROR_attrib).
  */
 #define GLFW_CONTEXT_NO_ERROR       0x0002200A
-/*! @brief Context creation API hint and attribute.
+/*! @brief context creation API hint and attribute.
  *
- *  Context creation API [hint](@ref GLFW_CONTEXT_CREATION_API_hint) and
+ *  context creation API [hint](@ref GLFW_CONTEXT_CREATION_API_hint) and
  *  [attribute](@ref GLFW_CONTEXT_CREATION_API_attrib).
  */
 #define GLFW_CONTEXT_CREATION_API   0x0002200B
@@ -4022,7 +4022,7 @@ GLFWAPI void glfwWaitEvents(void);
  *
  *  Event processing is not required for joystick input to work.
  *
- *  @param[in] timeout The maximum amount of time, in seconds, to wait.
+ *  @param[in] timeout The maximum amount of time, in seconds, to Wait.
  *
  *  @errors Possible errors include @ref GLFW_NOT_INITIALIZED, @ref
  *  GLFW_INVALID_VALUE and @ref GLFW_PLATFORM_ERROR.
@@ -5533,7 +5533,7 @@ GLFWAPI void glfwSwapBuffers(GLFWwindow* window);
 /*! @brief Sets the swap interval for the current context.
  *
  *  This function sets the swap interval for the current OpenGL or OpenGL ES
- *  context, i.e. the number of screen updates to wait from the time @ref
+ *  context, i.e. the number of screen updates to Wait from the time @ref
  *  glfwSwapBuffers was called before swapping the buffers and returning.  This
  *  is sometimes called _vertical synchronization_, _vertical retrace
  *  synchronization_ or just _vsync_.
@@ -5550,7 +5550,7 @@ GLFWAPI void glfwSwapBuffers(GLFWwindow* window);
  *  This function does not apply to Vulkan.  If you are rendering with Vulkan,
  *  see the present mode of your swapchain instead.
  *
- *  @param[in] interval The minimum number of screen updates to wait for
+ *  @param[in] interval The minimum number of screen updates to Wait for
  *  until the buffers are swapped by @ref glfwSwapBuffers.
  *
  *  @errors Possible errors include @ref GLFW_NOT_INITIALIZED, @ref

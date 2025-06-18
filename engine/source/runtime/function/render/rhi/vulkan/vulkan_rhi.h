@@ -290,6 +290,12 @@ namespace qyhs
 		std::vector<VkImageViewType> imageViewTypes;
 		VkDeviceSize uniform_buffer_sizes[DESCRIPTORBINDER_CBV_COUNT] = {};
 		std::vector<uint32_t> uniform_buffer_dynamic_slots;
+		size_t binding_hash = 0;
+		VkPipeline pipeline_cs = VK_NULL_HANDLE;
+		VkPipelineLayout pipelineLayout_cs = VK_NULL_HANDLE;
+		VkDescriptorSetLayout descriptorSetLayout = VK_NULL_HANDLE;
+		uint32_t bindlessFirstSet = 0;
+		std::vector<VkDescriptorSet> bindless_sets;
 	};
 
 	struct Texture_Vulkan
@@ -326,7 +332,8 @@ namespace qyhs
 		{
 			VulkanRHI * rhi = nullptr;
 			std::vector<VkWriteDescriptorSet> descriptor_set_writes;
-			VkDescriptorSet descriptorset_graphics;
+			VkDescriptorSet descriptorset_graphics = VK_NULL_HANDLE;
+			VkDescriptorSet descriptorSet_compute = VK_NULL_HANDLE;
 			std::vector<VkDescriptorImageInfo> image_infos;
 			std::vector<VkDescriptorBufferInfo> buffer_infos;
 			uint32_t uniform_buffer_dynamic_offsets[DESCRIPTORBINDER_CBV_COUNT] = {};
@@ -377,10 +384,11 @@ namespace qyhs
 			const VkCommandBuffer getCommandBuffer() const { return command_buffers[m_buffer_index][queue]; }
 			VkCommandPool getCommandPool() const { return command_pools[m_buffer_index][queue]; }
 			const PipelineState* active_pso = nullptr;
+
 			QueueType queue{};
 			std::vector<VkSemaphore> signals;		//signal that after submit command list
-			std::vector<VkSemaphore> waits;			//wait for signal
-			std::vector<std::pair<QueueType, VkSemaphore>> wait_queues;	//wait for queue
+			std::vector<VkSemaphore> waits;			//Wait for signal
+			std::vector<std::pair<QueueType, VkSemaphore>> wait_queues;	//Wait for queue
 			std::vector<SwapChain> prev_swapchains;
 			std::vector<std::pair<size_t, VkPipeline>> pipelines_worker;
 			uint32_t index{ 0 };
@@ -645,9 +653,11 @@ namespace qyhs
 		void createStorageBuffer(VkDeviceSize buffer_size, VkBuffer& storage_buffer, VkDeviceMemory& storage_buffer_memory);
 		void cmdBindDescriptorSets(VkPipelineBindPoint bind_point, VkPipelineLayout* pipeline_layout, int first_set, int set_count, const VkDescriptorSet* const* pDescriptorSets, uint32_t dynamic_offset_count, const uint32_t* p_dynamic_offsets);
 		void createDescriptorSetLayout(VkDescriptorSetLayoutCreateInfo* create_info, const VkAllocationCallbacks* callbacks, VkDescriptorSetLayout*& p_descriptor_set_layout);
+		virtual void bindComputeShader(const Shader* cs, CommandList cmd) override;
 		virtual bool createSampler(const SamplerDesc* sampler_desc, Sampler* sampler) override;
 		CommandList beginCommandList(QueueType queue) override;
 		int getMaxFrameInFlight() { return MAX_FRAMES_IN_FLIGHT; }
+		virtual void waitQueue(CommandList cmd, QueueType queue_type) override;
 		virtual int createSubresource(Texture* texture, SubresourceType type, uint32_t firstSlice, uint32_t sliceCount, uint32_t firstMip, uint32_t mipCount, const Format* format_change = nullptr, const ImageAspect* aspect = nullptr, const Swizzle* swizzle = nullptr, float min_lod_clamp = 0) const override;
 		virtual int createSubresource(GPUBuffer* buffer, SubresourceType type, uint64_t offset, uint64_t size = ~0ull,const Format * format_change = nullptr) override;
 		void drawInstanced(uint32_t vertexCount, uint32_t instanceCount, uint32_t startVertexLocation, uint32_t startInstanceLocation, CommandList cmd) override;
@@ -665,6 +675,8 @@ namespace qyhs
 		VkBuffer getUniformBuffer(uint32_t index) {
 			return uniformBuffers[index];
 		}
+		void predispatch(CommandList cmd);
+		void dispatch(uint32_t threadGroupCountX, uint32_t threadGroupCountY, uint32_t threadGroupCountZ, CommandList cmd) override;
 		virtual void setName(Shader* shader, const char* name) const override;
 		virtual void setName(GPUResource* resource, const char* name) const override;
 		std::mutex pso_layout_cache_mutex;
@@ -861,9 +873,9 @@ namespace qyhs
 		std::vector<VkImageView> swapChainImageViews;
 		std::vector<VkFramebuffer> swapChainFramebuffers;
 
-		VkRenderPass renderPass;
+		/*VkRenderPass renderPass;
 		VkDescriptorSetLayout descriptorSetLayout;
-		VkPipelineLayout pipelineLayout;
+		VkPipelineLayout pipelineLayout;*/
 
 		//base  render command pool
 		VkCommandPool command_pool;

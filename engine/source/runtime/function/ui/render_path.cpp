@@ -5,6 +5,7 @@
 #include "function/input/input.h"
 #include <iostream>
 
+
 enum class EditorActions
 {
 	// Camera movement
@@ -67,7 +68,7 @@ namespace qyhs
 		resizeBuffers();
 		//import_model_gltf(scene, "E://VS_Project//QyhsEngine//engine//source//runtime//resource//model//CesiumMan//glTF-Embedded//CesiumMan_test.gltf");
 		//import_model_gltf(scene, "E://GithubClone//WickedEngine//Content//models//feibi_y_up.gltf");
-	
+
 		//initialize camera position
 		XMMATRIX mat = XMMatrixTranslation(0.f, 2.f, -4.f);
 		camera->transformCamera(mat);
@@ -139,11 +140,11 @@ namespace qyhs
 		RHI* rhi = rhi::getRHI();
 		RenderPath2D::update(delta_time);
 
-		scene->update(delta_time);
+		scene.update(delta_time);
 
 		//Frustum culling for main camera
 		visibility_main.layer_mask = layer_mask;
-		visibility_main.scene = scene;
+		visibility_main.scene = &scene;
 		visibility_main.camera = camera;
 		visibility_main.flags = renderer::Visibility::ALLOW_EVERYTHING;
 		if (!occlusion_culling_enabled)
@@ -151,7 +152,7 @@ namespace qyhs
 			visibility_main.flags &= ~renderer::Visibility::ALLOW_OCCLUSION_CULLING;
 		}
 		renderer::updateVisibility(visibility_main);
-		renderer::updatePerFrameData(*scene, visibility_main, frame_cb);
+		renderer::updatePerFrameData(scene, visibility_main, frame_cb);
 
 		float x_dif = 0.0f, y_dif = 0.0f;
 		currentMouse = input::GetPointer();
@@ -174,7 +175,7 @@ namespace qyhs
 			camera_control_start = true;
 			input::HidePointer(false);
 		}
-		
+
 		const float clamped_delta_time = std::min(0.1f, delta_time);
 		const float speed = (input::Down(input::KEYBOARD_BUTTON_LSHIFT) ? 10.0f : 1.0f) * 6 * clamped_delta_time;
 		XMVECTOR move = XMLoadFloat3(&cam_move);
@@ -185,7 +186,7 @@ namespace qyhs
 			// Only move camera if control not pressed
 			if (checkInput(EditorActions::MOVE_CAMERA_LEFT)) { moveNew += XMVectorSet(-1, 0, 0, 0); }
 			if (checkInput(EditorActions::MOVE_CAMERA_RIGHT)) { moveNew += XMVectorSet(1, 0, 0, 0); }
-			if (checkInput(EditorActions::MOVE_CAMERA_FORWARD)) { moveNew += XMVectorSet(0, 0, 1, 0);  }
+			if (checkInput(EditorActions::MOVE_CAMERA_FORWARD)) { moveNew += XMVectorSet(0, 0, 1, 0); }
 			if (checkInput(EditorActions::MOVE_CAMERA_BACKWARD)) { moveNew += XMVectorSet(0, 0, -1, 0); }
 			if (checkInput(EditorActions::MOVE_CAMERA_UP)) { moveNew += XMVectorSet(0, 1, 0, 0); }
 			if (checkInput(EditorActions::MOVE_CAMERA_DOWN)) { moveNew += XMVectorSet(0, -1, 0, 0); }
@@ -242,23 +243,25 @@ namespace qyhs
 
 	void RenderPath3D::render()
 	{
-		std::shared_ptr<jobsystem::Context> ctx = std::make_shared<jobsystem::Context>();
+		std::shared_ptr<jobsystem::context> ctx = std::make_shared<jobsystem::context>();
 		RHI* rhi = rhi::getRHI();
 		CommandList cmd = rhi->beginCommandList();
+		const scene::Scene& scene = getCurrentScene();
 		CommandList cmd_prepareframe = cmd;
 		//prepare the frame
-		jobsystem::execute(*ctx, [this,cmd](jobsystem::JobArgs args) {
+		jobsystem::Execute(*ctx, [this, cmd](jobsystem::JobArgs args) {
 			renderer::updateRenderData(visibility_main, frame_cb, cmd);
 			});
 
-		//jobsystem::wait(*ctx);
+		jobsystem::Wait(*ctx);
+		rhi->waitQueue(cmd, RHI::QueueType::QUEUE_COMPUTE);
 		static const uint32_t drawscene_flags = renderer::DRAWSCENE_OPAQUE | renderer::DRAWSCENE_MAINCAMERA;
 
 		//main camera depth prepass
 		cmd = rhi->beginCommandList();
 		CommandList cmd_maincamera_prepass = cmd;
 		rhi->waitCommandList(cmd, cmd_prepareframe);
-		jobsystem::execute(*ctx, [this,cmd](jobsystem::JobArgs args) {
+		jobsystem::Execute(*ctx, [this, cmd](jobsystem::JobArgs args) {
 			RHI* rhi = rhi::getRHI();
 			renderer::bindCameraConstantBuffer(*camera, cmd);
 			RenderPassImage rp[] = {
@@ -283,27 +286,27 @@ namespace qyhs
 			renderer::drawScene(visibility_main, drawscene_flags, RENDERPASS_PREPASS, cmd);
 			rhi->endRenderPass(cmd);
 			rhi->endEvent(cmd);
-		});
+			});
 
-		//jobsystem::wait(*ctx);
+		//jobsystem::Wait(*ctx);
 
 		//main camera opaque color pass
 		cmd = rhi->beginCommandList();
 		rhi->waitCommandList(cmd, cmd_maincamera_prepass);
-		jobsystem::execute(*ctx, [this, cmd](jobsystem::JobArgs args) {
+		jobsystem::Execute(*ctx, [this, cmd](jobsystem::JobArgs args) {
 			renderer::bindCameraConstantBuffer(*camera, cmd);
 			renderer::bindCommonResources(cmd);
 			renderOpaques(cmd);
 			});
-		jobsystem::wait(*ctx);
+		jobsystem::Wait(*ctx);
 		//transparents
-		jobsystem::execute(*ctx, [this, cmd](jobsystem::JobArgs args) {
+		jobsystem::Execute(*ctx, [this, cmd](jobsystem::JobArgs args) {
 			renderer::bindCameraConstantBuffer(*camera, cmd);
 			renderer::bindCommonResources(cmd);
 			renderTransparents(cmd);
 			});
 
-		jobsystem::wait(*ctx);
+		jobsystem::Wait(*ctx);
 		RenderPath2D::render();
 	}
 
@@ -319,6 +322,7 @@ namespace qyhs
 
 	void RenderPath3D::renderTransparents(CommandList cmd) const
 	{
+		//const scene::CameraComponent& camera = scene::getCamera();
 		RHI* rhi = rhi::getRHI();
 		RenderPassImage rp[] = {
 			RenderPassImage::renderTarget(&rt_main_render,RenderPassImage::LoadOp::LOAD),
@@ -343,9 +347,196 @@ namespace qyhs
 			rhi->beginEvent("Transparent Scene", cmd);
 			rhi->bindViewports(cmd, 1, &vp);
 
-			renderer::drawScene(visibility_main,renderer::DRAWSCENE_TRANSPARENT|renderer::DRAWSCENE_MAINCAMERA,RENDERPASS_MAIN,cmd);
+			renderer::drawScene(visibility_main, renderer::DRAWSCENE_TRANSPARENT | renderer::DRAWSCENE_MAINCAMERA, RENDERPASS_MAIN, cmd);
 		}
-		renderer::drawDebugWorld(*camera,cmd);
+		renderer::drawDebugWorld(*camera, cmd);
+		//TODO:Render Bone to see if armature imported is true
+		{
+			static PipelineState pso;
+			if (!pso.isValid())
+			{
+				static auto LoadShaders = [] {
+					PipelineStateDesc desc;
+					desc.vertex_shader = renderer::GetShader(enums::VSTYPE_VERTEXCOLOR);
+					desc.fragment_shader = renderer::GetShader(enums::PSTYPE_VERTEXCOLOR);
+					desc.input_layout = renderer::GetInputLayout(enums::ILTYPE_VERTEXCOLOR);
+					desc.depth_stencil_state = renderer::GetDepthStencilState(enums::DSSTYPE_DEPTHDISABLED);
+					desc.rasterizer_state = renderer::GetRasterizerState(enums::RASTERIZER_STATE_TYPE_DOUBLE_SIDE);
+					desc.blend_state = renderer::GetBlendState(enums::BLEND_STATE_TYPE_TRANSPARENT);
+					desc.primitive_topology = PrimitiveTopology::TRIANGLE_LIST;
+					rhi::getRHI()->createPipelineState(&desc, &pso);
+					};
+				
+				LoadShaders();
+			}
+
+			size_t bone_count = 0;
+			for (size_t i = 0; i < scene.armatures.getCount(); ++i)
+			{
+				const scene::ArmatureComponent& armature = scene.armatures[i];
+				bone_count += armature.bone_collection.size();
+			}
+
+			if (bone_count > 0)
+			{
+				struct Vertex
+				{
+					XMFLOAT4 position;
+					XMFLOAT4 color;
+				};
+				const size_t segment_count = 18 + 1 + 18 + 1;
+				const size_t vb_size = sizeof(Vertex) * (bone_count * (segment_count + 1 + 1));
+				const size_t ib_size = sizeof(uint32_t) * bone_count * (segment_count + 1) * 3;
+				RHI::GPUAllocation mem = rhi->allocateGPU(vb_size + ib_size, cmd);
+				Vertex* vertices = (Vertex*)mem.data;
+				uint32_t* indices = (uint32_t*)((uint8_t*)mem.data + vb_size);
+				uint32_t vertex_count = 0;
+				uint32_t index_count = 0;
+
+				const XMVECTOR Eye = camera->GetEye();
+				const XMVECTOR Unit = XMVectorSet(0, 1, 0, 0);
+
+				for (size_t i = 0; i < scene.armatures.getCount(); ++i)
+				{
+					const scene::ArmatureComponent& armature = scene.armatures[i];
+					for (ecs::Entity entity : armature.bone_collection)
+					{
+						if (!scene.transforms.contain(entity))
+							continue;
+						const scene::TransformComponent& transform = *scene.transforms.getComponent(entity);
+						XMVECTOR a = transform.GetPositionV();
+						XMVECTOR b = a + XMVectorSet(0, 0.1f, 0, 0);
+						
+						
+						{
+							// Search for child to connect bone tip:
+							bool child_found = false;
+							
+							if (!child_found)
+							{
+								for (ecs::Entity child : armature.bone_collection)
+								{
+									const scene::HierarchyComponent* hierarchy = scene.hierarchy.getComponent(child);
+									if (hierarchy != nullptr && hierarchy->parent_id == entity && scene.transforms.contain(child))
+									{
+										const scene::TransformComponent& child_transform = *scene.transforms.getComponent(child);
+										b = child_transform.GetPositionV();
+										child_found = true;
+										break;
+									}
+								}
+							}
+							if (!child_found)
+							{
+								// No child, try to guess bone tip compared to parent (if it has parent):
+								const scene::HierarchyComponent* hierarchy = scene.hierarchy.getComponent(entity);
+								if (hierarchy != nullptr && scene.transforms.contain(hierarchy->parent_id))
+								{
+									const scene::TransformComponent& parent_transform = *scene.transforms.getComponent(hierarchy->parent_id);
+									XMVECTOR ab = a - parent_transform.GetPositionV();
+									b = a + ab;
+								}
+							}
+						}
+						XMVECTOR ab = XMVector3Normalize(b - a);
+
+						primitive::Capsule capsule;
+						capsule.radius = math::Distance(a, b) * 0.1f;
+
+						a -= XMVectorMultiply(ab, XMVectorReplicate(capsule.radius));  
+						b += XMVectorMultiply(ab, XMVectorReplicate(capsule.radius));  
+
+						XMStoreFloat3(&capsule.base, a);
+						XMStoreFloat3(&capsule.tip, b);
+						XMFLOAT4 color = inactiveEntityColor;
+
+						
+
+						color.w = 0.6;
+
+						XMVECTOR Base = XMLoadFloat3(&capsule.base);
+						XMVECTOR Tip = XMLoadFloat3(&capsule.tip);
+						XMVECTOR Radius = XMVectorReplicate(capsule.radius);
+						XMVECTOR Normal = XMVector3Normalize(Tip - Base);
+						XMVECTOR Tangent = XMVector3Normalize(XMVector3Cross(Normal, Base - Eye));
+						XMVECTOR Binormal = XMVector3Normalize(XMVector3Cross(Tangent, Normal));
+
+						XMVECTOR LineEndOffset = XMVectorMultiply(Normal, Radius);  
+						XMVECTOR A = XMVectorAdd(Base, LineEndOffset);  
+						XMVECTOR B = XMVectorSubtract(Tip, LineEndOffset);  
+						XMVECTOR AB = XMVectorMultiply(Unit, XMVector3Length(B - A));  
+
+						XMMATRIX M = { Tangent,Normal,Binormal,XMVectorSetW(A, 1) };
+
+						uint32_t center_vertex_index = vertex_count;
+						Vertex center_vertex;
+						XMStoreFloat4(&center_vertex.position, A);
+						center_vertex.position.w = 1;
+						center_vertex.color = color;
+						center_vertex.color.w = 0;
+						std::memcpy(vertices + vertex_count, &center_vertex, sizeof(center_vertex));
+						vertex_count++;
+
+						for (size_t i = 0; i < segment_count; ++i)
+						{
+							XMVECTOR segment_pos;
+							const float angle0 = XM_PIDIV2 + (float)i / (float)segment_count * XM_2PI;
+							if (i < 18)
+							{
+								segment_pos = XMVectorSet(sinf(angle0) * capsule.radius, cosf(angle0) * capsule.radius, 0, 1);
+							}
+							else if (i == 18)
+							{
+								segment_pos = XMVectorSet(sinf(angle0) * capsule.radius, cosf(angle0) * capsule.radius, 0, 1);
+							}
+							else if (i > 18 && i < 18 + 1 + 18)
+							{
+								segment_pos = AB + XMVectorSet(sinf(angle0) * capsule.radius * 0.5f, cosf(angle0) * capsule.radius * 0.5f, 0, 1);
+							}
+							else
+							{
+								segment_pos = AB + XMVectorSet(sinf(angle0) * capsule.radius * 0.5f, cosf(angle0) * capsule.radius * 0.5f, 0, 1);
+							}
+							segment_pos = XMVector3Transform(segment_pos, M);
+
+							Vertex vertex;
+							XMStoreFloat4(&vertex.position, segment_pos);
+							vertex.position.w = 1;
+							vertex.color = color;
+							//vertex.color.w = 0;
+							std::memcpy(vertices + vertex_count, &vertex, sizeof(vertex));
+							uint32_t ind[] = { center_vertex_index,vertex_count - 1,vertex_count };
+							std::memcpy(indices + index_count, ind, sizeof(ind));
+							index_count += arraysize(ind);
+							vertex_count++;
+						}
+						// closing triangle fan:
+						uint32_t ind[] = { center_vertex_index,vertex_count - 1,center_vertex_index+1 };
+						std::memcpy(indices + index_count, ind, sizeof(ind));
+						index_count += arraysize(ind);
+					}
+				}
+
+				rhi->beginEvent("Bone capsules", cmd);
+				rhi->bindPipelineState(&pso, cmd);
+
+				const GPUBuffer* vbs[] = {
+					&mem.buffer,
+				};
+				const uint32_t strides[] = {
+					sizeof(Vertex)
+				};
+				const uint64_t offsets[] = {
+					mem.offset,
+				};
+				rhi->bindVertexBuffers(vbs, 0, arraysize(vbs), strides, offsets, cmd);
+				rhi->bindIndexBuffer(&mem.buffer, IndexBufferFormat::UINT32, mem.offset + vb_size, cmd);
+
+				rhi->drawIndexed(index_count, 0, 0, cmd);
+				rhi->endEvent(cmd);
+			}
+		}
+
 		rhi->endRenderPass(cmd);
 	}
 
@@ -375,9 +566,9 @@ namespace qyhs
 			rhi->beginEvent("Opaque Scene", cmd);
 			rhi->bindViewports(cmd, 1, &vp);
 
-			renderer::drawScene(visibility_main,renderer::DRAWSCENE_OPAQUE|renderer::DRAWSCENE_MAINCAMERA,RENDERPASS_MAIN,cmd);
+			renderer::drawScene(visibility_main, renderer::DRAWSCENE_OPAQUE | renderer::DRAWSCENE_MAINCAMERA, RENDERPASS_MAIN, cmd);
 		}
-		
+
 		rhi->endRenderPass(cmd);
 	}
 

@@ -46,6 +46,8 @@ namespace qyhs
 		virtual void initialize2();
 		virtual void activatePath(RenderPath * render_path);
 		inline RenderPath* getActivePath() { return active_path; }
+		float time_test = 0;
+		float delta_time = 0.f;
 	protected:
 		RenderPath* active_path;
 	private:

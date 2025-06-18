@@ -9,7 +9,7 @@ namespace qyhs::scene
 			archive >> (uint8_t&)userBlendMode;
 			archive >> textures[BASECOLORMAP].name;
 			archive >> textures[BASECOLORMAP].uvset;
-			//jobsystem::execute(seri.ctx, [&](jobsystem::JobArgs args) {
+			//jobsystem::Execute(seri.ctx, [&](jobsystem::JobArgs args) {
 				createRenderData();
 			//	});
 		}
@@ -24,6 +24,22 @@ namespace qyhs::scene
 				seri.registerResource(texture.name);
 			}
 
+		}
+	}
+
+	void AnimationDataComponent::serialize(Archive& archive, ecs::EntitySerializer& seri)
+	{
+		if (archive.isReadMode())
+		{
+			archive >> _flags;
+			archive >> keyframe_times;
+			archive >> keyframe_data;
+		}
+		else
+		{
+			archive << _flags;
+			archive << keyframe_times;
+			archive << keyframe_data;
 		}
 	}
 
@@ -65,7 +81,7 @@ namespace qyhs::scene
 				archive >> subsets[i].index_count;
 			}
 
-			//jobsystem::execute(seri.ctx, [&](jobsystem::JobArgs args) {
+			//jobsystem::Execute(seri.ctx, [&](jobsystem::JobArgs args) {
 				createRenderData();
 				//});
 		}

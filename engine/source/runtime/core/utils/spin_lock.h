@@ -22,7 +22,7 @@ namespace qyhs
 				}
 				else
 				{
-					std::this_thread::yield(); // OS thread swap can occur here. It is important to keep it as fallback, to avoid any chance of lockup by busy wait
+					std::this_thread::yield(); // OS thread swap can occur here. It is important to keep it as fallback, to avoid any chance of lockup by busy Wait
 				}
 				spin++;
 			}

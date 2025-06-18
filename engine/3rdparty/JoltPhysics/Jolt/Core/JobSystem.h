@@ -28,7 +28,7 @@ JPH_NAMESPACE_BEGIN
 ///		JobHandle first_job = job_system->CreateJob("FirstJob", Color::sGreen, [second_job]() { ....; second_job.RemoveDependency(); }, 0); // Job can start immediately, will start second job when it's done
 ///		JobHandle third_job = job_system->CreateJob("ThirdJob", Color::sBlue, []() { ... }, 0); // This job can run immediately as well and can run in parallel to job 1 and 2
 ///		
-///		// Add the jobs to the barrier so that we can execute them while we're waiting
+///		// Add the jobs to the barrier so that we can Execute them while we're waiting
 ///		Barrier *barrier = job_system->CreateBarrier();
 ///		barrier->AddJob(first_job);
 ///		barrier->AddJob(second_job);
@@ -127,7 +127,7 @@ public:
 	/// RemoveDependency causes the dependency counter to reach 0.
 	virtual JobHandle		CreateJob(const char *inName, ColorArg inColor, const JobFunction &inJobFunction, uint32 inNumDependencies = 0) = 0;
 
-	/// Create a new barrier, used to wait on jobs
+	/// Create a new barrier, used to Wait on jobs
 	virtual Barrier *		CreateBarrier() = 0;
 
 	/// Destroy a barrier when it is no longer used. The barrier should be empty at this point.

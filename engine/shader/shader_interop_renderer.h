@@ -220,12 +220,36 @@ struct ObjectPushConstant
 	uint32_t instance_offset;
 };
 
+struct alignas(16) SkinningPushConstants
+{
+	int vb_pos_wind;
+	int vb_nor;
+	int vb_tan;
+	int so_pos;
+
+	int so_nor;
+	int so_tan;
+	int vb_bon;
+	int morphvb_index;
+
+	int skinningbuffer_index;
+	uint bone_offset;
+	uint morph_offset;
+	uint morph_count;
+
+	float3 aabb_min;
+	uint vertexCount;
+
+	float3 aabb_max;
+	uint influence_div4;
+};
 
 struct alignas(16) ShaderScene
 {
 	int geometry_buffer;
 	int instance_buffer;
 	int material_buffer;
+	int padding;
 };
 
 //constant buffer in dx = uniform buffer or uniform buffer dynamic in vulkan

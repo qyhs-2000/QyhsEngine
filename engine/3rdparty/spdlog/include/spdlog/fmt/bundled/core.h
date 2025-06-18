@@ -1340,7 +1340,7 @@ template <typename Context> struct arg_mapper {
   auto map(...) -> unformattable { return {}; }
 };
 
-// A type constant after applying arg_mapper<Context>.
+// A type constant after applying arg_mapper<context>.
 template <typename T, typename Context>
 using mapped_type_constant =
     type_constant<decltype(arg_mapper<Context>().map(std::declval<const T&>())),

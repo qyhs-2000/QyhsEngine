@@ -175,8 +175,8 @@ protected:
 	virtual void					RestoreBinaryState(StreamIn &inStream) override;
 
 private:	
-	class							DecodingContext;						///< Context class for walking through all nodes of a heightfield
-	struct							HSGetTrianglesContext;					///< Context class for GetTrianglesStart/Next
+	class							DecodingContext;						///< context class for walking through all nodes of a heightfield
+	struct							HSGetTrianglesContext;					///< context class for GetTrianglesStart/Next
 
 	/// Calculate commonly used values and store them in the shape
 	void							CacheValues();

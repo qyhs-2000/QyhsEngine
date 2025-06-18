@@ -83,7 +83,7 @@ private:
 	SharedMutex				mUpdateMutex;
 
 	/// We double buffer all trees so that we can query while building the next one and we destroy the old tree the next physics update.
-	/// This structure ensures that we wait for queries that are still using the old tree.
+	/// This structure ensures that we Wait for queries that are still using the old tree.
 	mutable SharedMutex		mQueryLocks[2];
 
 	/// This index indicates which lock is currently activate, it alternates between 0 and 1

@@ -1468,7 +1468,7 @@ void ImGui_ImplVulkanH_CreateOrResizeWindow(VkInstance instance, VkPhysicalDevic
 
 void ImGui_ImplVulkanH_DestroyWindow(VkInstance instance, VkDevice device, ImGui_ImplVulkanH_Window* wd, const VkAllocationCallbacks* allocator)
 {
-    vkDeviceWaitIdle(device); // FIXME: We could wait on the Queue if we had the queue in wd-> (otherwise VulkanH functions can't use globals)
+    vkDeviceWaitIdle(device); // FIXME: We could Wait on the Queue if we had the queue in wd-> (otherwise VulkanH functions can't use globals)
     //vkQueueWaitIdle(bd->Queue);
 
     for (uint32_t i = 0; i < wd->ImageCount; i++)

@@ -307,7 +307,7 @@ namespace qyhs::resourcemanager
 		std::vector<TempResource> tmp_resources;
 		tmp_resources.resize(serializable_count);
 
-		jobsystem::Context ctx;
+		jobsystem::context ctx;
 		ctx.priority = jobsystem::Priority::Low;
 		std::cout << "Read Resources" << std::endl;
 		for (int i = 0; i < serializable_count; ++i)
@@ -324,7 +324,7 @@ namespace qyhs::resourcemanager
 			{
 				continue;
 			}
-			jobsystem::execute(ctx, [i, &tmp_resources, &seri, &archive, file_offset](jobsystem::JobArgs args) {
+			jobsystem::Execute(ctx, [i, &tmp_resources, &seri, &archive, file_offset](jobsystem::JobArgs args) {
 				auto& tmp_resource = tmp_resources[i];
 				auto res = load(tmp_resource.name, Flags::IMPORT_DELAY, tmp_resource.data_ptr,
 					tmp_resource.data_size, archive.getSourceFileName(), file_offset);
@@ -334,7 +334,7 @@ namespace qyhs::resourcemanager
 				seri_locker.unlock();
 				});
 		}
-		jobsystem::wait(ctx);
+		jobsystem::Wait(ctx);
 		
 	}
 

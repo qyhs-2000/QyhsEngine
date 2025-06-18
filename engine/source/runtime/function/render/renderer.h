@@ -67,4 +67,10 @@ namespace qyhs::renderer
 	void updateRenderData(const Visibility& visibility, const FrameConstantBuffer& frame_cb,CommandList  cmd);
 	const Sampler* getSampler(enums::SAMPLERTYPES id);
 	void drawDebugWorld(const scene::CameraComponent & camera,CommandList cmd);
+	const Shader* GetShader(SHADER_TYPE id);
+	
+	const InputLayout* GetInputLayout(ILTYPES id);
+	const RasterizerState* GetRasterizerState(RSTYPES id);
+	const DepthStencilState* GetDepthStencilState(DSSTYPES id);
+	const BlendState* GetBlendState(BSTYPES id);
 }

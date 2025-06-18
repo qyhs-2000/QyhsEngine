@@ -84,7 +84,7 @@ void RegisterTypes()
 	ConvexHullShape::sRegister();
 	HeightFieldShape::sRegister();
 
-	// Register these last because their collision functions are simple so we want to execute them first (register them in reverse order of collision complexity)
+	// Register these last because their collision functions are simple so we want to Execute them first (register them in reverse order of collision complexity)
 	RotatedTranslatedShape::sRegister();
 	OffsetCenterOfMassShape::sRegister();
 	ScaledShape::sRegister();

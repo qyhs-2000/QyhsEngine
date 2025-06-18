@@ -66,6 +66,7 @@ namespace qyhs
 	{
 		VkBuffer resource = VK_NULL_HANDLE;
 		VmaAllocation allocation = nullptr;
+		VkDeviceAddress address = 0;
 		std::shared_ptr<VulkanRHI::AllocationHandler> allocation_handler = nullptr;
 		struct BufferSubresource
 		{
@@ -1437,6 +1438,24 @@ namespace qyhs
 		if (enableValidationLayers || enable_debug_utils_label) {
 			extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
 		}
+		uint32_t extensionCount = 0;
+		VkResult res = vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
+		assert(res == VK_SUCCESS);
+		std::vector<VkExtensionProperties> availableInstanceExtensions(extensionCount);
+		res = vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, availableInstanceExtensions.data());
+		assert(res == VK_SUCCESS);
+
+		for (auto& availableExtension : availableInstanceExtensions)
+		{
+			if (strcmp(availableExtension.extensionName, VK_EXT_SWAPCHAIN_COLOR_SPACE_EXTENSION_NAME) == 0)
+			{
+				extensions.push_back(VK_EXT_SWAPCHAIN_COLOR_SPACE_EXTENSION_NAME);
+			}
+			else if (strcmp(availableExtension.extensionName, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME) == 0)
+			{
+				extensions.push_back(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
+			}
+		}
 
 		return extensions;
 	}
@@ -2131,6 +2150,30 @@ namespace qyhs
 		}
 		break;
 		case qyhs::graphics::SubresourceType::UAV:
+			if (resource->isBuffer())
+			{
+				auto internal_state = to_internal((const GPUBuffer*)resource);
+				if (subresource < 0)
+				{
+					return internal_state->uav.index;
+				}
+				else
+				{
+					return internal_state->subresources_uav[subresource].index;
+				}
+			}
+			else if (resource->isTexture())
+			{
+				auto internal_state = to_internal((const Texture*)resource);
+				if (subresource < 0)
+				{
+					return internal_state->uav.index;
+				}
+				else
+				{
+					return internal_state->subresources_uav[subresource].index;
+				}
+			}
 			break;
 		case qyhs::graphics::SubresourceType::RTV:
 			break;
@@ -3428,7 +3471,7 @@ namespace qyhs
 				if (dependency)
 				{
 					
-					//if current queue is dependent on other queue, we need to wait for the other queue to finish
+					//if current queue is dependent on other queue, we need to Wait for the other queue to finish
 					queue.submit(this, VK_NULL_HANDLE);
 				}
 				VkCommandBufferSubmitInfo& cmd = queue.submit_cmds.emplace_back();
@@ -3999,6 +4042,121 @@ namespace qyhs
 			}
 			spvReflectDestroyShaderModule(&module);
 
+			if (stage == ShaderStage::COMPUTE_SHADER || stage == ShaderStage::LIBRARY)
+			{
+				internal_state->binding_hash = 0;
+				size_t i = 0;
+				for (auto& x : internal_state->layout_bindings)
+				{
+					helper::hash_combine(internal_state->binding_hash, x.binding);
+					helper::hash_combine(internal_state->binding_hash, x.descriptor_count);
+					helper::hash_combine(internal_state->binding_hash, x.descriptorType);
+					helper::hash_combine(internal_state->binding_hash, x.stageFlags);
+					helper::hash_combine(internal_state->binding_hash, internal_state->imageViewTypes[i++]);
+				}
+				for (auto& x : internal_state->bindingless_bindings)
+				{
+					helper::hash_combine(internal_state->binding_hash, x.used);
+					helper::hash_combine(internal_state->binding_hash, x.binding.binding);
+					helper::hash_combine(internal_state->binding_hash, x.binding.descriptor_count);
+					helper::hash_combine(internal_state->binding_hash, x.binding.descriptorType);
+					helper::hash_combine(internal_state->binding_hash, x.binding.stageFlags);
+				}
+				helper::hash_combine(internal_state->binding_hash, internal_state->pushconstants.offset);
+				helper::hash_combine(internal_state->binding_hash, internal_state->pushconstants.size);
+				helper::hash_combine(internal_state->binding_hash, internal_state->pushconstants.stageFlags);
+
+				pso_layout_cache_mutex.lock();
+				if (pso_layout_cache[internal_state->binding_hash].pipeline_layout == VK_NULL_HANDLE)
+				{
+					std::vector<VkDescriptorSetLayout> layouts;
+
+					{
+						VkDescriptorSetLayoutCreateInfo descriptorSetlayoutInfo = {};
+						descriptorSetlayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+						descriptorSetlayoutInfo.pBindings = internal_state->layout_bindings.data();
+						descriptorSetlayoutInfo.bindingCount = uint32_t(internal_state->layout_bindings.size());
+						VkResult res = vkCreateDescriptorSetLayout(m_device, &descriptorSetlayoutInfo, nullptr, &internal_state->descriptorSetLayout);
+						assert(res == VK_SUCCESS);
+						layouts.push_back(internal_state->descriptorSetLayout);
+					}
+
+					internal_state->bindlessFirstSet = (uint32_t)layouts.size();
+					for (auto& x : internal_state->bindingless_bindings)
+					{
+						switch (x.binding.descriptorType)
+						{
+						case VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER:
+							assert(0); // not supported, use the raw buffers for same functionality
+							break;
+						case VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE:
+							layouts.push_back(allocation_handler->bindless_sampled_images.descriptor_set_layout);
+							internal_state->bindless_sets.push_back(allocation_handler->bindless_sampled_images.descriptor_set);
+							break;
+						case VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER:
+							layouts.push_back(allocation_handler->bindless_uniform_texel_buffers.descriptor_set_layout);
+							internal_state->bindless_sets.push_back(allocation_handler->bindless_uniform_texel_buffers.descriptor_set);
+							break;
+						case VK_DESCRIPTOR_TYPE_STORAGE_BUFFER:
+							layouts.push_back(allocation_handler->bindless_storage_buffers.descriptor_set_layout);
+							internal_state->bindless_sets.push_back(allocation_handler->bindless_storage_buffers.descriptor_set);
+							break;
+						case VK_DESCRIPTOR_TYPE_STORAGE_IMAGE:
+							layouts.push_back(allocation_handler->bindless_storage_images.descriptor_set_layout);
+							internal_state->bindless_sets.push_back(allocation_handler->bindless_storage_images.descriptor_set);
+							break;
+						case VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER:
+							layouts.push_back(allocation_handler->bindless_storage_texel_buffers.descriptor_set_layout);
+							internal_state->bindless_sets.push_back(allocation_handler->bindless_storage_texel_buffers.descriptor_set);
+							break;
+						case VK_DESCRIPTOR_TYPE_SAMPLER:
+							layouts.push_back(allocation_handler->bindless_samplers.descriptor_set_layout);
+							internal_state->bindless_sets.push_back(allocation_handler->bindless_samplers.descriptor_set);
+							break;
+						case VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR:
+							layouts.push_back(allocation_handler->bindless_acceleration_structures.descriptor_set_layout);
+							internal_state->bindless_sets.push_back(allocation_handler->bindless_acceleration_structures.descriptor_set);
+							break;
+						default:
+							break;
+						}
+					}
+
+					VkPipelineLayoutCreateInfo pipelineLayoutInfo = {};
+					pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+					pipelineLayoutInfo.pSetLayouts = layouts.data();
+					pipelineLayoutInfo.setLayoutCount = (uint32_t)layouts.size();
+					if (internal_state->pushconstants.size > 0)
+					{
+						pipelineLayoutInfo.pushConstantRangeCount = 1;
+						pipelineLayoutInfo.pPushConstantRanges = &internal_state->pushconstants;
+					}
+					else
+					{
+						pipelineLayoutInfo.pushConstantRangeCount = 0;
+						pipelineLayoutInfo.pPushConstantRanges = nullptr;
+					}
+
+					VkResult res = vkCreatePipelineLayout(m_device, &pipelineLayoutInfo, nullptr, &internal_state->pipelineLayout_cs);
+					assert(res == VK_SUCCESS);
+					if (res == VK_SUCCESS)
+					{
+						pso_layout_cache[internal_state->binding_hash].descriptorSetLayout = internal_state->descriptorSetLayout;
+						pso_layout_cache[internal_state->binding_hash].pipeline_layout = internal_state->pipelineLayout_cs;
+						pso_layout_cache[internal_state->binding_hash].bindlessSets = internal_state->bindless_sets;
+						pso_layout_cache[internal_state->binding_hash].bindlessFirstSet = internal_state->bindlessFirstSet;
+					}
+				}
+				else
+				{
+					internal_state->descriptorSetLayout = pso_layout_cache[internal_state->binding_hash].descriptorSetLayout;
+					internal_state->pipelineLayout_cs = pso_layout_cache[internal_state->binding_hash].pipeline_layout;
+					internal_state->bindless_sets = pso_layout_cache[internal_state->binding_hash].bindlessSets;
+					internal_state->bindlessFirstSet = pso_layout_cache[internal_state->binding_hash].bindlessFirstSet;
+				}
+				pso_layout_cache_mutex.unlock();
+			}
+
 			assert(result == SPV_REFLECT_RESULT_SUCCESS);
 		}
 
@@ -4039,6 +4197,20 @@ namespace qyhs
 			break;
 		}
 
+		if (stage == ShaderStage::COMPUTE_SHADER)
+		{
+			VkComputePipelineCreateInfo pipelineInfo = {};
+			pipelineInfo.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
+			pipelineInfo.layout = internal_state->pipelineLayout_cs;
+			pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
+
+			// Create compute pipeline state in place:
+			pipelineInfo.stage = internal_state->stage_info;
+
+			VkResult res = vkCreateComputePipelines(m_device, pipeline_cache, 1, &pipelineInfo, nullptr, &internal_state->pipeline_cs);
+			assert(res == VK_SUCCESS);
+		}
+
 		return result == VK_SUCCESS;
 	}
 
@@ -4072,7 +4244,24 @@ namespace qyhs
 				vkCmdPushConstants(command_list.getCommandBuffer(), pso->pipeline_layout, pso->pushconstants.stageFlags, offset, size, data);
 				return;
 			}
-			//assert(0);
+			assert(0);
+		}
+		if(command_list.active_cs != nullptr)
+		{
+			auto cs_internal = to_internal(command_list.active_cs);
+			if (cs_internal->pushconstants.size > 0)
+			{
+				vkCmdPushConstants(
+					command_list.getCommandBuffer(),
+					cs_internal->pipelineLayout_cs,
+					cs_internal->pushconstants.stageFlags,
+					offset,
+					size,
+					data
+				);
+				return;
+			}
+			assert(0); // there was no push constant block!
 		}
 
 	}
@@ -4569,7 +4758,7 @@ namespace qyhs
 		}
 		if (desc->format != Format::UNKNOWN || has_flag(desc->misc_flags, ResourceMiscFlag::TYPED_FORMAT_CASTING))
 		{
-			alignment = std::max(alignment, m_physical_device_properties_2.properties.limits.minTexelBufferOffsetAlignment);
+			alignment = std::max(alignment, m_physical_device_properties_2.properties.limits.minTexelBufferOffsetAlignment);  //minTexelBufferOffsetAlignment is texels,not bytes
 		}
 		return alignment;
 	}
@@ -4610,14 +4799,34 @@ namespace qyhs
 			buffer_info.usage |= VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
 			buffer_info.usage |= VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT;
 		}
-		if (has_flag(buffer->desc.misc_flags, ResourceMiscFlag::BUFFER_RAW) || has_flag(buffer->desc.misc_flags, ResourceMiscFlag::BUFFER_STRUCTURED))
+		if (has_flag(buffer->desc.misc_flags, ResourceMiscFlag::BUFFER_RAW))
 		{
 			buffer_info.usage |= VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
 		}
+		if (has_flag(buffer->desc.misc_flags, ResourceMiscFlag::BUFFER_STRUCTURED))
+		{
+			buffer_info.usage |= VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
+		}
+		if (m_physical_device_features_1_2.bufferDeviceAddress == VK_TRUE)
+		{
+			buffer_info.usage |= VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT;
+		}
+		
 		buffer_info.usage |= VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
 		buffer_info.usage |= VK_BUFFER_USAGE_TRANSFER_DST_BIT;
 
 		buffer_info.flags = 0;
+		if (families.size() > 1)
+		{
+			buffer_info.sharingMode = VK_SHARING_MODE_CONCURRENT;
+			buffer_info.queueFamilyIndexCount = (uint32_t)families.size();
+			buffer_info.pQueueFamilyIndices = families.data();
+		}
+		else
+		{
+			buffer_info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+		}
+
 		VmaAllocationCreateInfo alloc_info = {};
 		alloc_info.usage = VMA_MEMORY_USAGE_AUTO;
 		if (desc->usage == Usage::READBACK)
@@ -4652,6 +4861,14 @@ namespace qyhs
 		{
 			buffer->mapped_data = internal_state->allocation->GetMappedData();
 			buffer->mapped_size = internal_state->allocation->GetSize();
+		}
+
+		if (buffer_info.usage & VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT)
+		{
+			VkBufferDeviceAddressInfo info = {};
+			info.sType = VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO;
+			info.buffer = internal_state->resource;
+			internal_state->address = vkGetBufferDeviceAddress(m_device, &info);
 		}
 
 		if (init_buffer_callback != nullptr)
@@ -4773,6 +4990,12 @@ namespace qyhs
 		default:
 			return format;
 		}
+	}
+
+	void VulkanRHI::waitQueue(CommandList cmd, QueueType queue_type)
+	{
+		CommandList_Vulkan& commandlist = getCommandList(cmd);
+		commandlist.wait_queues.push_back(std::make_pair(queue_type, createNewSemaphore()));
 	}
 
 	int VulkanRHI::createSubresource(Texture* texture, SubresourceType type, uint32_t firstSlice, uint32_t sliceCount, uint32_t firstMip, uint32_t mipCount, const Format* format_change, const ImageAspect* aspect, const Swizzle* swizzle, float min_lod_clamp) const
@@ -5201,6 +5424,19 @@ namespace qyhs
 		}
 
 		commandlist.active_pso = pso;
+	}
+
+	void VulkanRHI::predispatch(CommandList cmd)
+	{
+		CommandList_Vulkan& commandlist = getCommandList(cmd);
+		commandlist.binder.flush(false, cmd);
+	}
+
+	void VulkanRHI::dispatch(uint32_t threadGroupCountX, uint32_t threadGroupCountY, uint32_t threadGroupCountZ, CommandList cmd)
+	{
+		predispatch(cmd);
+		CommandList_Vulkan& commandlist = getCommandList(cmd);
+		vkCmdDispatch(commandlist.getCommandBuffer(), threadGroupCountX, threadGroupCountY, threadGroupCountZ);
 	}
 
 	void VulkanRHI::setName(Shader* shader, const char* name) const
@@ -5702,6 +5938,52 @@ namespace qyhs
 			}
 		}
 		vkCmdBindVertexBuffers2(getCommandList(cmd).getCommandBuffer(), slot, count, vbuffers, voffsets, nullptr, vstrides);
+	}
+
+	void VulkanRHI::bindComputeShader(const Shader* cs, CommandList cmd)
+	{
+		CommandList_Vulkan& commandlist = getCommandList(cmd);
+		if (commandlist.active_cs == cs)
+		{
+			return;
+		}
+		commandlist.active_pso = nullptr;
+
+		if (commandlist.active_cs == nullptr)
+		{
+			commandlist.binder.dirty |= DescriptorBinder::DIRTY_ALL;
+		}
+		else
+		{
+			auto internal_state = to_internal(cs);
+			auto active_internal = to_internal(commandlist.active_cs);
+			if (internal_state->binding_hash != active_internal->binding_hash)
+			{
+				commandlist.binder.dirty |= DescriptorBinder::DIRTY_ALL;
+			}
+		}
+
+		commandlist.active_cs = cs;
+		auto internal_state = to_internal(cs);
+
+		if (cs->stage == ShaderStage::COMPUTE_SHADER)
+		{
+			vkCmdBindPipeline(commandlist.getCommandBuffer(), VK_PIPELINE_BIND_POINT_COMPUTE, internal_state->pipeline_cs);
+
+			if (!internal_state->bindless_sets.empty())
+			{
+				vkCmdBindDescriptorSets(
+					commandlist.getCommandBuffer(),
+					VK_PIPELINE_BIND_POINT_COMPUTE,
+					internal_state->pipelineLayout_cs,
+					internal_state->bindlessFirstSet,
+					(uint32_t)internal_state->bindless_sets.size(),
+					internal_state->bindless_sets.data(),
+					0,
+					nullptr
+				);
+			}
+		}
 	}
 
 	void VulkanRHI::updateUniformBuffer() {
@@ -6250,9 +6532,25 @@ namespace qyhs
 	}
 
 	VkFormat VulkanRHI::findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) {
+		VkFormatProperties3KHR format_properties3 = {};
+		format_properties3.sType = VK_STRUCTURE_TYPE_FORMAT_PROPERTIES_3_KHR;
+
+		VkFormatProperties2 propst = {};
+		propst.sType = VK_STRUCTURE_TYPE_FORMAT_PROPERTIES_2;
+		propst.pNext = &format_properties3;
+
+		vkGetPhysicalDeviceFormatProperties2(physical_device, VK_FORMAT_R32G32B32_SFLOAT, &propst);
+
+		if ((format_properties3.bufferFeatures & VK_FORMAT_FEATURE_2_STORAGE_TEXEL_BUFFER_BIT_KHR) == 0) {
+			// ²»Ö§³Ö
+			int a = 0;
+			int b = 1;
+		}
+		
 		for (VkFormat format : candidates) {
 			VkFormatProperties props;
 			vkGetPhysicalDeviceFormatProperties(physical_device, format, &props);
+			
 
 			if (tiling == VK_IMAGE_TILING_LINEAR && (props.linearTilingFeatures & features) == features) {
 				return format;
@@ -6424,7 +6722,7 @@ namespace qyhs
 
 		if (rhi->queues[QUEUE_VIDEO_DECODE].queue != VK_NULL_HANDLE)
 		{
-			wait_semaphore_info.semaphore = cmd.semaphores[2]; // wait for graphics queue
+			wait_semaphore_info.semaphore = cmd.semaphores[2]; // Wait for graphics queue
 			wait_semaphore_info.stageMask = VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT;
 
 			submit_info.waitSemaphoreInfoCount = 1;
@@ -6441,7 +6739,7 @@ namespace qyhs
 
 		// This must be final submit in this function because it will also signal a fence for pso tracking by CPU!
 		{
-			wait_semaphore_info.semaphore = cmd.semaphores[1]; // wait for graphics queue
+			wait_semaphore_info.semaphore = cmd.semaphores[1]; // Wait for graphics queue
 			wait_semaphore_info.stageMask = VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT;
 
 			submit_info.waitSemaphoreInfoCount = 1;
@@ -6473,7 +6771,8 @@ namespace qyhs
 		VkPipelineLayout pipeline_layout = VK_NULL_HANDLE;
 		VkDescriptorSet descriptor_set = VK_NULL_HANDLE;
 		VkDescriptorSetLayout descriptor_set_layout = VK_NULL_HANDLE;
-		PipelineState_Vulkan* pso = to_internal(commandlist.active_pso);
+		PipelineState_Vulkan* pso =graphics? to_internal(commandlist.active_pso):nullptr;
+		auto cs = graphics ? nullptr : to_internal(commandlist.active_cs);
 		uint32_t uniform_buffer_dynamic_count = 0;
 		if (graphics)
 		{
@@ -6488,7 +6787,14 @@ namespace qyhs
 		}
 		else
 		{
-
+			pipeline_layout = cs->pipelineLayout_cs;
+			descriptor_set_layout = cs->descriptorSetLayout;
+			descriptor_set = descriptorSet_compute;
+			uniform_buffer_dynamic_count = (uint32_t)cs->uniform_buffer_dynamic_slots.size();
+			for (size_t i = 0; i < cs->uniform_buffer_dynamic_slots.size(); ++i)
+			{
+				uniform_buffer_dynamic_offsets[i] = (uint32_t)table.CBV_offset[cs->uniform_buffer_dynamic_slots[i]];
+			}
 		}
 
 		VkPipelineBindPoint pipeline_bind_point = VK_PIPELINE_BIND_POINT_GRAPHICS;
@@ -6500,8 +6806,8 @@ namespace qyhs
 				pipeline_bind_point = VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR;
 			}
 		}
-		const auto& layout_bindings = pso->layout_bindings;
-		const auto& image_view_types = pso->imageViewTypes;
+		const auto& layout_bindings = graphics?pso->layout_bindings:cs->layout_bindings;
+		const auto& image_view_types = graphics?pso->imageViewTypes:cs->imageViewTypes;
 		int i = 0;
 		if (dirty & DIRTY_DESCRIPTOR)
 		{
@@ -6723,7 +7029,7 @@ namespace qyhs
 							}
 							else
 							{
-								//buffer_infos.back().range = cs_internal->uniform_buffer_sizes[original_binding];
+								buffer_infos.back().range = cs->uniform_buffer_sizes[original_binding];
 							}
 							if (buffer_infos.back().range == 0ull)
 							{
@@ -6758,7 +7064,7 @@ namespace qyhs
 							}
 							else
 							{
-								//buffer_infos.back().range = cs_internal->uniform_buffer_sizes[original_binding];
+								buffer_infos.back().range = cs->uniform_buffer_sizes[original_binding];
 							}
 							if (buffer_infos.back().range == 0ull)
 							{
@@ -6903,7 +7209,7 @@ namespace qyhs
 		}
 		else
 		{
-			//descriptorset_compute = descriptor_set;
+			descriptorSet_compute = descriptor_set;
 		}
 		dirty = DIRTY_NONE;
 	}

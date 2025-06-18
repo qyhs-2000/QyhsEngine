@@ -193,14 +193,14 @@ void JobSystemThreadPool::BarrierImpl::Wait()
 					++mJobReadIndex;
 				}
 
-				// Loop through the jobs and execute the first executable job
+				// Loop through the jobs and Execute the first executable job
 				for (uint index = mJobReadIndex; index < mJobWriteIndex; ++index)
 				{
 					const atomic<Job *> &job = mJobs[index & (cMaxJobs - 1)];
 					Job *job_ptr = job.load();
 					if (job_ptr != nullptr && job_ptr->CanBeExecuted())
 					{
-						// This will only execute the job if it has not already executed
+						// This will only Execute the job if it has not already executed
 						job_ptr->Execute();
 						has_executed = true;
 						break;
@@ -321,7 +321,7 @@ void JobSystemThreadPool::StopThreads()
 		Job *job_ptr = mQueue[head & (cQueueLength - 1)].exchange(nullptr);
 		if (job_ptr != nullptr)
 		{
-			// And execute it
+			// And Execute it
 			job_ptr->Execute();
 			job_ptr->Release();
 		}
@@ -397,7 +397,7 @@ void JobSystemThreadPool::WaitForJobs(Barrier *inBarrier)
 {
 	JPH_PROFILE_FUNCTION();
 
-	// Let our barrier implementation wait for the jobs
+	// Let our barrier implementation Wait for the jobs
 	static_cast<BarrierImpl *>(inBarrier)->Wait();
 }
 
@@ -436,7 +436,7 @@ void JobSystemThreadPool::QueueJobInternal(Job *inJob)
 				// Wake up all threads in order to ensure that they can clear any nullptrs they may not have processed yet
 				mSemaphore.Release((uint)mThreads.size()); 
 
-				// Sleep a little (we have to wait for other threads to update their head pointer in order for us to be able to continue)
+				// Sleep a little (we have to Wait for other threads to update their head pointer in order for us to be able to continue)
 				this_thread::sleep_for(100us);
 				continue;
 			}
@@ -460,7 +460,7 @@ void JobSystemThreadPool::QueueJob(Job *inJob)
 {
 	JPH_PROFILE_FUNCTION();
 
-	// If we have no worker threads, we can't queue the job either. We assume in this case that the job will be added to a barrier and that the barrier will execute the job when it's Wait() function is called.
+	// If we have no worker threads, we can't queue the job either. We assume in this case that the job will be added to a barrier and that the barrier will Execute the job when it's Wait() function is called.
 	if (mThreads.empty())
 		return;
 
@@ -477,7 +477,7 @@ void JobSystemThreadPool::QueueJobs(Job **inJobs, uint inNumJobs)
 
 	JPH_ASSERT(inNumJobs > 0);
 
-	// If we have no worker threads, we can't queue the job either. We assume in this case that the job will be added to a barrier and that the barrier will execute the job when it's Wait() function is called.
+	// If we have no worker threads, we can't queue the job either. We assume in this case that the job will be added to a barrier and that the barrier will Execute the job when it's Wait() function is called.
 	if (mThreads.empty())
 		return;
 
@@ -555,7 +555,7 @@ void JobSystemThreadPool::ThreadMain([[maybe_unused]] const char *inName, int in
 					Job *job_ptr = job.exchange(nullptr);
 					if (job_ptr != nullptr)
 					{
-						// And execute it
+						// And Execute it
 						job_ptr->Execute();
 						job_ptr->Release();
 					}

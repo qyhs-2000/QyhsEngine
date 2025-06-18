@@ -105,7 +105,7 @@ namespace qyhs
 		{
 			return;
 		}
-		jobsystem::execute(loadmodel_workload, [=](jobsystem::JobArgs args) {
+		jobsystem::Execute(loadmodel_workload, [=](jobsystem::JobArgs args) {
 			std::shared_ptr<scene::Scene> scene = std::make_shared<scene::Scene>();
 			if (file_type == FileType::GLTF)
 			{

@@ -15,7 +15,7 @@ Index of this file:
 // [SECTION] Tables: Drawing
 // [SECTION] Tables: Sorting
 // [SECTION] Tables: Headers
-// [SECTION] Tables: Context Menu
+// [SECTION] Tables: context Menu
 // [SECTION] Tables: Settings (.ini data)
 // [SECTION] Tables: Garbage Collection
 // [SECTION] Tables: Debugging
@@ -821,7 +821,7 @@ void ImGui::TableUpdateLayout(ImGuiTable* table)
     IM_ASSERT(table->LeftMostEnabledColumn >= 0 && table->RightMostEnabledColumn >= 0);
 
     // [Part 2] Disable child window clipping while fitting columns. This is not strictly necessary but makes it possible
-    // to avoid the column fitting having to wait until the first visible frame of the child container (may or not be a good thing).
+    // to avoid the column fitting having to Wait until the first visible frame of the child container (may or not be a good thing).
     // FIXME-TABLE: for always auto-resizing columns may not want to do that all the time.
     if (has_auto_fit_request && table->OuterWindow != table->InnerWindow)
         table->InnerWindow->SkipItems = false;
@@ -1100,7 +1100,7 @@ void ImGui::TableUpdateLayout(ImGuiTable* table)
     table->IsLayoutLocked = true;
     table->IsUsingHeaders = false;
 
-    // [Part 11] Context menu
+    // [Part 11] context menu
     if (table->IsContextPopupOpen && table->InstanceCurrent == table->InstanceInteracted)
     {
         const ImGuiID context_menu_id = ImHashStr("##ContextMenu", 0, table->ID);
@@ -1217,7 +1217,7 @@ void    ImGui::EndTable()
     if (table->IsInsideRow)
         TableEndRow(table);
 
-    // Context menu in columns body
+    // context menu in columns body
     if (flags & ImGuiTableFlags_ContextMenuInBody)
         if (table->HoveredColumnBody != -1 && !IsAnyItemHovered() && IsMouseReleased(ImGuiMouseButton_Right))
             TableOpenContextMenu((int)table->HoveredColumnBody);
@@ -2991,7 +2991,7 @@ void ImGui::TableHeader(const char* label)
 }
 
 //-------------------------------------------------------------------------
-// [SECTION] Tables: Context Menu
+// [SECTION] Tables: context Menu
 //-------------------------------------------------------------------------
 // - TableOpenContextMenu() [Internal]
 // - TableDrawContextMenu() [Internal]

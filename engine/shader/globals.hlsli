@@ -19,6 +19,9 @@ bindless_buffers[];
 [[vk::binding(0, DESCRIPTOR_SET_BINDLESS_UNIFORM_TEXEL_BUFFER)]] Buffer<float4> bindless_buffers_float4[];
 [[vk::binding(0, DESCRIPTOR_SET_BINDLESS_SAMPLED_IMAGE)]] Texture2D bindless_textures[];
 
+[[vk::binding(0, DESCRIPTOR_SET_BINDLESS_STORAGE_BUFFER)]] RWByteAddressBuffer bindless_rwbuffers[];
+
+
 #include "shader_interop_renderer.h"
 
 [[vk::binding(0, DESCRIPTOR_SET_BINDLESS_STORAGE_BUFFER)]] StructuredBuffer<ShaderGeometry> bindless_structured_geometry[];

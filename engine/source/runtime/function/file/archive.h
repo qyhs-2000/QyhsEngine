@@ -69,6 +69,17 @@ namespace qyhs
 			return *this;
 		}
 
+		inline Archive& operator>>(float& data)
+		{
+			_read(data);
+			return *this;
+		}
+		inline Archive& operator>>(double& data)
+		{
+			_read(data);
+			return *this;
+		}
+
 		inline Archive& operator>>(char& data)
 		{
 			assert(isReadMode());

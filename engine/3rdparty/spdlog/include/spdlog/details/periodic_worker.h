@@ -7,7 +7,7 @@
 //
 // RAII over the owned thread:
 //    creates the thread on construction.
-//    stops and joins the thread on destruction (if the thread is executing a callback, wait for it to finish first).
+//    stops and joins the thread on destruction (if the thread is executing a callback, Wait for it to finish first).
 
 #include <chrono>
 #include <condition_variable>

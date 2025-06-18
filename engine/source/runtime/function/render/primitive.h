@@ -18,6 +18,8 @@ namespace qyhs::primitive
 			const XMFLOAT3& _max = XMFLOAT3(std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest())
 		) : _min(_min), _max(_max) {}
 
+		static AABB Merge(const AABB& a, const AABB& b);
+
 		AABB transform(const XMMATRIX& mat) const
 		{
 			const XMVECTOR vcorners[8] = {
@@ -58,6 +60,12 @@ namespace qyhs::primitive
 			return XMMatrixScaling(_max.x - _min.x, _max.y - _min.y, _max.z - _min.z) * XMMatrixTranslation(_min.x, _min.y, _min.z);
 		}
 
+		inline void createFromHalfWidth(const XMFLOAT3& center, const XMFLOAT3& halfwidth)
+		{
+			_min = XMFLOAT3(center.x - halfwidth.x, center.y - halfwidth.y, center.z - halfwidth.z);
+			_max = XMFLOAT3(center.x + halfwidth.x, center.y + halfwidth.y, center.z + halfwidth.z);
+		}
+
 		XMFLOAT3 getCenter()const
 		{
 			return XMFLOAT3((_min.x + _max.x) * 0.5f, (_min.y + _max.y) * 0.5f, (_min.z + _max.z) * 0.5f);
@@ -74,6 +82,8 @@ namespace qyhs::primitive
 			XMFLOAT3 abc = getHalfWidth();
 			return std::sqrt(std::pow(abc.x, 2.0f) + std::pow(abc.y, 2.0f) + std::pow(abc.z, 2.0f));
 		}
+		constexpr XMFLOAT3 getMin() const { return _min; }
+		constexpr XMFLOAT3 getMax() const { return _max; }
 	private:
 	};
 
@@ -95,5 +105,48 @@ namespace qyhs::primitive
 		XMFLOAT2 pos;
 		XMFLOAT2 size;
 	private:
+	};
+
+	struct Sphere
+	{
+		XMFLOAT3 center;
+		float radius;
+	};
+
+	struct Capsule
+	{
+		XMFLOAT3 base = XMFLOAT3(0, 0, 0);
+		XMFLOAT3 tip = XMFLOAT3(0, 0, 0);
+		float radius = 0;
+		Capsule() = default;
+		Capsule(const XMFLOAT3& base, const XMFLOAT3& tip, float radius) :base(base), tip(tip), radius(radius)
+		{
+			assert(radius >= 0);
+		}
+		Capsule(XMVECTOR base, XMVECTOR tip, float radius) :radius(radius)
+		{
+			assert(radius >= 0);
+			XMStoreFloat3(&this->base, base);
+			XMStoreFloat3(&this->tip, tip);
+		}
+		Capsule(const Sphere& sphere, float height) :
+			base(XMFLOAT3(sphere.center.x, sphere.center.y - sphere.radius, sphere.center.z)),
+			tip(XMFLOAT3(base.x, base.y + height, base.z)),
+			radius(sphere.radius)
+		{
+			assert(radius >= 0);
+		}
+		inline AABB getAABB() const
+		{
+			XMFLOAT3 halfWidth = XMFLOAT3(radius, radius, radius);
+			AABB base_aabb;
+			base_aabb.createFromHalfWidth(base, halfWidth);
+			AABB tip_aabb;
+			tip_aabb.createFromHalfWidth(tip, halfWidth);
+			AABB result = AABB::Merge(base_aabb, tip_aabb);
+			assert(result.isValid());
+			return result;
+		}
+		
 	};
 }

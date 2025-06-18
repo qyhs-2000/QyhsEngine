@@ -42,7 +42,7 @@ namespace qyhs
 		current_time = glfwGetTime();
 		auto &rhi = qyhs::rhi::getRHI();
 		rhi = m_rhi.get();
-		initializer::initializeComponentAsync();
+		initializer::initializeComponentsAsync();
 		//m_rhi = g_runtime_global_context.m_render_system->getRHI();
 		//auto rhi = qyhs::rhi::getRHI();
 		//rhi = m_rhi.get();
@@ -57,7 +57,7 @@ namespace qyhs
 		initialized = true;
 		auto &rhi = qyhs::rhi::getRHI();
 		rhi = m_rhi.get();
-		qyhs::initializer::initializeComponentAsync();
+		qyhs::initializer::initializeComponentsAsync();
 	}
 
 	void QyhsEngine::run()
@@ -73,7 +73,7 @@ namespace qyhs
 				initialize();
 			}
 
-			if (!initializer::initializeFinished())
+			if (!initializer::isInitializeFinished())
 			{
 				continue;
 			}
@@ -111,19 +111,20 @@ namespace qyhs
 
 		qyhs::font::updateAtlas(canvas.getDPIScaling());
 
-		float delta_time = float(timer.record_elapsed_time());
+		delta_time = float(timer.record_elapsed_seconds());
+		time_test += delta_time;
 		const float target_frame_time = 1.0f / target_frame_rate;
 		if (frame_rate_lock && delta_time < target_frame_time)
 		{
 			std::this_thread::sleep_for(std::chrono::milliseconds((int)((target_frame_time - delta_time) * 1000)));
 			delta_time = float(timer.record_elapsed_time());
 		}
-
-		if (!initializer::initializeFinished())
+		delta_time = clamp(delta_time, 0.0f, 0.1f);
+		if (!initializer::isInitializeFinished())
 		{
 			return;
 		}
-
+		//initializer::WaitForInitializationsToFinish();
 		input::Update(window, canvas);
 		eventhandler::fireEvent(eventhandler::EVENT_THREAD_SAFE_POINT, 0);
 		update(delta_time);

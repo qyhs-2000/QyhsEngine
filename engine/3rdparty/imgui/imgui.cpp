@@ -281,7 +281,7 @@ CODE
      // Shutdown
      ImGui::DestroyContext();
 
- To decide whether to dispatch mouse/keyboard inputs to Dear ImGui to the rest of your application,
+ To decide whether to Dispatch mouse/keyboard inputs to Dear ImGui to the rest of your application,
  you should read the 'io.WantCaptureMouse', 'io.WantCaptureKeyboard' and 'io.WantTextInput' flags!
  Please read the FAQ and example applications for details about this!
 
@@ -739,7 +739,7 @@ CODE
  Q: How to get started?
  A: Read 'PROGRAMMER GUIDE' above. Read examples/README.txt.
 
- Q: How can I tell whether to dispatch mouse/keyboard to Dear ImGui or my application?
+ Q: How can I tell whether to Dispatch mouse/keyboard to Dear ImGui or my application?
  A: You should read the 'io.WantCaptureMouse', 'io.WantCaptureKeyboard' and 'io.WantTextInput' flags!
  >> See https://www.dearimgui.org/faq for a fully detailed answer. You really want to read this.
 
@@ -3850,8 +3850,8 @@ void ImGui::StartMouseMovingWindow(ImGuiWindow* window)
 }
 
 // We use 'undock_floating_node == false' when dragging from title bar to allow moving groups of floating nodes without undocking them.
-// - undock_floating_node == true: when dragging from a floating node within a hierarchies, always undock the node.
-// - undock_floating_node == false: when dragging from a floating node within a hierarchies, move root window.
+// - undock_floating_node == true: when dragging from a floating node within a hierarchy, always undock the node.
+// - undock_floating_node == false: when dragging from a floating node within a hierarchy, move root window.
 void ImGui::StartMouseMovingWindowOrNode(ImGuiWindow* window, ImGuiDockNode* node, bool undock_floating_node)
 {
     ImGuiContext& g = *GImGui;
@@ -3859,8 +3859,8 @@ void ImGui::StartMouseMovingWindowOrNode(ImGuiWindow* window, ImGuiDockNode* nod
     if (node != NULL && node->VisibleWindow && (node->VisibleWindow->Flags & ImGuiWindowFlags_NoMove) == 0)
     {
         // Can undock if:
-        // - part of a floating node hierarchies with more than one visible node (if only one is visible, we'll just move the whole hierarchies)
-        // - part of a dockspace node hierarchies (trivia: undocking from a fixed/central node will create a new node and copy windows)
+        // - part of a floating node hierarchy with more than one visible node (if only one is visible, we'll just move the whole hierarchy)
+        // - part of a dockspace node hierarchy (trivia: undocking from a fixed/central node will create a new node and copy windows)
         ImGuiDockNode* root_node = DockNodeGetRootNode(node);
         if (root_node->OnlyNodeWithWindows != node || root_node->CentralNode != NULL)   // -V1051 PVS-Studio thinks node should be root_node and is wrong about that.
             if (undock_floating_node || root_node->IsDockSpace())
@@ -4231,7 +4231,7 @@ void ImGui::UpdateMouseWheel()
     }
 }
 
-// The reason this is exposed in imgui_internal.h is: on touch-based system that don't have hovering, we want to dispatch inputs to the right target (imgui vs imgui+app)
+// The reason this is exposed in imgui_internal.h is: on touch-based system that don't have hovering, we want to Dispatch inputs to the right target (imgui vs imgui+app)
 void ImGui::UpdateHoveredWindowAndCaptureFlags()
 {
     ImGuiContext& g = *GImGui;
@@ -4285,7 +4285,7 @@ void ImGui::UpdateHoveredWindowAndCaptureFlags()
     if (clear_hovered_windows)
         g.HoveredWindow = g.HoveredWindowUnderMovingWindow = NULL;
 
-    // Update io.WantCaptureMouse for the user application (true = dispatch mouse info to Dear ImGui only, false = dispatch mouse to Dear ImGui + underlying app)
+    // Update io.WantCaptureMouse for the user application (true = Dispatch mouse info to Dear ImGui only, false = Dispatch mouse to Dear ImGui + underlying app)
     // Update io.WantCaptureMouseAllowPopupClose (experimental) to give a chance for app to react to popup closure with a drag
     if (g.WantCaptureMouseNextFrame != -1)
     {
@@ -4297,7 +4297,7 @@ void ImGui::UpdateHoveredWindowAndCaptureFlags()
         io.WantCaptureMouseUnlessPopupClose = (mouse_avail_unless_popup_close && (g.HoveredWindow != NULL || mouse_any_down)) || has_open_modal;
     }
 
-    // Update io.WantCaptureKeyboard for the user application (true = dispatch keyboard info to Dear ImGui only, false = dispatch keyboard info to Dear ImGui + underlying app)
+    // Update io.WantCaptureKeyboard for the user application (true = Dispatch keyboard info to Dear ImGui only, false = Dispatch keyboard info to Dear ImGui + underlying app)
     if (g.WantCaptureKeyboardNextFrame != -1)
         io.WantCaptureKeyboard = (g.WantCaptureKeyboardNextFrame != 0);
     else
@@ -9573,7 +9573,7 @@ void ImGui::OpenPopup(ImGuiID id, ImGuiPopupFlags popup_flags)
 // Mark popup as open (toggle toward open state).
 // Popups are closed when user click outside, or activate a pressable item, or CloseCurrentPopup() is called within a BeginPopup()/EndPopup() block.
 // Popup identifiers are relative to the current ID-stack (so OpenPopup and BeginPopup needs to be at the same level).
-// One open popup per level of the popup hierarchies (NB: when assigning we reset the Window member of ImGuiPopupRef to NULL)
+// One open popup per level of the popup hierarchy (NB: when assigning we reset the Window member of ImGuiPopupRef to NULL)
 void ImGui::OpenPopupEx(ImGuiID id, ImGuiPopupFlags popup_flags)
 {
     ImGuiContext& g = *GImGui;
@@ -14619,7 +14619,7 @@ static void ImGui::DockNodeUpdateForRootNode(ImGuiDockNode* node)
     DockNodeUpdateFlagsAndCollapse(node);
 
     // - Setup central node pointers
-    // - Find if there's only a single visible window in the hierarchies (in which case we need to display a regular title bar -> FIXME-DOCK: that last part is not done yet!)
+    // - Find if there's only a single visible window in the hierarchy (in which case we need to display a regular title bar -> FIXME-DOCK: that last part is not done yet!)
     // Cannot merge this with DockNodeUpdateFlagsAndCollapse() because FirstNodeWithWindows is found after window removal and child collapsing
     ImGuiDockNodeTreeInfo info;
     DockNodeFindInfo(node, &info);
@@ -15793,7 +15793,7 @@ void ImGui::DockNodeTreeMerge(ImGuiContext* ctx, ImGuiDockNode* parent_node, ImG
     }
 }
 
-// Update Pos/Size for a node hierarchies (don't affect child Windows yet)
+// Update Pos/Size for a node hierarchy (don't affect child Windows yet)
 // (Depth-first, Pre-Order)
 void ImGui::DockNodeTreeUpdatePosSize(ImGuiDockNode* node, ImVec2 pos, ImVec2 size, ImGuiDockNode* only_write_to_single_node)
 {
@@ -16187,7 +16187,7 @@ ImGuiID ImGui::DockSpace(ImGuiID id, const ImVec2& size_arg, ImGuiDockNodeFlags 
     // We need to handle the rare case were a central node is missing.
     // This can happen if the node was first created manually with DockBuilderAddNode() but _without_ the ImGuiDockNodeFlags_Dockspace.
     // Doing it correctly would set the _CentralNode flags, which would then propagate according to subsequent split.
-    // It would also be ambiguous to attempt to assign a central node while there are split nodes, so we wait until there's a single node remaining.
+    // It would also be ambiguous to attempt to assign a central node while there are split nodes, so we Wait until there's a single node remaining.
     // The specific sub-property of _CentralNode we are interested in recovering here is the "Don't delete when empty" property,
     // as it doesn't make sense for an empty dockspace to not have this property.
     if (node->IsLeafNode() && !node->IsCentralNode())
@@ -16406,7 +16406,7 @@ void ImGui::DockBuilderRemoveNodeChildNodes(ImGuiID root_id)
                     break;
                 }
 
-    // Not really efficient, but easier to destroy a whole hierarchies considering DockContextRemoveNode is attempting to merge nodes
+    // Not really efficient, but easier to destroy a whole hierarchy considering DockContextRemoveNode is attempting to merge nodes
     if (nodes_to_remove.Size > 1)
         ImQsort(nodes_to_remove.Data, nodes_to_remove.Size, sizeof(ImGuiDockNode*), DockNodeComparerDepthMostFirst);
     for (int n = 0; n < nodes_to_remove.Size; n++)
@@ -16585,7 +16585,7 @@ void ImGui::DockBuilderCopyDockSpace(ImGuiID src_dockspace_id, ImGuiID dst_docks
     ImVector<ImGuiID> node_remap_pairs;
     DockBuilderCopyNode(src_dockspace_id, dst_dockspace_id, &node_remap_pairs);
 
-    // Attempt to transition all the upcoming windows associated to dst_dockspace_id into the newly created hierarchies of dock nodes
+    // Attempt to transition all the upcoming windows associated to dst_dockspace_id into the newly created hierarchy of dock nodes
     // (The windows associated to src_dockspace_id are staying in place)
     ImVector<ImGuiID> src_windows;
     for (int remap_window_n = 0; remap_window_n < in_window_remap_pairs->Size; remap_window_n += 2)
@@ -16612,7 +16612,7 @@ void ImGui::DockBuilderCopyDockSpace(ImGuiID src_dockspace_id, ImGuiID dst_docks
 
         if (dst_dock_id != 0)
         {
-            // Docked windows gets redocked into the new node hierarchies.
+            // Docked windows gets redocked into the new node hierarchy.
             IMGUI_DEBUG_LOG_DOCKING("Remap live window '%s' 0x%08X -> '%s' 0x%08X\n", src_window_name, src_dock_id, dst_window_name, dst_dock_id);
             DockBuilderDockWindow(dst_window_name, dst_dock_id);
         }
@@ -16638,7 +16638,7 @@ void ImGui::DockBuilderCopyDockSpace(ImGuiID src_dockspace_id, ImGuiID dst_docks
                 if (src_windows.contains(window->ID))
                     continue;
 
-                // Docked windows gets redocked into the new node hierarchies.
+                // Docked windows gets redocked into the new node hierarchy.
                 IMGUI_DEBUG_LOG_DOCKING("Remap window '%s' %08X -> %08X\n", window->Name, src_dock_id, dst_dock_id);
                 DockBuilderDockWindow(window->Name, dst_dock_id);
             }
@@ -16694,7 +16694,7 @@ static ImGuiDockNode* ImGui::DockContextBindNodeToWindow(ImGuiContext* ctx, ImGu
         node->LastFrameAlive = g.FrameCount;
     }
 
-    // If the node just turned visible and is part of a hierarchies, it doesn't have a Size assigned by DockNodeTreeUpdatePosSize() yet,
+    // If the node just turned visible and is part of a hierarchy, it doesn't have a Size assigned by DockNodeTreeUpdatePosSize() yet,
     // so we're forcing a Pos/Size update from the first ancestor that is already visible (often it will be the root node).
     // If we don't do this, the window will be assigned a zero-size on its first frame, which won't ideally warm up the layout.
     // This is a little wonky because we don't normally update the Pos/Size of visible node mid-frame.
@@ -17600,7 +17600,7 @@ void ImGui::ShowMetricsWindow(bool* p_open)
         DebugNodeWindowsList(&g.WindowsFocusOrder, "By focus order (root windows)");
         if (TreeNode("By submission order (begin stack)"))
         {
-            // Here we display windows in their submitted order/hierarchies, however note that the Begin stack doesn't constitute a Parent<>Child relationship!
+            // Here we display windows in their submitted order/hierarchy, however note that the Begin stack doesn't constitute a Parent<>Child relationship!
             ImVector<ImGuiWindow*>& temp_buffer = g.WindowsTempSortBuffer;
             temp_buffer.resize(0);
             for (int i = 0; i < g.Windows.Size; i++)

@@ -72,7 +72,7 @@ private:
 #ifdef JPH_PLATFORM_WINDOWS
 		// On windows we use a semaphore object since it is more efficient than a lock and a condition variable
 		alignas(JPH_CACHE_LINE_SIZE) atomic<int> mCount { 0 };				///< We increment mCount for every release, to acquire we decrement the count. If the count is negative we know that we are waiting on the actual semaphore.
-		void *				mSemaphore;										///< The semaphore is an expensive construct so we only acquire/release it if we know that we need to wait/have waiting threads
+		void *				mSemaphore;										///< The semaphore is an expensive construct so we only acquire/release it if we know that we need to Wait/have waiting threads
 #else
 		// Other platforms: Emulate a semaphore using a mutex, condition variable and count
 		mutex				mLock;
@@ -95,7 +95,7 @@ private:
 		/// Check if there are any jobs in the job barrier
 		inline bool			IsEmpty() const									{ return mJobReadIndex == mJobWriteIndex; }
 
-		/// Wait for all jobs in this job barrier, while waiting, execute jobs that are part of this barrier on the current thread
+		/// Wait for all jobs in this job barrier, while waiting, Execute jobs that are part of this barrier on the current thread
 		void				Wait();
 
 		/// Flag to indicate if a barrier has been handed out

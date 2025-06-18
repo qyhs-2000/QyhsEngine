@@ -7,10 +7,11 @@
 #include "resource/resource_manager.h"
 namespace qyhs::scene
 {
+	class Scene;
 	class Component
 	{
 	public:
-		virtual void serialize(Archive& archive, ecs::EntitySerializer& seri) = 0;
+		virtual void serialize(Archive& archive, ecs::EntitySerializer& seri) {};
 	private:
 	};
 	class ObjectComponent :public Component
@@ -31,10 +32,10 @@ namespace qyhs::scene
 		virtual void serialize(Archive& archive, ecs::EntitySerializer& seri) override;
 	};
 
-	class HierarchyComponent:public Component
+	class HierarchyComponent :public Component
 	{
 	public:
-		qyhs::ecs::Entity parent_id;
+		qyhs::ecs::Entity parent_id = ecs::INVALID_ENTITY;
 		virtual void serialize(Archive& archive, ecs::EntitySerializer& seri) override;
 
 	private:
@@ -129,6 +130,8 @@ namespace qyhs::scene
 		bool isDirty()const { return _flag & DIRTY; }
 		void translate(const XMFLOAT3& move);
 		void rotateRollPitchYaw(const XMFLOAT3& value);
+		XMVECTOR GetPositionV() const;
+		XMFLOAT3 getPosition()const;
 		void setDirty(bool value = true)
 		{
 			if (value)
@@ -246,17 +249,32 @@ namespace qyhs::scene
 			Vertex_TEX uv1;
 			static constexpr graphics::Format FORMAT = graphics::Format::R16G16B16A16_UNORM;
 		};
+		struct Vertex_Bone
+		{
+			XMUINT4 packed = XMUINT4(0, 0, 0, 0);
+			constexpr void fromFull(const XMUINT4& bone_indices, const XMFLOAT4& bone_weights)
+			{
+				packed.x = (bone_indices.x & 0xFFFFF) | ((uint32_t(bone_weights.x * 4095) & 0xFFF) << 20u);
+				packed.y = (bone_indices.y & 0xFFFFF) | ((uint32_t(bone_weights.y * 4095) & 0xFFF) << 20u);
+				packed.z = (bone_indices.z & 0xFFFFF) | ((uint32_t(bone_weights.z * 4095) & 0xFFF) << 20u);
+				packed.w = (bone_indices.w & 0xFFFFF) | ((uint32_t(bone_weights.w * 4095) & 0xFFF) << 20u);
+			}
+		};
+		uint32_t active_morph_count = 0;
 		XMFLOAT2 uv_range_min = XMFLOAT2(0, 0);
 		XMFLOAT2 uv_range_max = XMFLOAT2(1, 1);
 		Format position_format = Vertex_POS16::FORMAT;
 		uint32_t geometry_offset;
 		std::vector<MeshSubset> subsets;
 		graphics::GPUBuffer general_buffer;   //index buffer and all static vertex buffer
+		graphics::GPUBuffer streamout_buffer; //compute shader output buffer
 		primitive::AABB aabb;
-		
+		ecs::Entity armatureID = ecs::INVALID_ENTITY;
 		inline uint32_t getLodCount() const { return subsets_per_lod == 0 ? 1 : (uint32_t)(subsets.size() / subsets_per_lod); }
 		void createRenderData();
 		void deleteRenderData();
+		void createStreamOutRenderData();   //for compute shader output
+		inline bool isSkinned() const { return armatureID != ecs::INVALID_ENTITY; }
 		inline graphics::IndexBufferFormat getIndexFormat() const { return graphics::getIndexBufferFormat((uint32_t)vertex_positions.size()); }
 		inline size_t getIndexBufferStride() const { return getIndexFormat() == graphics::IndexBufferFormat::UINT32 ? sizeof(uint32_t) : sizeof(uint16_t); }
 		void getLodSubsetRange(uint32_t lod, int& first_subset, int& last_subset) const
@@ -280,6 +298,7 @@ namespace qyhs::scene
 				_flags &= (uint32_t)(~DOUBLE_SIDE);
 			}
 		}
+		size_t getBoneInfluencedCount()const;
 		inline bool isDoubleSided()const { return _flags & DOUBLE_SIDE; }
 		uint32_t subsets_per_lod = 0;
 		std::vector<uint32_t> indices;
@@ -288,7 +307,7 @@ namespace qyhs::scene
 		std::vector<XMFLOAT4> vertex_tangents;
 		std::vector<XMFLOAT2> vertex_uvset_0;
 		std::vector<XMFLOAT2> vertex_uvset_1;
-		std::vector<XMUINT4> vertex_boneindices;
+		std::vector<XMUINT4> vertex_boneindices;	//joint  one vertex is inflused by four bone
 		std::vector<XMFLOAT4> vertex_boneweights;
 		std::vector<XMUINT4> vertex_boneindices2;
 		std::vector<XMFLOAT4> vertex_boneweights2;
@@ -299,7 +318,10 @@ namespace qyhs::scene
 
 		BufferView ib;
 		BufferView vb_pos_wind;
+		BufferView shader_output_pos;          //process with compute shader
+		BufferView shader_output_pos_pre;
 		BufferView vb_uvs;
+		BufferView vb_bon;				   //vertex influded by bone 
 
 		virtual void serialize(Archive& archive, ecs::EntitySerializer& seri) override;
 	private:
@@ -330,6 +352,7 @@ namespace qyhs::scene
 		void transformCamera(const TransformComponent& transform) { transformCamera(XMLoadFloat4x4(&transform.world)); }
 		void updateCamera();
 		inline void SetDirty(bool value = true) { if (value) { _flags |= DIRTY; } else { _flags &= ~DIRTY; } };
+		inline XMVECTOR GetEye() const { return XMLoadFloat3(&eye); }
 		XMFLOAT4X4 view_proj;
 		XMFLOAT4X4 view;
 		XMFLOAT4X4 proj;
@@ -345,6 +368,101 @@ namespace qyhs::scene
 		virtual void serialize(Archive& archive, ecs::EntitySerializer& seri) override;
 	private:
 		uint32_t _flags = 0;
+	};
+
+	class ArmatureComponent :public Component
+	{
+	public:
+		std::vector<XMFLOAT4X4> inverse_bind_matrices;
+		std::vector<ecs::Entity> bone_collection;
+		uint32_t gpu_bone_offset = 0;
+		std::vector<ShaderTransform> bone_data;
+		primitive::AABB aabb;
+	private:
+	};
+
+	class AnimationComponent :public Component
+	{
+	public:
+		struct AnimationChannel
+		{
+			enum class Path
+			{
+				TRANSLATION,
+				ROTATION,
+				SCALE,
+				WEIGHTS,
+
+				UNKNOWN,
+			};
+
+			enum class PathDataType
+			{
+				Float,
+				Float2,
+				Float3,
+				Float4,
+				Weights,
+				Event
+			};
+			Path path = Path::UNKNOWN;
+			int sampler_index = -1;
+			
+			ecs::Entity target = ecs::INVALID_ENTITY;
+
+			PathDataType getPathDataType()const;
+			int next_event = 0;
+			int retargetIndex = -1;
+
+		};
+
+		struct AnimationSampler
+		{
+			enum Mode
+			{
+				LINEAR,
+				STEP,
+				CUBICSPLINE,
+				MODE_FORCE_UINT32 = 0xFFFFFFFF
+			} mode = LINEAR;
+			ecs::Entity data = ecs::INVALID_ENTITY;
+			Scene* scene = nullptr;
+		};
+
+		enum FLAGS
+		{
+			EMPTY = 0,
+			PLAYING = 1 << 0,
+			LOOPED = 1 << 1,
+			ROOT_MOTION = 1 << 2
+		};
+		uint32_t _flags = PLAYING | LOOPED;
+		float start = 0;
+		float end = 0;
+		float last_update_time = 0;
+		float timer = 0;
+		float amount = 1;
+		float speed = 1;
+		std::vector<AnimationSampler> samplers;
+		std::vector<AnimationChannel> channels;
+		bool isPlaying() const { 
+			return _flags & PLAYING; 
+		}
+		bool isLooped() const { return _flags & LOOPED; }
+		bool isRootMotion()const { return _flags & ROOT_MOTION; }
+		inline void pause() { _flags &= ~PLAYING; }
+		ecs::Entity root_motion_bone = ecs::INVALID_ENTITY;
+	private:
+	};
+
+	class AnimationDataComponent :public Component
+	{
+	public:
+		std::vector<float> keyframe_times;
+		std::vector<float> keyframe_data;
+		uint32_t _flags = 0;
+		virtual void serialize(Archive& archive, ecs::EntitySerializer& seri) override;
+	private:
 	};
 
 	CameraComponent& getCamera();

@@ -274,7 +274,7 @@ static void ShowDemoWindowColumns();
 static void ShowDemoWindowMisc();
 
 // Demonstrate most Dear ImGui features (this is big function!)
-// You may execute this function to experiment with the UI and understand what it does.
+// You may Execute this function to experiment with the UI and understand what it does.
 // You may then search for keywords in the code when you are interested by a specific feature.
 void ImGui::ShowDemoWindow(bool* p_open)
 {
@@ -3447,10 +3447,10 @@ static void ShowDemoWindowPopups()
         ImGui::TreePop();
     }
 
-    IMGUI_DEMO_MARKER("Popups/Context menus");
-    if (ImGui::TreeNode("Context menus"))
+    IMGUI_DEMO_MARKER("Popups/context menus");
+    if (ImGui::TreeNode("context menus"))
     {
-        HelpMarker("\"Context\" functions are simple helpers to associate a Popup to a given Item or Window identifier.");
+        HelpMarker("\"context\" functions are simple helpers to associate a Popup to a given Item or Window identifier.");
 
         // BeginPopupContextItem() is a helper to provide common/simple popup behavior of essentially doing:
         //     if (id == 0)
@@ -4965,8 +4965,8 @@ static void ShowDemoWindowTables()
     // Demonstrate creating custom context menus inside columns, while playing it nice with context menus provided by TableHeadersRow()/TableHeader()
     if (open_action != -1)
         ImGui::SetNextItemOpen(open_action != 0);
-    IMGUI_DEMO_MARKER("Tables/Context menus");
-    if (ImGui::TreeNode("Context menus"))
+    IMGUI_DEMO_MARKER("Tables/context menus");
+    if (ImGui::TreeNode("context menus"))
     {
         HelpMarker("By default, right-clicking over a TableHeadersRow()/TableHeader() line will open the default context-menu.\nUsing ImGuiTableFlags_ContextMenuInBody we also allow right-clicking over columns body.");
         static ImGuiTableFlags flags1 = ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable | ImGuiTableFlags_Borders | ImGuiTableFlags_ContextMenuInBody;
@@ -4975,7 +4975,7 @@ static void ShowDemoWindowTables()
         ImGui::CheckboxFlags("ImGuiTableFlags_ContextMenuInBody", &flags1, ImGuiTableFlags_ContextMenuInBody);
         PopStyleCompact();
 
-        // Context Menus: first example
+        // context Menus: first example
         // [1.1] Right-click on the TableHeadersRow() line to open the default table context menu.
         // [1.2] Right-click in columns also open the default table context menu (if ImGuiTableFlags_ContextMenuInBody is set)
         const int COLUMNS_COUNT = 3;
@@ -5001,7 +5001,7 @@ static void ShowDemoWindowTables()
             ImGui::EndTable();
         }
 
-        // Context Menus: second example
+        // context Menus: second example
         // [2.1] Right-click on the TableHeadersRow() line to open the default table context menu.
         // [2.2] Right-click on the ".." to open a custom popup
         // [2.3] Right-click in columns to open another custom popup
@@ -7623,7 +7623,7 @@ static void ShowExampleAppCustomRendering(bool* p_open)
                 scrolling.y += io.MouseDelta.y;
             }
 
-            // Context menu (under default mouse threshold)
+            // context menu (under default mouse threshold)
             ImVec2 drag_delta = ImGui::GetMouseDragDelta(ImGuiMouseButton_Right);
             if (opt_enable_context_menu && ImGui::IsMouseReleased(ImGuiMouseButton_Right) && drag_delta.x == 0.0f && drag_delta.y == 0.0f)
                 ImGui::OpenPopupOnItemClick("context");
@@ -7980,7 +7980,7 @@ void ShowExampleAppDocuments(bool* p_open)
     // They have multiple effects:
     // - Display a dot next to the title.
     // - Tab is selected when clicking the X close button.
-    // - Closure is not assumed (will wait for user to stop submitting the tab).
+    // - Closure is not assumed (will Wait for user to stop submitting the tab).
     //   Otherwise closure is assumed when pressing the X, so if you keep submitting the tab may reappear at end of tab bar.
     //   We need to assume closure by default otherwise waiting for "lack of submission" on the next frame would leave an empty
     //   hole for one-frame, both in the tab-bar and in tab-contents when closing a tab/window.

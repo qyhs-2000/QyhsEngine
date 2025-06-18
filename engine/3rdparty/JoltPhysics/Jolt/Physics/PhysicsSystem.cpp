@@ -517,7 +517,7 @@ void PhysicsSystem::Update(float inDeltaTime, int inCollisionSteps, int inIntegr
 		}
 	}
 	
-	// Build the list of jobs to wait for
+	// Build the list of jobs to Wait for
 	JobSystem::Barrier *barrier = context.mBarrier;
 	{
 		JPH_PROFILE("Build job barrier");
@@ -561,7 +561,7 @@ void PhysicsSystem::Update(float inDeltaTime, int inCollisionSteps, int inIntegr
 	}
 
 	// Wait until all jobs finish
-	// Note we don't just wait for the last job. If we would and another job
+	// Note we don't just Wait for the last job. If we would and another job
 	// would be scheduled in between there is the possibility of a deadlock.
 	// The other job could try to e.g. add/remove a body which would try to
 	// lock a body mutex while this thread has already locked the mutex
@@ -777,7 +777,7 @@ void PhysicsSystem::TrySpawnJobFindCollisions(PhysicsUpdateContext::Step *ioStep
 							step->mContext->mPhysicsSystem->JobFindCollisions(step, job_index); 
 						});
 
-					// Add the job to the job barrier so the main updating thread can execute the job too
+					// Add the job to the job barrier so the main updating thread can Execute the job too
 					ioStep->mContext->mBarrier->AddJob(job);
 
 					// Spawn only 1 extra job at a time

@@ -28,4 +28,5 @@ namespace qyhs::math
 	}
 
 	const bool collision2D(const XMFLOAT2& hb_pos1, const XMFLOAT2& hb_size1, const XMFLOAT2& hb_pos2, const XMFLOAT2& hb_size2);
+	const float lerp(float value1, float value2, float amount);
 }

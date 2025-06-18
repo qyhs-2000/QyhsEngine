@@ -4138,7 +4138,7 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
         }
     }
 
-    // We have an edge case if ActiveId was set through another widget (e.g. widget being swapped), clear id immediately (don't wait until the end of the function)
+    // We have an edge case if ActiveId was set through another widget (e.g. widget being swapped), clear id immediately (don't Wait until the end of the function)
     if (g.ActiveId == id && state == NULL)
         ClearActiveID();
 
@@ -4913,7 +4913,7 @@ bool ImGui::ColorEdit4(const char* label, float col[4], ImGuiColorEditFlags flag
     if (flags & ImGuiColorEditFlags_NoInputs)
         flags = (flags & (~ImGuiColorEditFlags_DisplayMask_)) | ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_NoOptions;
 
-    // Context menu: display and modify options (before defaults are applied)
+    // context menu: display and modify options (before defaults are applied)
     if (!(flags & ImGuiColorEditFlags_NoOptions))
         ColorEditOptionsPopup(col, flags);
 
@@ -5167,7 +5167,7 @@ bool ImGui::ColorPicker4(const char* label, float col[4], ImGuiColorEditFlags fl
     if (!(flags & ImGuiColorEditFlags_NoSidePreview))
         flags |= ImGuiColorEditFlags_NoSmallPreview;
 
-    // Context menu: display and store options.
+    // context menu: display and store options.
     if (!(flags & ImGuiColorEditFlags_NoOptions))
         ColorPickerOptionsPopup(col, flags);
 
@@ -6920,7 +6920,7 @@ bool ImGui::BeginMenuEx(const char* label, const char* icon, bool enabled)
     bool menu_is_open = IsPopupOpen(id, ImGuiPopupFlags_None);
 
     // Sub-menus are ChildWindow so that mouse can be hovering across them (otherwise top-most popup menu would steal focus and not allow hovering on parent menu)
-    // The first menu in a hierarchies isn't so hovering doesn't get accross (otherwise e.g. resizing borders with ImGuiButtonFlags_FlattenChildren would react), but top-most BeginMenu() will bypass that limitation.
+    // The first menu in a hierarchy isn't so hovering doesn't get accross (otherwise e.g. resizing borders with ImGuiButtonFlags_FlattenChildren would react), but top-most BeginMenu() will bypass that limitation.
     ImGuiWindowFlags flags = ImGuiWindowFlags_ChildMenu | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoNavFocus;
     if (window->Flags & ImGuiWindowFlags_ChildMenu)
         flags |= ImGuiWindowFlags_ChildWindow;
@@ -7498,7 +7498,7 @@ static void ImGui::TabBarLayout(ImGuiTabBar* tab_bar)
 
         // Refresh tab width immediately, otherwise changes of style e.g. style.FramePadding.x would noticeably lag in the tab bar.
         // Additionally, when using TabBarAddTab() to manipulate tab bar order we occasionally insert new tabs that don't have a width yet,
-        // and we cannot wait for the next BeginTabItem() call. We cannot compute this width within TabBarAddTab() because font size depends on the activate window.
+        // and we cannot Wait for the next BeginTabItem() call. We cannot compute this width within TabBarAddTab() because font size depends on the activate window.
         const char* tab_name = tab_bar->GetTabName(tab);
         const bool has_close_button = (tab->Flags & ImGuiTabItemFlags_NoCloseButton) == 0;
         tab->ContentWidth = TabItemCalcSize(tab_name, has_close_button).x;

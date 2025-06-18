@@ -8,121 +8,52 @@
 #include <cassert>
 namespace qyhs::jobsystem
 {
-	enum class Priority
-	{
-
-		High,
-		Low,
-		Streaming,
-		Priority_Count
-	};
-
-	struct Context
-	{
-		volatile long count = 0;
-		Priority priority = Priority::High;
-	};
-
-	void wait(const Context& ctx);
+	void Initialize(uint32_t maxThreadCount = ~0u);
+	void ShutDown();
 
 	struct JobArgs
 	{
-		unsigned int group_id;
-		unsigned int job_index;
-		unsigned int group_index;
-		unsigned int is_first_job_in_group;
-		unsigned int is_last_job_in_group;
-		void* shared_memory;
+		uint32_t jobIndex;		// job index relative to Dispatch (like SV_DispatchThreadID in HLSL)
+		uint32_t groupID;		// group index relative to Dispatch (like SV_GroupID in HLSL)
+		uint32_t groupIndex;	// job index relative to group (like SV_GroupIndex in HLSL)
+		bool isFirstJobInGroup;	// is the current job the first one in the group?
+		bool isLastJobInGroup;	// is the current job the last one in the group?
+		void* sharedmemory;		// stack memory shared within the current group (jobs within a group Execute serially)
 	};
 
-	struct Job
+	enum class Priority
 	{
-		Context* ctx;
-		std::function<void(JobArgs)> task;
-		unsigned int group_id;
-		unsigned int group_job_offset;
-		unsigned int group_job_end;
-		unsigned int shared_memory_size = 0;
-		inline void execute()
-		{
-			JobArgs args;
-			args.group_id = group_id;
-			if (shared_memory_size > 0)
-			{
-				args.shared_memory = alloca(shared_memory_size);
-			}
-			else
-			{
-				args.shared_memory = nullptr;
-			}
-			for (unsigned int i = group_job_offset; i < group_job_end; ++i)
-			{
-				args.job_index = i;
-				args.group_index = i - group_job_offset;
-				args.is_first_job_in_group = (i == group_job_offset);
-				args.is_last_job_in_group = (i == group_job_end - 1);
-				task(args);
-			}
-			atomAdd(&ctx->count, -1);
-		}
+		High,		// Default
+		Low,		// Pool of low priority threads, useful for generic tasks that shouldn't interfere with high priority tasks
+		Streaming,	// Single low priority thread, for streaming resources
+		Count
 	};
 
-	struct JobQueue
+	// Defines a state of execution, can be waited on
+	struct context
 	{
-		std::deque<Job> queue;
-		std::mutex locker;
-
-		inline void push_back(const Job& item)
-		{
-			std::scoped_lock lock(locker);
-			queue.push_back(item);
-		}
-		inline bool pop_front(Job& item)
-		{
-			std::scoped_lock lock(locker);
-			if (queue.empty())
-			{
-				return false;
-			}
-			item = std::move(queue.front());
-			queue.pop_front();
-			return true;
-		}
+		volatile long counter = 0;
+		Priority priority = Priority::High;
 	};
 
-	struct PriorityResource
-	{
-		std::vector<std::thread> threads;
-		std::unique_ptr<JobQueue[]> job_queue_per_thread;
-		std::atomic<uint32_t> next_queue{ 0 };
-		unsigned int threads_num = 0;
-		std::mutex wake_mutex;
-		std::condition_variable wake_condition;
-		inline void work(uint32_t startingQueue)
-		{
-			Job job;
-			for (uint32_t i = 0; i < threads_num; ++i)
-			{
-				JobQueue& job_queue = job_queue_per_thread[startingQueue % threads_num];
-				while (job_queue.pop_front(job))
-				{
-					job.execute();
-				}
-				startingQueue++; // go to next queue
-			}
-		}
-	};
-	
-	struct InternalState
-	{
-		PriorityResource resources[int(Priority::Priority_Count)];
-		unsigned int num_cores;
-		std::atomic_bool alive = { true };
-	}static internal_state;
+	uint32_t GetThreadCount(Priority priority = Priority::High);
 
-	bool isBusy(const Context & ctx);
+	// Add a task to Execute asynchronously. Any idle thread will Execute this.
+	void Execute(context& ctx, const std::function<void(JobArgs)>& task);
 
-	void execute(Context& ctx,const std::function<void(JobArgs)> & task);
-	void initialize(uint32_t max_thread_count = ~0u);
-	void dispatch(Context& ctx, uint32_t job_count, uint32_t group_size, const std::function<void(JobArgs)>& task, uint32_t sharedmemory_size = 0);
+	// Divide a task onto multiple jobs and Execute in parallel.
+	//	jobCount	: how many jobs to generate for this task.
+	//	groupSize	: how many jobs to Execute per thread. Jobs inside a group Execute serially. It might be worth to increase for small jobs
+	//	task		: receives a JobArgs as parameter
+	void Dispatch(context& ctx, uint32_t jobCount, uint32_t groupSize, const std::function<void(JobArgs)>& task, size_t sharedmemory_size = 0);
+
+	// Returns the amount of job groups that will be created for a set number of jobs and group size
+	uint32_t DispatchGroupCount(uint32_t jobCount, uint32_t groupSize);
+
+	// Check if any threads are working currently or not
+	bool IsBusy(const context& ctx);
+
+	// Wait until all threads become idle
+	//	Current thread will become a worker thread, executing jobs
+	void Wait(const context& ctx);
 }

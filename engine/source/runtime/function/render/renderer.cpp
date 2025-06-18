@@ -40,7 +40,7 @@ inline PipelineState* getObjectPSO(ObjectRenderingVariant variant)
 	return &object_pso[variant.bits.renderpass][variant.bits.shadertype][variant.bits.mesh_shader][variant.value];
 }
 
-qyhs::jobsystem::Context object_pso_job_ctxs[RENDERPASS_COUNT][OBJECT_MESH_SHADER_PSO_COUNT];
+qyhs::jobsystem::context object_pso_job_ctxs[RENDERPASS_COUNT][OBJECT_MESH_SHADER_PSO_COUNT];
 namespace qyhs::renderer
 {
 	Shader shaders[SHADER_TYPE_COUNT];
@@ -53,6 +53,26 @@ namespace qyhs::renderer
 	RasterizerState rasterizers[RASTERIZER_STATE_TYPE_COUNT];
 	BlendState blend_states[BLEND_STATE_TYPE_COUNT];
 	DepthStencilState depth_stencils[DSSTYPE_COUNT];
+	const Shader* GetShader(SHADER_TYPE id)
+	{
+		return &shaders[id];
+	}
+	const InputLayout* GetInputLayout(ILTYPES id)
+	{
+		return &input_layouts[id];
+	}
+	const RasterizerState* GetRasterizerState(RSTYPES id)
+	{
+		return &rasterizers[id];
+	}
+	const DepthStencilState* GetDepthStencilState(DSSTYPES id)
+	{
+		return &depth_stencils[id];
+	}
+	const BlendState* GetBlendState(BSTYPES id)
+	{
+		return &blend_states[id];
+	}
 	bool loadShader(graphics::ShaderStage stage, graphics::Shader& shader, const std::string& filename, ShaderModel min_shader_model, const std::vector<std::string>& permutation_definitions)
 	{
 		std::string shader_binary_filename = SHADER_PATH + filename;
@@ -322,7 +342,7 @@ namespace qyhs::renderer
 
 	void updateVisibility(Visibility& visibility)
 	{
-		jobsystem::Context ctx;
+		jobsystem::context ctx;
 		visibility.frustum = visibility.camera->frustum;
 		static constexpr uint32_t group_size = 64;
 		struct StreamCompaction
@@ -337,24 +357,24 @@ namespace qyhs::renderer
 			//cull objects
 			const uint32_t object_size = (uint32_t)std::min((uint32_t)visibility.scene->aabb_objects.size(), visibility.scene->objects.getCount());
 			visibility.visible_objects.resize(object_size);
-			jobsystem::dispatch(ctx, object_size, group_size, [&](jobsystem::JobArgs args) {
-				StreamCompaction& stream_compaction = *(StreamCompaction*)args.shared_memory;
-				if (args.is_first_job_in_group)
+			jobsystem::Dispatch(ctx, object_size, group_size, [&](jobsystem::JobArgs args) {
+				StreamCompaction& stream_compaction = *(StreamCompaction*)args.sharedmemory;
+				if (args.isFirstJobInGroup)
 				{
 					stream_compaction.count = 0;
 				}
-				const primitive::AABB& aabb = visibility.scene->aabb_objects[args.job_index];
+				const primitive::AABB& aabb = visibility.scene->aabb_objects[args.jobIndex];
 				if (visibility.frustum.checkBox(aabb))
 				{
-					stream_compaction.list[stream_compaction.count++] = args.group_index;
-					const scene::ObjectComponent& object = visibility.scene->objects[args.job_index];
+					stream_compaction.list[stream_compaction.count++] = args.groupIndex;
+					const scene::ObjectComponent& object = visibility.scene->objects[args.jobIndex];
 					//Scene
 				}
 				// Global stream compaction:
-				if (args.is_last_job_in_group && stream_compaction.count > 0)
+				if (args.isLastJobInGroup && stream_compaction.count > 0)
 				{
 					uint32_t prev_count = visibility.object_counter.fetch_add(stream_compaction.count);
-					uint32_t groupOffset = args.group_id * group_size;
+					uint32_t groupOffset = args.groupID * group_size;
 					for (uint32_t i = 0; i < stream_compaction.count; ++i)
 					{
 						visibility.visible_objects[prev_count + i] = groupOffset + stream_compaction.list[i];
@@ -364,6 +384,7 @@ namespace qyhs::renderer
 				}, shared_memory_size
 			);
 		}
+		jobsystem::Wait(ctx);
 	}
 
 	bool getOcclusionCullingEnabled()
@@ -471,17 +492,17 @@ namespace qyhs::renderer
 	void loadShaders()
 	{
 		RHI* rhi = rhi::getRHI();
-		jobsystem::Context ctx;
+		jobsystem::context ctx;
 
 		//vertex shader
-		jobsystem::execute(ctx, [](jobsystem::JobArgs args)
+		jobsystem::Execute(ctx, [](jobsystem::JobArgs args)
 			{
 				loadShader(ShaderStage::VERTEX_SHADER, shaders[VS_OBJECT_COMMON_VS], "object_common_vs.cso");
 			});
-		jobsystem::execute(ctx, [](jobsystem::JobArgs args) {
+		jobsystem::Execute(ctx, [](jobsystem::JobArgs args) {
 			loadShader(ShaderStage::VERTEX_SHADER, shaders[VSTYPE_OBJECT_PREPASS], "objectVS_prepass.cso");
 			});
-		jobsystem::execute(ctx, [](jobsystem::JobArgs args) {
+		jobsystem::Execute(ctx, [](jobsystem::JobArgs args) {
 			input_layouts[ILTYPE_VERTEXCOLOR].elements = {
 				{ "POSITION", 0, Format::R32G32B32A32_FLOAT, 0, InputLayout::APPEND_ALIGNED_ELEMENT, InputClassification::PER_VERTEX_DATA },
 				{ "TEXCOORD", 0, Format::R32G32B32A32_FLOAT, 0, InputLayout::APPEND_ALIGNED_ELEMENT, InputClassification::PER_VERTEX_DATA },
@@ -489,23 +510,28 @@ namespace qyhs::renderer
 			loadShader(ShaderStage::VERTEX_SHADER, shaders[VSTYPE_VERTEXCOLOR], "vertexcolorVS.cso");
 			});
 		//piexel shaders
-		jobsystem::execute(ctx, [](jobsystem::JobArgs args) { loadShader(ShaderStage::PIXEL_SHADER, shaders[PSTYPE_OBJECT_PREPASS], "objectPS_prepass.cso"); });
-		jobsystem::execute(ctx, [](jobsystem::JobArgs args) {loadShader(ShaderStage::PIXEL_SHADER, shaders[PSTYPE_VERTEXCOLOR], "vertexcolorPS.cso"); });
-		jobsystem::dispatch(ctx, scene::MaterialComponent::SHADERTYPE_COUNT, 1, [](jobsystem::JobArgs args) {
-			loadShader(ShaderStage::PIXEL_SHADER, shaders[PSTYPE_OBJECT_PERMUTATION_BEGIN + args.job_index],
-				"objectPS.cso", ShaderModel::SM_6_0, scene::MaterialComponent::shadertype_definitions[args.job_index]);
+		jobsystem::Execute(ctx, [](jobsystem::JobArgs args) { loadShader(ShaderStage::PIXEL_SHADER, shaders[PSTYPE_OBJECT_PREPASS], "objectPS_prepass.cso"); });
+		jobsystem::Execute(ctx, [](jobsystem::JobArgs args) {loadShader(ShaderStage::PIXEL_SHADER, shaders[PSTYPE_VERTEXCOLOR], "vertexcolorPS.cso"); });
+		jobsystem::Dispatch(ctx, scene::MaterialComponent::SHADERTYPE_COUNT, 1, [](jobsystem::JobArgs args) {
+			loadShader(ShaderStage::PIXEL_SHADER, shaders[PSTYPE_OBJECT_PERMUTATION_BEGIN + args.jobIndex],
+				"objectPS.cso", ShaderModel::SM_6_0, scene::MaterialComponent::shadertype_definitions[args.jobIndex]);
 			});
-		jobsystem::dispatch(ctx, scene::MaterialComponent::SHADERTYPE_COUNT, 1, [](jobsystem::JobArgs args) {
-			auto defines = scene::MaterialComponent::shadertype_definitions[args.job_index];
+		jobsystem::Dispatch(ctx, scene::MaterialComponent::SHADERTYPE_COUNT, 1, [](jobsystem::JobArgs args) {
+			auto defines = scene::MaterialComponent::shadertype_definitions[args.jobIndex];
 			defines.push_back("TRANSPARENT");
-			loadShader(ShaderStage::PIXEL_SHADER, shaders[PSTYPE_OBJECT_TRANSPARENT_PERMUTATION_BEGIN + args.job_index], "objectPS.cso", ShaderModel::SM_6_0, defines);
+			loadShader(ShaderStage::PIXEL_SHADER, shaders[PSTYPE_OBJECT_TRANSPARENT_PERMUTATION_BEGIN + args.jobIndex], "objectPS.cso", ShaderModel::SM_6_0, defines);
 			});
-		jobsystem::wait(ctx);
 
-		jobsystem::dispatch(ctx, DEBUG_RENDERING_COUNT, 1, [&](jobsystem::JobArgs args) {
+		//compute shader
+		jobsystem::Execute(ctx, [](jobsystem::JobArgs args) {
+			loadShader(ShaderStage::COMPUTE_SHADER, shaders[CSTYPE_SKINNING], "skinningCS.cso");
+			});
+
+		jobsystem::Wait(ctx);
+		jobsystem::Dispatch(ctx, DEBUG_RENDERING_COUNT, 1, [&](jobsystem::JobArgs args) {
 			PipelineStateDesc desc = {};
 			RHI* rhi = rhi::getRHI();
-			switch (args.job_index)
+			switch (args.jobIndex)
 			{
 			case DEBUG_RENDERING_GRID:
 			{
@@ -522,18 +548,19 @@ namespace qyhs::renderer
 			default:
 				break;
 			}
-			rhi->createPipelineState(&desc, &PSO_debug[args.job_index]);
+			rhi->createPipelineState(&desc, &PSO_debug[args.jobIndex]);
 			});
+
 
 		for (uint32_t render_pass = 0; render_pass < RENDERPASS_COUNT; ++render_pass)
 		{
 			for (uint32_t mesh_shader = 0; mesh_shader <= rhi->checkCapability(GraphicsDeviceCapability::MESH_SHADER) ? 1u : 0u; ++mesh_shader)
 			{
-				jobsystem::wait(object_pso_job_ctxs[render_pass][mesh_shader]);
+				jobsystem::Wait(object_pso_job_ctxs[render_pass][mesh_shader]);
 				object_pso_job_ctxs[render_pass][mesh_shader].priority = jobsystem::Priority::Low;
 				for (uint32_t shader_type = 0; shader_type < scene::MaterialComponent::SHADERTYPE_COUNT; ++shader_type)
 				{
-					jobsystem::execute(object_pso_job_ctxs[render_pass][mesh_shader], [=](jobsystem::JobArgs args) {
+					jobsystem::Execute(object_pso_job_ctxs[render_pass][mesh_shader], [=](jobsystem::JobArgs args) {
 						//now just for opaque scene
 						for (uint32_t blend_mode = 0; blend_mode <= BLENDMODE_ALPHA; ++blend_mode)
 						{
@@ -685,6 +712,7 @@ namespace qyhs::renderer
 			}
 		}
 
+		
 	}
 
 	//setup rasterizer state,blend state 
@@ -772,6 +800,10 @@ namespace qyhs::renderer
 		dsd.depth_write_mask = DepthWriteMask::ZERO;
 		dsd.depth_func = ComparisonFunc::GREATER_EQUAL;
 		depth_stencils[DSSTYPE_DEPTHREAD] = dsd;
+
+		dsd.depth_enable = false;
+		dsd.stencil_enable = false;
+		depth_stencils[DSSTYPE_DEPTHDISABLED] = dsd;
 
 		dsd.depth_enable = true;
 		dsd.depth_write_mask = DepthWriteMask::ZERO;
@@ -912,7 +944,83 @@ namespace qyhs::renderer
 				visibility.scene->geometry_array_size * sizeof(ShaderGeometry), cmd);
 		}
 
+		if (visibility.scene->skinning_buffer.isValid() && visibility.scene->skinning_data_size > 0)
+		{
+			rhi->copyBuffer(&visibility.scene->skinning_buffer, 0,
+				&visibility.scene->skinning_upload_buffers[rhi->getBufferIndex()], 0,
+				visibility.scene->skinning_data_size, cmd);
+		}
+
 		bindCommonResources(cmd);
+
+		{
+			rhi->beginEvent("Skinning and Morph", cmd);
+			int descriptor_skinning_buffer = -1;
+			if (visibility.scene->skinning_buffer.isValid())
+			{
+				descriptor_skinning_buffer = rhi->getDescriptorIndex(&visibility.scene->skinning_buffer, SubresourceType::SRV);
+			}
+			else if (visibility.scene->skinning_upload_buffers[rhi->getBufferIndex()].isValid())
+			{
+				// In this case we use the upload buffer directly, this will be the case with UMA GPU:
+				descriptor_skinning_buffer = rhi->getDescriptorIndex(&visibility.scene->skinning_upload_buffers[rhi->getBufferIndex()], SubresourceType::SRV);
+			}
+			rhi->bindComputeShader(&shaders[CSTYPE_SKINNING], cmd);
+			for (size_t i = 0; i < visibility.scene->meshes.getCount(); ++i)
+			{
+				ecs::Entity entity = visibility.scene->meshes.getEntity(i);
+				const scene::MeshComponent& mesh = visibility.scene->meshes[i];
+
+				if (
+					(mesh.isSkinned() || mesh.vb_bon.IsValid()) && // Note: even if all morphs are inactive, the skinning must be done
+					mesh.streamout_buffer.isValid()
+					)
+				{
+					SkinningPushConstants push;
+					push.vb_pos_wind = mesh.vb_pos_wind.descriptor_srv;
+					
+					push.so_pos = mesh.shader_output_pos.descriptor_uav;
+					
+					push.skinningbuffer_index = descriptor_skinning_buffer;
+					const scene::ArmatureComponent* armature = visibility.scene->armatures.getComponent(mesh.armatureID);
+					if (armature != nullptr)
+					{
+						push.bone_offset = armature->gpu_bone_offset;
+					}
+					
+					push.vb_bon = mesh.vb_bon.descriptor_srv;
+					if (mesh.active_morph_count > 0)
+					{
+						
+					}
+					else
+					{
+						push.morph_count = 0;
+						push.morph_offset = ~0u;
+						push.morphvb_index = -1;
+					}
+					if (IsFormatUnorm(mesh.position_format))
+					{
+						push.aabb_min = mesh.aabb._min;
+						push.aabb_max = mesh.aabb._max;
+					}
+					else
+					{
+						push.aabb_min = {};
+						push.aabb_max = {};
+					}
+					push.vertexCount = (uint)mesh.vertex_positions.size();
+					push.influence_div4 = mesh.getBoneInfluencedCount();
+					rhi->pushConstants(&push, sizeof(push), cmd);
+
+					rhi->dispatch(((uint32_t)mesh.vertex_positions.size() + 63) / 64, 1, 1, cmd);
+
+					
+				}
+			}
+
+			rhi->endEvent(cmd); // Skinning and Morph
+		}
 	}
 
 	const Sampler* getSampler(enums::SAMPLERTYPES id)

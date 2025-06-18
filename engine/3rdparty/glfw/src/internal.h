@@ -277,7 +277,7 @@ struct _GLFWwndconfig
     } x11;
 };
 
-// Context configuration
+// context configuration
 //
 // Parameters relating to the creation of the context but not directly related
 // to the framebuffer.  This is used to pass context creation parameters from
@@ -330,7 +330,7 @@ struct _GLFWfbconfig
     uintptr_t   handle;
 };
 
-// Context structure
+// context structure
 //
 struct _GLFWcontext
 {

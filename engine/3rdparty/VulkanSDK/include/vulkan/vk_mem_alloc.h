@@ -2282,7 +2282,7 @@ extern "C" {
 
     \param allocator Allocator object.
     \param pInfo Structure filled with parameters of defragmentation.
-    \param[out] pContext Context object that must be passed to vmaEndDefragmentation() to finish defragmentation.
+    \param[out] pContext context object that must be passed to vmaEndDefragmentation() to finish defragmentation.
     \returns
     - `VK_SUCCESS` if defragmentation can begin.
     - `VK_ERROR_FEATURE_NOT_PRESENT` if defragmentation is not supported.
@@ -2298,7 +2298,7 @@ extern "C" {
     /** \brief Ends defragmentation process.
 
     \param allocator Allocator object.
-    \param context Context object that has been created by vmaBeginDefragmentation().
+    \param context context object that has been created by vmaBeginDefragmentation().
     \param[out] pStats Optional stats for the defragmentation. Can be null.
 
     Use this function to finish defragmentation started by vmaBeginDefragmentation().
@@ -2311,7 +2311,7 @@ extern "C" {
     /** \brief Starts single defragmentation pass.
 
     \param allocator Allocator object.
-    \param context Context object that has been created by vmaBeginDefragmentation().
+    \param context context object that has been created by vmaBeginDefragmentation().
     \param[out] pPassInfo Computed information for current pass.
     \returns
     - `VK_SUCCESS` if no more moves are possible. Then you can omit call to vmaEndDefragmentationPass() and simply end whole defragmentation.
@@ -2326,7 +2326,7 @@ extern "C" {
     /** \brief Ends single defragmentation pass.
 
     \param allocator Allocator object.
-    \param context Context object that has been created by vmaBeginDefragmentation().
+    \param context context object that has been created by vmaBeginDefragmentation().
     \param pPassInfo Computed information for current pass filled by vmaBeginDefragmentationPass() and possibly modified by you.
 
     Returns `VK_SUCCESS` if no more moves are possible or `VK_INCOMPLETE` if more defragmentations are possible.

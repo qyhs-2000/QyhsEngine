@@ -39,7 +39,7 @@ public:
 	/// Must be called before UpdatePrepare to prevent modifications from being made to the tree
 	virtual void		LockModifications()													{ /* Optionally overridden by implementation */ }
 
-	/// Context used during broadphase update
+	/// context used during broadphase update
 	struct UpdateState { void *mData[4]; };
 
 	/// Update the broadphase, needs to be called frequently to update the internal state when bodies have been modified.

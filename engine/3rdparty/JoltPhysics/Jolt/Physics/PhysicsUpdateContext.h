@@ -141,7 +141,7 @@ public:
 	PhysicsSystem *			mPhysicsSystem;											///< The physics system we belong to
 	TempAllocator *			mTempAllocator;											///< Temporary allocator used during the update
 	JobSystem *				mJobSystem;												///< Job system that processes jobs
-	JobSystem::Barrier *	mBarrier;												///< Barrier used to wait for all physics jobs to complete
+	JobSystem::Barrier *	mBarrier;												///< Barrier used to Wait for all physics jobs to complete
 
 	float					mStepDeltaTime;											///< Delta time for a simulation step (collision step)
 	float					mSubStepDeltaTime;										///< Delta time for a simulation sub step (integration step)

@@ -7,17 +7,31 @@
 #endif // _WIN32
 #define arraysize(a) sizeof(a)/sizeof(a[0])
 
+template<typename T>
+T clamp(const T& val, T a, T b)
+{
+	T min = a < b ? a : b;
+	T max = a > b ? a : b;
+	return val < min ? min : (val > max ? max : val);
+}
+
+template <typename T>
+constexpr T saturate(T x)
+{
+	return clamp(x, T(0), T(1));
+}
+
 inline long atomOr(volatile long* ptr, long mask)
 {
 	return _InterlockedOr(ptr, mask);
 }
 
-inline long atomLoad(const volatile long* ptr)
+inline long AtomicLoad(const volatile long* ptr)
 {
 	return atomOr((volatile long*)ptr, 0);
 }
 
-inline long atomAdd(volatile long* ptr, long val)
+inline long AtomicAdd(volatile long* ptr, long val)
 {
 	return _InterlockedExchangeAdd(ptr, val);
 }
@@ -69,13 +83,7 @@ constexpr typename std::enable_if<enable_bitmask_operators<E>::enable, E>::type 
 	return lhs;
 }
 
-template<typename T>
-T clamp(const T& val, T a, T b)
-{
-	T min = a < b ? a : b;
-	T max = a > b ? a : b;
-	return val < min ? min : (val > max ? max : val);
-}
+
 
 template<typename T>
 constexpr bool has_flag(T lhs, T rhs)

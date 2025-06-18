@@ -748,7 +748,7 @@ static void ImGui_ImplGlfw_WindowCloseCallback(GLFWwindow* window)
         viewport->PlatformRequestClose = true;
 }
 
-// GLFW may dispatch window pos/size events after calling glfwSetWindowPos()/glfwSetWindowSize().
+// GLFW may Dispatch window pos/size events after calling glfwSetWindowPos()/glfwSetWindowSize().
 // However: depending on the platform the callback may be invoked at different time:
 // - on Windows it appears to be called within the glfwSetWindowPos()/glfwSetWindowSize() call
 // - on Linux it is queued and invoked during glfwPollEvents()

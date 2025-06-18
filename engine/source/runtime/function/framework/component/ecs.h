@@ -20,7 +20,7 @@ namespace qyhs::ecs
 	{
 	public:
 		std::unordered_set<std::string> resource_registration;
-		jobsystem::Context ctx;
+		jobsystem::context ctx;
 		std::unordered_map<uint64_t, Entity> remap;
 		bool allow_remap = true;
 		void registerResource(const std::string& name);
@@ -198,7 +198,7 @@ namespace qyhs::ecs
 			return m_components.back();
 		}
 
-		inline TComponent* getComponent(GameObjectID gobject)
+		inline TComponent* getComponent(Entity gobject)
 		{
 			auto iter = lookup_map.find(gobject);
 			if (iter == lookup_map.end())
@@ -206,6 +206,18 @@ namespace qyhs::ecs
 				return nullptr;
 			}
 			return &m_components[iter->second];
+		}
+
+		inline const TComponent* getComponent(Entity entity) const
+		{
+			if (lookup_map.empty())
+				return nullptr;
+			const auto it = lookup_map.find(entity);
+			if (it != lookup_map.end())
+			{
+				return &m_components[it->second];
+			}
+			return nullptr;
 		}
 
 		inline TComponent& operator[](size_t index) { return m_components[index]; }

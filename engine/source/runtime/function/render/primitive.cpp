@@ -32,6 +32,11 @@ namespace qyhs::primitive
 		return true;
 	}
 
+	AABB AABB::Merge(const AABB& a, const AABB& b)
+	{
+		return AABB(math::min(a.getMin(), b.getMin()), math::max(a.getMax(), b.getMax()));
+	}
+
 	bool HitBox2D::intersects(const HitBox2D& hb)
 	{
 		return qyhs::math::collision2D(pos, size, hb.pos, hb.size);

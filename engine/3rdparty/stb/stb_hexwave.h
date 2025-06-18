@@ -82,7 +82,7 @@
 //
 //    Classic waveforms:
 //                               peak    half    zero
-//                     reflect   time   height   wait
+//                     reflect   time   height   Wait
 //      Sawtooth          1       0       0       0
 //      Square            1       0       1       0
 //      Triangle          1       0.5     0       0
@@ -91,7 +91,7 @@
 //    into other waveforms, and there are a few more notable shapes:
 //
 //                               peak    half    zero
-//                     reflect   time   height   wait
+//                     reflect   time   height   Wait
 //      Sawtooth          1       1      any      0
 //      Sawtooth (8va)    1       0      -1       0
 //      Triangle          1       0.5     0       0
@@ -119,7 +119,7 @@
 //
 //    Crossfade between classic waveforms:
 //                                            peak     half    zero
-//        Start         End         reflect   time    height   wait
+//        Start         End         reflect   time    height   Wait
 //        -----         ---         -------   ----    ------   ----
 //        Triangle      Square         0       0      -1..1    0
 //        Saw           Square         1       0       0..1    0
@@ -132,7 +132,7 @@
 //    Non-crossfade morph between classic waveforms, most require changing
 //    two parameters at the same time:
 //                                           peak     half    zero
-//      Start         End         reflect    time    height   wait
+//      Start         End         reflect    time    height   Wait
 //      -----         ---         -------    ----    ------   ----
 //      Square        Triangle      any      0..0.5   1..0     0
 //      Square        Saw            1       0..1     1..any   0
@@ -140,7 +140,7 @@
 //
 //    Other noteworthy morphs between simple shapes:
 //                                                            peak     half    zero
-//      Start           Halfway       End          reflect    time    height   wait
+//      Start           Halfway       End          reflect    time    height   Wait
 //      -----           ---------     ---          -------    ----    ------   ----
 //      Saw (8va,neg)                Saw (pos)        1       0..1      -1      0
 //      Saw (neg)                    Saw (pos)        1       0..1       0      0
@@ -186,7 +186,7 @@
 //   C1 discontinuity, which reduces artifacts for sweeps/LFO.
 //
 //   Changes to an oscillator timbre using hexwave_change() actually
-//   wait until the oscillator finishes its current cycle. All
+//   Wait until the oscillator finishes its current cycle. All
 //   waveforms with non-zero "zero_wait" settings pass through 0
 //   and have 0-slope at the start of a cycle, which means changing
 //   the settings is artifact free at that time. (If zero_wait is 0,

@@ -141,7 +141,7 @@
 //
 // VOXEL MESH API
 //
-//   Context
+//   context
 //
 //     To understand the API, make sure you first understand the feature set
 //     listed above.

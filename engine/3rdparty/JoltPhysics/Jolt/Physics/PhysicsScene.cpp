@@ -40,7 +40,7 @@ bool PhysicsScene::FixInvalidScales()
 	bool success = true;
 	for (BodyCreationSettings &b : mBodies)
 	{
-		// Test if there is an invalid scale in the shape hierarchies
+		// Test if there is an invalid scale in the shape hierarchy
 		const Shape *shape = b.GetShape();
 		if (!shape->IsValidScale(unit_scale))
 		{

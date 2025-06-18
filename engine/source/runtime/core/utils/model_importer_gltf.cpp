@@ -38,7 +38,7 @@ namespace tinygltf
 			}
 
 		}
-		auto resource = qyhs::resourcemanager::load(image->uri,qyhs::resourcemanager::Flags::IMPORT_RETAIN_FILEDATA | qyhs::resourcemanager::Flags::IMPORT_DELAY,
+		auto resource = qyhs::resourcemanager::load(image->uri, qyhs::resourcemanager::Flags::IMPORT_RETAIN_FILEDATA | qyhs::resourcemanager::Flags::IMPORT_DELAY,
 			(const uint8_t*)bytes,
 			(size_t)size);
 		if (!resource.isValid())
@@ -70,7 +70,7 @@ namespace qyhs
 	{
 	public:
 		Entity root_entity;
-		std::unordered_map<int, GameObjectID> node_map_gobject;
+		std::unordered_map<int, Entity> entity_map;
 		std::unordered_map<int, size_t> mesh_index_map_asset_id;
 		std::unordered_map<int, size_t> material_index_map_asset_id;
 		std::unordered_map<int, MeshComponent*> mesh_index_map_mesh_comp;
@@ -107,24 +107,54 @@ namespace qyhs
 		return render_system->createMaterial(material_data);
 	}
 
-	void loadNode(int node_index, GameObjectID parent, LoaderState_Scene& loader_state)
+	void loadNode(int nodeIndex, GameObjectID parent, LoaderState_Scene& state)
 	{
-		if (node_index < 0)
+		if (nodeIndex < 0 || state.entity_map.count(nodeIndex) != 0)
 		{
 			return;
 		}
-		auto& node = loader_state.model.nodes[node_index];
-		GameObjectID entity = ecs::INVALID_ENTITY;
-		scene::Scene& scene = *loader_state.scene;
-		//add mesh component
+		auto& node = state.model.nodes[nodeIndex];
+		scene::Scene& scene = *state.scene;
+		Entity entity = ecs::INVALID_ENTITY;
+
 		if (node.mesh >= 0)
 		{
-			entity = scene.createObjectEntity(node.name);
-			scene::ObjectComponent& object = *scene.objects.getComponent(entity);
-			object.mesh_entity = scene.meshes.getEntity(node.mesh);
-			int a = 1;;
-			int c = 10;
+			assert(node.mesh < (int)scene.meshes.getCount());
+
+			if (node.skin >= 0)
+			{
+				// This node is an armature:
+				entity = scene.armatures.getEntity(node.skin);
+				scene::MeshComponent* mesh = &scene.meshes[node.mesh];
+				Entity meshEntity = scene.meshes.getEntity(node.mesh);
+				assert(!mesh->vertex_boneindices.empty());
+				if (mesh->armatureID != ecs::INVALID_ENTITY)
+				{
+					// Reuse mesh with different skin is not possible currently, so we create a new one:
+					meshEntity = entity;
+					scene::MeshComponent& newMesh = scene.meshes.create(meshEntity);
+					newMesh = scene.meshes[node.mesh];
+					newMesh.createRenderData();
+					mesh = &newMesh;
+				}
+				mesh->armatureID = entity;
+
+				// The object component will use an identity transform but will be parented to the armature:
+				Entity objectEntity = scene.createObjectEntity(node.name);
+				scene::ObjectComponent& object = *scene.objects.getComponent(objectEntity);
+				object.mesh_entity = meshEntity;
+				scene.attachComponent(objectEntity, entity, true);
+			}
+			else
+			{
+				// This node is a mesh instance:
+				entity = scene.createObjectEntity(node.name);
+				scene::ObjectComponent& object = *scene.objects.getComponent(entity);
+				object.mesh_entity = scene.meshes.getEntity(node.mesh);
+			}
 		}
+
+		
 
 		if (entity == ecs::INVALID_ENTITY)
 		{
@@ -133,72 +163,63 @@ namespace qyhs
 			scene.names.create(entity) = node.name;
 		}
 
-		scene::TransformComponent* transform_component = scene.transforms.getComponent(entity);
+		state.entity_map[nodeIndex] = entity;
+
+		scene::TransformComponent& transform = *scene.transforms.getComponent(entity);
 		if (!node.scale.empty())
 		{
-			for (int i = 0; i < 3; ++i)
+			// Note: limiting min scale because scale <= 0.0001 will break matrix decompose and mess up the model (float precision issue?)
+			for (int idx = 0; idx < 3; ++idx)
 			{
-				if (std::abs(node.scale[i]) <= 0.0001)
+				if (std::abs(node.scale[idx]) <= 0.0001)
 				{
-					const double sign = node.scale[i] < 0 ? -1 : 1;
-					node.scale[i] = 0.0001001 * sign;
+					const double sign = node.scale[idx] < 0 ? -1 : 1;
+					node.scale[idx] = 0.0001001 * sign;
 				}
-
 			}
-			transform_component->local_scale = XMFLOAT3(node.scale[0], node.scale[1], node.scale[2]);
-
+			transform.local_scale = XMFLOAT3(float(node.scale[0]), float(node.scale[1]), float(node.scale[2]));
 		}
 		if (!node.rotation.empty())
 		{
-			Quaternion rotation;
-			rotation.x = node.rotation[0];
-			rotation.y = node.rotation[1];
-			rotation.z = node.rotation[2];
-			rotation.w = node.rotation[3];
-			transform_component->local_rotation = XMFLOAT4(node.rotation[0], node.rotation[1], node.rotation[2], node.rotation[3]);
+			transform.local_rotation = XMFLOAT4((float)node.rotation[0], (float)node.rotation[1], (float)node.rotation[2], (float)node.rotation[3]);
 		}
 		if (!node.translation.empty())
 		{
-			Vector3 position;
-			position.x = node.translation[0];
-			position.y = node.translation[1];
-			position.z = node.translation[2];
-			transform_component->local_position = XMFLOAT3(node.translation[0], node.translation[1], node.translation[2]);
+			transform.local_position = XMFLOAT3((float)node.translation[0], (float)node.translation[1], (float)node.translation[2]);
 		}
 		if (!node.matrix.empty())
 		{
-			transform_component->world._11 = (float)node.matrix[0];
-			transform_component->world._12 = (float)node.matrix[1];
-			transform_component->world._13 = (float)node.matrix[2];
-			transform_component->world._14 = (float)node.matrix[3];
-			transform_component->world._21 = (float)node.matrix[4];
-			transform_component->world._22 = (float)node.matrix[5];
-			transform_component->world._23 = (float)node.matrix[6];
-			transform_component->world._24 = (float)node.matrix[7];
-			transform_component->world._31 = (float)node.matrix[8];
-			transform_component->world._32 = (float)node.matrix[9];
-			transform_component->world._33 = (float)node.matrix[10];
-			transform_component->world._34 = (float)node.matrix[11];
-			transform_component->world._41 = (float)node.matrix[12];
-			transform_component->world._42 = (float)node.matrix[13];
-			transform_component->world._43 = (float)node.matrix[14];
-			transform_component->world._44 = (float)node.matrix[15];
-			transform_component->applyWorldToLocal(); // this creates S, R, T vectors from world matrix
-
+			transform.world._11 = (float)node.matrix[0];
+			transform.world._12 = (float)node.matrix[1];
+			transform.world._13 = (float)node.matrix[2];
+			transform.world._14 = (float)node.matrix[3];
+			transform.world._21 = (float)node.matrix[4];
+			transform.world._22 = (float)node.matrix[5];
+			transform.world._23 = (float)node.matrix[6];
+			transform.world._24 = (float)node.matrix[7];
+			transform.world._31 = (float)node.matrix[8];
+			transform.world._32 = (float)node.matrix[9];
+			transform.world._33 = (float)node.matrix[10];
+			transform.world._34 = (float)node.matrix[11];
+			transform.world._41 = (float)node.matrix[12];
+			transform.world._42 = (float)node.matrix[13];
+			transform.world._43 = (float)node.matrix[14];
+			transform.world._44 = (float)node.matrix[15];
+			transform.applyWorldToLocal(); // this creates S, R, T vectors from world matrix
 		}
 
-		transform_component->updateTransform();
+		transform.updateTransform();
 
-		if (parent != k_invalid_gobject_id)
+		if (parent != ecs::INVALID_ENTITY)
 		{
 			scene.attachComponent(entity, parent, true);
 		}
 
 		if (!node.children.empty())
 		{
-			for (auto& child : node.children)
+			for (int child : node.children)
 			{
-				loadNode(child, entity, loader_state);
+				loadNode(child, entity, state);
 			}
 		}
 
@@ -538,7 +559,7 @@ namespace qyhs
 
 	}
 
-	
+
 
 	bool import_model_gltf(scene::Scene* scene, std::string file_path)
 	{
@@ -628,35 +649,41 @@ namespace qyhs
 		}
 
 		//create mesh
-		for (auto& mesh : loader_state.model.meshes)
+		for (auto& x : loader_state.model.meshes)
 		{
-			Entity mesh_entity = scene->createMeshEntity(mesh.name);
-			scene::MeshComponent& mesh_comp = *scene->meshes.getComponent(mesh_entity);
+			Entity meshEntity = scene->createMeshEntity(x.name);
+			scene->attachComponent(meshEntity, loader_state.root_entity);
+			scene::MeshComponent& mesh = *scene->meshes.getComponent(meshEntity);
 
-			for (auto& primitive : mesh.primitives)
+			for (auto& prim : x.primitives)
 			{
-				mesh_comp.subsets.push_back(scene::MeshComponent::MeshSubset());
+				mesh.subsets.push_back(scene::MeshComponent::MeshSubset());
 				if (scene->materials.getCount() == 0)
 				{
+					// Create a material last minute if there was none
 					scene->materials.create(ecs::createEntity());
 				}
-				mesh_comp.subsets.back().materialID = scene->materials.getEntity(std::max(0, primitive.material));
-				uint32_t vertex_offset = (uint32_t)mesh_comp.vertex_positions.size();
-				scene::MaterialComponent* material = scene->materials.getComponent(mesh_comp.subsets.back().materialID);
-				const int index_remap[3] = { 0,2,1 };
-				if (primitive.indices >= 0)
+				mesh.subsets.back().materialID = scene->materials.getEntity(std::max(0, prim.material));
+				scene::MaterialComponent* material = scene->materials.getComponent(mesh.subsets.back().materialID);
+				uint32_t vertexOffset = (uint32_t)mesh.vertex_positions.size();
+
+				const size_t index_remap[] = {
+					0,2,1
+				};
+
+				if (prim.indices >= 0)
 				{
 					// Fill indices:
-					const tinygltf::Accessor& accessor = loader_state.model.accessors[primitive.indices];
+					const tinygltf::Accessor& accessor = loader_state.model.accessors[prim.indices];
 					const tinygltf::BufferView& bufferView = loader_state.model.bufferViews[accessor.bufferView];
 					const tinygltf::Buffer& buffer = loader_state.model.buffers[bufferView.buffer];
 
 					int stride = accessor.ByteStride(bufferView);
 					size_t indexCount = accessor.count;
-					size_t indexOffset = mesh_comp.indices.size();
-					mesh_comp.indices.resize(indexOffset + indexCount);
-					mesh_comp.subsets.back().index_offset = (uint32_t)indexOffset;
-					mesh_comp.subsets.back().index_count = (uint32_t)indexCount;
+					size_t indexOffset = mesh.indices.size();
+					mesh.indices.resize(indexOffset + indexCount);
+					mesh.subsets.back().index_offset = (uint32_t)indexOffset;
+					mesh.subsets.back().index_count = (uint32_t)indexCount;
 
 					const uint8_t* data = buffer.data.data() + accessor.byteOffset + bufferView.byteOffset;
 
@@ -664,27 +691,27 @@ namespace qyhs
 					{
 						for (size_t i = 0; i < indexCount; i += 3)
 						{
-							mesh_comp.indices[indexOffset + i + 0] = vertex_offset + data[i + index_remap[0]];
-							mesh_comp.indices[indexOffset + i + 1] = vertex_offset + data[i + index_remap[1]];
-							mesh_comp.indices[indexOffset + i + 2] = vertex_offset + data[i + index_remap[2]];
+							mesh.indices[indexOffset + i + 0] = vertexOffset + data[i + index_remap[0]];
+							mesh.indices[indexOffset + i + 1] = vertexOffset + data[i + index_remap[1]];
+							mesh.indices[indexOffset + i + 2] = vertexOffset + data[i + index_remap[2]];
 						}
 					}
 					else if (stride == 2)
 					{
 						for (size_t i = 0; i < indexCount; i += 3)
 						{
-							mesh_comp.indices[indexOffset + i + 0] = vertex_offset + ((uint16_t*)data)[i + index_remap[0]];
-							mesh_comp.indices[indexOffset + i + 1] = vertex_offset + ((uint16_t*)data)[i + index_remap[1]];
-							mesh_comp.indices[indexOffset + i + 2] = vertex_offset + ((uint16_t*)data)[i + index_remap[2]];
+							mesh.indices[indexOffset + i + 0] = vertexOffset + ((uint16_t*)data)[i + index_remap[0]];
+							mesh.indices[indexOffset + i + 1] = vertexOffset + ((uint16_t*)data)[i + index_remap[1]];
+							mesh.indices[indexOffset + i + 2] = vertexOffset + ((uint16_t*)data)[i + index_remap[2]];
 						}
 					}
 					else if (stride == 4)
 					{
 						for (size_t i = 0; i < indexCount; i += 3)
 						{
-							mesh_comp.indices[indexOffset + i + 0] = vertex_offset + ((uint32_t*)data)[i + index_remap[0]];
-							mesh_comp.indices[indexOffset + i + 1] = vertex_offset + ((uint32_t*)data)[i + index_remap[1]];
-							mesh_comp.indices[indexOffset + i + 2] = vertex_offset + ((uint32_t*)data)[i + index_remap[2]];
+							mesh.indices[indexOffset + i + 0] = vertexOffset + ((uint32_t*)data)[i + index_remap[0]];
+							mesh.indices[indexOffset + i + 1] = vertexOffset + ((uint32_t*)data)[i + index_remap[1]];
+							mesh.indices[indexOffset + i + 2] = vertexOffset + ((uint32_t*)data)[i + index_remap[2]];
 						}
 					}
 					else
@@ -692,7 +719,8 @@ namespace qyhs
 						assert(0 && "unsupported index stride!");
 					}
 				}
-				for (auto& attr : primitive.attributes)
+
+				for (auto& attr : prim.attributes)
 				{
 					const std::string& attr_name = attr.first;
 					int attr_data = attr.second;
@@ -704,30 +732,30 @@ namespace qyhs
 					int stride = accessor.ByteStride(bufferView);
 					size_t vertexCount = accessor.count;
 
-					if (mesh_comp.subsets.back().index_count == 0)
+					if (mesh.subsets.back().index_count == 0)
 					{
 						// Autogen indices:
 						//	Note: this is not common, so it is simpler to create a dummy index buffer here than rewrite engine to support this case
-						size_t indexOffset = mesh_comp.indices.size();
-						mesh_comp.indices.resize(indexOffset + vertexCount);
+						size_t indexOffset = mesh.indices.size();
+						mesh.indices.resize(indexOffset + vertexCount);
 						for (size_t vi = 0; vi < vertexCount; vi += 3)
 						{
-							mesh_comp.indices[indexOffset + vi + 0] = uint32_t(vertex_offset + vi + index_remap[0]);
-							mesh_comp.indices[indexOffset + vi + 1] = uint32_t(vertex_offset + vi + index_remap[1]);
-							mesh_comp.indices[indexOffset + vi + 2] = uint32_t(vertex_offset + vi + index_remap[2]);
+							mesh.indices[indexOffset + vi + 0] = uint32_t(vertexOffset + vi + index_remap[0]);
+							mesh.indices[indexOffset + vi + 1] = uint32_t(vertexOffset + vi + index_remap[1]);
+							mesh.indices[indexOffset + vi + 2] = uint32_t(vertexOffset + vi + index_remap[2]);
 						}
-						mesh_comp.subsets.back().index_offset = (uint32_t)indexOffset;
-						mesh_comp.subsets.back().index_count = (uint32_t)vertexCount;
+						mesh.subsets.back().index_offset = (uint32_t)indexOffset;
+						mesh.subsets.back().index_count = (uint32_t)vertexCount;
 					}
 
 					const uint8_t* data = buffer.data.data() + accessor.byteOffset + bufferView.byteOffset;
 
 					if (!attr_name.compare("POSITION"))
 					{
-						mesh_comp.vertex_positions.resize(vertex_offset + vertexCount);
+						mesh.vertex_positions.resize(vertexOffset + vertexCount);
 						for (size_t i = 0; i < vertexCount; ++i)
 						{
-							mesh_comp.vertex_positions[vertex_offset + i] = *(const XMFLOAT3*)(data + i * stride);
+							mesh.vertex_positions[vertexOffset + i] = *(const XMFLOAT3*)(data + i * stride);
 						}
 
 						if (accessor.sparse.isSparse)
@@ -745,19 +773,19 @@ namespace qyhs
 							case TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE:
 								for (int s = 0; s < sparse.count; ++s)
 								{
-									mesh_comp.vertex_positions[sparse_indices_data[s]] = ((const XMFLOAT3*)sparse_values_data)[s];
+									mesh.vertex_positions[sparse_indices_data[s]] = ((const XMFLOAT3*)sparse_values_data)[s];
 								}
 								break;
 							case TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT:
 								for (int s = 0; s < sparse.count; ++s)
 								{
-									mesh_comp.vertex_positions[((const uint16_t*)sparse_indices_data)[s]] = ((const XMFLOAT3*)sparse_values_data)[s];
+									mesh.vertex_positions[((const uint16_t*)sparse_indices_data)[s]] = ((const XMFLOAT3*)sparse_values_data)[s];
 								}
 								break;
 							case TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT:
 								for (int s = 0; s < sparse.count; ++s)
 								{
-									mesh_comp.vertex_positions[((const uint32_t*)sparse_indices_data)[s]] = ((const XMFLOAT3*)sparse_values_data)[s];
+									mesh.vertex_positions[((const uint32_t*)sparse_indices_data)[s]] = ((const XMFLOAT3*)sparse_values_data)[s];
 								}
 								break;
 							}
@@ -765,10 +793,10 @@ namespace qyhs
 					}
 					else if (!attr_name.compare("NORMAL"))
 					{
-						mesh_comp.vertex_normals.resize(vertex_offset + vertexCount);
+						mesh.vertex_normals.resize(vertexOffset + vertexCount);
 						for (size_t i = 0; i < vertexCount; ++i)
 						{
-							mesh_comp.vertex_normals[vertex_offset + i] = *(const XMFLOAT3*)(data + i * stride);
+							mesh.vertex_normals[vertexOffset + i] = *(const XMFLOAT3*)(data + i * stride);
 						}
 
 						if (accessor.sparse.isSparse)
@@ -786,19 +814,19 @@ namespace qyhs
 							case TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE:
 								for (int s = 0; s < sparse.count; ++s)
 								{
-									mesh_comp.vertex_normals[sparse_indices_data[s]] = ((const XMFLOAT3*)sparse_values_data)[s];
+									mesh.vertex_normals[sparse_indices_data[s]] = ((const XMFLOAT3*)sparse_values_data)[s];
 								}
 								break;
 							case TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT:
 								for (int s = 0; s < sparse.count; ++s)
 								{
-									mesh_comp.vertex_normals[((const uint16_t*)sparse_indices_data)[s]] = ((const XMFLOAT3*)sparse_values_data)[s];
+									mesh.vertex_normals[((const uint16_t*)sparse_indices_data)[s]] = ((const XMFLOAT3*)sparse_values_data)[s];
 								}
 								break;
 							case TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT:
 								for (int s = 0; s < sparse.count; ++s)
 								{
-									mesh_comp.vertex_normals[((const uint32_t*)sparse_indices_data)[s]] = ((const XMFLOAT3*)sparse_values_data)[s];
+									mesh.vertex_normals[((const uint32_t*)sparse_indices_data)[s]] = ((const XMFLOAT3*)sparse_values_data)[s];
 								}
 								break;
 							}
@@ -806,23 +834,23 @@ namespace qyhs
 					}
 					else if (!attr_name.compare("TANGENT"))
 					{
-						mesh_comp.vertex_tangents.resize(vertex_offset + vertexCount);
+						mesh.vertex_tangents.resize(vertexOffset + vertexCount);
 						for (size_t i = 0; i < vertexCount; ++i)
 						{
-							mesh_comp.vertex_tangents[vertex_offset + i] = *(const XMFLOAT4*)(data + i * stride);
+							mesh.vertex_tangents[vertexOffset + i] = *(const XMFLOAT4*)(data + i * stride);
 						}
 					}
 					else if (!attr_name.compare("TEXCOORD_0"))
 					{
-						mesh_comp.vertex_uvset_0.resize(vertex_offset + vertexCount);
+						mesh.vertex_uvset_0.resize(vertexOffset + vertexCount);
 						if (accessor.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT)
 						{
 							for (size_t i = 0; i < vertexCount; ++i)
 							{
 								const XMFLOAT2& tex = *(const XMFLOAT2*)((size_t)data + i * stride);
 
-								mesh_comp.vertex_uvset_0[vertex_offset + i].x = tex.x;
-								mesh_comp.vertex_uvset_0[vertex_offset + i].y = tex.y;
+								mesh.vertex_uvset_0[vertexOffset + i].x = tex.x;
+								mesh.vertex_uvset_0[vertexOffset + i].y = tex.y;
 							}
 						}
 						else if (accessor.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE)
@@ -832,8 +860,8 @@ namespace qyhs
 								const uint8_t& s = *(uint8_t*)((size_t)data + i * stride + 0);
 								const uint8_t& t = *(uint8_t*)((size_t)data + i * stride + 1);
 
-								mesh_comp.vertex_uvset_0[vertex_offset + i].x = s / 255.0f;
-								mesh_comp.vertex_uvset_0[vertex_offset + i].y = t / 255.0f;
+								mesh.vertex_uvset_0[vertexOffset + i].x = s / 255.0f;
+								mesh.vertex_uvset_0[vertexOffset + i].y = t / 255.0f;
 							}
 						}
 						else if (accessor.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT)
@@ -843,22 +871,22 @@ namespace qyhs
 								const uint16_t& s = *(uint16_t*)((size_t)data + i * stride + 0 * sizeof(uint16_t));
 								const uint16_t& t = *(uint16_t*)((size_t)data + i * stride + 1 * sizeof(uint16_t));
 
-								mesh_comp.vertex_uvset_0[vertex_offset + i].x = s / 65535.0f;
-								mesh_comp.vertex_uvset_0[vertex_offset + i].y = t / 65535.0f;
+								mesh.vertex_uvset_0[vertexOffset + i].x = s / 65535.0f;
+								mesh.vertex_uvset_0[vertexOffset + i].y = t / 65535.0f;
 							}
 						}
 					}
 					else if (!attr_name.compare("TEXCOORD_1"))
 					{
-						mesh_comp.vertex_uvset_1.resize(vertex_offset + vertexCount);
+						mesh.vertex_uvset_1.resize(vertexOffset + vertexCount);
 						if (accessor.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT)
 						{
 							for (size_t i = 0; i < vertexCount; ++i)
 							{
 								const XMFLOAT2& tex = *(const XMFLOAT2*)((size_t)data + i * stride);
 
-								mesh_comp.vertex_uvset_1[vertex_offset + i].x = tex.x;
-								mesh_comp.vertex_uvset_1[vertex_offset + i].y = tex.y;
+								mesh.vertex_uvset_1[vertexOffset + i].x = tex.x;
+								mesh.vertex_uvset_1[vertexOffset + i].y = tex.y;
 							}
 						}
 						else if (accessor.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE)
@@ -868,8 +896,8 @@ namespace qyhs
 								const uint8_t& s = *(uint8_t*)((size_t)data + i * stride + 0);
 								const uint8_t& t = *(uint8_t*)((size_t)data + i * stride + 1);
 
-								mesh_comp.vertex_uvset_1[vertex_offset + i].x = s / 255.0f;
-								mesh_comp.vertex_uvset_1[vertex_offset + i].y = t / 255.0f;
+								mesh.vertex_uvset_1[vertexOffset + i].x = s / 255.0f;
+								mesh.vertex_uvset_1[vertexOffset + i].y = t / 255.0f;
 							}
 						}
 						else if (accessor.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT)
@@ -879,14 +907,14 @@ namespace qyhs
 								const uint16_t& s = *(uint16_t*)((size_t)data + i * stride + 0 * sizeof(uint16_t));
 								const uint16_t& t = *(uint16_t*)((size_t)data + i * stride + 1 * sizeof(uint16_t));
 
-								mesh_comp.vertex_uvset_1[vertex_offset + i].x = s / 65535.0f;
-								mesh_comp.vertex_uvset_1[vertex_offset + i].y = t / 65535.0f;
+								mesh.vertex_uvset_1[vertexOffset + i].x = s / 65535.0f;
+								mesh.vertex_uvset_1[vertexOffset + i].y = t / 65535.0f;
 							}
 						}
 					}
 					else if (!attr_name.compare("JOINTS_0"))
 					{
-						mesh_comp.vertex_boneindices.resize(vertex_offset + vertexCount);
+						mesh.vertex_boneindices.resize(vertexOffset + vertexCount);
 						if (accessor.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE)
 						{
 							struct JointTmp
@@ -898,10 +926,10 @@ namespace qyhs
 							{
 								const JointTmp& joint = *(const JointTmp*)(data + i * stride);
 
-								mesh_comp.vertex_boneindices[vertex_offset + i].x = joint.ind[0];
-								mesh_comp.vertex_boneindices[vertex_offset + i].y = joint.ind[1];
-								mesh_comp.vertex_boneindices[vertex_offset + i].z = joint.ind[2];
-								mesh_comp.vertex_boneindices[vertex_offset + i].w = joint.ind[3];
+								mesh.vertex_boneindices[vertexOffset + i].x = joint.ind[0];
+								mesh.vertex_boneindices[vertexOffset + i].y = joint.ind[1];
+								mesh.vertex_boneindices[vertexOffset + i].z = joint.ind[2];
+								mesh.vertex_boneindices[vertexOffset + i].w = joint.ind[3];
 							}
 						}
 						else if (accessor.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT)
@@ -915,10 +943,10 @@ namespace qyhs
 							{
 								const JointTmp& joint = *(const JointTmp*)(data + i * stride);
 
-								mesh_comp.vertex_boneindices[vertex_offset + i].x = joint.ind[0];
-								mesh_comp.vertex_boneindices[vertex_offset + i].y = joint.ind[1];
-								mesh_comp.vertex_boneindices[vertex_offset + i].z = joint.ind[2];
-								mesh_comp.vertex_boneindices[vertex_offset + i].w = joint.ind[3];
+								mesh.vertex_boneindices[vertexOffset + i].x = joint.ind[0];
+								mesh.vertex_boneindices[vertexOffset + i].y = joint.ind[1];
+								mesh.vertex_boneindices[vertexOffset + i].z = joint.ind[2];
+								mesh.vertex_boneindices[vertexOffset + i].w = joint.ind[3];
 							}
 						}
 						else if (accessor.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT)
@@ -932,10 +960,10 @@ namespace qyhs
 							{
 								const JointTmp& joint = *(const JointTmp*)(data + i * stride);
 
-								mesh_comp.vertex_boneindices[vertex_offset + i].x = joint.ind[0];
-								mesh_comp.vertex_boneindices[vertex_offset + i].y = joint.ind[1];
-								mesh_comp.vertex_boneindices[vertex_offset + i].z = joint.ind[2];
-								mesh_comp.vertex_boneindices[vertex_offset + i].w = joint.ind[3];
+								mesh.vertex_boneindices[vertexOffset + i].x = joint.ind[0];
+								mesh.vertex_boneindices[vertexOffset + i].y = joint.ind[1];
+								mesh.vertex_boneindices[vertexOffset + i].z = joint.ind[2];
+								mesh.vertex_boneindices[vertexOffset + i].w = joint.ind[3];
 							}
 						}
 						else
@@ -943,14 +971,18 @@ namespace qyhs
 							assert(0);
 						}
 					}
+					else if (!attr_name.compare("JOINTS_1"))
+					{
+						assert(0);
+					}
 					else if (!attr_name.compare("WEIGHTS_0"))
 					{
-						mesh_comp.vertex_boneweights.resize(vertex_offset + vertexCount);
+						mesh.vertex_boneweights.resize(vertexOffset + vertexCount);
 						if (accessor.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT)
 						{
 							for (size_t i = 0; i < vertexCount; ++i)
 							{
-								mesh_comp.vertex_boneweights[vertex_offset + i] = *(XMFLOAT4*)((size_t)data + i * stride);
+								mesh.vertex_boneweights[vertexOffset + i] = *(XMFLOAT4*)((size_t)data + i * stride);
 							}
 						}
 						else if (accessor.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE)
@@ -962,10 +994,10 @@ namespace qyhs
 								const uint8_t& z = *(uint8_t*)((size_t)data + i * stride + 2);
 								const uint8_t& w = *(uint8_t*)((size_t)data + i * stride + 3);
 
-								mesh_comp.vertex_boneweights[vertex_offset + i].x = x / 255.0f;
-								mesh_comp.vertex_boneweights[vertex_offset + i].x = y / 255.0f;
-								mesh_comp.vertex_boneweights[vertex_offset + i].x = z / 255.0f;
-								mesh_comp.vertex_boneweights[vertex_offset + i].x = w / 255.0f;
+								mesh.vertex_boneweights[vertexOffset + i].x = x / 255.0f;
+								mesh.vertex_boneweights[vertexOffset + i].x = y / 255.0f;
+								mesh.vertex_boneweights[vertexOffset + i].x = z / 255.0f;
+								mesh.vertex_boneweights[vertexOffset + i].x = w / 255.0f;
 							}
 						}
 						else if (accessor.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT)
@@ -977,105 +1009,44 @@ namespace qyhs
 								const uint16_t& z = *(uint8_t*)((size_t)data + i * stride + 2 * sizeof(uint16_t));
 								const uint16_t& w = *(uint8_t*)((size_t)data + i * stride + 3 * sizeof(uint16_t));
 
-								mesh_comp.vertex_boneweights[vertex_offset + i].x = x / 65535.0f;
-								mesh_comp.vertex_boneweights[vertex_offset + i].x = y / 65535.0f;
-								mesh_comp.vertex_boneweights[vertex_offset + i].x = z / 65535.0f;
-								mesh_comp.vertex_boneweights[vertex_offset + i].x = w / 65535.0f;
+								mesh.vertex_boneweights[vertexOffset + i].x = x / 65535.0f;
+								mesh.vertex_boneweights[vertexOffset + i].x = y / 65535.0f;
+								mesh.vertex_boneweights[vertexOffset + i].x = z / 65535.0f;
+								mesh.vertex_boneweights[vertexOffset + i].x = w / 65535.0f;
 							}
 						}
 					}
-					/*else if (!attr_name.compare("COLOR_0"))
-					{
-						if(material != nullptr)
-						{
-							material->SetUseVertexColors(true);
-						}
-						mesh_comp.vertex_colors.resize(vertex_offset + vertexCount);
-						if (accessor.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT)
-						{
-							if (accessor.type == TINYGLTF_TYPE_VEC3)
-							{
-								for (size_t i = 0; i < vertexCount; ++i)
-								{
-									const XMFLOAT3& color = *(XMFLOAT3*)((size_t)data + i * stride);
-									uint32_t rgba = wi::math::CompressColor(color);
-
-									mesh_comp.vertex_colors[vertex_offset + i] = rgba;
-								}
-							}
-							else if (accessor.type == TINYGLTF_TYPE_VEC4)
-							{
-								for (size_t i = 0; i < vertexCount; ++i)
-								{
-									const XMFLOAT4& color = *(XMFLOAT4*)((size_t)data + i * stride);
-									uint32_t rgba = wi::math::CompressColor(color);
-
-									mesh_comp.vertex_colors[vertex_offset + i] = rgba;
-								}
-							}
-						}
-						else if (accessor.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE)
-						{
-							if (accessor.type == TINYGLTF_TYPE_VEC3)
-							{
-								for (size_t i = 0; i < vertexCount; ++i)
-								{
-									const uint8_t& r = *(uint8_t*)((size_t)data + i * stride + 0);
-									const uint8_t& g = *(uint8_t*)((size_t)data + i * stride + 1);
-									const uint8_t& b = *(uint8_t*)((size_t)data + i * stride + 2);
-									const uint8_t a = 0xFF;
-									wi::Color color = wi::Color(r, g, b, a);
-
-									mesh_comp.vertex_colors[vertex_offset + i] = color;
-								}
-							}
-							else if (accessor.type == TINYGLTF_TYPE_VEC4)
-							{
-								for (size_t i = 0; i < vertexCount; ++i)
-								{
-									const uint8_t& r = *(uint8_t*)((size_t)data + i * stride + 0);
-									const uint8_t& g = *(uint8_t*)((size_t)data + i * stride + 1);
-									const uint8_t& b = *(uint8_t*)((size_t)data + i * stride + 2);
-									const uint8_t& a = *(uint8_t*)((size_t)data + i * stride + 3);
-									wi::Color color = wi::Color(r, g, b, a);
-
-									mesh_comp.vertex_colors[vertex_offset + i] = color;
-								}
-							}
-						}
-						else if (accessor.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT)
-						{
-							if (accessor.type == TINYGLTF_TYPE_VEC3)
-							{
-								for (size_t i = 0; i < vertexCount; ++i)
-								{
-									const uint16_t& r = *(uint16_t*)((size_t)data + i * stride + 0 * sizeof(uint16_t));
-									const uint16_t& g = *(uint16_t*)((size_t)data + i * stride + 1 * sizeof(uint16_t));
-									const uint16_t& b = *(uint16_t*)((size_t)data + i * stride + 2 * sizeof(uint16_t));
-									uint32_t rgba = wi::math::CompressColor(XMFLOAT3(r / 65535.0f, g / 65535.0f, b / 65535.0f));
-
-									mesh_comp.vertex_colors[vertex_offset + i] = rgba;
-								}
-							}
-							else if (accessor.type == TINYGLTF_TYPE_VEC4)
-							{
-								for (size_t i = 0; i < vertexCount; ++i)
-								{
-									const uint16_t& r = *(uint16_t*)((size_t)data + i * stride + 0 * sizeof(uint16_t));
-									const uint16_t& g = *(uint16_t*)((size_t)data + i * stride + 1 * sizeof(uint16_t));
-									const uint16_t& b = *(uint16_t*)((size_t)data + i * stride + 2 * sizeof(uint16_t));
-									const uint16_t& a = *(uint16_t*)((size_t)data + i * stride + 3 * sizeof(uint16_t));
-									uint32_t rgba = wi::math::CompressColor(XMFLOAT4(r / 65535.0f, g / 65535.0f, b / 65535.0f, a / 65535.0f));
-
-									mesh_comp.vertex_colors[vertex_offset + i] = rgba;
-								}
-							}
-						}
-					}*/
+					
 				}
-			}
-			mesh_comp.createRenderData();
 
+
+				
+			}
+
+			mesh.createRenderData(); // tangents are generated inside if needed, which must be done before FlipZAxis!
+		}
+
+		// Create armatures:
+		for (auto& skin : loader_state.model.skins)
+		{
+			ecs::Entity armatureEntity = ecs::createEntity();
+			scene->names.create(armatureEntity) = skin.name;
+			scene->transforms.create(armatureEntity);
+			scene->attachComponent(armatureEntity, loader_state.root_entity);
+			scene::ArmatureComponent& armature = scene->armatures.create(armatureEntity);
+
+			if (skin.inverseBindMatrices >= 0)
+			{
+				const tinygltf::Accessor& accessor = loader_state.model.accessors[skin.inverseBindMatrices];
+				const tinygltf::BufferView& bufferView = loader_state.model.bufferViews[accessor.bufferView];
+				const tinygltf::Buffer& buffer = loader_state.model.buffers[bufferView.buffer];
+				armature.inverse_bind_matrices.resize(accessor.count);
+				memcpy(armature.inverse_bind_matrices.data(), &buffer.data[accessor.byteOffset + bufferView.byteOffset], accessor.count * sizeof(XMFLOAT4X4));
+			}
+			else
+			{
+				assert(0);
+			}
 		}
 
 		const tinygltf::Scene& gltf_scene = loader_state.model.scenes[0 > loader_state.model.defaultScene ? 0 : loader_state.model.defaultScene];
@@ -1084,22 +1055,169 @@ namespace qyhs
 			loadNode(gltf_scene.nodes[i], loader_state.root_entity, loader_state);
 		}
 
-		//bool is_entity_in_scene = false;
-		//if (!is_entity_in_scene)
-		//{
-		//	editor_render_scene->m_render_entities.push_back(render_entity);
-		//}
-		//else
-		//{
-		//	for (auto& entity : editor_render_scene->m_render_entities)
-		//	{
-		//		if (entity.m_instance_id == render_entity.m_instance_id)
-		//		{
-		//			entity = render_entity;
-		//			break;
-		//		}
-		//	}
-		//}
+		// Create armature-bone mappings:
+		int armatureIndex = 0;
+		for (auto& skin : loader_state.model.skins)
+		{
+			Entity armatureEntity = scene->armatures.getEntity(armatureIndex);
+			scene::ArmatureComponent& armature = scene->armatures[armatureIndex++];
+
+			const size_t jointCount = skin.joints.size();
+
+			armature.bone_collection.resize(jointCount);
+
+			// Create bone collection:
+			for (size_t i = 0; i < jointCount; ++i)
+			{
+				int jointIndex = skin.joints[i];
+				Entity boneEntity = loader_state.entity_map[jointIndex];
+
+				armature.bone_collection[i] = boneEntity;
+
+			}
+		}
+
+		// Create animations:
+		for (auto& anim : loader_state.model.animations)
+		{
+			ecs::Entity entity = ecs::createEntity();
+			scene->names.create(entity) = anim.name;
+			scene->attachComponent(entity, loader_state.root_entity);
+			scene::AnimationComponent& animationcomponent = scene->animations.create(entity);
+			animationcomponent.samplers.resize(anim.samplers.size());
+			animationcomponent.channels.resize(anim.channels.size());
+
+			for (size_t i = 0; i < anim.samplers.size(); ++i)
+			{
+				auto& sam = anim.samplers[i];
+
+				if (!sam.interpolation.compare("LINEAR"))
+				{
+					animationcomponent.samplers[i].mode = scene::AnimationComponent::AnimationSampler::Mode::LINEAR;
+				}
+				else if (!sam.interpolation.compare("STEP"))
+				{
+					animationcomponent.samplers[i].mode = scene::AnimationComponent::AnimationSampler::Mode::STEP;
+				}
+				else if (!sam.interpolation.compare("CUBICSPLINE"))
+				{
+					animationcomponent.samplers[i].mode = scene::AnimationComponent::AnimationSampler::Mode::CUBICSPLINE;
+				}
+
+				animationcomponent.samplers[i].data = ecs::createEntity();
+				scene->attachComponent(animationcomponent.samplers[i].data, entity);
+				scene::AnimationDataComponent& animationdata = scene->animation_datas.create(animationcomponent.samplers[i].data);
+
+				// AnimationSampler input = keyframe times
+				{
+					const tinygltf::Accessor& accessor = loader_state.model.accessors[sam.input];
+					const tinygltf::BufferView& bufferView = loader_state.model.bufferViews[accessor.bufferView];
+					const tinygltf::Buffer& buffer = loader_state.model.buffers[bufferView.buffer];
+
+					assert(accessor.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT);
+
+					int stride = accessor.ByteStride(bufferView);
+					size_t count = accessor.count;
+
+					animationdata.keyframe_times.resize(count);
+
+					const unsigned char* data = buffer.data.data() + accessor.byteOffset + bufferView.byteOffset;
+
+					assert(stride == 4);
+
+					for (size_t j = 0; j < count; ++j)
+					{
+						float time = ((float*)data)[j];
+						animationdata.keyframe_times[j] = time;
+						animationcomponent.start = std::min(animationcomponent.start, time);
+						animationcomponent.end = std::max(animationcomponent.end, time);
+					}
+
+				}
+
+				// AnimationSampler output = keyframe data
+				{
+					const tinygltf::Accessor& accessor = loader_state.model.accessors[sam.output];
+					const tinygltf::BufferView& bufferView = loader_state.model.bufferViews[accessor.bufferView];
+					const tinygltf::Buffer& buffer = loader_state.model.buffers[bufferView.buffer];
+
+					int stride = accessor.ByteStride(bufferView);
+					size_t count = accessor.count;
+
+					const unsigned char* data = buffer.data.data() + accessor.byteOffset + bufferView.byteOffset;
+
+					switch (accessor.type)
+					{
+					case TINYGLTF_TYPE_SCALAR:
+					{
+						assert(stride == sizeof(float));
+						animationdata.keyframe_data.resize(count);
+						for (size_t j = 0; j < count; ++j)
+						{
+							animationdata.keyframe_data[j] = ((float*)data)[j];
+						}
+					}
+					break;
+					case TINYGLTF_TYPE_VEC3:
+					{
+						assert(stride == sizeof(XMFLOAT3));
+						animationdata.keyframe_data.resize(count * 3);
+						for (size_t j = 0; j < count; ++j)
+						{
+							((XMFLOAT3*)animationdata.keyframe_data.data())[j] = ((XMFLOAT3*)data)[j];
+						}
+					}
+					break;
+					case TINYGLTF_TYPE_VEC4:
+					{
+						assert(stride == sizeof(XMFLOAT4));
+						animationdata.keyframe_data.resize(count * 4);
+						for (size_t j = 0; j < count; ++j)
+						{
+							((XMFLOAT4*)animationdata.keyframe_data.data())[j] = ((XMFLOAT4*)data)[j];
+						}
+					}
+					break;
+					default: assert(0); break;
+
+					}
+
+				}
+
+			}
+
+			for (size_t i = 0; i < anim.channels.size(); ++i)
+			{
+				auto& channel = anim.channels[i];
+
+				animationcomponent.channels[i].target = loader_state.entity_map[channel.target_node];
+				assert(channel.sampler >= 0);
+				animationcomponent.channels[i].sampler_index = (uint32_t)channel.sampler;
+
+				if (!channel.target_path.compare("scale"))
+				{
+					animationcomponent.channels[i].path = scene::AnimationComponent::AnimationChannel::Path::SCALE;
+				}
+				else if (!channel.target_path.compare("rotation"))
+				{
+					animationcomponent.channels[i].path = scene::AnimationComponent::AnimationChannel::Path::ROTATION;
+				}
+				else if (!channel.target_path.compare("translation"))
+				{
+					animationcomponent.channels[i].path = scene::AnimationComponent::AnimationChannel::Path::TRANSLATION;
+				}
+				else if (!channel.target_path.compare("weights"))
+				{
+					animationcomponent.channels[i].path = scene::AnimationComponent::AnimationChannel::Path::WEIGHTS;
+				}
+				else
+				{
+					animationcomponent.channels[i].path = scene::AnimationComponent::AnimationChannel::Path::UNKNOWN;
+				}
+			}
+
+		}
+
 		return true;
 	}
 

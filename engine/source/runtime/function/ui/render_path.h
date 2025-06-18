@@ -73,9 +73,11 @@ namespace qyhs
 		graphics::Texture rt_main;
 		renderer::Visibility visibility_main;
 		graphics::Texture depth_buffer_main;
-		scene::Scene* scene = scene::getScene();
-		scene::Scene& getCurrentScene() { return *scene; }
+		scene::Scene& scene = *scene::getScene();
+		scene::Scene& getCurrentScene() { return scene; }
+		const scene::Scene& getCurrentScene()const { return scene; }
 		bool occlusion_culling_enabled = true;
+		Color inactiveEntityColor = Color::fromFloat4(XMFLOAT4(1, 1, 1, 0.5f));
 		FrameConstantBuffer frame_cb = {};
 	public:
 		graphics::Texture gui_blurred_background;

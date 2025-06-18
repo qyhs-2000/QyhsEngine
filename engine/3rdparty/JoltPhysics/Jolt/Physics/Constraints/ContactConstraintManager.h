@@ -479,7 +479,7 @@ private:
 	uint32						mMaxConstraints = 0;
 	atomic<uint32>				mNumConstraints { 0 };
 
-	/// Context used for this physics update
+	/// context used for this physics update
 	PhysicsUpdateContext *		mUpdateContext;
 };
 

@@ -132,7 +132,7 @@ protected:
 	virtual void					RestoreBinaryState(StreamIn &inStream) override;
 
 private:
-	struct							MSGetTrianglesContext;										///< Context class for GetTrianglesStart/Next
+	struct							MSGetTrianglesContext;										///< context class for GetTrianglesStart/Next
 
 	static constexpr int			NumTriangleBits = 3;										///< How many bits to reserve to encode the triangle index
 	static constexpr int			MaxTrianglesPerLeaf = 1 << NumTriangleBits;					///< Number of triangles that are stored max per leaf aabb node 

@@ -8,6 +8,12 @@ constexpr T inverse_lerp(T value1, T value2, T pos)
 	return value2 == value1 ? T(0) : ((pos - value1) / (value2 - value1));
 }
 
+template<typename T>
+constexpr float lerp(T x, T y, T a)
+{
+	return x * (1 - a) + y * a;
+}
+
 namespace qyhs::math
 {
 	XMFLOAT4X4 IDENTITY_MATRIX = XMFLOAT4X4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
@@ -17,12 +23,12 @@ namespace qyhs::math
 	}
 	XMFLOAT3 min(const XMFLOAT3& a, const XMFLOAT3& b)
 	{
-		return XMFLOAT3(std::min(a.x,b.x),std::min(a.y,b.y),std::min(a.z,b.z));
+		return XMFLOAT3(std::min(a.x, b.x), std::min(a.y, b.y), std::min(a.z, b.z));
 	}
 
 	XMFLOAT3 max(const XMFLOAT3& a, const XMFLOAT3& b)
 	{
-		return XMFLOAT3(std::max(a.x,b.x),std::max(a.y,b.y),std::max(a.z,b.z));
+		return XMFLOAT3(std::max(a.x, b.x), std::max(a.y, b.y), std::max(a.z, b.z));
 	}
 
 	constexpr float inverseLerp(float value1, float value2, float pos)
@@ -47,8 +53,13 @@ namespace qyhs::math
 		return true;
 	}
 
+	const float lerp(float value1, float value2, float amount)
+	{
+		return ::lerp(value1, value2, amount);
+	}
+
 	XMFLOAT3 inverseLerp(XMFLOAT3 min, XMFLOAT3 max, XMFLOAT3 pos)
 	{
-		return XMFLOAT3(inverseLerp(min.x,max.x,pos.x),inverseLerp(min.y,max.y,pos.y),inverseLerp(min.z,max.z,pos.z));
+		return XMFLOAT3(inverseLerp(min.x, max.x, pos.x), inverseLerp(min.y, max.y, pos.y), inverseLerp(min.z, max.z, pos.z));
 	}
 }
