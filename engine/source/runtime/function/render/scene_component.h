@@ -378,6 +378,7 @@ namespace qyhs::scene
 		uint32_t gpu_bone_offset = 0;
 		std::vector<ShaderTransform> bone_data;
 		primitive::AABB aabb;
+		virtual void serialize(Archive& archive, ecs::EntitySerializer& seri) override;
 	private:
 	};
 
@@ -452,6 +453,7 @@ namespace qyhs::scene
 		bool isRootMotion()const { return _flags & ROOT_MOTION; }
 		inline void pause() { _flags &= ~PLAYING; }
 		ecs::Entity root_motion_bone = ecs::INVALID_ENTITY;
+		virtual void serialize(Archive& archive, ecs::EntitySerializer& seri) override;
 	private:
 	};
 

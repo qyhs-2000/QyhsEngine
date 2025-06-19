@@ -80,7 +80,7 @@ namespace qyhs::scene
 				archive >> subsets[i].index_offset;
 				archive >> subsets[i].index_count;
 			}
-
+			serializeEntity(archive, armatureID, seri);
 			//jobsystem::Execute(seri.ctx, [&](jobsystem::JobArgs args) {
 				createRenderData();
 				//});
@@ -103,15 +103,33 @@ namespace qyhs::scene
 				archive << subsets[i].index_offset;
 				archive << subsets[i].index_count;
 			}
-
+			serializeEntity(archive, armatureID, seri);
 		}
 	}
 
 	void NameComponent::serialize(Archive& archive, ecs::EntitySerializer& seri)
 	{
+		if (archive.isReadMode())
+		{
+			archive >> name;
+		}
+		else
+		{
+			archive << name;
+		}
 	}
 
 	void HierarchyComponent::serialize(Archive& archive, ecs::EntitySerializer& seri)
 	{
+		serializeEntity(archive, parent_id, seri);
+		
+		if (archive.isReadMode())
+		{
+			
+		}
+		else
+		{
+		
+		}
 	}
 }

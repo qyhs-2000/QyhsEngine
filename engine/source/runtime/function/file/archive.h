@@ -80,6 +80,20 @@ namespace qyhs
 			return *this;
 		}
 
+		inline Archive& operator>>(int& data)
+		{
+			int64_t temp;
+			_read(temp);
+			data = (int)temp;
+			return *this;
+		}
+
+		inline Archive& operator>>(XMFLOAT4X4& data)
+		{
+			_read(data);
+			return *this;
+		}
+
 		inline Archive& operator>>(char& data)
 		{
 			assert(isReadMode());

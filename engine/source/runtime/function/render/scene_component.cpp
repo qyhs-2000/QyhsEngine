@@ -94,6 +94,23 @@ namespace qyhs::scene
 
 	void TransformComponent::serialize(Archive& archive, ecs::EntitySerializer& seri)
 	{
+		if (archive.isReadMode())
+		{
+			archive >> _flag;
+			archive >> local_scale;
+			archive >> local_rotation;
+			archive >> local_position;
+
+			setDirty();
+			updateTransform();
+		}
+		else
+		{
+			archive << _flag; // maybe not needed just for dirtiness, but later might come handy if we have more persistent flags
+			archive << local_scale;
+			archive << local_rotation;
+			archive << local_position;
+		}
 	}
 
 	void MeshComponent::deleteRenderData()
@@ -159,7 +176,7 @@ namespace qyhs::scene
 		desc.size = alignTo(vertex_positions.size() * position_stride, alignment) +
 			alignTo(indices.size() * getIndexBufferStride(), alignment) +
 			alignTo(vertex_colors.size() * sizeof(Vertex_Color), alignment) +
-			alignTo(uv_count * sizeof(Vertex_UVS), alignment) + 
+			alignTo(uv_count * sizeof(Vertex_UVS), alignment) +
 			alignTo(vertex_boneindices.size() * sizeof(Vertex_Bone), alignment) +
 			alignTo(vertex_boneindices2.size() * sizeof(Vertex_Bone), alignment);
 
@@ -503,6 +520,123 @@ namespace qyhs::scene
 			break;
 		}
 		return PathDataType::Event;
+	}
+
+	void ArmatureComponent::serialize(Archive& archive, ecs::EntitySerializer& seri)
+	{
+		if (archive.isReadMode())
+		{
+
+
+			size_t boneCount;
+			archive >> boneCount;
+			bone_collection.resize(boneCount);
+			for (size_t i = 0; i < boneCount; ++i)
+			{
+				serializeEntity(archive, bone_collection[i], seri);
+			}
+
+			archive >> inverse_bind_matrices;
+
+
+
+			ecs::Entity rootBoneID;
+			serializeEntity(archive, rootBoneID, seri);
+
+		}
+		else
+		{
+
+
+			archive << bone_collection.size();
+			for (size_t i = 0; i < bone_collection.size(); ++i)
+			{
+				ecs::Entity boneID = bone_collection[i];
+				serializeEntity(archive, boneID, seri);
+			}
+
+			archive << inverse_bind_matrices;
+
+			ecs::Entity rootBoneID;
+			serializeEntity(archive, rootBoneID, seri);
+
+		}
+	}
+
+	void AnimationComponent::serialize(Archive& archive, ecs::EntitySerializer& seri)
+	{
+		if (archive.isReadMode())
+		{
+			archive >> _flags;
+			archive >> start;
+			archive >> end;
+			archive >> timer;
+			archive >> amount;
+			archive >> speed;
+
+
+			size_t channelCount;
+			archive >> channelCount;
+			channels.resize(channelCount);
+			for (size_t i = 0; i < channelCount; ++i)
+			{
+
+				archive >> (uint32_t&)channels[i].path;
+				serializeEntity(archive, channels[i].target, seri);
+				archive >> channels[i].sampler_index;
+
+				archive >> channels[i].retargetIndex;
+
+			}
+
+			size_t samplerCount;
+			archive >> samplerCount;
+			samplers.resize(samplerCount);
+			for (size_t i = 0; i < samplerCount; ++i)
+			{
+
+				archive >> (uint32_t&)samplers[i].mode;
+				serializeEntity(archive, samplers[i].data, seri);
+
+			}
+
+
+		}
+		else
+		{
+			archive << _flags;
+			archive << start;
+			archive << end;
+			archive << timer;
+			archive << amount;
+			archive << speed;
+
+			archive << channels.size();
+			for (size_t i = 0; i < channels.size(); ++i)
+			{
+
+				archive << (uint32_t&)channels[i].path;
+				serializeEntity(archive, channels[i].target, seri);
+				archive << channels[i].sampler_index;
+
+				archive << channels[i].retargetIndex;
+
+			}
+
+			archive << samplers.size();
+			for (size_t i = 0; i < samplers.size(); ++i)
+			{
+
+				archive << samplers[i].mode;
+				serializeEntity(archive, samplers[i].data, seri);
+			}
+
+
+		}
+
+		// Root Bone Name
+		serializeEntity(archive, root_motion_bone, seri);
+
 	}
 
 }
