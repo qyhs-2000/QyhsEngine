@@ -161,6 +161,7 @@ namespace qyhs
 		virtual void beginRenderPass(const RenderPassImage *image, uint32_t size, CommandList cmd,RenderPassFlags flags = RenderPassFlags::NONE) = 0;
 		virtual void endRenderPass(CommandList cmd_list) = 0;
 		virtual void submitCommandLists() = 0;
+		virtual void initImgui() {}
 		virtual void bindScissorRects(uint32_t scissor_count, const Rect* rect, CommandList cmd) = 0;
 		bool checkCapability(GraphicsDeviceCapability capability) { return has_flag(capabilities, capability); }
 		virtual void drawImage(const graphics::Texture* texture, const qyhs::image::Params& params, CommandList cmd) {};

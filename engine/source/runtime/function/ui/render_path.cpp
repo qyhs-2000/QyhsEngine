@@ -63,6 +63,7 @@ bool checkInput(EditorActions action)
 namespace qyhs
 {
 	bool camera_control_start = true;
+	bool show_bone = false;
 	void RenderPath3D::start()
 	{
 		resizeBuffers();
@@ -350,7 +351,8 @@ namespace qyhs
 			renderer::drawScene(visibility_main, renderer::DRAWSCENE_TRANSPARENT | renderer::DRAWSCENE_MAINCAMERA, RENDERPASS_MAIN, cmd);
 		}
 		renderer::drawDebugWorld(*camera, cmd);
-		//TODO:Render Bone to see if armature imported is true
+
+		if(show_bone)
 		{
 			static PipelineState pso;
 			if (!pso.isValid())

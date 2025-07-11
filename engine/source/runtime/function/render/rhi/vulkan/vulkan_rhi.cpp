@@ -22,7 +22,10 @@
 #include <vulkan/vk_mem_alloc.h>
 
 #endif // USE_VOLK
-
+//#define IMGUI_IMPL_VULKAN_USE_VOLK
+//#define IMGUI_IMPL_VULKAN_USE_LOADER
+//#define IMGUI_IMPL_VULKAN_NO_PROTOTYPES
+#include "imgui/backends/imgui_impl_vulkan.h"
 #include <tiny_obj_loader.h>
 #include <core/base/macro.h>
 
@@ -3453,6 +3456,39 @@ namespace qyhs
 		const Sampler* sampler = &image::samplers[SAMPLER_LINEAR_CLAMP];
 	}
 
+	void VulkanRHI::initImgui()
+	{
+		ImGui_ImplVulkan_InitInfo init_info = {};
+		init_info.ApiVersion = VK_API_VERSION_1_3;
+		init_info.Instance = instance;
+		init_info.PhysicalDevice = physical_device;
+		init_info.Device = m_device;
+		init_info.QueueFamily = findQueueFamilies(getPhysicalDevice()).graphics_family.value();
+		init_info.Queue = getGraphicsQueue();
+		init_info.DescriptorPool = m_descriptor_pool;
+		init_info.Subpass = 0;
+		init_info.UseDynamicRendering = true;
+		init_info.PipelineRenderingCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO_KHR;
+		// may be different from the real swapchain image count
+		// see ImGui_ImplVulkanH_GetMinImageCountFromPresentMode
+		init_info.MinImageCount = 3;
+		init_info.ImageCount = 3;
+		auto pCmdBeginRendering = (PFN_vkCmdBeginRendering)vkGetDeviceProcAddr(m_device, "vkCmdBeginRendering");
+		auto pCmdEndRendering = (PFN_vkCmdEndRendering)vkGetDeviceProcAddr(m_device, "vkCmdEndRendering");
+
+		bool success = ImGui_ImplVulkan_LoadFunctions(
+			VK_API_VERSION_1_3,
+			[](const char* function_name, void* user_data) {
+				return vkGetInstanceProcAddr((VkInstance)user_data, function_name);
+			},
+			instance
+		);
+		std::cout << vkGetDeviceProcAddr << std::endl;
+		assert(vkGetDeviceProcAddr(init_info.Device, "vkCmdBeginRendering") != nullptr);
+		// ³õÊ¼»¯ ImGui Vulkan ºó¶Ë
+		ImGui_ImplVulkan_Init(&init_info);
+	}
+
 	void VulkanRHI::submitCommandLists()
 	{
 		VkResult result;
@@ -6292,6 +6328,14 @@ namespace qyhs
 		std::vector<VkExtensionProperties> availableExtensions(extensionCount);
 		vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, availableExtensions.data());
 
+		bool hasDynamicRendering = false;
+		for (const auto& ext : availableExtensions) {
+			if (strcmp(ext.extensionName, VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME) == 0) {
+				hasDynamicRendering = true;
+				break;
+			}
+		}
+		std::cout << "Dynamic Rendering supported: " << hasDynamicRendering << std::endl;
 		std::set<std::string> requiredExtensions(deviceExtensions.begin(), deviceExtensions.end());
 
 		for (const std::string& check_extension : requiredExtensions)
@@ -6310,7 +6354,15 @@ namespace qyhs
 			*features_chain = &depth_clip_enable_features;
 			features_chain = &depth_clip_enable_features.pNext;
 		}
-
+		if (checkExtensionSupport(VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME, availableExtensions))
+		{
+			enabled_extensions.push_back(VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME);
+		}
+		uint32_t version;
+		vkEnumerateInstanceVersion(&version);
+		if (VK_VERSION_MAJOR(version) >= 1 && VK_VERSION_MINOR(version) >= 3) {
+			std::cout << "Vulkan 1.3+ (Dynamic Rendering is core)" << std::endl;
+		}
 		return true;
 	}
 

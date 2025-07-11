@@ -7,7 +7,7 @@ if(CMAKE_VERSION VERSION_LESS "2.8.3")
    message(FATAL_ERROR "CMake >= 2.8.3 required")
 endif()
 cmake_policy(PUSH)
-cmake_policy(VERSION 2.8.3...3.28)
+cmake_policy(VERSION 2.8.3...3.27)
 #----------------------------------------------------------------
 # Generated CMake target import file.
 #----------------------------------------------------------------
@@ -50,35 +50,35 @@ unset(_cmake_expected_targets)
 add_library(tinyobjloader STATIC IMPORTED)
 
 set_target_properties(tinyobjloader PROPERTIES
-  INTERFACE_INCLUDE_DIRECTORIES "E:/VS_Project/QyhsEngine/engine/3rdparty/tinyobjloader"
+  INTERFACE_INCLUDE_DIRECTORIES "D:/vs_project/QyhsEngine/engine/3rdparty/tinyobjloader"
 )
 
 # Import target "tinyobjloader" for configuration "Debug"
 set_property(TARGET tinyobjloader APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
 set_target_properties(tinyobjloader PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-  IMPORTED_LOCATION_DEBUG "E:/VS_Project/QyhsEngine/engine/3rdparty/tinyobjloader/Debug/tinyobjloader.lib"
+  IMPORTED_LOCATION_DEBUG "D:/vs_project/QyhsEngine/engine/3rdparty/tinyobjloader/Debug/tinyobjloader.lib"
   )
 
 # Import target "tinyobjloader" for configuration "Release"
 set_property(TARGET tinyobjloader APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(tinyobjloader PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "E:/VS_Project/QyhsEngine/engine/3rdparty/tinyobjloader/Release/tinyobjloader.lib"
+  IMPORTED_LOCATION_RELEASE "D:/vs_project/QyhsEngine/engine/3rdparty/tinyobjloader/Release/tinyobjloader.lib"
   )
 
 # Import target "tinyobjloader" for configuration "MinSizeRel"
 set_property(TARGET tinyobjloader APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
 set_target_properties(tinyobjloader PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "CXX"
-  IMPORTED_LOCATION_MINSIZEREL "E:/VS_Project/QyhsEngine/engine/3rdparty/tinyobjloader/MinSizeRel/tinyobjloader.lib"
+  IMPORTED_LOCATION_MINSIZEREL "D:/vs_project/QyhsEngine/engine/3rdparty/tinyobjloader/MinSizeRel/tinyobjloader.lib"
   )
 
 # Import target "tinyobjloader" for configuration "RelWithDebInfo"
 set_property(TARGET tinyobjloader APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
 set_target_properties(tinyobjloader PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "E:/VS_Project/QyhsEngine/engine/3rdparty/tinyobjloader/RelWithDebInfo/tinyobjloader.lib"
+  IMPORTED_LOCATION_RELWITHDEBINFO "D:/vs_project/QyhsEngine/engine/3rdparty/tinyobjloader/RelWithDebInfo/tinyobjloader.lib"
   )
 
 # This file does not depend on other imported targets which have

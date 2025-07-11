@@ -9,6 +9,7 @@ namespace qyhs
 	public:
 		uint32_t width = 0;
 		uint32_t height = 0;
+		platform::WindowType m_window = nullptr;
 		float dpi{ 0 };
 		inline void init(platform::WindowProperties window_properties)
 		{
@@ -24,6 +25,7 @@ namespace qyhs
 
 		inline void init(platform::WindowType window)
 		{
+			//m_window = window;
 			platform::WindowProperties window_properties;
 			platform::getWindowProperties(window, &window_properties);
 			init(window_properties);

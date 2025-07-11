@@ -754,6 +754,7 @@ namespace qyhs
 		virtual bool createSwapChain(platform::WindowType window, SwapChain* swapchain, SwapChainDesc desc)override;
 		void createSurface(SwapChain* swapchain = nullptr, HWND hwnd = NULL);
 		virtual void bindIndexBuffer(const GPUBuffer* indexBuffer, const IndexBufferFormat format, uint64_t offset, CommandList cmd) override;
+		virtual void initImgui() override;
 		//bool createInternalSwapChain(SwapChain_Vulkan* internal_state);
 		static constexpr uint32_t immutable_sampler_slot_begin = 100;
 		std::unordered_map<size_t, VkPipeline> pipelines_global;

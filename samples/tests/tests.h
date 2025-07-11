@@ -1,5 +1,6 @@
 #pragma once
 #include "engine.h"
+
 #include "function/ui/render_path.h"
 
 namespace qyhs
@@ -7,7 +8,8 @@ namespace qyhs
 	enum TestType : int
 	{
 		HELLOTRIANGLE,
-		CesiumMan
+		CesiumMan,
+		ImGui
 	};
 	
 	class TestRenderer :public RenderPath3D
@@ -16,6 +18,7 @@ namespace qyhs
 		virtual void load() override;
 		virtual void render() override;
 		virtual void start() override;
+		void setupImguiContext();
 	private:
 		gui::ComboBox test_selector;
 		

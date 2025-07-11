@@ -31,7 +31,7 @@ namespace qyhs
     void UIPass::initializeUIRenderBackend(WindowUI* window_ui)
     {
         m_window_ui = window_ui;
-        ImGui_ImplVulkan_LoadFunctions([](const char* name, void*) { return vkGetInstanceProcAddr(volkGetLoadedInstance(), name); });
+        ImGui_ImplVulkan_LoadFunctions(1,[](const char* name, void*) { return vkGetInstanceProcAddr(volkGetLoadedInstance(), name); });
         ImGui_ImplGlfw_InitForVulkan(std::static_pointer_cast<VulkanRHI>(m_rhi)->m_window, true);
         ImGui_ImplVulkan_InitInfo init_info = {};
         init_info.Instance                  = std::static_pointer_cast<VulkanRHI>(m_rhi)->instance;
@@ -40,13 +40,14 @@ namespace qyhs
         init_info.QueueFamily               = m_vulkan_rhi->findQueueFamilies(m_vulkan_rhi->getPhysicalDevice()).graphics_family.value();
         init_info.Queue                     = m_vulkan_rhi->getGraphicsQueue();
         init_info.DescriptorPool            = std::static_pointer_cast<VulkanRHI>(m_rhi)->m_descriptor_pool;
+        init_info.RenderPass = m_framebuffer.render_pass;
         init_info.Subpass                   = main_camera_subpass_ui;
 
         // may be different from the real swapchain image count
         // see ImGui_ImplVulkanH_GetMinImageCountFromPresentMode
         init_info.MinImageCount = 3;
         init_info.ImageCount    = 3;
-        ImGui_ImplVulkan_Init(&init_info, m_framebuffer.render_pass);
+        ImGui_ImplVulkan_Init(&init_info);
 
         uploadFonts();
     }
@@ -73,7 +74,7 @@ namespace qyhs
         {
             throw std::runtime_error("could not create one-time command buffer!");
         }
-        ImGui_ImplVulkan_CreateFontsTexture(*commandbuffer);
+        //ImGui_ImplVulkan_CreateFontsTexture(*commandbuffer);
 
         if (VK_SUCCESS != m_vulkan_rhi->endCommandBuffer(commandbuffer))
         {
@@ -89,7 +90,7 @@ namespace qyhs
         m_vulkan_rhi->queueWaitIdle(m_vulkan_rhi->getGraphicsQueue());
 
         m_vulkan_rhi->freeCommandBuffers(m_vulkan_rhi->command_pool, 1, commandbuffer);
-        ImGui_ImplVulkan_DestroyFontUploadObjects();
+        //ImGui_ImplVulkan_DestroyFontUploadObjects();
         
     }
 }

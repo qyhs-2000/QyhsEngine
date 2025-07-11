@@ -191,6 +191,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         break;
     case WM_INPUT:
+        std::cout << "Input The Key!" << std::endl;
         //qyhs::input::rawinput::ParseMessage((void*)lParam);
         break;
     case WM_KILLFOCUS:

@@ -7,6 +7,7 @@
 #include <windows.h>
 #include <algorithm>
 #include <cstdint>
+#include <string>
 namespace qyhs::jobsystem
 {
 	struct Job

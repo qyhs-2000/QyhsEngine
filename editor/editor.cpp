@@ -33,7 +33,7 @@ namespace qyhs
 		gui::Gui& gui = GetGUI();
 		open_button.create("Open");
 		open_button.setText("Open");
-		open_button.setPosition(Vector2(1100, 20));
+		open_button.setPosition(Vector2(800, 20));
 		open_button.setColor(Color(50, 100, 255, 180), gui::WIDGET_STATE::IDLE);
 		open_button.setColor(Color(120, 160, 255, 255), gui::WIDGET_STATE::FOCUS);
 		open_button.setSize(Vector2(70, 30));
@@ -53,7 +53,7 @@ namespace qyhs
 
 		save_button.create("Save");
 		save_button.setText("Save");
-		save_button.setPosition(Vector2(1200, 20));
+		save_button.setPosition(Vector2(900, 20));
 		save_button.setColor(Color(50, 180, 100, 180), gui::WIDGET_STATE::IDLE);
 		save_button.setColor(Color(50, 220, 140, 255), gui::WIDGET_STATE::FOCUS);
 		save_button.setSize(Vector2(70, 30));
