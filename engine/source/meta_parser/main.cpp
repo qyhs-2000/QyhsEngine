@@ -49,10 +49,17 @@ int main(int argc, char* argv[])
 	char* argv_temp[6] = { "E:/VS_Project/QyhsEngine/engine/bin/precompile.json",
 						  "E:/VS_Project/QyhsEngine/parser_header.h",
 						  "E:/VS_Project/QyhsEngine/engine/source","*","Qyhs","0"};
-	if (argv_temp[0] != nullptr && argv_temp[2] != nullptr && argv_temp[3] != nullptr && argv_temp[4] != nullptr && argv_temp[5] != nullptr)
+	if (argv[0] != nullptr && argv[2] != nullptr && argv[3] != nullptr && argv[4] != nullptr && argv[5] != nullptr)
 	{
 		MetaParser::prepare();
-		result = parse(argv_temp[0],argv_temp[1], argv_temp[2], argv_temp[3], argv_temp[4], argv_temp[5]);
+		std::cout << "Parser Args:" << std::endl;
+		std::cout << argv[1] << std::endl;
+		std::cout << argv[2] << std::endl;
+		std::cout << argv[3] << std::endl;
+		std::cout << argv[4] << std::endl;
+		std::cout << argv[5] << std::endl;
+		std::cout << argv[6] << std::endl;
+		result = parse(argv[1], argv[2], argv[3], argv[4], argv[5],argv[6]);
 		auto duration = std::chrono::system_clock::now() - start_time;
 		std::cout << "Completed in " << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << " ms" << std::endl;
 		return result;

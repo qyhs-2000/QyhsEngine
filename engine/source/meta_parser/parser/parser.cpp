@@ -87,6 +87,7 @@ int MetaParser::parse()
 		arguments.emplace_back(paths[index].c_str());
 	}
 	std::filesystem::path input_path(m_source_include_file_name);
+	std::cout << "Source Include File Name: " << m_source_include_file_name << std::endl;
 	if (!std::filesystem::exists(input_path))
 	{
 		std::cout << "failed to load" << input_path << std::endl;
@@ -147,11 +148,12 @@ bool MetaParser::parseProject()
 	std::string context = buffer.str();
 	Utils::replaceAll(context, ",", ";");
 	auto include_files = Utils::split(context, ";");
-	std::cout << "Now serializing files:" << std::endl;
+	std::cout << "###################Now serializing files:###############" << std::endl;
 	for (uint32_t i = 0; i < include_files.size(); ++i)
 	{
 		std::cout << include_files[i] << std::endl;
 	}
+	std::cout << "#######################################################" << std::endl;
 	//upload include file to source file
 	std::fstream include_file_stream;
 	include_file_stream.open(m_source_include_file_name, std::ios::out);
@@ -176,6 +178,7 @@ bool MetaParser::parseProject()
 	include_file_stream << "#ifdef" << "__" << output_filename << "__" << std::endl;
 	for (auto include_file : include_files)
 	{
+		std::cout << "include_file : " << include_file << std::endl;
 		std::string temp_string(include_file);
 		Utils::replace(temp_string, '\\', '/');
 		include_file_stream << "#include \"" << include_file << "\"" << std::endl;

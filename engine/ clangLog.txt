@@ -1,77 +1,77 @@
-parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/application/application.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/base/macro.h \
+parser_header.o: D:/vs_project/QyhsEngine/parser_header.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/application/application.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/base/macro.h \
   function/global/global_context.h core/log/log_system.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/base/vulkan_base.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/common_include.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cstdint \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\yvals_core.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vcruntime.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\sal.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\concurrencysal.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vadefs.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xkeycheck.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\stdint.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\type_traits \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cstddef \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/base/vulkan_base.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/common_include.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\cstdint \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\yvals_core.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\vcruntime.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\sal.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\concurrencysal.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\vadefs.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\xkeycheck.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\stdint.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\type_traits \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\cstddef \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\stddef.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xtr1common \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\intrin.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\intrin0.inl.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\setjmp.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\immintrin.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\wmmintrin.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\nmmintrin.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\smmintrin.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\tmmintrin.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\pmmintrin.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\emmintrin.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xmmintrin.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\mmintrin.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\xtr1common \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\intrin.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\intrin0.inl.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\setjmp.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\immintrin.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\wmmintrin.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\nmmintrin.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\smmintrin.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\tmmintrin.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\pmmintrin.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\emmintrin.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\xmmintrin.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\mmintrin.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\malloc.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_malloc.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\zmmintrin.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\ammintrin.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/event/event_handler.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\functional \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\exception \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\yvals.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\zmmintrin.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\ammintrin.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/event/event_handler.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\functional \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\exception \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\yvals.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\crtdbg.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vcruntime_new_debug.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vcruntime_new.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\crtdefs.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\use_ansi.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cstdlib \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\vcruntime_new_debug.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\vcruntime_new.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\crtdefs.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\use_ansi.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\cstdlib \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\math.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_math.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\stdlib.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_search.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_wstdlib.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\limits.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vcruntime_exception.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\eh.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\limits.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\vcruntime_exception.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\eh.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_terminate.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\tuple \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\__msvc_iter_core.hpp \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\utility \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\initializer_list \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\typeinfo \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vcruntime_typeinfo.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xmemory \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\limits \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cfloat \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\tuple \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\__msvc_iter_core.hpp \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\utility \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\initializer_list \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\typeinfo \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\vcruntime_typeinfo.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\xmemory \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\limits \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\cfloat \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\float.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\climits \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cwchar \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cstdio \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\climits \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\cwchar \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\cstdio \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\stdio.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_wstdio.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_stdio_config.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\wchar.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_memcpy_s.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\errno.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vcruntime_string.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\vcruntime_string.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_wconio.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_wctype.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_wdirect.h \
@@ -82,48 +82,45 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_wtime.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\sys/stat.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\sys/types.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\new \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xatomic.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xutility \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cstring \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\new \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\xatomic.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\xutility \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\cstring \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\string.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_memory.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\memory \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\iosfwd \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\mutex \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\__msvc_chrono.hpp \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\ctime \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\memory \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\iosfwd \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\mutex \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\__msvc_chrono.hpp \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\ctime \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\time.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\ratio \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xtimec.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\system_error \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\__msvc_system_error_abi.hpp \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cerrno \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\stdexcept \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xstring \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\__msvc_sanitizer_annotate_container.hpp \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xcall_once.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xerrc.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\atomic \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xthreads.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\thread \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\ratio \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\xtimec.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\system_error \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\__msvc_system_error_abi.hpp \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\cerrno \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\stdexcept \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\xstring \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\__msvc_sanitizer_annotate_container.hpp \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\xcall_once.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\xerrc.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\atomic \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\xthreads.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\thread \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\process.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\corecrt_startup.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vcruntime_startup.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\string \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cctype \
-  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\ctype.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/helper.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\filesystem \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/initializer.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/jobsystem.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\deque \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\vcruntime_startup.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/helper.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\filesystem \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/initializer.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/jobsystem.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\deque \
   core/common_include.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cassert \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\cassert \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\assert.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/log/log_system.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/log/log_system.h \
   spdlog/spdlog.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/directx_math.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/math/directx_math.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\DirectXMath.h \
   cpuid.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um/DirectXMathConvert.inl \
@@ -135,92 +132,97 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um/DirectXPackedVector.inl \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\DirectXCollision.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um/DirectXCollision.inl \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/math.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\cmath \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\algorithm \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/math_library.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/math/math.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\cmath \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\algorithm \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\__msvc_minmax.hpp \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/math/math_library.h \
   function/render/primitive.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/matrix3.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/math/matrix3.h \
   core/meta/reflection/reflection.h core/math/math.h \
   core/math/quaternion.h core/math/vector3.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/matrix4.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/math/matrix4.h \
   core/math/matrix3.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime/core/math/quaternion.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime/core/math/quaternion.h \
   core/math/vector4.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime/core/meta/reflection/reflection.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime/core/meta/json.h \
-  json11.hpp E:\VS2022\VC\Tools\MSVC\14.38.33130\include\unordered_map \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xhash \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\list \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\vector \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\__msvc_bit_utils.hpp \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xbit_ops.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\unordered_set \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/quat.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/quaternion.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/random.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\random \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\__msvc_int128.hpp \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\ios \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xlocnum \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\iterator \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\streambuf \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xiosbase \
+  D:/vs_project/QyhsEngine/engine/source\runtime/core/meta/reflection/reflection.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime/core/meta/json.h \
+  json11.hpp \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\string \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\cctype \
+  C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\ctype.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\unordered_map \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\xhash \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\list \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\vector \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\__msvc_bit_utils.hpp \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\xbit_ops.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\unordered_set \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/math/quat.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/math/quaternion.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/math/random.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\random \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\__msvc_int128.hpp \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\ios \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\xlocnum \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\iterator \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\streambuf \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\xiosbase \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\share.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xlocale \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xfacet \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xlocinfo \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\__msvc_xlocinfo_types.hpp \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\clocale \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\xlocale \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\xfacet \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\xlocinfo \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\__msvc_xlocinfo_types.hpp \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\clocale \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\locale.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/transform.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/vector2.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/vector3.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime/core/math/quat.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/math/vector4.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime/core/math/vector3.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/meta/json.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/meta/reflection/reflection.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/meta/reflection/reflection_register.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/meta/serializer/serializer.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/math/transform.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/math/vector2.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/math/vector3.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime/core/math/quat.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/math/vector4.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime/core/math/vector3.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/meta/json.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/meta/reflection/reflection.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/meta/reflection/reflection_register.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/meta/serializer/serializer.h \
   core/meta/json.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/utils/dxcapi.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/utils/enum.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/utils/dxcapi.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/utils/enum.h \
   shader/shader_interop_renderer.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/utils/include/spirv/unified1/spirv.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/utils/model_importer_gltf.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/utils/model_importer_obj.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/utils/include/spirv/unified1/spirv.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/utils/model_importer_gltf.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/utils/model_importer_obj.h \
   function/render/render_type.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/utils/spin_lock.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/utils/spirv_reflect.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/utils/spin_lock.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/utils/spirv_reflect.h \
   core/utils/include/spirv/unified1/spirv.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/core/utils/utils.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\fstream \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\__msvc_filebuf.hpp \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\istream \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\ostream \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/engine.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/core/utils/utils.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\fstream \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\__msvc_filebuf.hpp \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\istream \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\ostream \
+  D:/vs_project/QyhsEngine/engine/source/runtime/engine.h \
   function/ui/render_path.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/rhi/vulkan/vulkan_rhi.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\chrono \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\array \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\optional \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\set \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\xtree vulkan/vulkan.h \
-  vulkan/vk_mem_alloc.h GLFW/glfw3.h glm/glm.hpp \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/rhi/vulkan/vulkan_rhi.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\chrono \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\array \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\optional \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\set \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\xtree \
+  vulkan/vulkan.h vulkan/vk_mem_alloc.h GLFW/glfw3.h glm/glm.hpp \
   glm/gtc/matrix_transform.hpp glm/gtx/hash.hpp \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/rhi/rhi.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/rhi/graphics.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/ui/image.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/color.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/ui/canvas.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/platform/platform.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/rhi/rhi.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/rhi/graphics.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/ui/image.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/color.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/ui/canvas.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/platform/platform.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\windows.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\winapifamily.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\winpackagefamily.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\sdkddkver.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\excpt.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\stdarg.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\excpt.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\stdarg.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\windef.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\minwindef.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\shared\specstrings.h \
@@ -374,200 +376,203 @@ parser_header.o: E:/VS_Project/QyhsEngine/parser_header.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\imm.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\ime_cmodes.h \
   core/math/vector2.h core/math/matrix4.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_type.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/render_type.h \
   resource/type/global_rendering_resource.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/timer/timer.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/file/archive.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/timer/timer.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/file/archive.h \
   core/math/directx_math.h function/render/color.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/animation/animation.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/animation/animation_clip.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/animation/animation_component.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/framework/component/animation/animation.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/framework/component/animation/animation_clip.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/framework/component/animation/animation_component.h \
   function/framework/component/component.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/animation/blend_state.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/animation/animation_skeleton_map.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/animation/skeleton.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/animation/node.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/framework/component/animation/blend_state.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/framework/component/animation/animation_skeleton_map.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/framework/component/animation/skeleton.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/framework/component/animation/node.h \
   core/math/quat.h resource/type/data/skeleton_data.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/animation/animation_loader.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/animation/animation_mask.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/animation/animation_manager.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\map \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/camera/camera_component.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/camera/../component.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/framework/component/animation/animation_loader.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/framework/component/animation/animation_mask.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/framework/component/animation/animation_manager.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\map \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/framework/component/camera/camera_component.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/framework/component/camera/../component.h \
   function/framework/component/ecs.h \
   function/framework/game_object/game_object.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/component.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/ecs.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/framework/component/component.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/framework/component/ecs.h \
   function/framework/game_object/game_object_id_allocator.h \
   function/file/archive.h core/jobsystem.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/hierarchy/hierarchy_component.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/mesh/mesh_component.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/mesh/../component.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/framework/component/hierarchy/hierarchy_component.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/framework/component/mesh/mesh_component.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/framework/component/mesh/../component.h \
   resource/type/component/mesh/mesh.h function/render/game_object_desc.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/motor/motor_component.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/framework/component/motor/motor_component.h \
   core/math/transform.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/component/transform/transform_component.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/framework/component/transform/transform_component.h \
   function/framework/component/hierarchy/hierarchy_component.h \
   function/framework/component/transform/transform_component.h \
   function/framework/component/mesh/mesh_component.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/game_object/character.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/game_object/game_object.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/game_object/game_object_id_allocator.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/framework/game_object/character.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/framework/game_object/game_object.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/framework/game_object/game_object_id_allocator.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\ucrt\memory.h \
   core/utils/utils.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/level/level.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/framework/level/level.h \
   function/framework/game_object/character.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/framework/world/world_manager.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/framework/world/world_manager.h \
   function/framework/level/level.h resource/type/world_resource.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/global/global_context.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/global/global_context.h \
   function/input/input_system.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/input/input.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/input/input.h \
   function/platform/platform.h function/ui/canvas.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/input/input_system.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/input/rawinput.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/Texture.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/game_object_desc.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/passes/combine_ui_pass.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/input/input_system.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/input/rawinput.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/Texture.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/game_object_desc.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/passes/combine_ui_pass.h \
   function/render/render_pass.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/passes/main_camera_render_pass.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/passes/main_camera_render_pass.h \
   function/render/render_common.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/passes/ui_pass.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/passes/ui_pass.h \
   function/render/ui/window_ui.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/passes/pick_render_pass.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/primitive.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_camera.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_common.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_entity.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_guid_allocator.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_helper.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_pass.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_pass_base.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/passes/pick_render_pass.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/primitive.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/render_camera.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/render_common.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/render_entity.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/render_guid_allocator.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/render_helper.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/render_pass.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/render_pass_base.h \
   function/render/rhi/rhi.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_resource_base.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/render_resource_base.h \
   function/render/rhi/vulkan/vulkan_rhi.h \
   function/render/render_pipeline_base.h \
   function/render/render_structure.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_resource.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_structure.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_pipeline.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_pipeline_base.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/ui/editor_ui.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/render_resource.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/render_structure.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/render_pipeline.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/render_pipeline_base.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/ui/editor_ui.h \
   function/render/window_system.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/ui/window_ui.h \
-  E:/VS_Project/QyhsEngine/engine/source\editor/include/editor_scene_manager.h \
-  E:/VS_Project/QyhsEngine/engine/source\editor/include/editor_axis.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/ui/window_ui.h \
+  D:/vs_project/QyhsEngine/engine/source\editor/include/editor_scene_manager.h \
+  D:/vs_project/QyhsEngine/engine/source\editor/include/editor_axis.h \
   function/render/render_entity.h function/render/render_pass_base.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_scene.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/render_scene.h \
   function/render/render_resource.h \
   function/render/render_guid_allocator.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_swap_context.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/render_swap_context.h \
   function/render/render_camera.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/render_system.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/render_system.h \
   function/render/render_pipeline.h \
   function/render/render_swap_context.h function/render/render_scene.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/renderer.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/renderer.h \
   function/render/scene_component.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/scene.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/scene_component.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/scene.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/scene_component.h \
   core/math/math_library.h resource/resource_manager.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/rhi/vulkan/common/vulkan_render_type.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/shader_compiler.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/rhi/vulkan/common/vulkan_render_type.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/scene_serialize_test.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/shader_compiler.h \
   function/render/rhi/graphics.h \
   C:\Program\ Files\ (x86)\Windows\ Kits\10\Include\10.0.22621.0\um\Windows.h \
   core/utils/dxcapi.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/texture_helper.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/render/window_system.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\iostream \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/texture_helper.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/render/window_system.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\iostream \
   core//math/vector2.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/ui/font.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/ui/gui.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/ui/sprite.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/ui/font.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/ui/gui.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/ui/sprite.h \
   function/ui/sprite_font.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/ui/rect_packer.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/ui/rect_packer.h \
   utility/stb_rect_pack.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/ui/render_path.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/ui/render_path.h \
   function/render/scene.h function/render/renderer.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/function/ui/sprite_font.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/function/ui/sprite_font.h \
   function/ui/font.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/resource/asset_manager/asset_manager.h \
-  E:\VS2022\VC\Tools\MSVC\14.38.33130\include\sstream core/base/macro.h \
-  core/meta/serializer/serializer.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated/serializer/all_serializer.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime/core/meta/serializer/serializer.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\vector2.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\core\math\vector2.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\matrix4.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\core\math\matrix4.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\quat.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\core\math\quat.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\vector3.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\core\math\vector3.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\transform.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\core\math\transform.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\animation_clip.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\animation\animation_clip.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\vector4.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\core\math\vector4.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\motor_component.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\motor\motor_component.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\component.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\component.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\animation.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\animation\animation.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\animation_skeleton_map.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\animation\animation_skeleton_map.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\animation_component.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\animation\animation_component.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\animation_mask.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\animation\animation_mask.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\camera_component.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\camera\camera_component.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\hierarchy_component.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\hierarchy\hierarchy_component.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\mesh_component.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\mesh\mesh_component.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\transform_component.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\function\framework\component\transform\transform_component.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\camera_config.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\resource\type\data\camera_config.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\object.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\resource\common\object.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime/function/framework/component/component.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\mash_data.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\resource\type\data\mash_data.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\mesh.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\resource\type\component\mesh\mesh.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\material.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\resource\type\data\material.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\level_resource.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\resource\type\level_resource.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/resource/asset_manager/asset_manager.h \
+  D:\visual_studio_2022\IDE\VC\Tools\MSVC\14.40.33807\include\sstream \
+  core/base/macro.h core/meta/serializer/serializer.h \
+  D:/vs_project/QyhsEngine/engine/source\_generated/serializer/all_serializer.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime/core/meta/serializer/serializer.h \
+  D:/vs_project/QyhsEngine/engine/source\_generated\serializer\vector2.serializer.gen.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime\core\math\vector2.h \
+  D:/vs_project/QyhsEngine/engine/source\_generated\serializer\matrix4.serializer.gen.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime\core\math\matrix4.h \
+  D:/vs_project/QyhsEngine/engine/source\_generated\serializer\quat.serializer.gen.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime\core\math\quat.h \
+  D:/vs_project/QyhsEngine/engine/source\_generated\serializer\animation_clip.serializer.gen.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime\function\framework\component\animation\animation_clip.h \
+  D:/vs_project/QyhsEngine/engine/source\_generated\serializer\vector4.serializer.gen.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime\core\math\vector4.h \
+  D:/vs_project/QyhsEngine/engine/source\_generated\serializer\transform.serializer.gen.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime\core\math\transform.h \
+  D:/vs_project/QyhsEngine/engine/source\_generated\serializer\animation.serializer.gen.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime\function\framework\component\animation\animation.h \
+  D:/vs_project/QyhsEngine/engine/source\_generated\serializer\vector3.serializer.gen.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime\core\math\vector3.h \
+  D:/vs_project/QyhsEngine/engine/source\_generated\serializer\animation_skeleton_map.serializer.gen.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime\function\framework\component\animation\animation_skeleton_map.h \
+  D:/vs_project/QyhsEngine/engine/source\_generated\serializer\animation_component.serializer.gen.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime\function\framework\component\animation\animation_component.h \
+  D:/vs_project/QyhsEngine/engine/source\_generated\serializer\animation_mask.serializer.gen.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime\function\framework\component\animation\animation_mask.h \
+  D:/vs_project/QyhsEngine/engine/source\_generated\serializer\component.serializer.gen.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime\function\framework\component\component.h \
+  D:/vs_project/QyhsEngine/engine/source\_generated\serializer\camera_component.serializer.gen.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime\function\framework\component\camera\camera_component.h \
+  D:/vs_project/QyhsEngine/engine/source\_generated\serializer\hierarchy_component.serializer.gen.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime\function\framework\component\hierarchy\hierarchy_component.h \
+  D:/vs_project/QyhsEngine/engine/source\_generated\serializer\skeleton_data.serializer.gen.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime\resource\type\data\skeleton_data.h \
+  D:/vs_project/QyhsEngine/engine/source\_generated\serializer\mesh_component.serializer.gen.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime\function\framework\component\mesh\mesh_component.h \
+  D:/vs_project/QyhsEngine/engine/source\_generated\serializer\transform_component.serializer.gen.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime\function\framework\component\transform\transform_component.h \
+  D:/vs_project/QyhsEngine/engine/source\_generated\serializer\motor_component.serializer.gen.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime\function\framework\component\motor\motor_component.h \
+  D:/vs_project/QyhsEngine/engine/source\_generated\serializer\scene_serialize_test.serializer.gen.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime\function\render\scene_serialize_test.h \
+  D:/vs_project/QyhsEngine/engine/source\_generated\serializer\world_resource.serializer.gen.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime\resource\type\world_resource.h \
   resource/common/object.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\world_resource.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\resource\type\world_resource.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\global_rendering_resource.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\resource\type\global_rendering_resource.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\resource\type/data/camera_config.h \
-  E:/VS_Project/QyhsEngine/engine/source\_generated\serializer\skeleton_data.serializer.gen.h \
-  E:/VS_Project/QyhsEngine/engine/source\runtime\resource\type\data\skeleton_data.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/resource/common/object.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/resource/config_manager/config_manager.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/resource/resource_manager.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/component/mesh/mesh.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/data/camera_config.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/data/mash_data.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/data/material.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/data/skeleton_data.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/global_rendering_resource.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/level_resource.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/resource/type/world_resource.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/stdafx.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/utility/liberation_sans.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/utility/stb_rect_pack.h \
-  E:/VS_Project/QyhsEngine/engine/source/runtime/utility/stb_truetype.h \
-  E:/VS_Project/QyhsEngine/engine/source/editor/include/editor.h \
+  D:/vs_project/QyhsEngine/engine/source\_generated\serializer\object.serializer.gen.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime\resource\common\object.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime/function/framework/component/component.h \
+  D:/vs_project/QyhsEngine/engine/source\_generated\serializer\mesh.serializer.gen.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime\resource\type\component\mesh\mesh.h \
+  D:/vs_project/QyhsEngine/engine/source\_generated\serializer\level_resource.serializer.gen.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime\resource\type\level_resource.h \
+  D:/vs_project/QyhsEngine/engine/source\_generated\serializer\camera_config.serializer.gen.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime\resource\type\data\camera_config.h \
+  D:/vs_project/QyhsEngine/engine/source\_generated\serializer\mash_data.serializer.gen.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime\resource\type\data\mash_data.h \
+  D:/vs_project/QyhsEngine/engine/source\_generated\serializer\material.serializer.gen.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime\resource\type\data\material.h \
+  D:/vs_project/QyhsEngine/engine/source\_generated\serializer\global_rendering_resource.serializer.gen.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime\resource\type\global_rendering_resource.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime\resource\type/data/camera_config.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/resource/common/object.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/resource/config_manager/config_manager.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/resource/resource_manager.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/resource/type/component/mesh/mesh.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/resource/type/data/camera_config.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/resource/type/data/mash_data.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/resource/type/data/material.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/resource/type/data/skeleton_data.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/resource/type/global_rendering_resource.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/resource/type/level_resource.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/resource/type/world_resource.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/stdafx.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/utility/liberation_sans.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/utility/stb_rect_pack.h \
+  D:/vs_project/QyhsEngine/engine/source/runtime/utility/stb_truetype.h \
+  D:/vs_project/QyhsEngine/engine/source/editor/include/editor.h \
   engine.h \
-  E:/VS_Project/QyhsEngine/engine/source\editor/include/editor_global_context.h \
+  D:/vs_project/QyhsEngine/engine/source\editor/include/editor_global_context.h \
   function/render/ui/editor_ui.h application/application.h \
-  E:/VS_Project/QyhsEngine/engine/source/editor/include/editor_axis.h \
-  E:/VS_Project/QyhsEngine/engine/source/editor/include/editor_global_context.h \
-  E:/VS_Project/QyhsEngine/engine/source/editor/include/editor_input_manager.h
+  D:/vs_project/QyhsEngine/engine/source/editor/include/editor_axis.h \
+  D:/vs_project/QyhsEngine/engine/source/editor/include/editor_global_context.h \
+  D:/vs_project/QyhsEngine/engine/source/editor/include/editor_input_manager.h

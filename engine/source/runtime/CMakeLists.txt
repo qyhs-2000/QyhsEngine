@@ -8,8 +8,10 @@ set(json_lib_dir ${THIRD_PARTY_DIR}/lib/json11)
 add_library(json11 ${json_include}/json11.cpp)
 set_target_properties(json11 PROPERTIES FOLDER "ThirdParty/json11")
 
-file(GLOB_RECURSE HEADER_FILES "*.h")
-file(GLOB_RECURSE SOURCE_FILES "*.cpp" "*.c")
+
+
+file(GLOB_RECURSE HEADER_FILES  CONFIGURE_DEPENDS "*.h")
+file(GLOB_RECURSE SOURCE_FILES  CONFIGURE_DEPENDS "*.cpp" "*.c")
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${HEADER_FILES} ${SOURCE_FILES})
 
 add_library(${TARGET_NAME} ${HEADER_FILES} ${SOURCE_FILES})
@@ -28,6 +30,8 @@ endif()
 add_definitions(-DUSE_VOLK)
 
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${HEADER_FILES} ${SOURCE_FILES})
+message(STATUS "All Include Files:")
+message(STATUS "${HEADER_FILES}")
 
 target_link_libraries(${TARGET_NAME} PUBLIC glfw)
 target_link_libraries(${TARGET_NAME} PUBLIC spdlog::spdlog)

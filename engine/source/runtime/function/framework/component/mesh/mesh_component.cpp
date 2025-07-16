@@ -6,7 +6,8 @@
 #include "function/framework/component/transform/transform_component.h"
 #include "resource/asset_manager/asset_manager.h"
 #include "resource/type/data/material.h"
-#include "function/framework/component/animation/animation.h"
+//#include "function/framework/component/animation/animation.h"
+#include "function/framework/component/animation/animation_component.h"
 #include <iostream>
 namespace qyhs
 {

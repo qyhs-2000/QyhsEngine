@@ -4,7 +4,7 @@
 #include "render_type.h"
 #include "passes/main_camera_render_pass.h"
 #include "function/framework/component/motor/motor_component.h"
-
+#include "resource/type/data/material.h"
 #include "resource/config_manager/config_manager.h"
 #include "resource/asset_manager/asset_manager.h"
 #include "resource/type/global_rendering_resource.h"

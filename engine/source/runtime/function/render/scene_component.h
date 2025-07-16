@@ -5,6 +5,8 @@
 #include "function/render/primitive.h"
 #include "core/math/math_library.h"
 #include "resource/resource_manager.h"
+
+#include "core/meta/reflection/reflection.h"
 namespace qyhs::scene
 {
 	class Scene;
@@ -468,4 +470,7 @@ namespace qyhs::scene
 	};
 
 	CameraComponent& getCamera();
+
+	
 }
+
