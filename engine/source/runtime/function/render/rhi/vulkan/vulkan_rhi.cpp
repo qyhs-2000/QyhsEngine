@@ -26,6 +26,7 @@
 //#define IMGUI_IMPL_VULKAN_USE_LOADER
 //#define IMGUI_IMPL_VULKAN_NO_PROTOTYPES
 #include "imgui/backends/imgui_impl_vulkan.h"
+#include "imgui/backends/imgui_impl_win32.h"
 #include <tiny_obj_loader.h>
 #include <core/base/macro.h>
 
@@ -466,6 +467,7 @@ namespace qyhs
 			res = vkCreateSampler(m_device, &createInfo, nullptr, &immutable_samplers.emplace_back());
 			assert(res == VK_SUCCESS);
 		}
+		createDescriptorPool();
 	}
 
 	VulkanRHI::~VulkanRHI()
@@ -976,7 +978,7 @@ namespace qyhs
 		std::scoped_lock lock(semaphore_pool_locker);
 		if (semaphore_pool.empty())
 		{
-			VkSemaphore &semaphore = semaphore_pool.emplace_back();
+			VkSemaphore& semaphore = semaphore_pool.emplace_back();
 			VkSemaphoreCreateInfo create_info = {};
 			create_info.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
 			VkResult res = vkCreateSemaphore(m_device, &create_info, nullptr, &semaphore);
@@ -1366,6 +1368,7 @@ namespace qyhs
 			swapchain->desc.width = swapchain_vulkan->desc.width;
 			swapchain->desc.height = swapchain_vulkan->desc.height;
 		}
+		m_hwnd = window;
 		return true;
 	}
 
@@ -3468,11 +3471,17 @@ namespace qyhs
 		init_info.DescriptorPool = m_descriptor_pool;
 		init_info.Subpass = 0;
 		init_info.UseDynamicRendering = true;
+		//init_info.PipelineRenderingCreateInfo
+
 		init_info.PipelineRenderingCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO_KHR;
+		init_info.PipelineRenderingCreateInfo.colorAttachmentCount = 1;
+		VkFormat format = VK_FORMAT_R8G8B8A8_UNORM;
+		init_info.PipelineRenderingCreateInfo.pColorAttachmentFormats = &format;
+		
 		// may be different from the real swapchain image count
 		// see ImGui_ImplVulkanH_GetMinImageCountFromPresentMode
-		init_info.MinImageCount = 3;
-		init_info.ImageCount = 3;
+		init_info.MinImageCount = 2;
+		init_info.ImageCount = 2;
 		auto pCmdBeginRendering = (PFN_vkCmdBeginRendering)vkGetDeviceProcAddr(m_device, "vkCmdBeginRendering");
 		auto pCmdEndRendering = (PFN_vkCmdEndRendering)vkGetDeviceProcAddr(m_device, "vkCmdEndRendering");
 
@@ -3506,7 +3515,7 @@ namespace qyhs
 				const bool dependency = !command_list.signals.empty() || !command_list.waits.empty() || !command_list.wait_queues.empty();
 				if (dependency)
 				{
-					
+
 					//if current queue is dependent on other queue, we need to Wait for the other queue to finish
 					queue.submit(this, VK_NULL_HANDLE);
 				}
@@ -4282,7 +4291,7 @@ namespace qyhs
 			}
 			assert(0);
 		}
-		if(command_list.active_cs != nullptr)
+		if (command_list.active_cs != nullptr)
 		{
 			auto cs_internal = to_internal(command_list.active_cs);
 			if (cs_internal->pushconstants.size > 0)
@@ -4847,7 +4856,7 @@ namespace qyhs
 		{
 			buffer_info.usage |= VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT;
 		}
-		
+
 		buffer_info.usage |= VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
 		buffer_info.usage |= VK_BUFFER_USAGE_TRANSFER_DST_BIT;
 
@@ -5460,6 +5469,39 @@ namespace qyhs
 		}
 
 		commandlist.active_pso = pso;
+	}
+
+	void VulkanRHI::renderImGui(CommandList cmd)
+	{
+		CommandList_Vulkan& commandlist = getCommandList(cmd);
+
+		ImGui_ImplVulkan_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGuiIO& io = ImGui::GetIO();
+		io.ConfigFlags &= ~ImGuiConfigFlags_ViewportsEnable;
+		
+
+		ImGuiViewport* main_viewport = ImGui::GetMainViewport();
+		struct ViewportData
+		{
+			HWND Hwnd;
+		};
+		ViewportData* data = new ViewportData();
+		data->Hwnd = m_hwnd;
+		main_viewport->PlatformUserData = data;
+		
+		ImGui::NewFrame();
+
+		// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+		bool show_demo_window = true;
+		ImGui::ShowDemoWindow(&show_demo_window);
+
+		// Rendering
+		ImGui::Render();
+		ImDrawData* draw_data = ImGui::GetDrawData();
+
+		
+		ImGui_ImplVulkan_RenderDrawData(draw_data, commandlist.getCommandBuffer());
 	}
 
 	void VulkanRHI::predispatch(CommandList cmd)
@@ -6598,11 +6640,11 @@ namespace qyhs
 			int a = 0;
 			int b = 1;
 		}
-		
+
 		for (VkFormat format : candidates) {
 			VkFormatProperties props;
 			vkGetPhysicalDeviceFormatProperties(physical_device, format, &props);
-			
+
 
 			if (tiling == VK_IMAGE_TILING_LINEAR && (props.linearTilingFeatures & features) == features) {
 				return format;
@@ -6823,7 +6865,7 @@ namespace qyhs
 		VkPipelineLayout pipeline_layout = VK_NULL_HANDLE;
 		VkDescriptorSet descriptor_set = VK_NULL_HANDLE;
 		VkDescriptorSetLayout descriptor_set_layout = VK_NULL_HANDLE;
-		PipelineState_Vulkan* pso =graphics? to_internal(commandlist.active_pso):nullptr;
+		PipelineState_Vulkan* pso = graphics ? to_internal(commandlist.active_pso) : nullptr;
 		auto cs = graphics ? nullptr : to_internal(commandlist.active_cs);
 		uint32_t uniform_buffer_dynamic_count = 0;
 		if (graphics)
@@ -6858,8 +6900,8 @@ namespace qyhs
 				pipeline_bind_point = VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR;
 			}
 		}
-		const auto& layout_bindings = graphics?pso->layout_bindings:cs->layout_bindings;
-		const auto& image_view_types = graphics?pso->imageViewTypes:cs->imageViewTypes;
+		const auto& layout_bindings = graphics ? pso->layout_bindings : cs->layout_bindings;
+		const auto& image_view_types = graphics ? pso->imageViewTypes : cs->imageViewTypes;
 		int i = 0;
 		if (dirty & DIRTY_DESCRIPTOR)
 		{

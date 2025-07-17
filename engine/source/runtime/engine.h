@@ -50,8 +50,8 @@ namespace qyhs
 		float delta_time = 0.f;
 	protected:
 		RenderPath* active_path;
-	private:
 		platform::WindowType window;
+	private:
 		VkInstance instance;
 		VkDebugUtilsMessengerEXT debugMessenger;
 		VkSurfaceKHR surface;

@@ -228,7 +228,7 @@ namespace qyhs
 		RenderPassImage rp[] = {
 			RenderPassImage::renderTarget(
 				&rt_final,
-				RenderPassImage::LoadOp::LOAD
+				RenderPassImage::LoadOp::CLEAR
 			),
 		};
 		image::setCanvas(*this);

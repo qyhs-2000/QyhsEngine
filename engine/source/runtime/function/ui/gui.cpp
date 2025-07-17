@@ -195,6 +195,7 @@ namespace qyhs::gui
 			rhi->bindScissorRects(1, &scissorRect, cmd);
 			widgets[i]->render(canvas, cmd);
 		}
+		rhi->renderImGui(cmd);
 		rhi->bindScissorRects(1, &scissorRect, cmd);
 		rhi->endEvent(cmd);
 	}

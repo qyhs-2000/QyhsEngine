@@ -160,6 +160,7 @@ namespace qyhs
 		virtual void beginRenderPass(SwapChain* swapChain, CommandList& cmd_list) = 0;
 		virtual void beginRenderPass(const RenderPassImage *image, uint32_t size, CommandList cmd,RenderPassFlags flags = RenderPassFlags::NONE) = 0;
 		virtual void endRenderPass(CommandList cmd_list) = 0;
+		virtual void renderImGui(CommandList cmd) = 0;
 		virtual void submitCommandLists() = 0;
 		virtual void initImgui() {}
 		virtual void bindScissorRects(uint32_t scissor_count, const Rect* rect, CommandList cmd) = 0;

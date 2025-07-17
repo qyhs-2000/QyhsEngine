@@ -11,13 +11,14 @@ namespace qyhs
 		QyhsEngine::initialize2();
 
 		//renderer.init(canvas);
+		renderer.setWindow(window);
 		renderer.load();
-
 		activatePath(&renderer);
 	}
 
 	void TestRenderer::load()
 	{
+		
 		gui::Gui& gui = GetGUI();
 
 		test_selector.create("TestSelector");

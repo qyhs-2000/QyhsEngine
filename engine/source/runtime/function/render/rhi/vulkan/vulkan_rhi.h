@@ -672,6 +672,7 @@ namespace qyhs
 		VkDescriptorPool& getDescriptorPool() { return m_descriptor_pool; }
 		virtual void bindPipelineState(const PipelineState* state, CommandList cmd) override;
 		std::mutex queue_submit_mutex;
+		virtual void renderImGui(CommandList cmd) override;
 		VkBuffer getUniformBuffer(uint32_t index) {
 			return uniformBuffers[index];
 		}
@@ -856,6 +857,7 @@ namespace qyhs
 		VkInstance instance;
 		VkDebugUtilsMessengerEXT debugMessenger;
 		GLFWwindow* m_window{ nullptr };
+		platform::WindowType m_hwnd;
 		VkSurfaceKHR surface;
 		VkPhysicalDevice physical_device;
 		VkViewport m_viewport;

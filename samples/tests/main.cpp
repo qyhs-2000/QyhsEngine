@@ -1,6 +1,7 @@
 #include <iostream>
 //#include "stdafx.h"
 #include "main.h"
+#include "imgui/imgui.h"
 #include "tests.h"
 #include "function/input/rawinput.h"
 #define MAX_LOADSTRING 100
@@ -26,6 +27,9 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 #if defined(_DEBUG)
 #include <crtdbg.h>
 #pragma comment( linker, "/subsystem:console" )
+
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 int main(int argc, const char** argv) {
     _CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_DEBUG);
     return wWinMain(GetModuleHandle(NULL), NULL, GetCommandLine(), SW_SHOWDEFAULT);
@@ -149,6 +153,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam);
     switch (message)
     {
     case WM_COMMAND:
