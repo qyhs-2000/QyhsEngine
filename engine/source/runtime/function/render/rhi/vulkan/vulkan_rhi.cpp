@@ -3461,6 +3461,7 @@ namespace qyhs
 
 	void VulkanRHI::initImgui()
 	{
+		use_imgui = true;
 		ImGui_ImplVulkan_InitInfo init_info = {};
 		init_info.ApiVersion = VK_API_VERSION_1_3;
 		init_info.Instance = instance;
@@ -5473,6 +5474,10 @@ namespace qyhs
 
 	void VulkanRHI::renderImGui(CommandList cmd)
 	{
+		if (!use_imgui)
+		{
+			return;
+		}
 		CommandList_Vulkan& commandlist = getCommandList(cmd);
 
 		ImGui_ImplVulkan_NewFrame();
@@ -5496,6 +5501,31 @@ namespace qyhs
 		bool show_demo_window = true;
 		ImGui::ShowDemoWindow(&show_demo_window);
 
+		
+
+		// 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
+		{
+			static float f = 0.0f;
+			static int counter = 0;
+
+			ImGui::Begin("Animation Clips");                          // Create a window called "Hello, world!" and append into it.
+
+			
+			
+			static int current_item = 0; // 当前选中的项
+			const char* items[] = { "Option A", "Option B", "Option C" };
+			if (ImGui::Combo("Combo Box", &current_item, items, IM_ARRAYSIZE(items)))
+			{
+				// current_item 已经更新
+				// 你可以在这里处理用户选择
+				printf("Selected item: %d\n", current_item);
+
+			}
+			
+			ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+			
+			ImGui::End();
+		}
 		// Rendering
 		ImGui::Render();
 		ImDrawData* draw_data = ImGui::GetDrawData();

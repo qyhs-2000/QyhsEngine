@@ -20,8 +20,8 @@
 #include "_generated\serializer\scene_serialize_test.serializer.gen.h"
 #include "_generated\serializer\world_resource.serializer.gen.h"
 #include "_generated\serializer\object.serializer.gen.h"
-#include "_generated\serializer\level_resource.serializer.gen.h"
 #include "_generated\serializer\mesh.serializer.gen.h"
+#include "_generated\serializer\level_resource.serializer.gen.h"
 #include "_generated\serializer\camera_config.serializer.gen.h"
 #include "_generated\serializer\mash_data.serializer.gen.h"
 #include "_generated\serializer\material.serializer.gen.h"
@@ -1182,48 +1182,6 @@ namespace qyhs
 
 
 	template<>
-	LevelResource & Serializer::read(const Json & json_context,LevelResource & instance)
-	{
-		assert(json_context.is_object());
-		
-		if(!json_context["gravity"].is_null())
-		{
-			Serializer::read(json_context["gravity"],instance.m_gravity);
-		}
-		if(!json_context["character_name"].is_null())
-		{
-			Serializer::read(json_context["character_name"],instance.m_character_name);
-		}
-		if(!json_context["objects"].is_null())
-		{
-			assert(json_context["objects"].is_array());
-			Json::array array_m_objects = 
-			json_context["objects"].array_items();
-			instance.m_objects.resize(array_m_objects.size());
-			for(size_t index = 0;index<array_m_objects.size();++index){
-				Serializer::read(array_m_objects[index],instance.m_objects[index]);
-			}
-		}
-		return instance;
-	}
-
-	template<>
-    Json Serializer::write(const LevelResource& instance){
-        Json::object  ret_context;
-        
-        ret_context.insert_or_assign("gravity", Serializer::write(instance.m_gravity));
-        ret_context.insert_or_assign("character_name", Serializer::write(instance.m_character_name));
-        Json::array m_objects_json;
-        for (auto& item : instance.m_objects){
-            m_objects_json.emplace_back(Serializer::write(item));
-        }
-        ret_context.insert_or_assign("objects",m_objects_json);
-        
-        return  Json(ret_context);
-    }
-
-
-	template<>
 	SubMeshRes & Serializer::read(const Json & json_context,SubMeshRes & instance)
 	{
 		assert(json_context.is_object());
@@ -1281,6 +1239,48 @@ namespace qyhs
             m_sub_meshes_json.emplace_back(Serializer::write(item));
         }
         ret_context.insert_or_assign("sub_meshes",m_sub_meshes_json);
+        
+        return  Json(ret_context);
+    }
+
+
+	template<>
+	LevelResource & Serializer::read(const Json & json_context,LevelResource & instance)
+	{
+		assert(json_context.is_object());
+		
+		if(!json_context["gravity"].is_null())
+		{
+			Serializer::read(json_context["gravity"],instance.m_gravity);
+		}
+		if(!json_context["character_name"].is_null())
+		{
+			Serializer::read(json_context["character_name"],instance.m_character_name);
+		}
+		if(!json_context["objects"].is_null())
+		{
+			assert(json_context["objects"].is_array());
+			Json::array array_m_objects = 
+			json_context["objects"].array_items();
+			instance.m_objects.resize(array_m_objects.size());
+			for(size_t index = 0;index<array_m_objects.size();++index){
+				Serializer::read(array_m_objects[index],instance.m_objects[index]);
+			}
+		}
+		return instance;
+	}
+
+	template<>
+    Json Serializer::write(const LevelResource& instance){
+        Json::object  ret_context;
+        
+        ret_context.insert_or_assign("gravity", Serializer::write(instance.m_gravity));
+        ret_context.insert_or_assign("character_name", Serializer::write(instance.m_character_name));
+        Json::array m_objects_json;
+        for (auto& item : instance.m_objects){
+            m_objects_json.emplace_back(Serializer::write(item));
+        }
+        ret_context.insert_or_assign("objects",m_objects_json);
         
         return  Json(ret_context);
     }

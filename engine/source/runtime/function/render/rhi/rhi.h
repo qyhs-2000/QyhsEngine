@@ -227,6 +227,7 @@ namespace qyhs
 		constexpr uint64_t getFrameCount()const { return frame_count; }
 		virtual void bindComputeShader(const Shader* cs, CommandList cmd) = 0;
 		virtual void dispatch(uint32_t threadGroupCountX, uint32_t threadGroupCountY, uint32_t threadGroupCountZ, CommandList cmd) = 0;
+		bool use_imgui = false;
 	protected:
 		graphics::GraphicsDeviceCapability capabilities = graphics::GraphicsDeviceCapability::NONE;		//feature of graphics device
 		uint64_t frame_count{ 0 };
