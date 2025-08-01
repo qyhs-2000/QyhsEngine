@@ -31,6 +31,11 @@ struct alignas(16) ShaderTransform
 		mat2 = float4(matrix._13, matrix._23, matrix._33, matrix._43);
 	}
 	float4x4 getMatrix()
+#ifdef __cplusplus
+		const
+#endif // __cplusplus
+
+
 	{
 		return float4x4(
 			mat0.x, mat0.y, mat0.z, mat0.w,
@@ -102,7 +107,7 @@ struct alignas(16) ShaderTextureSlot
 struct alignas(16) ShaderMaterial
 {
 	float4 base_color;
-	
+
 	int sampler_descriptor;
 	float3 _padding;
 #ifndef __cplusplus
@@ -192,7 +197,7 @@ struct ShaderMeshInstancePointer
 	}
 };
 
-CBUFFER(MiscConstantBuffer,CBSLOT_RENDERER_MISC)
+CBUFFER(MiscConstantBuffer, CBSLOT_RENDERER_MISC)
 {
 	float4x4 g_xTransform;
 	float4 g_xColor;

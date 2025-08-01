@@ -163,6 +163,7 @@ namespace qyhs
 		virtual void renderImGui(CommandList cmd) = 0;
 		virtual void submitCommandLists() = 0;
 		virtual void initImgui() {}
+		virtual void setupImguiContext() = 0;
 		virtual void bindScissorRects(uint32_t scissor_count, const Rect* rect, CommandList cmd) = 0;
 		bool checkCapability(GraphicsDeviceCapability capability) { return has_flag(capabilities, capability); }
 		virtual void drawImage(const graphics::Texture* texture, const qyhs::image::Params& params, CommandList cmd) {};
@@ -228,9 +229,11 @@ namespace qyhs
 		virtual void bindComputeShader(const Shader* cs, CommandList cmd) = 0;
 		virtual void dispatch(uint32_t threadGroupCountX, uint32_t threadGroupCountY, uint32_t threadGroupCountZ, CommandList cmd) = 0;
 		bool use_imgui = false;
+		SwapChain* getSwapChain()const { return m_swapchain; }
 	protected:
 		graphics::GraphicsDeviceCapability capabilities = graphics::GraphicsDeviceCapability::NONE;		//feature of graphics device
 		uint64_t frame_count{ 0 };
+		SwapChain* m_swapchain{ nullptr };
 	};
 
 	inline RHI::~RHI() = default;

@@ -198,6 +198,7 @@ namespace qyhs
 		desc.height = canvas.getPhysicalHeight();
 		bool success = m_rhi->createSwapChain(window,&swapchain, desc);
 		assert(success);
+		m_rhi->setupImguiContext();
 	}
 
 	void QyhsEngine::update(float delta_time)

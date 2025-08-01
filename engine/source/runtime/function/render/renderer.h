@@ -68,7 +68,7 @@ namespace qyhs::renderer
 	const Sampler* getSampler(enums::SAMPLERTYPES id);
 	void drawDebugWorld(const scene::CameraComponent & camera,CommandList cmd);
 	const Shader* GetShader(SHADER_TYPE id);
-	
+	primitive::Ray GetPickRay(long cursorX, long cursorY, const Canvas& canvas, const scene::CameraComponent& camera = scene::getCamera());
 	const InputLayout* GetInputLayout(ILTYPES id);
 	const RasterizerState* GetRasterizerState(RSTYPES id);
 	const DepthStencilState* GetDepthStencilState(DSSTYPES id);

@@ -541,10 +541,10 @@ parser_header.o: D:/vs_project/QyhsEngine/parser_header.h \
   D:/vs_project/QyhsEngine/engine/source\_generated\serializer\object.serializer.gen.h \
   D:/vs_project/QyhsEngine/engine/source\runtime\resource\common\object.h \
   D:/vs_project/QyhsEngine/engine/source\runtime/function/framework/component/component.h \
-  D:/vs_project/QyhsEngine/engine/source\_generated\serializer\level_resource.serializer.gen.h \
-  D:/vs_project/QyhsEngine/engine/source\runtime\resource\type\level_resource.h \
   D:/vs_project/QyhsEngine/engine/source\_generated\serializer\mesh.serializer.gen.h \
   D:/vs_project/QyhsEngine/engine/source\runtime\resource\type\component\mesh\mesh.h \
+  D:/vs_project/QyhsEngine/engine/source\_generated\serializer\level_resource.serializer.gen.h \
+  D:/vs_project/QyhsEngine/engine/source\runtime\resource\type\level_resource.h \
   D:/vs_project/QyhsEngine/engine/source\_generated\serializer\camera_config.serializer.gen.h \
   D:/vs_project/QyhsEngine/engine/source\runtime\resource\type\data\camera_config.h \
   D:/vs_project/QyhsEngine/engine/source\_generated\serializer\mash_data.serializer.gen.h \

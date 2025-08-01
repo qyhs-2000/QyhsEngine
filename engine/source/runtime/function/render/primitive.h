@@ -5,7 +5,7 @@
 
 namespace qyhs::primitive
 {
-
+	class Ray;
 	class AABB
 	{
 	public:
@@ -66,6 +66,9 @@ namespace qyhs::primitive
 			_max = XMFLOAT3(center.x + halfwidth.x, center.y + halfwidth.y, center.z + halfwidth.z);
 		}
 
+		bool intersects(const Ray& ray) const;
+		bool intersects(const XMFLOAT3& point) const;
+
 		XMFLOAT3 getCenter()const
 		{
 			return XMFLOAT3((_min.x + _max.x) * 0.5f, (_min.y + _max.y) * 0.5f, (_min.z + _max.z) * 0.5f);
@@ -84,6 +87,29 @@ namespace qyhs::primitive
 		}
 		constexpr XMFLOAT3 getMin() const { return _min; }
 		constexpr XMFLOAT3 getMax() const { return _max; }
+	private:
+	};
+
+	class Ray
+	{
+	public:
+		XMFLOAT3 direction;
+		XMFLOAT3 origin{ 0,0,0 };
+		XMFLOAT3 direction_inverse;
+		Ray(const XMFLOAT3& newOrigin = XMFLOAT3(0, 0, 0), const XMFLOAT3& newDirection = XMFLOAT3(0, 0, 1), float newTMin = 0, float newTMax = std::numeric_limits<float>::max()) :
+			Ray(XMLoadFloat3(&newOrigin), XMLoadFloat3(&newDirection), newTMin, newTMax)
+		{}
+		Ray(const XMVECTOR& newOrigin, const XMVECTOR& newDirection, float newTMin = 0, float newTMax = std::numeric_limits<float>::max())
+		{
+			XMStoreFloat3(&origin, newOrigin);
+			XMStoreFloat3(&direction, newDirection);
+			XMStoreFloat3(&direction_inverse, XMVectorReciprocal(newDirection));
+			TMin = newTMin;
+			TMax = newTMax;
+		}
+		float TMax = std::numeric_limits<float>::max();
+		float TMin = 0;
+		bool intersects(const AABB& aabb)const;
 	private:
 	};
 

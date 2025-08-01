@@ -31,6 +31,14 @@ namespace qyhs::scene
 		XMStoreFloat3(&local_position, p);
 	}
 
+	void TransformComponent::ClearTransform()
+	{
+		setDirty();
+		local_scale = XMFLOAT3(1, 1, 1);
+		local_rotation = XMFLOAT4(0, 0, 0, 1);
+		local_position = XMFLOAT3(0, 0, 0);
+	}
+
 	void TransformComponent::updateTransform()
 	{
 		if (isDirty())

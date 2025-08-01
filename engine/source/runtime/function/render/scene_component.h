@@ -127,6 +127,7 @@ namespace qyhs::scene
 		void applyWorldToLocal();
 		void MatrixTransform(XMMATRIX matrix);
 		void updateTransform();
+		void ClearTransform();
 		void updateTransformParented(TransformComponent* parent_transform);
 		XMMATRIX getLocalMatrix()const;
 		bool isDirty()const { return _flag & DIRTY; }

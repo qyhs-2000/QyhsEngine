@@ -708,6 +708,7 @@ namespace qyhs
 		VkImageView& getTextureImageView() { return textureImageView; }
 		VkSampler& getTextureSampler() { return textureSampler; }
 		uint32_t getCurrentFrameIndex() { return m_current_frame_index; }
+		
 		std::vector<VkImageView>& getSwapChainImageView()
 		{
 			return swapChainImageViews;
@@ -790,8 +791,8 @@ namespace qyhs
 		VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger);
 		void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator);
 		void initInstanceFunction();
-
-
+		virtual void setupImguiContext() override;
+		bool imgui_initialized = false;
 		bool isDeviceSuitable(VkPhysicalDevice device);
 		bool checkDeviceExtensionSupport(VkPhysicalDevice device);
 		//SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device,VkSurfaceKHR & surface);
@@ -832,6 +833,7 @@ namespace qyhs
 		virtual void pushConstants(const void* data, uint32_t size, CommandList cmd, uint32_t offset = 0) override;
 		virtual void drawIndexedInstanced(uint32_t index_count, uint32_t instance_count, uint32_t start_index_location, int32_t base_vertex_location, uint32_t start_instance_location, CommandList cmd) override;
 		virtual void copyBuffer(const GPUBuffer* dst_buffer, uint64_t dst_offset, const GPUBuffer* src_buffer, uint64_t src_offset, uint64_t size, CommandList cmd) override;
+		
 	public:
 		
 		VmaAllocator m_assets_allocator;

@@ -146,6 +146,20 @@ namespace qyhs::renderer
 		inline uint32_t getInstanceIndex()const { return instance_index; }
 	};
 
+	primitive::Ray GetPickRay(long cursorX, long cursorY, const Canvas& canvas, const scene::CameraComponent& camera)
+	{
+		float screenW = canvas.getLogicalWidth();
+		float screenH = canvas.getLogicalHeight();
+
+		XMMATRIX V = camera.getView();
+		XMMATRIX P = camera.getProjection();
+		XMMATRIX W = XMMatrixIdentity();
+		XMVECTOR lineStart = XMVector3Unproject(XMVectorSet((float)cursorX, (float)cursorY, 1, 1), 0, 0, screenW, screenH, 0.0f, 1.0f, P, V, W);
+		XMVECTOR lineEnd = XMVector3Unproject(XMVectorSet((float)cursorX, (float)cursorY, 0, 1), 0, 0, screenW, screenH, 0.0f, 1.0f, P, V, W);
+		XMVECTOR rayDirection = XMVector3Normalize(XMVectorSubtract(lineEnd, lineStart));
+		return primitive::Ray(lineStart, rayDirection);
+	}
+
 	struct RenderQueue
 	{
 		std::vector<RenderBatch> render_batches;

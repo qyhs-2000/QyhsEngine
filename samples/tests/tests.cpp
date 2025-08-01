@@ -44,7 +44,7 @@ namespace qyhs
 			case ImGui:
 			{
 				std::cout << "Hello ImGui" << std::endl;
-				setupImguiContext();
+				//setupImguiContext();
 			}
 			break;
 			default:

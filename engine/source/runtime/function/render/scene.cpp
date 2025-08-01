@@ -70,6 +70,156 @@ namespace qyhs::scene
 		}
 	}
 
+	PickResult Pick(const primitive::Ray& ray, uint32_t filterMask, uint32_t layerMask, const Scene& scene, uint32_t lod)
+	{
+		return scene.Intersects(ray,filterMask,lod);
+	}
+
+	XMVECTOR SkinVertex(const MeshComponent& mesh, const ArmatureComponent& armature, uint32_t index, XMVECTOR* N)
+	{
+		XMVECTOR P = XMLoadFloat3(&mesh.vertex_positions[index]);
+		const XMUINT4& ind = mesh.vertex_boneindices[index];
+		const XMFLOAT4& wei = mesh.vertex_boneweights[index];
+
+		const XMFLOAT4X4 mat[] = {
+			armature.bone_data[ind.x].getMatrix(),
+			armature.bone_data[ind.y].getMatrix(),
+			armature.bone_data[ind.z].getMatrix(),
+			armature.bone_data[ind.w].getMatrix(),
+		};
+		const XMMATRIX M[] = {
+			XMMatrixTranspose(XMLoadFloat4x4(&mat[0])),
+			XMMatrixTranspose(XMLoadFloat4x4(&mat[1])),
+			XMMatrixTranspose(XMLoadFloat4x4(&mat[2])),
+			XMMatrixTranspose(XMLoadFloat4x4(&mat[3])),
+		};
+
+		XMVECTOR skinned;
+		skinned = XMVectorScale( XMVector3Transform(P, M[0]) , wei.x);
+		skinned += XMVectorScale(XMVector3Transform(P, M[1]) , wei.y);
+		skinned += XMVectorScale(XMVector3Transform(P, M[2]) , wei.z);
+		skinned += XMVectorScale(XMVector3Transform(P, M[3]) , wei.w);
+		P = skinned;
+
+		if (N != nullptr)
+		{
+			*N = XMLoadFloat3(&mesh.vertex_normals[index]);
+			skinned = XMVectorScale(XMVector3TransformNormal(*N, M[0]) , wei.x);
+			skinned += XMVectorScale(XMVector3TransformNormal(*N, M[1]) , wei.y);
+			skinned += XMVectorScale(XMVector3TransformNormal(*N, M[2]) , wei.z);
+			skinned += XMVectorScale(XMVector3TransformNormal(*N, M[3]) , wei.w);
+			*N = XMVector3Normalize(skinned);
+		}
+
+		return P;
+	}
+
+	Scene::RayIntersectionResult Scene::Intersects(const primitive::Ray& ray, uint32_t filterMask,uint32_t lod) const
+	{
+		RayIntersectionResult result;
+
+		const XMVECTOR rayOrigin = XMLoadFloat3(&ray.origin);
+		const XMVECTOR rayDirection = XMVector3Normalize(XMLoadFloat3(&ray.direction));
+
+		if (filterMask & FILTER_OBJECT_ALL)
+		{
+			for (size_t objectIndex = 0; objectIndex < aabb_objects.size(); ++objectIndex)
+			{
+				const primitive::AABB& aabb = aabb_objects[objectIndex];
+				if (!ray.intersects(aabb))
+				{
+					continue;
+				}
+				const ObjectComponent& object = objects[objectIndex];
+				if (object.mesh_entity == INVALID_ENTITY)
+				{
+					continue;
+				}
+				if ((filterMask & object.getFilterMask()) == 0)
+				{
+					continue;
+				}
+
+				const Entity entity = objects.getEntity(objectIndex);
+				const MeshComponent* mesh = meshes.getComponent(object.mesh_entity);
+				const ArmatureComponent* armature = mesh->isSkinned() ? armatures.getComponent(mesh->armatureID):nullptr;
+				XMMATRIX objectMatrix = XMLoadFloat4x4(&object_matrices[objectIndex]);
+				XMMATRIX objectMatrix_Inverse = XMMatrixInverse(nullptr, objectMatrix);
+				const XMVECTOR rayOrigin_local = XMVector3Transform(rayOrigin, objectMatrix_Inverse);
+				const XMVECTOR rayDirection_local = XMVector3Transform(rayDirection, objectMatrix_Inverse);
+				if (!mesh)
+				{
+					continue;
+				}
+
+				auto intersect_triangle = [&](uint32_t subsetIndex, uint32_t indexOffset, uint32_t triangleIndex)
+					{
+						const uint32_t i0 = mesh->indices[indexOffset + triangleIndex * 3 + 0];
+						const uint32_t i1 = mesh->indices[indexOffset + triangleIndex * 3 + 1];
+						const uint32_t i2 = mesh->indices[indexOffset + triangleIndex * 3 + 2];
+
+						XMVECTOR p0;
+						XMVECTOR p1;
+						XMVECTOR p2;
+
+						if (armature == nullptr || armature->bone_data.empty())
+						{
+							p0 = XMLoadFloat3(&mesh->vertex_positions[i0]);
+							p1 = XMLoadFloat3(&mesh->vertex_positions[i1]);
+							p2 = XMLoadFloat3(&mesh->vertex_positions[i2]);
+						}
+						else
+						{
+							p0 = SkinVertex(*mesh, *armature, i0);
+							p1 = SkinVertex(*mesh, *armature, i1);
+							p2 = SkinVertex(*mesh, *armature, i2);
+						}
+
+						float distance;
+						XMFLOAT2 bary;
+						if (math::RayTriangleIntersects(rayOrigin_local, rayDirection_local, p0, p1, p2, distance, bary))
+						{
+							const XMVECTOR pos_local = XMVectorAdd(rayOrigin_local, XMVectorScale(rayDirection_local ,distance));
+							const XMVECTOR pos = XMVector3Transform(pos_local, objectMatrix);
+
+							distance = math::Distance(pos, rayOrigin);
+
+							if (distance < result.distance && distance >= ray.TMin && distance <= ray.TMax)
+							{
+								result.entity = entity;
+								XMStoreFloat3(&result.position, pos);
+								result.distance = distance;
+								result.subsetIndex = (int)subsetIndex;
+								result.vertexID0 = (int)i0;
+								result.vertexID1 = (int)i1;
+								result.vertexID2 = (int)i2;
+							}
+						}
+					};
+				
+				// Brute-force intersection test:
+				int first_subset = 0;
+				int last_subset = 0;
+				mesh->getLodSubsetRange(lod, first_subset, last_subset);
+				for (uint32_t subsetIndex = first_subset; subsetIndex < last_subset; ++subsetIndex)
+				{
+					const MeshComponent::MeshSubset& subset = mesh->subsets[subsetIndex];
+					if (subset.index_count == 0)
+						continue;
+					const uint32_t indexOffset = subset.index_offset;
+					const uint32_t triangleCount = subset.index_count / 3;
+
+					for (uint32_t triangleIndex = 0; triangleIndex < triangleCount; ++triangleIndex)
+					{
+						intersect_triangle(subsetIndex, indexOffset, triangleIndex);
+					}
+				}
+			}
+		}
+
+		return result;
+	}
+
 	void Scene::scanAnimationDepedencies()
 	{
 		if (animations.getCount() == 0)

@@ -196,7 +196,7 @@ namespace qyhs
 		initInstanceFunction();
 		pickPhysicalDevice();
 		createLogicalDevice();
-
+		
 		VkFenceCreateInfo fence_create_info = {};
 		fence_create_info.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
 		//fence_create_info.flags = VK_FENCE_CREATE_SIGNALED_BIT;
@@ -535,7 +535,7 @@ namespace qyhs
 		createCommandBuffers();
 		createSyncObjects();
 		createAllocator();
-
+		//setupImguiContext();
 	}
 
 	void VulkanRHI::initVulkan()
@@ -1369,6 +1369,7 @@ namespace qyhs
 			swapchain->desc.height = swapchain_vulkan->desc.height;
 		}
 		m_hwnd = window;
+		m_swapchain = swapchain;
 		return true;
 	}
 
@@ -6560,6 +6561,48 @@ namespace qyhs
 	{
 		_vkCmdBeginDebugUtilsLabelEXT = (PFN_vkCmdBeginDebugUtilsLabelEXT)vkGetInstanceProcAddr(instance, "vkCmdBeginDebugUtilsLabelEXT");
 		_vkCmdEndDebugUtilsLabelEXT = (PFN_vkCmdEndDebugUtilsLabelEXT)vkGetInstanceProcAddr(instance, "vkCmdEndDebugUtilsLabelEXT");
+	}
+
+	static int ImGui_ImplWin32_CreateVkSurface(ImGuiViewport* viewport, ImU64 vk_instance, const void* vk_allocator, ImU64* out_vk_surface)
+	{
+		VkWin32SurfaceCreateInfoKHR createInfo = {};
+		createInfo.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
+		createInfo.hwnd = (HWND)viewport->PlatformHandleRaw;
+		createInfo.hinstance = ::GetModuleHandle(nullptr);
+		return (int)vkCreateWin32SurfaceKHR((VkInstance)vk_instance, &createInfo, (VkAllocationCallbacks*)vk_allocator, (VkSurfaceKHR*)out_vk_surface);
+	}
+
+	void VulkanRHI::setupImguiContext()
+	{
+		if (imgui_initialized) return;
+		imgui_initialized = true;
+		IMGUI_CHECKVERSION();
+		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
+		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
+		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
+		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
+
+		// Setup Dear ImGui style
+		ImGui::StyleColorsDark();
+		//ImGui::StyleColorsLight();
+
+		// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
+		ImGuiStyle& style = ImGui::GetStyle();
+		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		{
+			style.WindowRounding = 0.0f;
+			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+		}
+
+		// Setup Platform/Renderer backends
+		ImGui_ImplWin32_Init(m_hwnd);
+		ImGui::GetPlatformIO().Platform_CreateVkSurface = ImGui_ImplWin32_CreateVkSurface;
+
+		initImgui();
 	}
 
 	void VulkanRHI::transitionImageLayout(VkImage image, VkFormat format, uint32_t mip_levels, VkImageLayout oldLayout, VkImageLayout newLayout) {

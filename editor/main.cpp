@@ -1,6 +1,7 @@
 #include <iostream>
 //#include "stdafx.h"
 #include "main.h"
+#include "imgui/imgui.h"
 #include "editor.h"
 #include "function/input/rawinput.h"
 #define MAX_LOADSTRING 100
@@ -9,6 +10,8 @@
 HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
+
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 qyhs::Editor editor;
 
@@ -149,6 +152,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam);
     switch (message)
     {
     case WM_COMMAND:

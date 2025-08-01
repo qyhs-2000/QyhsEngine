@@ -5,6 +5,7 @@
 namespace qyhs::eventhandler
 {
 	inline constexpr int EVENT_THREAD_SAFE_POINT = -1;
+	inline constexpr int  EVENT_RELOAD_SHADERS = -2;
 
 	struct EventManager
 	{

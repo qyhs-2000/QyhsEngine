@@ -53,6 +53,19 @@ namespace qyhs::scene
 			std::unordered_set<ecs::Entity> entities;
 			std::vector<AnimationComponent*> animations;
 		};
+
+		struct RayIntersectionResult
+		{
+			ecs::Entity entity = ecs::INVALID_ENTITY;
+			float distance = std::numeric_limits<float>::max();
+			XMFLOAT3 position;
+			int subsetIndex;
+			int vertexID0;
+			int vertexID1;
+			int vertexID2;
+		};
+		RayIntersectionResult Intersects(const primitive::Ray& ray, uint32_t filterMask = enums::FILTER_OPAQUE, uint32_t lod = 0) const;
+
 		jobsystem::context animation_dependency_scan_workload;
 		std::vector<AnimationQueue> animation_queues;
 		
@@ -114,8 +127,10 @@ namespace qyhs::scene
 		std::atomic<uint32_t> geometry_allocator{ 0 };
 		std::atomic<uint32_t> skinning_allocator{ 0 };
 	};
-
+	XMVECTOR SkinVertex(const MeshComponent& mesh, const ArmatureComponent& armature, uint32_t index, XMVECTOR* N = nullptr);
 	Scene* getScene();
 	ecs::Entity loadModel(Scene& scene, const std::string& fileName, const XMMATRIX& transformMatrix = XMMatrixIdentity(), bool attached = false);
 	void LoadModel2(Scene& scene, const std::string& fileName, const XMMATRIX& transformMatrix = XMMatrixIdentity(), ecs::Entity rootEntity = ecs::INVALID_ENTITY);
+	using PickResult = Scene::RayIntersectionResult;
+	PickResult Pick(const primitive::Ray& ray, uint32_t filterMask = enums::FILTER_OPAQUE, uint32_t layerMask = ~0, const Scene& scene = *getScene(), uint32_t lod = 0);
 }

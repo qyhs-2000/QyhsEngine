@@ -183,6 +183,10 @@ namespace qyhs::gui
 
 	void Gui::render(const Canvas& canvas, CommandList cmd) const
 	{
+		if (widgets.empty())
+		{
+			return;
+		}
 		RHI* rhi = rhi::getRHI();
 		Rect scissorRect;
 		scissorRect.bottom = (int32_t)(canvas.getPhysicalHeight());

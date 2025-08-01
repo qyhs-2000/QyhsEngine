@@ -4,6 +4,7 @@
 #include "core/utils/utils.h"
 #include "core/event/event_handler.h"
 #include "function/file/archive.h"
+#include "function/input/input.h"
 enum class FileType
 {
 	INVALID,
@@ -83,12 +84,61 @@ namespace qyhs
 	void EditorRenderer::render()
 	{
 		RenderPath3D::render();
+		RHI* rhi = rhi::getRHI();
+		{
+			CommandList cmd = rhi->beginCommandList();
+			rhi->beginEvent("Editor", cmd);
+			Viewport vp;
+			vp.width = rhi->getSwapChain()->desc.width;
+			vp.height = rhi->getSwapChain()->desc.height;
+			rhi->bindViewports(cmd, 1, &vp);
+			{
+				RenderPassImage rp[] = {
+				RenderPassImage::renderTarget(&rt_final,RenderPassImage::LoadOp::LOAD),
+				RenderPassImage::depthStencil(&editorDepthBuffer,RenderPassImage::LoadOp::CLEAR,
+					RenderPassImage::StoreOp::STORE,
+					ResourceState::DEPTHSTENCIL,
+					ResourceState::DEPTHSTENCIL,
+					ResourceState::DEPTHSTENCIL)
+					
+				};
+				rhi->beginRenderPass(rp,arraysize(rp),cmd);
+				Rect scissor = getScissorInternalResolution();
+				rhi->bindScissorRects(1, &scissor, cmd);
+				translator.Draw(scene::getCamera(), cmd);
+
+				rhi->endRenderPass(cmd);
+			}
+
+			rhi->endEvent(cmd);
+		}
 
 	}
 
 	void EditorRenderer::start()
 	{
 		RenderPath3D::start();
+
+		RHI* rhi = rhi::getRHI();
+		{
+			TextureDesc desc;
+			desc.width = rt_final.desc.width;
+			desc.height = rt_final.desc.height;
+			desc.misc_flags = ResourceMiscFlag::TRANSIENT_ATTACHMENT;
+			desc.sample_count = getMSAASampleCount();
+
+			desc.format = Format::D32_FLOAT;
+			desc.bind_flags = BindFlag::DEPTH_STENCIL;
+			desc.layout = ResourceState::DEPTHSTENCIL;
+			rhi->createTexture(&desc, &editorDepthBuffer, nullptr);
+			rhi->setName(&editorDepthBuffer, "editor_depthbuffer");
+
+			desc.format = Format::R8G8B8A8_UNORM;
+			desc.bind_flags = BindFlag::RENDER_TARGET;
+			desc.layout = ResourceState::RENDERTARGET;
+			rhi->createTexture(&desc, &editorRenderTarget, nullptr);
+			rhi->setName(&editorRenderTarget, "editor_rendertarget");
+		}
 
 	}
 
@@ -137,7 +187,7 @@ namespace qyhs
 		}
 		if (file_type == FileType::XSCENE)
 		{
-			Archive archive = Archive(filename,false);
+			Archive archive = Archive(filename, false);
 			if (archive.isOpen())
 			{
 				scene::Scene& scene = getCurrentScene();
@@ -145,5 +195,41 @@ namespace qyhs
 			}
 		}
 	}
-	
+
+	void EditorRenderer::compose(CommandList cmd)
+	{
+		RenderPath3D::compose(cmd);
+	}
+
+	void EditorRenderer::AddSelected(const scene::PickResult& picked)
+	{
+		translator.selected.push_back(picked);
+	}
+
+	void EditorRenderer::update(float delta_time)
+	{
+		RenderPath3D::update(delta_time);
+		hovered = {};
+		pickRay = renderer::GetPickRay((long)currentMouse.x, (long)currentMouse.y, *this, *camera);
+
+		if (hovered.entity == ecs::INVALID_ENTITY)
+		{
+			if (input::Down(input::MOUSE_BUTTON_LEFT))
+			{
+				hovered = scene::Pick(pickRay);
+				if (hovered.entity == ecs::INVALID_ENTITY && !translator.selected.empty())
+				{
+					translator.selected.clear();
+				}
+			}
+		}
+
+		if (hovered.entity != ecs::INVALID_ENTITY)
+		{
+			translator.selected.clear();
+			AddSelected(hovered);
+		}
+		
+	}
+
 }
