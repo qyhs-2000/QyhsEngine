@@ -6,6 +6,7 @@
 //#include "core/math/math_library.h"
 #include <iostream>
 using namespace qyhs::ecs;
+#include "function/timer/ScopeTimer.h"
 namespace qyhs::scene
 {
 	const uint32_t small_subtask_groupsize = 64u;
@@ -72,7 +73,7 @@ namespace qyhs::scene
 
 	PickResult Pick(const primitive::Ray& ray, uint32_t filterMask, uint32_t layerMask, const Scene& scene, uint32_t lod)
 	{
-		return scene.Intersects(ray,filterMask,lod);
+		return scene.Intersects(ray, filterMask, lod);
 	}
 
 	XMVECTOR SkinVertex(const MeshComponent& mesh, const ArmatureComponent& armature, uint32_t index, XMVECTOR* N)
@@ -95,26 +96,26 @@ namespace qyhs::scene
 		};
 
 		XMVECTOR skinned;
-		skinned = XMVectorScale( XMVector3Transform(P, M[0]) , wei.x);
-		skinned += XMVectorScale(XMVector3Transform(P, M[1]) , wei.y);
-		skinned += XMVectorScale(XMVector3Transform(P, M[2]) , wei.z);
-		skinned += XMVectorScale(XMVector3Transform(P, M[3]) , wei.w);
+		skinned = XMVectorScale(XMVector3Transform(P, M[0]), wei.x);
+		skinned += XMVectorScale(XMVector3Transform(P, M[1]), wei.y);
+		skinned += XMVectorScale(XMVector3Transform(P, M[2]), wei.z);
+		skinned += XMVectorScale(XMVector3Transform(P, M[3]), wei.w);
 		P = skinned;
 
 		if (N != nullptr)
 		{
 			*N = XMLoadFloat3(&mesh.vertex_normals[index]);
-			skinned = XMVectorScale(XMVector3TransformNormal(*N, M[0]) , wei.x);
-			skinned += XMVectorScale(XMVector3TransformNormal(*N, M[1]) , wei.y);
-			skinned += XMVectorScale(XMVector3TransformNormal(*N, M[2]) , wei.z);
-			skinned += XMVectorScale(XMVector3TransformNormal(*N, M[3]) , wei.w);
+			skinned = XMVectorScale(XMVector3TransformNormal(*N, M[0]), wei.x);
+			skinned += XMVectorScale(XMVector3TransformNormal(*N, M[1]), wei.y);
+			skinned += XMVectorScale(XMVector3TransformNormal(*N, M[2]), wei.z);
+			skinned += XMVectorScale(XMVector3TransformNormal(*N, M[3]), wei.w);
 			*N = XMVector3Normalize(skinned);
 		}
 
 		return P;
 	}
 
-	Scene::RayIntersectionResult Scene::Intersects(const primitive::Ray& ray, uint32_t filterMask,uint32_t lod) const
+	Scene::RayIntersectionResult Scene::Intersects(const primitive::Ray& ray, uint32_t filterMask, uint32_t lod) const
 	{
 		RayIntersectionResult result;
 
@@ -142,7 +143,7 @@ namespace qyhs::scene
 
 				const Entity entity = objects.getEntity(objectIndex);
 				const MeshComponent* mesh = meshes.getComponent(object.mesh_entity);
-				const ArmatureComponent* armature = mesh->isSkinned() ? armatures.getComponent(mesh->armatureID):nullptr;
+				const ArmatureComponent* armature = mesh->isSkinned() ? armatures.getComponent(mesh->armatureID) : nullptr;
 				XMMATRIX objectMatrix = XMLoadFloat4x4(&object_matrices[objectIndex]);
 				XMMATRIX objectMatrix_Inverse = XMMatrixInverse(nullptr, objectMatrix);
 				const XMVECTOR rayOrigin_local = XMVector3Transform(rayOrigin, objectMatrix_Inverse);
@@ -179,7 +180,7 @@ namespace qyhs::scene
 						XMFLOAT2 bary;
 						if (math::RayTriangleIntersects(rayOrigin_local, rayDirection_local, p0, p1, p2, distance, bary))
 						{
-							const XMVECTOR pos_local = XMVectorAdd(rayOrigin_local, XMVectorScale(rayDirection_local ,distance));
+							const XMVECTOR pos_local = XMVectorAdd(rayOrigin_local, XMVectorScale(rayDirection_local, distance));
 							const XMVECTOR pos = XMVector3Transform(pos_local, objectMatrix);
 
 							distance = math::Distance(pos, rayOrigin);
@@ -196,7 +197,7 @@ namespace qyhs::scene
 							}
 						}
 					};
-				
+
 				// Brute-force intersection test:
 				int first_subset = 0;
 				int last_subset = 0;
@@ -646,11 +647,20 @@ namespace qyhs::scene
 			}
 		}
 		skinning_upload_buffer_mapped = skinning_upload_buffers[rhi->getBufferIndex()].mapped_data;
+		{
 
-		updateAnimations(ctx);
-		updateTransforms(ctx);
-		jobsystem::Wait(ctx);
-		updateHierarchy(ctx);
+			updateAnimations(ctx);
+			updateTransforms(ctx);
+			jobsystem::Wait(ctx);
+			{
+				//TODO:这里耗时很长，导入的动画越多就越长
+				ScopeTimer scene_update("Update");
+				updateHierarchy(ctx);
+				jobsystem::Wait(ctx);
+
+			}
+
+		}
 
 		geometry_array_size = geometry_allocator.load();
 		if (geometry_upload_buffers[0].desc.size < geometry_array_size * sizeof(ShaderGeometry))
@@ -672,15 +682,20 @@ namespace qyhs::scene
 			}
 		}
 		geometry_upload_buffer_mapped = (ShaderGeometry*)geometry_upload_buffers[rhi->getBufferIndex()].mapped_data;
-
-
-		updateMeshes(ctx);
-		updateMaterials(ctx);
 		jobsystem::Wait(ctx);
+
+		{
+
+			updateMeshes(ctx);
+			updateMaterials(ctx);
+			jobsystem::Wait(ctx);
+		}
+
 		updateArmatures(ctx);
 		jobsystem::Wait(ctx);
 		updateObjects(ctx);
 		updateShaderScene();
+
 	}
 
 	void Scene::updateAnimations(jobsystem::context& ctx)
@@ -711,50 +726,23 @@ namespace qyhs::scene
 
 					const AnimationComponent::AnimationChannel::PathDataType path_data_type = channel.getPathDataType();
 
-					float timeFirst = std::numeric_limits<float>::max();
-					float timeLast = std::numeric_limits<float>::min();
-					int keyLeft = 0;	float timeLeft = std::numeric_limits<float>::min();
-					int keyRight = 0;	float timeRight = std::numeric_limits<float>::max();
+					const auto& times = animationdata->keyframe_times;
 
-					// search for usable keyframes:
-					for (int k = 0; k < (int)animationdata->keyframe_times.size(); ++k)
-					{
-						const float time = animationdata->keyframe_times[k];
-						if (time < timeFirst)
-						{
-							timeFirst = time;
-						}
-						if (time > timeLast)
-						{
-							timeLast = time;
-						}
-						if (time <= animation.timer && time > timeLeft)
-						{
-							timeLeft = time;
-							keyLeft = k;
-						}
-						if (time >= animation.timer && time < timeRight)
-						{
-							timeRight = time;
-							keyRight = k;
-						}
+					//binary search
+					auto it_right = std::upper_bound(times.begin(), times.end(), animation.timer);
+
+					int keyLeft, keyRight;
+					if (it_right == times.begin()) {
+						keyLeft = keyRight = 0;
+					} else if (it_right == times.end()) {
+						keyLeft = keyRight = (int)times.size() - 1;
+					} else {
+						keyRight = (int)std::distance(times.begin(), it_right);
+						keyLeft = keyRight - 1;
 					}
-					if (path_data_type != AnimationComponent::AnimationChannel::PathDataType::Event)
-					{
-						if (animation.timer < timeFirst)
-						{
-							// animation beginning haven't been reached, force first keyframe:
-							timeLeft = timeFirst;
-							timeRight = timeFirst;
-							keyLeft = 0;
-							keyRight = 0;
-						}
-					}
-					else
-					{
-						timeLeft = std::max(timeLeft, timeFirst);
-						timeRight = std::max(timeRight, timeLast);
-					}
+
+					float timeLeft = times[keyLeft];
+					float timeRight = times[keyRight];
 
 					const float left = animationdata->keyframe_times[keyLeft];
 					const float right = animationdata->keyframe_times[keyRight];
@@ -1217,49 +1205,41 @@ namespace qyhs::scene
 
 	void Scene::updateHierarchy(jobsystem::context& ctx)
 	{
-		jobsystem::Dispatch(ctx, (uint32_t)hierarchy.getCount(), small_subtask_groupsize, [&](jobsystem::JobArgs args) {
 
-			HierarchyComponent& hier = hierarchy[args.jobIndex];
-			Entity entity = hierarchy.getEntity(args.jobIndex);
-
+		for (uint32_t i = 0; i < hierarchy.getCount(); ++i)
+		{
+			Entity entity = hierarchy.getEntity(i);
+			HierarchyComponent& hier = hierarchy[i];
 			TransformComponent* transform_child = transforms.getComponent(entity);
-			XMMATRIX worldmatrix;
-			if (transform_child != nullptr)
+
+			if (transform_child == nullptr) continue;
+
+			bool parent_dirty = false;
+			TransformComponent* transform_parent = nullptr;
+			if (hier.parent_id != INVALID_ENTITY)
 			{
-				worldmatrix = transform_child->getLocalMatrix();
+				transform_parent = transforms.getComponent(hier.parent_id);
+				if (transform_parent) parent_dirty = transform_parent->isDirty(); 
 			}
 
-
-			if (transform_child == nullptr)
-				return;
-
-			Entity parentID = hier.parent_id;
-			while (parentID != INVALID_ENTITY)
+			if (transform_child->isDirty() || parent_dirty)
 			{
-				TransformComponent* transform_parent = transforms.getComponent(parentID);
-				if (transform_child != nullptr && transform_parent != nullptr)
-				{
-					worldmatrix *= transform_parent->getLocalMatrix();
-				}
+				transform_child->setDirty(); 
 
+				XMMATRIX local = transform_child->getLocalMatrix();
 
-				const HierarchyComponent* hier_recursive = hierarchy.getComponent(parentID);
-				if (hier_recursive != nullptr)
+				if (transform_parent != nullptr)
 				{
-					parentID = hier_recursive->parent_id;
+					XMMATRIX parentWorld = XMLoadFloat4x4(&transform_parent->world);
+					XMStoreFloat4x4(&transform_child->world, XMMatrixMultiply(local, parentWorld));
 				}
 				else
 				{
-					parentID = INVALID_ENTITY;
+					XMStoreFloat4x4(&transform_child->world, local);
 				}
 			}
+		}
 
-			if (transform_child != nullptr)
-			{
-				XMStoreFloat4x4(&transform_child->world, worldmatrix);
-			}
-
-			});
 	}
 
 	void Scene::updateShaderScene()

@@ -138,10 +138,14 @@ namespace qyhs
 
 	void RenderPath3D::update(float delta_time)
 	{
+		//std::cout << delta_time << std::endl;
 		RHI* rhi = rhi::getRHI();
 		RenderPath2D::update(delta_time);
 
+
+
 		scene.update(delta_time);
+
 
 		//Frustum culling for main camera
 		visibility_main.layer_mask = layer_mask;
@@ -352,7 +356,7 @@ namespace qyhs
 		}
 		renderer::drawDebugWorld(*camera, cmd);
 
-		if(show_bone)
+		if (show_bone)
 		{
 			static PipelineState pso;
 			if (!pso.isValid())
@@ -368,7 +372,7 @@ namespace qyhs
 					desc.primitive_topology = PrimitiveTopology::TRIANGLE_LIST;
 					rhi::getRHI()->createPipelineState(&desc, &pso);
 					};
-				
+
 				LoadShaders();
 			}
 
@@ -408,12 +412,12 @@ namespace qyhs
 						const scene::TransformComponent& transform = *scene.transforms.getComponent(entity);
 						XMVECTOR a = transform.GetPositionV();
 						XMVECTOR b = a + XMVectorSet(0, 0.1f, 0, 0);
-						
-						
+
+
 						{
 							// Search for child to connect bone tip:
 							bool child_found = false;
-							
+
 							if (!child_found)
 							{
 								for (ecs::Entity child : armature.bone_collection)
@@ -445,14 +449,14 @@ namespace qyhs
 						primitive::Capsule capsule;
 						capsule.radius = math::Distance(a, b) * 0.1f;
 
-						a -= XMVectorMultiply(ab, XMVectorReplicate(capsule.radius));  
-						b += XMVectorMultiply(ab, XMVectorReplicate(capsule.radius));  
+						a -= XMVectorMultiply(ab, XMVectorReplicate(capsule.radius));
+						b += XMVectorMultiply(ab, XMVectorReplicate(capsule.radius));
 
 						XMStoreFloat3(&capsule.base, a);
 						XMStoreFloat3(&capsule.tip, b);
 						XMFLOAT4 color = inactiveEntityColor;
 
-						
+
 
 						color.w = 0.6;
 
@@ -463,10 +467,10 @@ namespace qyhs
 						XMVECTOR Tangent = XMVector3Normalize(XMVector3Cross(Normal, Base - Eye));
 						XMVECTOR Binormal = XMVector3Normalize(XMVector3Cross(Tangent, Normal));
 
-						XMVECTOR LineEndOffset = XMVectorMultiply(Normal, Radius);  
-						XMVECTOR A = XMVectorAdd(Base, LineEndOffset);  
-						XMVECTOR B = XMVectorSubtract(Tip, LineEndOffset);  
-						XMVECTOR AB = XMVectorMultiply(Unit, XMVector3Length(B - A));  
+						XMVECTOR LineEndOffset = XMVectorMultiply(Normal, Radius);
+						XMVECTOR A = XMVectorAdd(Base, LineEndOffset);
+						XMVECTOR B = XMVectorSubtract(Tip, LineEndOffset);
+						XMVECTOR AB = XMVectorMultiply(Unit, XMVector3Length(B - A));
 
 						XMMATRIX M = { Tangent,Normal,Binormal,XMVectorSetW(A, 1) };
 
@@ -513,7 +517,7 @@ namespace qyhs
 							vertex_count++;
 						}
 						// closing triangle fan:
-						uint32_t ind[] = { center_vertex_index,vertex_count - 1,center_vertex_index+1 };
+						uint32_t ind[] = { center_vertex_index,vertex_count - 1,center_vertex_index + 1 };
 						std::memcpy(indices + index_count, ind, sizeof(ind));
 						index_count += arraysize(ind);
 					}

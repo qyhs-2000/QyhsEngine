@@ -2,22 +2,22 @@
 #include "_generated\serializer\vector2.serializer.gen.h"
 #include "_generated\serializer\matrix4.serializer.gen.h"
 #include "_generated\serializer\quat.serializer.gen.h"
+#include "_generated\serializer\vector3.serializer.gen.h"
+#include "_generated\serializer\transform.serializer.gen.h"
 #include "_generated\serializer\animation_clip.serializer.gen.h"
 #include "_generated\serializer\vector4.serializer.gen.h"
-#include "_generated\serializer\transform.serializer.gen.h"
+#include "_generated\serializer\motor_component.serializer.gen.h"
 #include "_generated\serializer\animation.serializer.gen.h"
-#include "_generated\serializer\vector3.serializer.gen.h"
 #include "_generated\serializer\animation_skeleton_map.serializer.gen.h"
 #include "_generated\serializer\animation_component.serializer.gen.h"
 #include "_generated\serializer\animation_mask.serializer.gen.h"
 #include "_generated\serializer\component.serializer.gen.h"
 #include "_generated\serializer\camera_component.serializer.gen.h"
 #include "_generated\serializer\hierarchy_component.serializer.gen.h"
-#include "_generated\serializer\skeleton_data.serializer.gen.h"
 #include "_generated\serializer\mesh_component.serializer.gen.h"
 #include "_generated\serializer\transform_component.serializer.gen.h"
-#include "_generated\serializer\motor_component.serializer.gen.h"
 #include "_generated\serializer\scene_serialize_test.serializer.gen.h"
+#include "_generated\serializer\skeleton_data.serializer.gen.h"
 #include "_generated\serializer\world_resource.serializer.gen.h"
 #include "_generated\serializer\object.serializer.gen.h"
 #include "_generated\serializer\level_resource.serializer.gen.h"
@@ -218,6 +218,68 @@ namespace qyhs
         ret_context.insert_or_assign("x", Serializer::write(instance.x));
         ret_context.insert_or_assign("y", Serializer::write(instance.y));
         ret_context.insert_or_assign("z", Serializer::write(instance.z));
+        return  Json(ret_context);
+    }
+
+
+	template<>
+	Vector3 & Serializer::read(const Json & json_context,Vector3 & instance)
+	{
+		assert(json_context.is_object());
+		
+		if(!json_context["x"].is_null())
+		{
+			Serializer::read(json_context["x"],instance.x);
+		}
+		if(!json_context["y"].is_null())
+		{
+			Serializer::read(json_context["y"],instance.y);
+		}
+		if(!json_context["z"].is_null())
+		{
+			Serializer::read(json_context["z"],instance.z);
+		}
+		return instance;
+	}
+
+	template<>
+    Json Serializer::write(const Vector3& instance){
+        Json::object  ret_context;
+        
+        ret_context.insert_or_assign("x", Serializer::write(instance.x));
+        ret_context.insert_or_assign("y", Serializer::write(instance.y));
+        ret_context.insert_or_assign("z", Serializer::write(instance.z));
+        return  Json(ret_context);
+    }
+
+
+	template<>
+	Transform & Serializer::read(const Json & json_context,Transform & instance)
+	{
+		assert(json_context.is_object());
+		
+		if(!json_context["position"].is_null())
+		{
+			Serializer::read(json_context["position"],instance.m_position);
+		}
+		if(!json_context["scale"].is_null())
+		{
+			Serializer::read(json_context["scale"],instance.m_scale);
+		}
+		if(!json_context["rotation"].is_null())
+		{
+			Serializer::read(json_context["rotation"],instance.m_rotation);
+		}
+		return instance;
+	}
+
+	template<>
+    Json Serializer::write(const Transform& instance){
+        Json::object  ret_context;
+        
+        ret_context.insert_or_assign("position", Serializer::write(instance.m_position));
+        ret_context.insert_or_assign("scale", Serializer::write(instance.m_scale));
+        ret_context.insert_or_assign("rotation", Serializer::write(instance.m_rotation));
         return  Json(ret_context);
     }
 
@@ -433,32 +495,51 @@ namespace qyhs
 
 
 	template<>
-	Transform & Serializer::read(const Json & json_context,Transform & instance)
+	MotorComponentRes & Serializer::read(const Json & json_context,MotorComponentRes & instance)
 	{
 		assert(json_context.is_object());
 		
-		if(!json_context["position"].is_null())
+		if(!json_context["move_speed"].is_null())
 		{
-			Serializer::read(json_context["position"],instance.m_position);
-		}
-		if(!json_context["scale"].is_null())
-		{
-			Serializer::read(json_context["scale"],instance.m_scale);
-		}
-		if(!json_context["rotation"].is_null())
-		{
-			Serializer::read(json_context["rotation"],instance.m_rotation);
+			Serializer::read(json_context["move_speed"],instance.move_speed);
 		}
 		return instance;
 	}
 
 	template<>
-    Json Serializer::write(const Transform& instance){
+    Json Serializer::write(const MotorComponentRes& instance){
         Json::object  ret_context;
         
-        ret_context.insert_or_assign("position", Serializer::write(instance.m_position));
-        ret_context.insert_or_assign("scale", Serializer::write(instance.m_scale));
-        ret_context.insert_or_assign("rotation", Serializer::write(instance.m_rotation));
+        ret_context.insert_or_assign("move_speed", Serializer::write(instance.move_speed));
+        return  Json(ret_context);
+    }
+
+
+	template<>
+	MotorComponent & Serializer::read(const Json & json_context,MotorComponent & instance)
+	{
+		assert(json_context.is_object());
+		Serializer::read(json_context,*(qyhs::Component*)&instance);
+		if(!json_context["transform"].is_null())
+		{
+			Serializer::read(json_context["transform"],instance.m_transform);
+		}
+		if(!json_context["motor_res"].is_null())
+		{
+			Serializer::read(json_context["motor_res"],instance.m_motor_res);
+		}
+		return instance;
+	}
+
+	template<>
+    Json Serializer::write(const MotorComponent& instance){
+        Json::object  ret_context;
+        auto&&  json_context_0 = Serializer::write(*(qyhs::Component*)&instance);
+        assert(json_context_0.is_object());
+        auto&& json_context_map_0 = json_context_0.object_items();
+        ret_context.insert(json_context_map_0.begin() , json_context_map_0.end());
+        ret_context.insert_or_assign("transform", Serializer::write(instance.m_transform));
+        ret_context.insert_or_assign("motor_res", Serializer::write(instance.m_motor_res));
         return  Json(ret_context);
     }
 
@@ -607,37 +688,6 @@ namespace qyhs
         ret_context.insert_or_assign("skeleton_file_path", Serializer::write(instance.skeleton_file_path));
         ret_context.insert_or_assign("frame_position", Serializer::write(instance.frame_position));
         ret_context.insert_or_assign("blend_state", Serializer::write(instance.blend_state));
-        return  Json(ret_context);
-    }
-
-
-	template<>
-	Vector3 & Serializer::read(const Json & json_context,Vector3 & instance)
-	{
-		assert(json_context.is_object());
-		
-		if(!json_context["x"].is_null())
-		{
-			Serializer::read(json_context["x"],instance.x);
-		}
-		if(!json_context["y"].is_null())
-		{
-			Serializer::read(json_context["y"],instance.y);
-		}
-		if(!json_context["z"].is_null())
-		{
-			Serializer::read(json_context["z"],instance.z);
-		}
-		return instance;
-	}
-
-	template<>
-    Json Serializer::write(const Vector3& instance){
-        Json::object  ret_context;
-        
-        ret_context.insert_or_assign("x", Serializer::write(instance.x));
-        ret_context.insert_or_assign("y", Serializer::write(instance.y));
-        ret_context.insert_or_assign("z", Serializer::write(instance.z));
         return  Json(ret_context);
     }
 
@@ -877,6 +927,78 @@ namespace qyhs
 
 
 	template<>
+	MeshComponent & Serializer::read(const Json & json_context,MeshComponent & instance)
+	{
+		assert(json_context.is_object());
+		Serializer::read(json_context,*(qyhs::Component*)&instance);
+		if(!json_context["mesh_res"].is_null())
+		{
+			Serializer::read(json_context["mesh_res"],instance.m_mesh_res);
+		}
+		return instance;
+	}
+
+	template<>
+    Json Serializer::write(const MeshComponent& instance){
+        Json::object  ret_context;
+        auto&&  json_context_0 = Serializer::write(*(qyhs::Component*)&instance);
+        assert(json_context_0.is_object());
+        auto&& json_context_map_0 = json_context_0.object_items();
+        ret_context.insert(json_context_map_0.begin() , json_context_map_0.end());
+        ret_context.insert_or_assign("mesh_res", Serializer::write(instance.m_mesh_res));
+        return  Json(ret_context);
+    }
+
+
+	template<>
+	TransformComponent & Serializer::read(const Json & json_context,TransformComponent & instance)
+	{
+		assert(json_context.is_object());
+		Serializer::read(json_context,*(qyhs::Component*)&instance);
+		if(!json_context["transform"].is_null())
+		{
+			Serializer::read(json_context["transform"],instance.m_transform);
+		}
+		return instance;
+	}
+
+	template<>
+    Json Serializer::write(const TransformComponent& instance){
+        Json::object  ret_context;
+        auto&&  json_context_0 = Serializer::write(*(qyhs::Component*)&instance);
+        assert(json_context_0.is_object());
+        auto&& json_context_map_0 = json_context_0.object_items();
+        ret_context.insert(json_context_map_0.begin() , json_context_map_0.end());
+        ret_context.insert_or_assign("transform", Serializer::write(instance.m_transform));
+        return  Json(ret_context);
+    }
+
+
+	template<>
+	AnimComponentTest & Serializer::read(const Json & json_context,AnimComponentTest & instance)
+	{
+		assert(json_context.is_object());
+		Serializer::read(json_context,*(qyhs::Component*)&instance);
+		if(!json_context["test_int"].is_null())
+		{
+			Serializer::read(json_context["test_int"],instance.test_int);
+		}
+		return instance;
+	}
+
+	template<>
+    Json Serializer::write(const AnimComponentTest& instance){
+        Json::object  ret_context;
+        auto&&  json_context_0 = Serializer::write(*(qyhs::Component*)&instance);
+        assert(json_context_0.is_object());
+        auto&& json_context_map_0 = json_context_0.object_items();
+        ret_context.insert(json_context_map_0.begin() , json_context_map_0.end());
+        ret_context.insert_or_assign("test_int", Serializer::write(instance.test_int));
+        return  Json(ret_context);
+    }
+
+
+	template<>
 	RawBone & Serializer::read(const Json & json_context,RawBone & instance)
 	{
 		assert(json_context.is_object());
@@ -960,128 +1082,6 @@ namespace qyhs
         ret_context.insert_or_assign("is_flat", Serializer::write(instance.is_flat));
         ret_context.insert_or_assign("root_index", Serializer::write(instance.root_index));
         ret_context.insert_or_assign("in_topological_order", Serializer::write(instance.in_topological_order));
-        return  Json(ret_context);
-    }
-
-
-	template<>
-	MeshComponent & Serializer::read(const Json & json_context,MeshComponent & instance)
-	{
-		assert(json_context.is_object());
-		Serializer::read(json_context,*(qyhs::Component*)&instance);
-		if(!json_context["mesh_res"].is_null())
-		{
-			Serializer::read(json_context["mesh_res"],instance.m_mesh_res);
-		}
-		return instance;
-	}
-
-	template<>
-    Json Serializer::write(const MeshComponent& instance){
-        Json::object  ret_context;
-        auto&&  json_context_0 = Serializer::write(*(qyhs::Component*)&instance);
-        assert(json_context_0.is_object());
-        auto&& json_context_map_0 = json_context_0.object_items();
-        ret_context.insert(json_context_map_0.begin() , json_context_map_0.end());
-        ret_context.insert_or_assign("mesh_res", Serializer::write(instance.m_mesh_res));
-        return  Json(ret_context);
-    }
-
-
-	template<>
-	TransformComponent & Serializer::read(const Json & json_context,TransformComponent & instance)
-	{
-		assert(json_context.is_object());
-		Serializer::read(json_context,*(qyhs::Component*)&instance);
-		if(!json_context["transform"].is_null())
-		{
-			Serializer::read(json_context["transform"],instance.m_transform);
-		}
-		return instance;
-	}
-
-	template<>
-    Json Serializer::write(const TransformComponent& instance){
-        Json::object  ret_context;
-        auto&&  json_context_0 = Serializer::write(*(qyhs::Component*)&instance);
-        assert(json_context_0.is_object());
-        auto&& json_context_map_0 = json_context_0.object_items();
-        ret_context.insert(json_context_map_0.begin() , json_context_map_0.end());
-        ret_context.insert_or_assign("transform", Serializer::write(instance.m_transform));
-        return  Json(ret_context);
-    }
-
-
-	template<>
-	MotorComponentRes & Serializer::read(const Json & json_context,MotorComponentRes & instance)
-	{
-		assert(json_context.is_object());
-		
-		if(!json_context["move_speed"].is_null())
-		{
-			Serializer::read(json_context["move_speed"],instance.move_speed);
-		}
-		return instance;
-	}
-
-	template<>
-    Json Serializer::write(const MotorComponentRes& instance){
-        Json::object  ret_context;
-        
-        ret_context.insert_or_assign("move_speed", Serializer::write(instance.move_speed));
-        return  Json(ret_context);
-    }
-
-
-	template<>
-	MotorComponent & Serializer::read(const Json & json_context,MotorComponent & instance)
-	{
-		assert(json_context.is_object());
-		Serializer::read(json_context,*(qyhs::Component*)&instance);
-		if(!json_context["transform"].is_null())
-		{
-			Serializer::read(json_context["transform"],instance.m_transform);
-		}
-		if(!json_context["motor_res"].is_null())
-		{
-			Serializer::read(json_context["motor_res"],instance.m_motor_res);
-		}
-		return instance;
-	}
-
-	template<>
-    Json Serializer::write(const MotorComponent& instance){
-        Json::object  ret_context;
-        auto&&  json_context_0 = Serializer::write(*(qyhs::Component*)&instance);
-        assert(json_context_0.is_object());
-        auto&& json_context_map_0 = json_context_0.object_items();
-        ret_context.insert(json_context_map_0.begin() , json_context_map_0.end());
-        ret_context.insert_or_assign("transform", Serializer::write(instance.m_transform));
-        ret_context.insert_or_assign("motor_res", Serializer::write(instance.m_motor_res));
-        return  Json(ret_context);
-    }
-
-
-	template<>
-	AnimComponentTest & Serializer::read(const Json & json_context,AnimComponentTest & instance)
-	{
-		assert(json_context.is_object());
-		Serializer::read(json_context,*(qyhs::Component*)&instance);
-		if(!json_context["test_int"].is_null())
-		{
-			Serializer::read(json_context["test_int"],instance.test_int);
-		}
-		return instance;
-	}
-
-	template<>
-    Json Serializer::write(const AnimComponentTest& instance){
-        Json::object  ret_context;
-        auto&&  json_context_0 = Serializer::write(*(qyhs::Component*)&instance);
-        assert(json_context_0.is_object());
-        auto&& json_context_map_0 = json_context_0.object_items();
-        ret_context.insert(json_context_map_0.begin() , json_context_map_0.end());
-        ret_context.insert_or_assign("test_int", Serializer::write(instance.test_int));
         return  Json(ret_context);
     }
 

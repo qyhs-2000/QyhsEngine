@@ -1,7 +1,7 @@
-prefix=D:/vs_project/QyhsEngine/bin
+prefix=E:/VS_Project/QyhsEngine/bin
 exec_prefix=${prefix}
-includedir=D:/vs_project/QyhsEngine/bin/include
-libdir=D:/vs_project/QyhsEngine/bin/lib
+includedir=E:/VS_Project/QyhsEngine/bin/include
+libdir=E:/VS_Project/QyhsEngine/bin/lib
 
 Name: GLFW
 Description: A multi-platform library for OpenGL, window and input

@@ -1084,6 +1084,7 @@ namespace qyhs
 			scene->names.create(entity) = anim.name;
 			scene->attachComponent(entity, loader_state.root_entity);
 			scene::AnimationComponent& animationcomponent = scene->animations.create(entity);
+			animationcomponent.name = anim.name;
 			animationcomponent.samplers.resize(anim.samplers.size());
 			animationcomponent.channels.resize(anim.channels.size());
 
@@ -1217,7 +1218,7 @@ namespace qyhs
 			}
 
 		}
-
+		
 		return true;
 	}
 

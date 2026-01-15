@@ -33,7 +33,7 @@
 #include "core/helper.h"
 
 #include "core/utils/spirv_reflect.h"
-
+#include "runtime/function/render/scene.h"
 using namespace qyhs::graphics;
 
 namespace qyhs
@@ -4844,7 +4844,7 @@ namespace qyhs
 		if (has_flag(buffer->desc.bind_flags, BindFlag::UNORDERED_ACCESS))
 		{
 			buffer_info.usage |= VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
-			buffer_info.usage |= VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT;
+			//buffer_info.usage |= VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT;
 		}
 		if (has_flag(buffer->desc.misc_flags, ResourceMiscFlag::BUFFER_RAW))
 		{
@@ -5512,13 +5512,31 @@ namespace qyhs
 			ImGui::Begin("Animation Clips");                          // Create a window called "Hello, world!" and append into it.
 
 			
-			
-			static int current_item = 0; // 当前选中的项
-			const char* items[] = { "Option A", "Option B", "Option C" };
-			if (ImGui::Combo("Combo Box", &current_item, items, IM_ARRAYSIZE(items)))
+			const int animation_count =  scene::getScene()->animations.getCount();
+			static int current_item = -1; // 当前选中的项
+			//const char* items[] = { "Option A", "Option B", "Option C" };
+			std::vector<std::string> animaiton_names(animation_count);
+			std::vector<const char*> animation_names_cstr(animation_count);
+			for (int i = 0;i<animation_count;++i)
+			{
+				animaiton_names[i] = scene::getScene()->animations[i].name;
+				animation_names_cstr[i] = animaiton_names[i].c_str();
+			}
+			if (ImGui::Combo("Combo Box", &current_item, animation_names_cstr.data(), animation_count))
 			{
 				// current_item 已经更新
 				// 你可以在这里处理用户选择
+				for (int i = 0; i < animation_count; ++i)
+				{
+					if (scene::getScene()->animations[i].name == animaiton_names[current_item])
+					{
+						scene::getScene()->animations[i].play();
+					}
+					else
+					{
+						scene::getScene()->animations[i].pause();
+					}
+				}
 				printf("Selected item: %d\n", current_item);
 
 			}

@@ -292,6 +292,7 @@ namespace qyhs::resourcemanager
 		}
 
 		locker.unlock();
+		std::cout << "Finished Save" << std::endl;
 	}
 
 	void Serialize_READ(Archive& archive, ResourceSerializer& seri)

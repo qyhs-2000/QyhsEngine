@@ -581,7 +581,7 @@ namespace qyhs::scene
 			archive >> timer;
 			archive >> amount;
 			archive >> speed;
-
+			archive >> name;
 
 			size_t channelCount;
 			archive >> channelCount;
@@ -618,6 +618,7 @@ namespace qyhs::scene
 			archive << timer;
 			archive << amount;
 			archive << speed;
+			archive << name;
 
 			archive << channels.size();
 			for (size_t i = 0; i < channels.size(); ++i)

@@ -440,7 +440,7 @@ namespace qyhs::scene
 			LOOPED = 1 << 1,
 			ROOT_MOTION = 1 << 2
 		};
-		uint32_t _flags = PLAYING | LOOPED;
+		uint32_t _flags =  LOOPED;
 		float start = 0;
 		float end = 0;
 		float last_update_time = 0;
@@ -454,9 +454,11 @@ namespace qyhs::scene
 		}
 		bool isLooped() const { return _flags & LOOPED; }
 		bool isRootMotion()const { return _flags & ROOT_MOTION; }
+		inline void play() { _flags |= PLAYING; }
 		inline void pause() { _flags &= ~PLAYING; }
 		ecs::Entity root_motion_bone = ecs::INVALID_ENTITY;
 		virtual void serialize(Archive& archive, ecs::EntitySerializer& seri) override;
+		std::string name;
 	private:
 	};
 
